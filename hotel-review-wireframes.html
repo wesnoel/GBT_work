@@ -1,0 +1,1496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B2B Hotel Review System — Concept Exploration</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F7F7F7;--surface:#FFF;--border:#E2E2E2;--border-strong:#C8C8C8;
+  --text-1:#141414;--text-2:#5C5C5C;--text-3:#9A9A9A;--text-4:#C4C4C4;
+  --hover:#F0F0F0;--active:#E8E8E8;
+  --sh-sm:0 1px 3px rgba(0,0,0,.08);--sh-md:0 4px 16px rgba(0,0,0,.10);--sh-lg:0 8px 40px rgba(0,0,0,.16);
+  --r4:4px;--r8:8px;--r12:12px;
+  --font:-apple-system,BlinkMacSystemFont,'Segoe UI','Inter',system-ui,sans-serif;
+}
+html{font-family:var(--font);background:var(--bg);color:var(--text-1)}
+body{min-height:100vh}
+
+/* ── pages ── */
+.page{display:none}
+.page.active{display:block}
+
+/* ── hub ── */
+.hub-head{background:var(--surface);border-bottom:1px solid var(--border);padding:32px 48px}
+.hub-head-inner{max-width:1100px;margin:0 auto;display:flex;align-items:flex-end;justify-content:space-between}
+.hub-eyebrow{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin-bottom:6px}
+.hub-h1{font-size:28px;font-weight:700;letter-spacing:-.02em}
+.hub-meta{font-size:12px;color:var(--text-3);text-align:right;line-height:1.7}
+.hub-body{max-width:1100px;margin:0 auto;padding:52px 48px 80px}
+.hub-intro{max-width:560px;margin-bottom:44px;font-size:14px;color:var(--text-2);line-height:1.7}
+.card-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r12);overflow:hidden;cursor:pointer;transition:box-shadow .2s,border-color .2s,transform .15s}
+.card:hover{box-shadow:var(--sh-md);border-color:var(--border-strong);transform:translateY(-2px)}
+.card:active{transform:translateY(0)}
+.card-thumb{height:210px;background:#EFEFEF;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:center}
+.card-body{padding:22px}
+.card-num{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--text-3);margin-bottom:4px}
+.card-title{font-size:17px;font-weight:700;letter-spacing:-.01em;margin-bottom:8px}
+.card-desc{font-size:13px;color:var(--text-2);line-height:1.6;margin-bottom:16px}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
+.tag{font-size:11px;font-weight:500;color:var(--text-2);background:var(--hover);border:1px solid var(--border);border-radius:100px;padding:3px 10px}
+.card-cta{font-size:13px;font-weight:600;color:var(--text-1);display:flex;align-items:center;gap:5px}
+
+/* ── concept nav ── */
+.cnav{position:fixed;top:0;left:0;right:0;height:54px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 28px;gap:16px;z-index:50}
+.cnav-back{display:flex;align-items:center;gap:5px;font-size:13px;font-weight:500;color:var(--text-2);cursor:pointer;padding:5px 10px;border-radius:var(--r4);transition:background .15s,color .15s;border:none;background:none;font-family:var(--font)}
+.cnav-back:hover{background:var(--hover);color:var(--text-1)}
+.cnav-sep{width:1px;height:18px;background:var(--border)}
+.cnav-sub{font-size:13px;color:var(--text-3)}
+.cnav-name{font-size:13px;font-weight:600}
+.cnav-pills{margin-left:auto;display:flex;gap:2px;background:var(--hover);border:1px solid var(--border);border-radius:100px;padding:3px}
+.cpill{font-size:12px;font-weight:500;color:var(--text-2);padding:4px 14px;border-radius:100px;cursor:pointer;transition:background .15s,color .15s;border:none;background:none;font-family:var(--font)}
+.cpill.on{background:var(--surface);color:var(--text-1);box-shadow:var(--sh-sm)}
+
+/* ── concept stage ── */
+.cstage{margin-top:54px}
+.stage-hero{background:var(--surface);border-bottom:1px solid var(--border);padding:44px 48px 36px}
+.stage-hero-inner{max-width:1100px;margin:0 auto}
+.stage-num{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--text-3);margin-bottom:6px}
+.stage-h2{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:6px}
+.stage-desc{font-size:13px;color:var(--text-2);line-height:1.6;max-width:480px}
+
+/* ── demo area ── */
+.demo{background:#EBEBEB;min-height:480px;display:flex;align-items:center;justify-content:center;position:relative;padding:60px 40px;border-bottom:1px solid var(--border)}
+.demo-btn{display:flex;align-items:center;gap:9px;background:var(--text-1);color:#FFF;border:none;border-radius:var(--r8);padding:12px 22px;font-size:13px;font-weight:600;font-family:var(--font);cursor:pointer;transition:opacity .15s}
+.demo-btn:hover{opacity:.82}
+.demo-hint{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);font-size:12px;color:var(--text-3);white-space:nowrap}
+
+/* ── breakdowns ── */
+.bdowns{max-width:1100px;margin:0 auto;padding:56px 48px 80px}
+.bdowns-title{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin-bottom:28px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.bdown-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px}
+.bdown-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r8);overflow:hidden}
+.bdown-prev{height:190px;background:#F4F4F4;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:center}
+.bdown-foot{padding:12px 14px;display:flex;align-items:center;justify-content:space-between}
+.bdown-label{font-size:12px;font-weight:600}
+.bdown-sub{font-size:11px;color:var(--text-3)}
+
+/* ── modal overlay ── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.42);display:flex;align-items:center;justify-content:center;z-index:200;opacity:0;pointer-events:none;transition:opacity .2s;backdrop-filter:blur(2px)}
+.overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--surface);border-radius:var(--r12);box-shadow:var(--sh-lg);position:relative;overflow:hidden}
+
+/* ── sheet ── */
+.sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:200;opacity:0;pointer-events:none;transition:opacity .25s}
+.sheet-bg.open{opacity:1;pointer-events:all}
+.sheet{position:fixed;top:0;right:0;bottom:0;width:420px;background:var(--surface);z-index:201;transform:translateX(100%);transition:transform .3s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column;box-shadow:var(--sh-lg)}
+.sheet-bg.open .sheet{transform:translateX(0)}
+
+/* ── shared form ── */
+.stars{display:flex;gap:8px}
+.star{font-size:30px;cursor:pointer;color:#D4D4D4;transition:color .1s,transform .1s;line-height:1;user-select:none}
+.star.on,.star.hov{color:var(--text-1)}
+.star:hover{transform:scale(1.08)}
+.star-lg{font-size:40px;gap:12px}
+.star-sm{font-size:22px;cursor:pointer;color:#D4D4D4;transition:color .1s;user-select:none}
+.star-sm.on,.star-sm.hov{color:var(--text-1)}
+.rlabel{font-size:13px;color:var(--text-3);margin-top:5px;min-height:18px;transition:color .15s}
+.rlabel.on{color:var(--text-2)}
+.rec-row{display:flex;gap:10px}
+.rec-btn{flex:1;padding:10px;border:1.5px solid var(--border);border-radius:var(--r8);background:none;font-family:var(--font);font-size:13px;font-weight:500;color:var(--text-2);cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px}
+.rec-btn:hover{border-color:var(--border-strong);color:var(--text-1);background:var(--hover)}
+.rec-btn.on{border-color:var(--text-1);background:var(--text-1);color:#FFF}
+.flabel{font-size:12px;font-weight:600;color:var(--text-2);margin-bottom:7px;display:block;letter-spacing:.01em}
+.fopt{font-weight:400;color:var(--text-3)}
+.ftextarea{width:100%;border:1.5px solid var(--border);border-radius:var(--r8);padding:11px;font-family:var(--font);font-size:13px;color:var(--text-1);resize:none;background:var(--surface);transition:border-color .15s;line-height:1.5}
+.ftextarea:focus{outline:none;border-color:var(--text-1)}
+.ftextarea::placeholder{color:var(--text-4)}
+.charcount{font-size:11px;color:var(--text-3);text-align:right;margin-top:4px}
+.btn-p{background:var(--text-1);color:#FFF;border:none;border-radius:var(--r8);padding:11px 22px;font-family:var(--font);font-size:13px;font-weight:600;cursor:pointer;transition:opacity .15s}
+.btn-p:hover{opacity:.83}
+.btn-p:disabled{opacity:.3;cursor:not-allowed}
+.btn-s{background:none;color:var(--text-2);border:1.5px solid var(--border);border-radius:var(--r8);padding:10px 18px;font-family:var(--font);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s}
+.btn-s:hover{border-color:var(--border-strong);color:var(--text-1)}
+.fsec{margin-bottom:22px}
+.sec-h{font-size:13px;font-weight:600;color:var(--text-1);margin-bottom:3px}
+.sec-s{font-size:12px;color:var(--text-3);margin-bottom:10px}
+.divider{height:1px;background:var(--border);margin:18px 0}
+.hotel-strip{display:flex;align-items:center;gap:11px;padding:11px 14px;background:var(--hover);border-radius:var(--r8);margin-bottom:18px}
+.hotel-thumb{width:38px;height:38px;border-radius:var(--r4);background:var(--border-strong);flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.hotel-name{font-size:13px;font-weight:600;color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hotel-meta{font-size:11px;color:var(--text-3);margin-top:1px}
+.scrollable{overflow-y:auto;flex:1}
+.scrollable::-webkit-scrollbar{width:4px}
+.scrollable::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:2px}
+.chip-row{display:flex;gap:7px;flex-wrap:wrap}
+.chip{font-size:12px;font-weight:500;color:var(--text-2);border:1.5px solid var(--border);border-radius:100px;padding:5px 13px;cursor:pointer;transition:all .15s;background:none;font-family:var(--font)}
+.chip:hover{border-color:var(--border-strong);color:var(--text-1)}
+.chip.on{border-color:var(--text-1);background:var(--text-1);color:#FFF}
+.progress-bar{height:2px;background:var(--border);position:absolute;top:0;left:0;right:0;border-radius:0}
+.progress-fill{height:100%;background:var(--text-1);border-radius:1px;transition:width .3s ease}
+.step-dots{display:flex;gap:5px;align-items:center}
+.sdot{width:6px;height:6px;border-radius:50%;background:var(--border-strong);transition:all .2s}
+.sdot.active{background:var(--text-1);width:18px;border-radius:3px}
+.sdot.done{background:var(--text-1)}
+.success-wrap{text-align:center;padding:36px 24px}
+.success-icon{width:46px;height:46px;background:var(--text-1);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+.success-h{font-size:17px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px}
+.success-p{font-size:13px;color:var(--text-2);line-height:1.6}
+
+/* ── mini wireframe shapes (card thumbnails) ── */
+.wf{background:#FFF;border-radius:7px;box-shadow:0 3px 14px rgba(0,0,0,.13);padding:13px}
+.wf-bar{height:7px;background:#E0E0E0;border-radius:3px;margin-bottom:7px}
+.wf-bar.dk{background:#B4B4B4}
+.wf-bar.s{width:55%}
+.wf-bar.xs{width:38%}
+.wf-stars{display:flex;gap:3px;margin:7px 0}
+.wf-s{width:11px;height:11px;background:#1A1A1A;border-radius:2px}
+.wf-s.e{background:#E0E0E0}
+.wf-pills{display:flex;gap:5px;margin-top:5px}
+.wf-pill{height:18px;flex:1;border-radius:3px;background:#E0E0E0}
+.wf-pill.dk{background:#1A1A1A}
+.wf-ta{height:32px;background:#F4F4F4;border-radius:3px;margin-top:7px;border:1px solid #E0E0E0}
+.wf-btn{height:20px;background:#1A1A1A;border-radius:3px;margin-top:7px}
+.wf-sheet{display:flex;width:210px;height:150px;border-radius:7px;overflow:hidden;box-shadow:0 3px 14px rgba(0,0,0,.11)}
+.wf-sheet-bg{flex:1;background:#E8E8E8}
+.wf-sheet-p{width:105px;background:#FFF;padding:9px;flex-shrink:0;border-left:1px solid #E0E0E0}
+.wf-step{background:#FFF;border-radius:7px;box-shadow:0 3px 14px rgba(0,0,0,.13);padding:13px;width:190px}
+.wf-stepdots{display:flex;gap:3px;justify-content:center;margin-bottom:9px}
+.wf-sdot{height:3px;border-radius:2px;background:#E0E0E0}
+.wf-sdot.a{background:#1A1A1A}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════ HUB ═══ -->
+<div class="page active" id="pg-hub">
+  <div class="hub-head">
+    <div class="hub-head-inner">
+      <div>
+        <div class="hub-eyebrow">Concept Exploration · B2B Travel</div>
+        <div class="hub-h1">Hotel Review System</div>
+      </div>
+      <div class="hub-meta">Wireframe concepts · Grayscale<br>4 concepts · Interactive</div>
+    </div>
+  </div>
+  <div class="hub-body">
+    <div class="hub-intro">Three traveler-facing concepts for capturing post-stay hotel reviews, plus an admin management view. Each concept explores a different approach to balancing friction, context, and data completeness.</div>
+    <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin-bottom:16px">Traveler-facing · Review collection</div>
+    <div class="card-grid" style="margin-bottom:40px">
+
+      <div class="card" onclick="go('c1')">
+        <div class="card-thumb">
+          <div class="wf" style="width:175px">
+            <div class="wf-bar dk xs"></div>
+            <div class="wf-bar s" style="margin-top:3px"></div>
+            <div class="wf-stars"><div class="wf-s"></div><div class="wf-s"></div><div class="wf-s"></div><div class="wf-s e"></div><div class="wf-s e"></div></div>
+            <div class="wf-pills"><div class="wf-pill dk"></div><div class="wf-pill"></div></div>
+            <div class="wf-ta"></div>
+            <div class="wf-btn"></div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-num">Concept 01</div>
+          <div class="card-title">Focus Modal</div>
+          <div class="card-desc">Single-screen centered modal. All inputs on one surface, optimized for quick low-friction capture right after checkout.</div>
+          <div class="tags"><span class="tag">Modal</span><span class="tag">1-screen</span><span class="tag">Low friction</span></div>
+          <div class="card-cta">View concept <span>→</span></div>
+        </div>
+      </div>
+
+      <div class="card" onclick="go('c2')">
+        <div class="card-thumb">
+          <div class="wf-sheet">
+            <div class="wf-sheet-bg"></div>
+            <div class="wf-sheet-p">
+              <div style="height:5px;background:#1A1A1A;border-radius:2px;width:75%;margin-bottom:4px"></div>
+              <div style="height:4px;background:#E0E0E0;border-radius:2px;width:55%;margin-bottom:10px"></div>
+              <div style="display:flex;gap:2px;margin-bottom:4px">
+                <div style="width:8px;height:8px;background:#1A1A1A;border-radius:1px"></div><div style="width:8px;height:8px;background:#1A1A1A;border-radius:1px"></div><div style="width:8px;height:8px;background:#1A1A1A;border-radius:1px"></div><div style="width:8px;height:8px;background:#E0E0E0;border-radius:1px"></div><div style="width:8px;height:8px;background:#E0E0E0;border-radius:1px"></div>
+              </div>
+              <div style="height:3px;background:#E0E0E0;border-radius:2px;margin-bottom:7px;width:60%"></div>
+              <div style="display:flex;gap:3px;margin-bottom:6px"><div style="flex:1;height:14px;background:#1A1A1A;border-radius:3px"></div><div style="flex:1;height:14px;border:1px solid #E0E0E0;border-radius:3px"></div></div>
+              <div style="height:20px;background:#F0F0F0;border-radius:3px;border:1px solid #E0E0E0;margin-bottom:5px"></div>
+              <div style="height:16px;background:#1A1A1A;border-radius:3px"></div>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-num">Concept 02</div>
+          <div class="card-title">Contextual Side Sheet</div>
+          <div class="card-desc">Right-anchored drawer with more surface area for hotel context, sub-ratings, and extended written feedback.</div>
+          <div class="tags"><span class="tag">Side sheet</span><span class="tag">Contextual</span><span class="tag">Scrollable</span></div>
+          <div class="card-cta">View concept <span>→</span></div>
+        </div>
+      </div>
+
+      <div class="card" onclick="go('c3')">
+        <div class="card-thumb">
+          <div class="wf-step">
+            <div class="wf-stepdots">
+              <div class="wf-sdot a" style="width:18px"></div>
+              <div class="wf-sdot" style="width:8px"></div>
+              <div class="wf-sdot" style="width:8px"></div>
+            </div>
+            <div class="wf-bar dk xs" style="margin-bottom:3px"></div>
+            <div class="wf-bar s" style="margin-bottom:10px"></div>
+            <div style="display:flex;gap:3px;justify-content:center;margin-bottom:8px">
+              <div style="font-size:18px;color:#D4D4D4">★★★★★</div>
+            </div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px">
+              <div style="font-size:7px;border:1px solid #E0E0E0;border-radius:100px;padding:2px 6px;color:#9A9A9A">Location</div>
+              <div style="font-size:7px;border:1px solid #E0E0E0;border-radius:100px;padding:2px 6px;color:#9A9A9A">Service</div>
+            </div>
+            <div class="wf-btn"></div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-num">Concept 03</div>
+          <div class="card-title">Guided Steps</div>
+          <div class="card-desc">3-step modal introducing one focused question at a time. Higher completion rates for structured data collection.</div>
+          <div class="tags"><span class="tag">Modal</span><span class="tag">Multi-step</span><span class="tag">Guided</span></div>
+          <div class="card-cta">View concept <span>→</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Admin section -->
+    <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin-bottom:16px;padding-top:8px;border-top:1px solid var(--border)">Admin · Review management</div>
+    <div class="card" style="display:flex;flex-direction:row" onclick="go('admin')">
+      <div class="card-thumb" style="width:340px;height:auto;min-height:170px;flex-shrink:0">
+        <div style="display:flex;width:100%;height:100%;min-height:170px">
+          <div style="width:82px;background:#FFF;border-right:1px solid #E0E0E0;padding:10px 8px;flex-shrink:0">
+            <div style="height:6px;background:#1A1A1A;border-radius:2px;width:75%;margin-bottom:3px"></div>
+            <div style="height:4px;background:#E0E0E0;border-radius:2px;width:55%;margin-bottom:12px"></div>
+            <div style="height:4px;background:#1A1A1A;border-radius:2px;margin-bottom:6px"></div>
+            <div style="height:4px;background:#E0E0E0;border-radius:2px;width:85%;margin-bottom:6px"></div>
+            <div style="height:4px;background:#E0E0E0;border-radius:2px;width:75%;margin-bottom:6px"></div>
+            <div style="height:4px;background:#E0E0E0;border-radius:2px;margin-bottom:6px"></div>
+            <div style="height:4px;background:#E0E0E0;border-radius:2px;width:80%"></div>
+          </div>
+          <div style="flex:1;background:#F4F4F4;padding:10px 8px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+              <div style="height:6px;background:#1A1A1A;border-radius:2px;width:55%"></div>
+              <div style="height:18px;background:#1A1A1A;border-radius:3px;width:60px"></div>
+            </div>
+            <div style="height:24px;background:#FFF;border-radius:3px;border:1px solid #E0E0E0;margin-bottom:6px"></div>
+            <div style="background:#FFF;border-radius:4px;border:1px solid #E0E0E0;overflow:hidden">
+              <div style="height:7px;background:#F0F0F0;border-bottom:1px solid #E8E8E8"></div>
+              <div style="height:6px;border-bottom:1px solid #F0F0F0;padding:0 5px;display:flex;align-items:center;gap:3px"><div style="height:2px;background:#E0E0E0;border-radius:1px;flex:2"></div><div style="height:4px;background:#1A1A1A;border-radius:100px;flex:1"></div><div style="height:2px;background:#E0E0E0;border-radius:1px;flex:3"></div></div>
+              <div style="height:6px;border-bottom:1px solid #F0F0F0;padding:0 5px;display:flex;align-items:center;gap:3px"><div style="height:2px;background:#E0E0E0;border-radius:1px;flex:2"></div><div style="height:4px;background:#E8E8E8;border-radius:100px;flex:1"></div><div style="height:2px;background:#E0E0E0;border-radius:1px;flex:3"></div></div>
+              <div style="height:6px;border-bottom:1px solid #F0F0F0;padding:0 5px;display:flex;align-items:center;gap:3px"><div style="height:2px;background:#E0E0E0;border-radius:1px;flex:2"></div><div style="height:4px;background:#1A1A1A;border-radius:100px;flex:1"></div><div style="height:2px;background:#E0E0E0;border-radius:1px;flex:3"></div></div>
+              <div style="height:6px;padding:0 5px;display:flex;align-items:center;gap:3px"><div style="height:2px;background:#E0E0E0;border-radius:1px;flex:2"></div><div style="height:4px;background:#E8E8E8;border-radius:100px;flex:1"></div><div style="height:2px;background:#E0E0E0;border-radius:1px;flex:3"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body" style="display:flex;flex-direction:column;justify-content:center;padding:28px 28px">
+        <div class="card-num">Concept 04</div>
+        <div class="card-title">Admin · Review Management</div>
+        <div class="card-desc">A CRUD management view for reviewing, editing, and moderating traveler hotel reviews. Table-based layout with filtering, bulk actions, and inline edit/delete.</div>
+        <div class="tags"><span class="tag">Admin</span><span class="tag">Table</span><span class="tag">CRUD</span><span class="tag">Bulk actions</span></div>
+        <div class="card-cta">View concept <span>→</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════ CONCEPT 1 ═══ -->
+<div class="page" id="pg-c1">
+  <div class="cnav">
+    <button class="cnav-back" onclick="go('hub')">← Back</button>
+    <div class="cnav-sep"></div>
+    <span class="cnav-sub">Concept 01 —</span>
+    <span class="cnav-name">Focus Modal</span>
+    <div class="cnav-pills">
+      <button class="cpill on" onclick="navTo('c1',this)">01</button>
+      <button class="cpill" onclick="navTo('c2',this)">02</button>
+      <button class="cpill" onclick="navTo('c3',this)">03</button>
+      <button class="cpill" onclick="navTo('admin',this)">04</button>
+    </div>
+  </div>
+  <div class="cstage">
+    <div class="stage-hero"><div class="stage-hero-inner">
+      <div class="stage-num">Concept 01</div>
+      <div class="stage-h2">Focus Modal</div>
+      <div class="stage-desc">Single-screen centered modal. All review inputs on one surface, designed for quick post-booking or post-stay triggers with optional open text.</div>
+    </div></div>
+    <div class="demo">
+      <button class="demo-btn" onclick="openModal('m1')">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M5 8h6M8 5v6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Open review modal
+      </button>
+      <div class="demo-hint">Click to trigger the hotel review flow</div>
+    </div>
+    <div class="bdowns">
+      <div class="bdowns-title">State Breakdowns</div>
+      <div class="bdown-grid">
+
+        <div class="bdown-card">
+          <div class="bdown-prev">
+            <div style="width:172px;background:#fff;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.11);padding:13px">
+              <div style="font-size:8px;font-weight:700;color:#9A9A9A;letter-spacing:.06em;margin-bottom:7px">RATE YOUR STAY</div>
+              <div style="font-size:7px;color:#5C5C5C;margin-bottom:10px;line-height:1.4">Marriott Marquis SF — Nov 12–15</div>
+              <div style="font-size:14px;color:#D4D4D4;letter-spacing:1px;margin-bottom:8px">★★★★★</div>
+              <div style="display:flex;gap:4px;margin-bottom:6px"><div style="flex:1;height:15px;border:1px solid #E0E0E0;border-radius:3px"></div><div style="flex:1;height:15px;border:1px solid #E0E0E0;border-radius:3px"></div></div>
+              <div style="height:26px;background:#F4F4F4;border-radius:3px;border:1px solid #E0E0E0;margin-bottom:7px"></div>
+              <div style="height:16px;background:#E0E0E0;border-radius:3px"></div>
+            </div>
+          </div>
+          <div class="bdown-foot"><span class="bdown-label">Default</span><span class="bdown-sub">No input yet</span></div>
+        </div>
+
+        <div class="bdown-card">
+          <div class="bdown-prev">
+            <div style="width:172px;background:#fff;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.11);padding:13px">
+              <div style="font-size:8px;font-weight:700;color:#9A9A9A;letter-spacing:.06em;margin-bottom:7px">RATE YOUR STAY</div>
+              <div style="font-size:7px;color:#5C5C5C;margin-bottom:7px;line-height:1.4">Marriott Marquis SF — Nov 12–15</div>
+              <div style="display:flex;gap:2px;margin-bottom:2px"><span style="font-size:14px;color:#1A1A1A">★★★★</span><span style="font-size:14px;color:#D4D4D4">★</span></div>
+              <div style="font-size:7px;color:#5C5C5C;margin-bottom:8px">Very good</div>
+              <div style="display:flex;gap:4px;margin-bottom:6px"><div style="flex:1;height:15px;background:#1A1A1A;border-radius:3px"></div><div style="flex:1;height:15px;border:1px solid #E0E0E0;border-radius:3px"></div></div>
+              <div style="height:26px;background:#F4F4F4;border-radius:3px;border:1px solid #E0E0E0;margin-bottom:7px"></div>
+              <div style="height:16px;background:#1A1A1A;border-radius:3px"></div>
+            </div>
+          </div>
+          <div class="bdown-foot"><span class="bdown-label">Rating + Recommend</span><span class="bdown-sub">Partially filled</span></div>
+        </div>
+
+        <div class="bdown-card">
+          <div class="bdown-prev">
+            <div style="width:172px;background:#fff;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.11);padding:13px">
+              <div style="font-size:8px;font-weight:700;color:#9A9A9A;letter-spacing:.06em;margin-bottom:7px">RATE YOUR STAY</div>
+              <div style="font-size:7px;color:#5C5C5C;margin-bottom:7px;line-height:1.4">Marriott Marquis SF — Nov 12–15</div>
+              <div style="font-size:14px;color:#1A1A1A;margin-bottom:2px">★★★★★</div>
+              <div style="font-size:7px;color:#5C5C5C;margin-bottom:8px">Excellent</div>
+              <div style="display:flex;gap:4px;margin-bottom:6px"><div style="flex:1;height:15px;background:#1A1A1A;border-radius:3px"></div><div style="flex:1;height:15px;border:1px solid #E0E0E0;border-radius:3px"></div></div>
+              <div style="height:32px;background:#F4F4F4;border-radius:3px;border:1px solid #1A1A1A;margin-bottom:7px;padding:5px 6px"><div style="height:3px;background:#C8C8C8;border-radius:2px;margin-bottom:3px"></div><div style="height:3px;background:#C8C8C8;border-radius:2px;width:70%"></div></div>
+              <div style="height:16px;background:#1A1A1A;border-radius:3px"></div>
+            </div>
+          </div>
+          <div class="bdown-foot"><span class="bdown-label">Fully filled</span><span class="bdown-sub">Ready to submit</span></div>
+        </div>
+
+        <div class="bdown-card">
+          <div class="bdown-prev">
+            <div style="width:172px;background:#fff;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.11);padding:18px;text-align:center">
+              <div style="width:30px;height:30px;background:#1A1A1A;border-radius:50%;margin:0 auto 10px;display:flex;align-items:center;justify-content:center">
+                <svg width="13" height="13" viewBox="0 0 14 14"><path d="M2 7.5L5 10.5L12 3.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <div style="font-size:9px;font-weight:700;margin-bottom:4px">Review submitted</div>
+              <div style="font-size:7px;color:#5C5C5C;line-height:1.5;margin-bottom:10px">Your feedback helps colleagues make better booking decisions.</div>
+              <div style="height:13px;border:1px solid #E0E0E0;border-radius:3px"></div>
+            </div>
+          </div>
+          <div class="bdown-foot"><span class="bdown-label">Success</span><span class="bdown-sub">Submitted state</span></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal 1 -->
+<div class="overlay" id="m1" onclick="closeModal('m1',event)">
+  <div class="modal" style="width:460px;max-width:calc(100vw - 32px)" onclick="event.stopPropagation()">
+    <div id="m1-form">
+      <div style="padding:24px 24px 0;display:flex;align-items:flex-start;justify-content:space-between">
+        <div>
+          <div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:#9A9A9A;margin-bottom:4px">Rate your stay</div>
+          <div style="font-size:19px;font-weight:700;letter-spacing:-.02em">How was the hotel?</div>
+        </div>
+        <button onclick="closeModal('m1')" style="background:none;border:none;cursor:pointer;color:#9A9A9A;font-size:18px;line-height:1;padding:4px;margin-top:-2px">✕</button>
+      </div>
+      <div style="padding:14px 24px 0">
+        <div class="hotel-strip">
+          <div class="hotel-thumb"><svg width="17" height="17" viewBox="0 0 18 18" fill="none"><rect x="2" y="5" width="14" height="11" rx="1" stroke="#9A9A9A" stroke-width="1.2"/><path d="M6 16V11h6v5" stroke="#9A9A9A" stroke-width="1.2"/><path d="M1 16h16" stroke="#9A9A9A" stroke-width="1.2" stroke-linecap="round"/></svg></div>
+          <div style="flex:1;min-width:0">
+            <div class="hotel-name">Marriott Marquis San Francisco</div>
+            <div class="hotel-meta">Nov 12–15, 2024 · 3 nights · San Francisco, CA</div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="fsec">
+          <div class="sec-h">Rate your stay</div>
+          <div class="sec-s">All four fields required</div>
+          <div style="display:flex;flex-direction:column;gap:12px;margin-top:4px">
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="font-size:12px;font-weight:600;color:#141414;width:100px;flex-shrink:0">Overall</span>
+              <div class="stars" id="s1-stars" style="gap:5px;flex-shrink:0">
+                <span class="star" style="font-size:26px" onmouseenter="hov('s1',1)" onmouseleave="unhov('s1')" onclick="pick('s1',1)">★</span>
+                <span class="star" style="font-size:26px" onmouseenter="hov('s1',2)" onmouseleave="unhov('s1')" onclick="pick('s1',2)">★</span>
+                <span class="star" style="font-size:26px" onmouseenter="hov('s1',3)" onmouseleave="unhov('s1')" onclick="pick('s1',3)">★</span>
+                <span class="star" style="font-size:26px" onmouseenter="hov('s1',4)" onmouseleave="unhov('s1')" onclick="pick('s1',4)">★</span>
+                <span class="star" style="font-size:26px" onmouseenter="hov('s1',5)" onmouseleave="unhov('s1')" onclick="pick('s1',5)">★</span>
+              </div>
+              <div class="rlabel" id="s1-lbl" style="font-size:11px;margin-top:0;min-height:0;flex:1">—</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="font-size:12px;color:#5C5C5C;width:100px;flex-shrink:0">Cleanliness</span>
+              <div id="s1-cl" style="display:flex;gap:4px">
+                <span class="star-sm" onmouseenter="hsub('s1-cl',1)" onmouseleave="uhsub('s1-cl')" onclick="psub('s1-cl',1)">★</span>
+                <span class="star-sm" onmouseenter="hsub('s1-cl',2)" onmouseleave="uhsub('s1-cl')" onclick="psub('s1-cl',2)">★</span>
+                <span class="star-sm" onmouseenter="hsub('s1-cl',3)" onmouseleave="uhsub('s1-cl')" onclick="psub('s1-cl',3)">★</span>
+                <span class="star-sm" onmouseenter="hsub('s1-cl',4)" onmouseleave="uhsub('s1-cl')" onclick="psub('s1-cl',4)">★</span>
+                <span class="star-sm" onmouseenter="hsub('s1-cl',5)" onmouseleave="uhsub('s1-cl')" onclick="psub('s1-cl',5)">★</span>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="font-size:12px;color:#5C5C5C;width:100px;flex-shrink:0">Service</span>
+              <div id="s1-sv" style="display:flex;gap:4px">
+                <span class="star-sm" onmouseenter="hsub('s1-sv',1)" onmouseleave="uhsub('s1-sv')" onclick="psub('s1-sv',1)">★</span>
+                <span class="star-sm" onmouseenter="hsub('s1-sv',2)" onmouseleave="uhsub('s1-sv')" onclick="psub('s1-sv',2)">★</span>
+                <span class="star-sm" onmouseenter="hsub('s1-sv',3)" onmouseleave="uhsub('s1-sv')" onclick="psub('s1-sv',3)">★</span>
+                <span class="star-sm" onmouseenter="hsub('s1-sv',4)" onmouseleave="uhsub('s1-sv')" onclick="psub('s1-sv',4)">★</span>
+                <span class="star-sm" onmouseenter="hsub('s1-sv',5)" onmouseleave="uhsub('s1-sv')" onclick="psub('s1-sv',5)">★</span>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="font-size:12px;color:#5C5C5C;width:100px;flex-shrink:0">Convenience</span>
+              <div id="s1-cv" style="display:flex;gap:4px">
+                <span class="star-sm" onmouseenter="hsub('s1-cv',1)" onmouseleave="uhsub('s1-cv')" onclick="psub('s1-cv',1)">★</span>
+                <span class="star-sm" onmouseenter="hsub('s1-cv',2)" onmouseleave="uhsub('s1-cv')" onclick="psub('s1-cv',2)">★</span>
+                <span class="star-sm" onmouseenter="hsub('s1-cv',3)" onmouseleave="uhsub('s1-cv')" onclick="psub('s1-cv',3)">★</span>
+                <span class="star-sm" onmouseenter="hsub('s1-cv',4)" onmouseleave="uhsub('s1-cv')" onclick="psub('s1-cv',4)">★</span>
+                <span class="star-sm" onmouseenter="hsub('s1-cv',5)" onmouseleave="uhsub('s1-cv')" onclick="psub('s1-cv',5)">★</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="divider" style="margin:14px 0"></div>
+        <div class="fsec">
+          <div class="sec-h">Would you recommend this hotel to colleagues?</div>
+          <div class="sec-s">Based on value, comfort, and business suitability</div>
+          <div class="rec-row">
+            <button class="rec-btn" id="r1-y" onclick="rec('r1','y')">
+              <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5 10.5L12 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Yes, I would
+            </button>
+            <button class="rec-btn" id="r1-n" onclick="rec('r1','n')">
+              <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M3.5 3.5L10.5 10.5M10.5 3.5L3.5 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>No, I wouldn't
+            </button>
+          </div>
+        </div>
+        <div class="divider" style="margin:14px 0"></div>
+        <div class="fsec" style="margin-bottom:18px">
+          <label class="flabel">Written feedback <span class="fopt">(optional)</span></label>
+          <textarea class="ftextarea" id="t1" rows="3" placeholder="What stood out? Share anything that would help a colleague decide..." maxlength="500" oninput="cc('cc1',this.value.length,500)"></textarea>
+          <div class="charcount" id="cc1">0 / 500</div>
+        </div>
+      </div>
+      <div style="padding:14px 24px;border-top:1px solid #E2E2E2;display:flex;align-items:center;justify-content:space-between">
+        <button class="btn-s" onclick="closeModal('m1')">Skip for now</button>
+        <button class="btn-p" id="sub1" onclick="submit('m1')" disabled>Submit review</button>
+      </div>
+    </div>
+    <div id="m1-ok" style="display:none">
+      <div class="success-wrap">
+        <div class="success-icon"><svg width="20" height="20" viewBox="0 0 22 22" fill="none"><path d="M4 11L8.5 15.5L18 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="success-h">Review submitted</div>
+        <div class="success-p">Thanks for rating Marriott Marquis SF. Your feedback helps colleagues make smarter booking decisions.</div>
+        <div style="margin-top:22px"><button class="btn-p" onclick="closeModal('m1')">Done</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════ CONCEPT 2 ═══ -->
+<div class="page" id="pg-c2">
+  <div class="cnav">
+    <button class="cnav-back" onclick="go('hub')">← Back</button>
+    <div class="cnav-sep"></div>
+    <span class="cnav-sub">Concept 02 —</span>
+    <span class="cnav-name">Contextual Side Sheet</span>
+    <div class="cnav-pills">
+      <button class="cpill" onclick="navTo('c1',this)">01</button>
+      <button class="cpill on" onclick="navTo('c2',this)">02</button>
+      <button class="cpill" onclick="navTo('c3',this)">03</button>
+      <button class="cpill" onclick="navTo('admin',this)">04</button>
+    </div>
+  </div>
+  <div class="cstage">
+    <div class="stage-hero"><div class="stage-hero-inner">
+      <div class="stage-num">Concept 02</div>
+      <div class="stage-h2">Contextual Side Sheet</div>
+      <div class="stage-desc">Right-anchored panel that slides in alongside existing content. More surface area for hotel context, sub-ratings, and extended feedback without interrupting the page.</div>
+    </div></div>
+    <div class="demo">
+      <button class="demo-btn" onclick="openSheet()">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="1" y="2" width="14" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M10 2v12" stroke="currentColor" stroke-width="1.5"/></svg>
+        Open review panel
+      </button>
+      <div class="demo-hint">Slides in from the right edge</div>
+    </div>
+    <div class="bdowns">
+      <div class="bdowns-title">State Breakdowns</div>
+      <div class="bdown-grid">
+
+        <div class="bdown-card">
+          <div class="bdown-prev">
+            <div style="display:flex;width:196px;height:155px;border-radius:6px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.10)">
+              <div style="flex:1;background:#EFEFEF"></div>
+              <div style="width:92px;background:#fff;border-left:1px solid #E2E2E2;padding:8px">
+                <div style="height:5px;background:#1A1A1A;border-radius:2px;width:80%;margin-bottom:4px"></div>
+                <div style="height:4px;background:#E0E0E0;border-radius:2px;width:55%;margin-bottom:9px"></div>
+                <div style="font-size:11px;color:#D4D4D4;margin-bottom:4px">★★★★★</div>
+                <div style="display:flex;gap:3px;margin-bottom:7px"><div style="flex:1;height:13px;border:1px solid #E0E0E0;border-radius:2px"></div><div style="flex:1;height:13px;border:1px solid #E0E0E0;border-radius:2px"></div></div>
+                <div style="height:20px;background:#F0F0F0;border-radius:3px;border:1px solid #E0E0E0;margin-bottom:4px"></div>
+                <div style="height:14px;background:#E0E0E0;border-radius:3px"></div>
+              </div>
+            </div>
+          </div>
+          <div class="bdown-foot"><span class="bdown-label">Open — Default</span><span class="bdown-sub">No selections</span></div>
+        </div>
+
+        <div class="bdown-card">
+          <div class="bdown-prev">
+            <div style="display:flex;width:196px;height:155px;border-radius:6px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.10)">
+              <div style="flex:1;background:#EFEFEF;opacity:.45"></div>
+              <div style="width:92px;background:#fff;border-left:1px solid #E2E2E2;padding:8px">
+                <div style="height:5px;background:#1A1A1A;border-radius:2px;width:80%;margin-bottom:4px"></div>
+                <div style="height:4px;background:#E0E0E0;border-radius:2px;width:55%;margin-bottom:7px"></div>
+                <div style="font-size:11px;color:#1A1A1A;margin-bottom:2px">★★★★<span style="color:#D4D4D4">★</span></div>
+                <div style="font-size:6px;color:#5C5C5C;margin-bottom:6px">Very good</div>
+                <div style="display:flex;gap:3px;margin-bottom:5px"><div style="flex:1;height:13px;background:#1A1A1A;border-radius:2px"></div><div style="flex:1;height:13px;border:1px solid #E0E0E0;border-radius:2px"></div></div>
+                <div style="height:22px;background:#F4F4F4;border-radius:3px;border:1px solid #1A1A1A;margin-bottom:4px"></div>
+                <div style="height:14px;background:#1A1A1A;border-radius:3px"></div>
+              </div>
+            </div>
+          </div>
+          <div class="bdown-foot"><span class="bdown-label">In progress</span><span class="bdown-sub">Partially filled</span></div>
+        </div>
+
+        <div class="bdown-card">
+          <div class="bdown-prev">
+            <div style="display:flex;width:196px;height:155px;border-radius:6px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.10)">
+              <div style="flex:1;background:#EFEFEF;opacity:.4"></div>
+              <div style="width:92px;background:#fff;border-left:1px solid #E2E2E2;padding:8px;display:flex;flex-direction:column;align-items:center;justify-content:center">
+                <div style="width:24px;height:24px;background:#1A1A1A;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:6px"><svg width="11" height="11" viewBox="0 0 12 12"><path d="M2 6L5 9L10 3" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div style="font-size:8px;font-weight:700;text-align:center;margin-bottom:3px">Review submitted</div>
+                <div style="font-size:7px;color:#9A9A9A;text-align:center;line-height:1.4">Visible to colleagues</div>
+                <div style="height:13px;border:1px solid #E0E0E0;border-radius:3px;margin-top:9px;width:76%"></div>
+              </div>
+            </div>
+          </div>
+          <div class="bdown-foot"><span class="bdown-label">Success</span><span class="bdown-sub">Submitted in-panel</span></div>
+        </div>
+
+        <div class="bdown-card">
+          <div class="bdown-prev">
+            <div style="width:196px;height:155px;border-radius:6px;background:#EFEFEF;box-shadow:0 2px 10px rgba(0,0,0,.10)"></div>
+          </div>
+          <div class="bdown-foot"><span class="bdown-label">Closed</span><span class="bdown-sub">No panel visible</span></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Sheet overlay -->
+<div class="sheet-bg" id="sh-bg" onclick="closeSheet(event)">
+  <div class="sheet" onclick="event.stopPropagation()">
+    <div style="padding:18px 18px 14px;border-bottom:1px solid #E2E2E2;flex-shrink:0">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:11px">
+        <div>
+          <div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:#9A9A9A;margin-bottom:2px">Post-stay review</div>
+          <div style="font-size:17px;font-weight:700;letter-spacing:-.02em">Rate your hotel</div>
+        </div>
+        <button onclick="closeSheet()" style="background:#F0F0F0;border:none;cursor:pointer;color:#5C5C5C;width:27px;height:27px;border-radius:50%;font-size:13px;display:flex;align-items:center;justify-content:center">✕</button>
+      </div>
+      <div style="background:#F7F7F7;border-radius:8px;padding:9px 12px;display:flex;gap:9px;align-items:center">
+        <div style="width:34px;height:34px;background:#E0E0E0;border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center"><svg width="15" height="15" viewBox="0 0 18 18" fill="none"><rect x="2" y="5" width="14" height="11" rx="1" stroke="#9A9A9A" stroke-width="1.2"/><path d="M6 16V11h6v5" stroke="#9A9A9A" stroke-width="1.2"/><path d="M1 16h16" stroke="#9A9A9A" stroke-width="1.2" stroke-linecap="round"/></svg></div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;font-weight:600;color:#141414;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Marriott Marquis SF</div>
+          <div style="font-size:11px;color:#9A9A9A;margin-top:1px">Nov 12–15, 2024 · 3 nights</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          <div style="font-size:11px;color:#9A9A9A">Traveler</div>
+          <div style="font-size:11px;font-weight:600;color:#141414">W. Noel</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="scrollable" style="padding:18px" id="sh-form">
+      <div class="fsec">
+        <div class="sec-h">Overall rating</div>
+        <div class="sec-s">How was your overall stay?</div>
+        <div class="stars" id="s2-stars">
+          <span class="star" onmouseenter="hov('s2',1)" onmouseleave="unhov('s2')" onclick="pick('s2',1)">★</span>
+          <span class="star" onmouseenter="hov('s2',2)" onmouseleave="unhov('s2')" onclick="pick('s2',2)">★</span>
+          <span class="star" onmouseenter="hov('s2',3)" onmouseleave="unhov('s2')" onclick="pick('s2',3)">★</span>
+          <span class="star" onmouseenter="hov('s2',4)" onmouseleave="unhov('s2')" onclick="pick('s2',4)">★</span>
+          <span class="star" onmouseenter="hov('s2',5)" onmouseleave="unhov('s2')" onclick="pick('s2',5)">★</span>
+        </div>
+        <div class="rlabel" id="s2-lbl">Select a rating</div>
+      </div>
+      <div class="fsec">
+        <div class="sec-h">Sub-ratings</div>
+        <div class="sec-s">All fields required</div>
+        <div style="display:flex;flex-direction:column;gap:9px">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span style="font-size:12px;color:#5C5C5C;width:90px">Cleanliness</span>
+            <div id="s2-cl" style="display:flex;gap:4px">
+              <span class="star-sm" onmouseenter="hsub('s2-cl',1)" onmouseleave="uhsub('s2-cl')" onclick="psub('s2-cl',1)">★</span>
+              <span class="star-sm" onmouseenter="hsub('s2-cl',2)" onmouseleave="uhsub('s2-cl')" onclick="psub('s2-cl',2)">★</span>
+              <span class="star-sm" onmouseenter="hsub('s2-cl',3)" onmouseleave="uhsub('s2-cl')" onclick="psub('s2-cl',3)">★</span>
+              <span class="star-sm" onmouseenter="hsub('s2-cl',4)" onmouseleave="uhsub('s2-cl')" onclick="psub('s2-cl',4)">★</span>
+              <span class="star-sm" onmouseenter="hsub('s2-cl',5)" onmouseleave="uhsub('s2-cl')" onclick="psub('s2-cl',5)">★</span>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span style="font-size:12px;color:#5C5C5C;width:90px">Service</span>
+            <div id="s2-sv" style="display:flex;gap:4px">
+              <span class="star-sm" onmouseenter="hsub('s2-sv',1)" onmouseleave="uhsub('s2-sv')" onclick="psub('s2-sv',1)">★</span>
+              <span class="star-sm" onmouseenter="hsub('s2-sv',2)" onmouseleave="uhsub('s2-sv')" onclick="psub('s2-sv',2)">★</span>
+              <span class="star-sm" onmouseenter="hsub('s2-sv',3)" onmouseleave="uhsub('s2-sv')" onclick="psub('s2-sv',3)">★</span>
+              <span class="star-sm" onmouseenter="hsub('s2-sv',4)" onmouseleave="uhsub('s2-sv')" onclick="psub('s2-sv',4)">★</span>
+              <span class="star-sm" onmouseenter="hsub('s2-sv',5)" onmouseleave="uhsub('s2-sv')" onclick="psub('s2-sv',5)">★</span>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span style="font-size:12px;color:#5C5C5C;width:90px">Convenience</span>
+            <div id="s2-cv" style="display:flex;gap:4px">
+              <span class="star-sm" onmouseenter="hsub('s2-cv',1)" onmouseleave="uhsub('s2-cv')" onclick="psub('s2-cv',1)">★</span>
+              <span class="star-sm" onmouseenter="hsub('s2-cv',2)" onmouseleave="uhsub('s2-cv')" onclick="psub('s2-cv',2)">★</span>
+              <span class="star-sm" onmouseenter="hsub('s2-cv',3)" onmouseleave="uhsub('s2-cv')" onclick="psub('s2-cv',3)">★</span>
+              <span class="star-sm" onmouseenter="hsub('s2-cv',4)" onmouseleave="uhsub('s2-cv')" onclick="psub('s2-cv',4)">★</span>
+              <span class="star-sm" onmouseenter="hsub('s2-cv',5)" onmouseleave="uhsub('s2-cv')" onclick="psub('s2-cv',5)">★</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="fsec">
+        <div class="sec-h">Would you recommend this hotel to colleagues?</div>
+        <div class="sec-s">Consider location, value, and business suitability</div>
+        <div class="rec-row">
+          <button class="rec-btn" id="r2-y" onclick="rec('r2','y')">
+            <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5 10.5L12 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Yes
+          </button>
+          <button class="rec-btn" id="r2-n" onclick="rec('r2','n')">
+            <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M3.5 3.5L10.5 10.5M10.5 3.5L3.5 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>No
+          </button>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="fsec" style="margin-bottom:6px">
+        <label class="flabel">Written feedback <span class="fopt">(optional)</span></label>
+        <textarea class="ftextarea" id="t2" rows="4" placeholder="Share your experience — what worked well, what didn't, anything a future traveler should know..." maxlength="600" oninput="cc('cc2',this.value.length,600)"></textarea>
+        <div class="charcount" id="cc2">0 / 600</div>
+      </div>
+    </div>
+
+    <div id="sh-ok" style="display:none;flex:1;align-items:center;justify-content:center;padding:40px 20px">
+      <div style="text-align:center">
+        <div class="success-icon"><svg width="20" height="20" viewBox="0 0 22 22" fill="none"><path d="M4 11L8.5 15.5L18 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="success-h">Review submitted</div>
+        <div class="success-p">Your feedback is saved and visible to colleagues searching this property.</div>
+        <div style="margin-top:22px"><button class="btn-p" onclick="closeSheet()">Close panel</button></div>
+      </div>
+    </div>
+
+    <div style="padding:13px 18px;border-top:1px solid #E2E2E2;display:flex;align-items:center;justify-content:space-between;flex-shrink:0" id="sh-foot">
+      <button class="btn-s" onclick="closeSheet()">Cancel</button>
+      <button class="btn-p" id="sub2" onclick="submitSheet()" disabled>Submit review</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════ CONCEPT 3 ═══ -->
+<div class="page" id="pg-c3">
+  <div class="cnav">
+    <button class="cnav-back" onclick="go('hub')">← Back</button>
+    <div class="cnav-sep"></div>
+    <span class="cnav-sub">Concept 03 —</span>
+    <span class="cnav-name">Guided Steps</span>
+    <div class="cnav-pills">
+      <button class="cpill" onclick="navTo('c1',this)">01</button>
+      <button class="cpill" onclick="navTo('c2',this)">02</button>
+      <button class="cpill on" onclick="navTo('c3',this)">03</button>
+      <button class="cpill" onclick="navTo('admin',this)">04</button>
+    </div>
+  </div>
+  <div class="cstage">
+    <div class="stage-hero"><div class="stage-hero-inner">
+      <div class="stage-num">Concept 03</div>
+      <div class="stage-h2">Guided Steps</div>
+      <div class="stage-desc">A 3-step modal that introduces one focused question at a time. Higher completion rates for structured data collection with less perceived friction per screen.</div>
+    </div></div>
+    <div class="demo">
+      <button class="demo-btn" onclick="openStep()">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M8 5v3l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Begin guided review
+      </button>
+      <div class="demo-hint">3 steps · ~30 seconds</div>
+    </div>
+    <div class="bdowns">
+      <div class="bdowns-title">State Breakdowns</div>
+      <div class="bdown-grid">
+
+        <div class="bdown-card">
+          <div class="bdown-prev">
+            <div style="width:182px;background:#fff;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.11);padding:13px">
+              <div style="display:flex;gap:3px;justify-content:center;margin-bottom:9px">
+                <div style="width:16px;height:3px;border-radius:2px;background:#1A1A1A"></div>
+                <div style="width:7px;height:3px;border-radius:2px;background:#E0E0E0"></div>
+                <div style="width:7px;height:3px;border-radius:2px;background:#E0E0E0"></div>
+              </div>
+              <div style="font-size:7px;font-weight:700;color:#9A9A9A;letter-spacing:.06em;margin-bottom:3px">STEP 1 OF 3</div>
+              <div style="font-size:9px;font-weight:700;margin-bottom:8px">How was your stay?</div>
+              <div style="font-size:16px;color:#D4D4D4;text-align:center;margin-bottom:8px">★★★★★</div>
+              <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px">
+                <div style="font-size:6px;border:1px solid #E0E0E0;border-radius:100px;padding:2px 6px;color:#9A9A9A">Location</div>
+                <div style="font-size:6px;border:1px solid #E0E0E0;border-radius:100px;padding:2px 6px;color:#9A9A9A">Service</div>
+                <div style="font-size:6px;border:1px solid #1A1A1A;border-radius:100px;padding:2px 6px;color:#fff;background:#1A1A1A">Value</div>
+              </div>
+              <div style="height:15px;background:#E0E0E0;border-radius:3px"></div>
+            </div>
+          </div>
+          <div class="bdown-foot"><span class="bdown-label">Step 1 — Rating</span><span class="bdown-sub">Stars + highlight chips</span></div>
+        </div>
+
+        <div class="bdown-card">
+          <div class="bdown-prev">
+            <div style="width:182px;background:#fff;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.11);padding:13px">
+              <div style="display:flex;gap:3px;justify-content:center;margin-bottom:9px">
+                <div style="width:7px;height:3px;border-radius:2px;background:#1A1A1A"></div>
+                <div style="width:16px;height:3px;border-radius:2px;background:#1A1A1A"></div>
+                <div style="width:7px;height:3px;border-radius:2px;background:#E0E0E0"></div>
+              </div>
+              <div style="font-size:7px;font-weight:700;color:#9A9A9A;letter-spacing:.06em;margin-bottom:3px">STEP 2 OF 3</div>
+              <div style="font-size:9px;font-weight:700;margin-bottom:9px;line-height:1.3">Recommend to colleagues?</div>
+              <div style="display:flex;gap:4px;margin-bottom:8px"><div style="flex:1;height:20px;background:#1A1A1A;border-radius:4px"></div><div style="flex:1;height:20px;border:1px solid #E0E0E0;border-radius:4px"></div></div>
+              <div style="display:flex;justify-content:space-between">
+                <div style="height:13px;width:38%;border:1px solid #E0E0E0;border-radius:3px"></div>
+                <div style="height:13px;width:38%;background:#1A1A1A;border-radius:3px"></div>
+              </div>
+            </div>
+          </div>
+          <div class="bdown-foot"><span class="bdown-label">Step 2 — Recommend</span><span class="bdown-sub">Yes/No selection</span></div>
+        </div>
+
+        <div class="bdown-card">
+          <div class="bdown-prev">
+            <div style="width:182px;background:#fff;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.11);padding:13px">
+              <div style="display:flex;gap:3px;justify-content:center;margin-bottom:9px">
+                <div style="width:7px;height:3px;border-radius:2px;background:#1A1A1A"></div>
+                <div style="width:7px;height:3px;border-radius:2px;background:#1A1A1A"></div>
+                <div style="width:16px;height:3px;border-radius:2px;background:#1A1A1A"></div>
+              </div>
+              <div style="font-size:7px;font-weight:700;color:#9A9A9A;letter-spacing:.06em;margin-bottom:3px">STEP 3 OF 3</div>
+              <div style="font-size:9px;font-weight:700;margin-bottom:8px">Anything else to share?</div>
+              <div style="height:40px;background:#F4F4F4;border-radius:4px;border:1px solid #E0E0E0;margin-bottom:3px;padding:4px 5px"><div style="height:3px;background:#C8C8C8;border-radius:2px;margin-bottom:3px"></div><div style="height:3px;background:#C8C8C8;border-radius:2px;width:65%"></div></div>
+              <div style="font-size:6px;color:#C8C8C8;text-align:right;margin-bottom:6px">46 / 500</div>
+              <div style="display:flex;justify-content:space-between"><div style="height:13px;width:38%;border:1px solid #E0E0E0;border-radius:3px"></div><div style="height:13px;width:38%;background:#1A1A1A;border-radius:3px"></div></div>
+            </div>
+          </div>
+          <div class="bdown-foot"><span class="bdown-label">Step 3 — Written</span><span class="bdown-sub">Open text, optional</span></div>
+        </div>
+
+        <div class="bdown-card">
+          <div class="bdown-prev">
+            <div style="width:182px;background:#fff;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.11);padding:18px;text-align:center">
+              <div style="width:32px;height:32px;background:#1A1A1A;border-radius:50%;margin:0 auto 9px;display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 14 14"><path d="M2 7L5.5 10.5L12 4" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <div style="font-size:9px;font-weight:700;margin-bottom:3px">All done!</div>
+              <div style="font-size:7px;color:#5C5C5C;margin-bottom:7px">4 stars · Recommended</div>
+              <div style="height:13px;background:#1A1A1A;border-radius:3px"></div>
+            </div>
+          </div>
+          <div class="bdown-foot"><span class="bdown-label">Complete</span><span class="bdown-sub">Summary + done state</span></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Step Modal -->
+<div class="overlay" id="m3" onclick="closeStep(event)">
+  <div class="modal" style="width:480px;max-width:calc(100vw - 32px)" onclick="event.stopPropagation()">
+    <div class="progress-bar"><div class="progress-fill" id="p3" style="width:33%"></div></div>
+
+    <div id="m3-body" style="padding:28px 28px 0;padding-top:30px">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px">
+        <div>
+          <div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:#9A9A9A;margin-bottom:2px" id="st-label">Step 1 of 3</div>
+          <div style="font-size:19px;font-weight:700;letter-spacing:-.02em" id="st-title">How was your stay?</div>
+        </div>
+        <button onclick="closeStep()" style="background:none;border:none;cursor:pointer;color:#9A9A9A;font-size:18px;line-height:1;padding:4px;margin-top:-2px">✕</button>
+      </div>
+
+      <div class="hotel-strip" id="st-hotel">
+        <div class="hotel-thumb"><svg width="17" height="17" viewBox="0 0 18 18" fill="none"><rect x="2" y="5" width="14" height="11" rx="1" stroke="#9A9A9A" stroke-width="1.2"/><path d="M6 16V11h6v5" stroke="#9A9A9A" stroke-width="1.2"/><path d="M1 16h16" stroke="#9A9A9A" stroke-width="1.2" stroke-linecap="round"/></svg></div>
+        <div style="flex:1;min-width:0"><div class="hotel-name">Marriott Marquis San Francisco</div><div class="hotel-meta">Nov 12–15, 2024 · 3 nights</div></div>
+      </div>
+
+      <!-- step 1 -->
+      <div id="st1" style="padding-bottom:8px">
+        <div style="text-align:center;margin-bottom:14px">
+          <div style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#9A9A9A;margin-bottom:10px">Overall</div>
+          <div class="stars" id="s3-stars" style="justify-content:center;gap:10px">
+            <span class="star" style="font-size:38px" onmouseenter="hov('s3',1)" onmouseleave="unhov('s3')" onclick="pick('s3',1)">★</span>
+            <span class="star" style="font-size:38px" onmouseenter="hov('s3',2)" onmouseleave="unhov('s3')" onclick="pick('s3',2)">★</span>
+            <span class="star" style="font-size:38px" onmouseenter="hov('s3',3)" onmouseleave="unhov('s3')" onclick="pick('s3',3)">★</span>
+            <span class="star" style="font-size:38px" onmouseenter="hov('s3',4)" onmouseleave="unhov('s3')" onclick="pick('s3',4)">★</span>
+            <span class="star" style="font-size:38px" onmouseenter="hov('s3',5)" onmouseleave="unhov('s3')" onclick="pick('s3',5)">★</span>
+          </div>
+          <div class="rlabel" id="s3-lbl" style="text-align:center;font-size:14px;margin:10px 0 0">Select a rating</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:16px;border-top:1px solid #EBEBEB;padding-top:14px">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span style="font-size:12px;color:#5C5C5C;width:90px">Cleanliness</span>
+            <div id="s3-cl" style="display:flex;gap:4px">
+              <span class="star-sm" onmouseenter="hsub('s3-cl',1)" onmouseleave="uhsub('s3-cl')" onclick="psub('s3-cl',1)">★</span>
+              <span class="star-sm" onmouseenter="hsub('s3-cl',2)" onmouseleave="uhsub('s3-cl')" onclick="psub('s3-cl',2)">★</span>
+              <span class="star-sm" onmouseenter="hsub('s3-cl',3)" onmouseleave="uhsub('s3-cl')" onclick="psub('s3-cl',3)">★</span>
+              <span class="star-sm" onmouseenter="hsub('s3-cl',4)" onmouseleave="uhsub('s3-cl')" onclick="psub('s3-cl',4)">★</span>
+              <span class="star-sm" onmouseenter="hsub('s3-cl',5)" onmouseleave="uhsub('s3-cl')" onclick="psub('s3-cl',5)">★</span>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span style="font-size:12px;color:#5C5C5C;width:90px">Service</span>
+            <div id="s3-sv" style="display:flex;gap:4px">
+              <span class="star-sm" onmouseenter="hsub('s3-sv',1)" onmouseleave="uhsub('s3-sv')" onclick="psub('s3-sv',1)">★</span>
+              <span class="star-sm" onmouseenter="hsub('s3-sv',2)" onmouseleave="uhsub('s3-sv')" onclick="psub('s3-sv',2)">★</span>
+              <span class="star-sm" onmouseenter="hsub('s3-sv',3)" onmouseleave="uhsub('s3-sv')" onclick="psub('s3-sv',3)">★</span>
+              <span class="star-sm" onmouseenter="hsub('s3-sv',4)" onmouseleave="uhsub('s3-sv')" onclick="psub('s3-sv',4)">★</span>
+              <span class="star-sm" onmouseenter="hsub('s3-sv',5)" onmouseleave="uhsub('s3-sv')" onclick="psub('s3-sv',5)">★</span>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span style="font-size:12px;color:#5C5C5C;width:90px">Convenience</span>
+            <div id="s3-cv" style="display:flex;gap:4px">
+              <span class="star-sm" onmouseenter="hsub('s3-cv',1)" onmouseleave="uhsub('s3-cv')" onclick="psub('s3-cv',1)">★</span>
+              <span class="star-sm" onmouseenter="hsub('s3-cv',2)" onmouseleave="uhsub('s3-cv')" onclick="psub('s3-cv',2)">★</span>
+              <span class="star-sm" onmouseenter="hsub('s3-cv',3)" onmouseleave="uhsub('s3-cv')" onclick="psub('s3-cv',3)">★</span>
+              <span class="star-sm" onmouseenter="hsub('s3-cv',4)" onmouseleave="uhsub('s3-cv')" onclick="psub('s3-cv',4)">★</span>
+              <span class="star-sm" onmouseenter="hsub('s3-cv',5)" onmouseleave="uhsub('s3-cv')" onclick="psub('s3-cv',5)">★</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- step 2 -->
+      <div id="st2" style="display:none;padding-bottom:8px">
+        <div style="font-size:13px;color:#5C5C5C;margin-bottom:18px;line-height:1.6">Think about value, comfort, location, and business suitability for your colleagues.</div>
+        <div class="rec-row" style="gap:12px;margin-bottom:18px">
+          <button class="rec-btn" id="r3-y" onclick="rec('r3','y')" style="padding:16px;flex-direction:column;gap:7px;font-size:14px">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 12L9 17L20 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Yes, I would
+          </button>
+          <button class="rec-btn" id="r3-n" onclick="rec('r3','n')" style="padding:16px;flex-direction:column;gap:7px;font-size:14px">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            No, I wouldn't
+          </button>
+        </div>
+        <div id="st2-reason" style="display:none">
+          <label class="flabel">Anything specific? <span class="fopt">(optional)</span></label>
+          <textarea class="ftextarea" rows="2" placeholder="e.g. Too far from the venue, poor Wi-Fi..." maxlength="200"></textarea>
+        </div>
+      </div>
+
+      <!-- step 3 -->
+      <div id="st3" style="display:none;padding-bottom:8px">
+        <div style="font-size:13px;color:#5C5C5C;margin-bottom:14px;line-height:1.6">Help colleagues make a better decision. Share anything useful to know.</div>
+        <textarea class="ftextarea" id="t3" rows="5" placeholder="What was the day-to-day experience like? Would you stay here again for a work trip?" maxlength="500" oninput="cc('cc3',this.value.length,500)"></textarea>
+        <div class="charcount" id="cc3">0 / 500</div>
+      </div>
+    </div>
+
+    <!-- success -->
+    <div id="m3-ok" style="display:none;padding:36px 28px">
+      <div class="success-wrap" style="padding:0">
+        <div class="success-icon"><svg width="20" height="20" viewBox="0 0 22 22" fill="none"><path d="M4 11L8.5 15.5L18 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="success-h">All done!</div>
+        <div id="m3-summary" style="font-size:13px;color:#5C5C5C;margin-bottom:6px"></div>
+        <div class="success-p">Your review is live and visible to colleagues searching for hotels in San Francisco.</div>
+        <div style="margin-top:22px"><button class="btn-p" onclick="closeStep()">Close</button></div>
+      </div>
+    </div>
+
+    <!-- footer -->
+    <div style="padding:14px 28px;border-top:1px solid #E2E2E2;display:flex;align-items:center;justify-content:space-between" id="m3-foot">
+      <div style="display:flex;align-items:center;gap:10px">
+        <button class="btn-s" id="st-back" onclick="stepBack()" style="display:none">Back</button>
+        <div class="step-dots">
+          <div class="sdot active" id="sd1"></div>
+          <div class="sdot" id="sd2"></div>
+          <div class="sdot" id="sd3"></div>
+        </div>
+      </div>
+      <button class="btn-p" id="st-next" onclick="stepNext()" disabled>Next</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════ ADMIN ═══ -->
+<style>
+.anav-item{display:flex;align-items:center;justify-content:space-between;padding:8px 18px;font-size:13px;color:var(--text-2);cursor:pointer;transition:background .12s,color .12s;border-radius:0;user-select:none}
+.anav-item:hover{background:var(--hover);color:var(--text-1)}
+.anav-active{background:var(--hover);color:var(--text-1);font-weight:600}
+.tbl-row{border-bottom:1px solid #F0F0F0;transition:background .1s}
+.tbl-row:last-child{border-bottom:none}
+.tbl-row:hover{background:#FAFAFA}
+.tbl-row.selected{background:#F5F5F5}
+.tbl-row.deleting td{background:#FFF8F8}
+.badge-yes{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:#1A1A1A;background:#F0F0F0;border:1px solid #D8D8D8;border-radius:100px;padding:2px 8px}
+.badge-no{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:#9A9A9A;background:#FAFAFA;border:1px solid #E8E8E8;border-radius:100px;padding:2px 8px}
+.mini-star{font-size:12px;color:#D4D4D4;line-height:1}
+.mini-star.on{color:#1A1A1A}
+.act-btn{background:none;border:none;cursor:pointer;color:#9A9A9A;padding:5px;border-radius:var(--r4);transition:background .12s,color .12s;font-family:var(--font)}
+.act-btn:hover{background:var(--hover);color:var(--text-1)}
+.del-confirm{display:flex;align-items:center;gap:8px}
+.del-confirm span{font-size:12px;color:var(--text-2)}
+.del-yes{font-size:11px;font-weight:600;color:#FFF;background:#141414;border:none;border-radius:var(--r4);padding:4px 10px;cursor:pointer;font-family:var(--font)}
+.del-no{font-size:11px;font-weight:500;color:var(--text-2);background:none;border:1.5px solid var(--border);border-radius:var(--r4);padding:4px 10px;cursor:pointer;font-family:var(--font)}
+</style>
+
+<div class="page" id="pg-admin">
+  <div class="cnav">
+    <button class="cnav-back" onclick="go('hub')">← Back</button>
+    <div class="cnav-sep"></div>
+    <span class="cnav-sub">Admin —</span>
+    <span class="cnav-name">Review Management</span>
+    <div class="cnav-pills">
+      <button class="cpill" onclick="navTo('c1',this)">01</button>
+      <button class="cpill" onclick="navTo('c2',this)">02</button>
+      <button class="cpill" onclick="navTo('c3',this)">03</button>
+      <button class="cpill on" onclick="navTo('admin',this)">04</button>
+    </div>
+  </div>
+
+  <div style="margin-top:54px;display:flex;min-height:calc(100vh - 54px)">
+
+    <!-- Sidebar -->
+    <div style="width:238px;flex-shrink:0;border-right:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column">
+      <div style="padding:22px 20px 18px;border-bottom:1px solid var(--border);text-align:center">
+        <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3);margin-bottom:3px">AMEX GBT</div>
+        <div style="font-size:20px;font-weight:700;letter-spacing:-.02em">Egencia</div>
+        <div style="font-size:12px;color:var(--text-2);margin-top:3px">Egencia Test Company</div>
+      </div>
+      <div style="padding:8px 0;border-bottom:1px solid var(--border)">
+        <div id="anav-all" class="anav-item anav-active" onclick="adminNav(this)">
+          <span>All Reviews</span><span style="font-size:11px;color:var(--text-3);background:var(--active);border-radius:100px;padding:1px 7px;font-weight:500">24</span>
+        </div>
+        <div class="anav-item" onclick="adminNav(this)"><span>By Hotel</span></div>
+        <div class="anav-item" onclick="adminNav(this)"><span>By Traveler</span></div>
+        <div class="anav-item" onclick="adminNav(this)">
+          <span>Flagged</span><span style="font-size:11px;color:var(--surface);background:var(--border-strong);border-radius:100px;padding:1px 7px;font-weight:600">2</span>
+        </div>
+        <div class="anav-item" onclick="adminNav(this)"><span>Reports</span></div>
+      </div>
+      <div style="padding:8px 0">
+        <div style="font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--text-3);padding:6px 18px 6px">Settings</div>
+        <div class="anav-item" onclick="adminNav(this)"><span>Visibility rules</span></div>
+        <div class="anav-item" onclick="adminNav(this)"><span>Export data</span></div>
+      </div>
+    </div>
+
+    <!-- Main content -->
+    <div style="flex:1;min-width:0;display:flex;flex-direction:column;background:var(--bg)">
+
+      <!-- Header -->
+      <div style="background:var(--surface);border-bottom:1px solid var(--border);padding:22px 32px">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between">
+          <div>
+            <div style="font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px">Manage hotel reviews</div>
+            <div style="font-size:13px;color:var(--text-2);max-width:520px;line-height:1.5">View, moderate, and manage post-stay hotel reviews submitted by travelers. Edit content, remove reviews, or flag for follow-up.</div>
+          </div>
+          <button style="background:var(--text-1);color:#FFF;border:none;border-radius:var(--r8);padding:9px 18px;font-size:12px;font-weight:600;font-family:var(--font);cursor:pointer;transition:opacity .15s;white-space:nowrap" onmouseover="this.style.opacity='.82'" onmouseout="this.style.opacity='1'">Export reviews</button>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div style="background:var(--surface);border-bottom:1px solid var(--border);padding:11px 32px;display:flex;align-items:center;gap:10px">
+        <div style="position:relative;flex:1;max-width:260px">
+          <svg style="position:absolute;left:9px;top:50%;transform:translateY(-50%);pointer-events:none" width="13" height="13" viewBox="0 0 14 14" fill="none"><circle cx="6" cy="6" r="4.5" stroke="#9A9A9A" stroke-width="1.4"/><path d="M10 10L13 13" stroke="#9A9A9A" stroke-width="1.4" stroke-linecap="round"/></svg>
+          <input id="adm-search" type="text" placeholder="Search hotel or traveler…" oninput="admFilter()" style="width:100%;border:1.5px solid var(--border);border-radius:var(--r8);padding:7px 9px 7px 28px;font-size:12px;font-family:var(--font);color:var(--text-1);background:var(--surface);outline:none" onfocus="this.style.borderColor='#141414'" onblur="this.style.borderColor='#E2E2E2'">
+        </div>
+        <select id="adm-rating" onchange="admFilter()" style="border:1.5px solid var(--border);border-radius:var(--r8);padding:7px 10px;font-size:12px;font-family:var(--font);color:var(--text-2);background:var(--surface);cursor:pointer;outline:none">
+          <option value="">All ratings</option>
+          <option value="5">5 stars</option>
+          <option value="4">4 stars</option>
+          <option value="3">3 stars</option>
+          <option value="low">1–2 stars</option>
+        </select>
+        <select id="adm-rec" onchange="admFilter()" style="border:1.5px solid var(--border);border-radius:var(--r8);padding:7px 10px;font-size:12px;font-family:var(--font);color:var(--text-2);background:var(--surface);cursor:pointer;outline:none">
+          <option value="">All responses</option>
+          <option value="yes">Recommended</option>
+          <option value="no">Not recommended</option>
+        </select>
+        <div style="margin-left:auto;font-size:12px;color:var(--text-3)" id="adm-count"></div>
+      </div>
+
+      <!-- Bulk bar -->
+      <div id="adm-bulk" style="display:none;background:var(--text-1);color:#FFF;padding:10px 32px;align-items:center;justify-content:space-between">
+        <span style="font-size:13px;font-weight:500" id="adm-bulk-lbl">0 selected</span>
+        <div style="display:flex;gap:8px">
+          <button onclick="admBulkDelete()" style="background:none;border:1.5px solid rgba(255,255,255,.3);color:#FFF;border-radius:var(--r4);padding:5px 12px;font-size:12px;font-weight:600;font-family:var(--font);cursor:pointer">Delete selected</button>
+          <button onclick="admClearBulk()" style="background:none;border:none;color:rgba(255,255,255,.55);font-size:12px;font-family:var(--font);cursor:pointer">Clear</button>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div style="padding:24px 32px;overflow:auto;flex:1">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r8);overflow:hidden">
+          <table id="adm-table" style="width:100%;border-collapse:collapse">
+            <thead>
+              <tr style="border-bottom:1px solid var(--border);background:#FAFAFA">
+                <th style="width:40px;padding:10px 14px;text-align:center">
+                  <input type="checkbox" id="adm-sel-all" onchange="admSelAll(this.checked)" style="cursor:pointer;accent-color:#141414">
+                </th>
+                <th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--text-3);white-space:nowrap">Hotel / Location</th>
+                <th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--text-3);white-space:nowrap">Chain</th>
+                <th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--text-3);white-space:nowrap">Overall</th>
+                <th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--text-3);white-space:nowrap">Cleanliness</th>
+                <th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--text-3);white-space:nowrap">Service</th>
+                <th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--text-3);white-space:nowrap">Convenience</th>
+                <th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--text-3)">Recommend</th>
+                <th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--text-3)">Feedback</th>
+                <th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--text-3)">Traveler</th>
+                <th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--text-3);white-space:nowrap">Date</th>
+              </tr>
+            </thead>
+            <tbody id="adm-tbody"></tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px">
+          <div style="font-size:12px;color:var(--text-3)">Showing 1–5 of 24 reviews</div>
+          <div style="display:flex;gap:3px">
+            <button style="width:30px;height:30px;border:1.5px solid var(--border);border-radius:var(--r4);background:var(--surface);font-size:13px;cursor:pointer;color:var(--text-2)">‹</button>
+            <button style="width:30px;height:30px;border:1.5px solid var(--text-1);border-radius:var(--r4);background:var(--text-1);font-size:12px;cursor:pointer;color:#FFF;font-weight:600">1</button>
+            <button style="width:30px;height:30px;border:1.5px solid var(--border);border-radius:var(--r4);background:var(--surface);font-size:12px;cursor:pointer;color:var(--text-2)">2</button>
+            <button style="width:30px;height:30px;border:1.5px solid var(--border);border-radius:var(--r4);background:var(--surface);font-size:12px;cursor:pointer;color:var(--text-2)">3</button>
+            <button style="width:30px;height:30px;border:1.5px solid var(--border);border-radius:var(--r4);background:var(--surface);font-size:13px;cursor:pointer;color:var(--text-2)">›</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Edit review modal -->
+<div class="overlay" id="m-edit" onclick="closeEditModal(event)">
+  <div class="modal" style="width:480px;max-width:calc(100vw - 32px)" onclick="event.stopPropagation()">
+    <div style="padding:22px 24px 0;display:flex;align-items:flex-start;justify-content:space-between">
+      <div>
+        <div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--text-3);margin-bottom:3px">Edit review</div>
+        <div style="font-size:18px;font-weight:700;letter-spacing:-.02em" id="edit-hotel-name">—</div>
+      </div>
+      <button onclick="closeEditModal()" style="background:none;border:none;cursor:pointer;color:var(--text-3);font-size:18px;line-height:1;padding:4px;margin-top:-2px">✕</button>
+    </div>
+    <div style="padding:0 24px">
+      <div class="divider" style="margin:14px 0 18px"></div>
+      <div class="fsec">
+        <div class="sec-h">Rating</div>
+        <div class="sec-s">Adjust the star rating for this review</div>
+        <div class="stars" id="edit-stars" style="gap:10px">
+          <span class="star" onmouseenter="hov('edit',1)" onmouseleave="unhov('edit')" onclick="pick('edit',1)">★</span>
+          <span class="star" onmouseenter="hov('edit',2)" onmouseleave="unhov('edit')" onclick="pick('edit',2)">★</span>
+          <span class="star" onmouseenter="hov('edit',3)" onmouseleave="unhov('edit')" onclick="pick('edit',3)">★</span>
+          <span class="star" onmouseenter="hov('edit',4)" onmouseleave="unhov('edit')" onclick="pick('edit',4)">★</span>
+          <span class="star" onmouseenter="hov('edit',5)" onmouseleave="unhov('edit')" onclick="pick('edit',5)">★</span>
+        </div>
+        <div class="rlabel" id="edit-lbl"></div>
+      </div>
+      <div class="fsec" style="margin-top:18px">
+        <div class="sec-h">Recommend to colleagues?</div>
+        <div class="rec-row" style="margin-top:10px">
+          <button class="rec-btn" id="edit-y" onclick="rec('edit','y')">
+            <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5 10.5L12 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Yes
+          </button>
+          <button class="rec-btn" id="edit-n" onclick="rec('edit','n')">
+            <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M3.5 3.5L10.5 10.5M10.5 3.5L3.5 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>No
+          </button>
+        </div>
+      </div>
+      <div class="fsec" style="margin-top:18px;margin-bottom:20px">
+        <label class="flabel">Feedback text</label>
+        <textarea class="ftextarea" id="edit-text" rows="4" maxlength="500" placeholder="Review text…"></textarea>
+      </div>
+    </div>
+    <div style="padding:14px 24px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+      <button class="btn-s" onclick="closeEditModal()">Cancel</button>
+      <button class="btn-p" onclick="saveEdit()">Save changes</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── state ──
+const ST = {
+  s1:{r:0,cl:0,sv:0,cv:0,rec:null},
+  s2:{r:0,cl:0,sv:0,cv:0,rec:null},
+  s3:{r:0,cl:0,sv:0,cv:0,rec:null},
+  step:1
+};
+const LABELS = ['','Poor','Fair','Good','Very good','Excellent'];
+
+// ── nav ──
+function go(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('pg-'+id).classList.add('active');
+  window.scrollTo(0,0);
+}
+function navTo(id,btn){
+  btn.closest('.cnav-pills').querySelectorAll('.cpill').forEach(p=>p.classList.remove('on'));
+  btn.classList.add('on');
+  go(id);
+}
+
+// ── stars ──
+function hov(sid,n){
+  document.querySelectorAll('#'+sid+'-stars .star').forEach((s,i)=>{
+    s.classList.toggle('hov',i<n);
+    if(ST[sid].r===0) s.classList.remove('on');
+  });
+}
+function unhov(sid){
+  document.querySelectorAll('#'+sid+'-stars .star').forEach((s,i)=>{
+    s.classList.remove('hov');
+    s.classList.toggle('on',i<ST[sid].r);
+  });
+}
+function pick(sid,n){
+  ST[sid].r=n;
+  document.querySelectorAll('#'+sid+'-stars .star').forEach((s,i)=>{
+    s.classList.toggle('on',i<n); s.classList.remove('hov');
+  });
+  const lbl=document.getElementById(sid+'-lbl');
+  if(lbl){lbl.textContent=LABELS[n];lbl.classList.add('on');}
+  chkSub(sid);
+  if(sid==='s3') updStep();
+}
+
+// ── sub-stars ──
+function hsub(id,n){document.querySelectorAll('#'+id+' .star-sm').forEach((s,i)=>s.classList.toggle('hov',i<n));}
+function uhsub(id){
+  const v=parseInt(document.getElementById(id).dataset.v||0);
+  document.querySelectorAll('#'+id+' .star-sm').forEach((s,i)=>{s.classList.remove('hov');s.classList.toggle('on',i<v);});
+}
+function psub(id,n){
+  document.getElementById(id).dataset.v=n;
+  document.querySelectorAll('#'+id+' .star-sm').forEach((s,i)=>{s.classList.toggle('on',i<n);s.classList.remove('hov');});
+  const parts=id.split('-'); const sid=parts[0]; const dim=parts[1];
+  if(ST[sid]&&dim) ST[sid][dim]=n;
+  if(sid==='s1'||sid==='s2') chkSub(sid);
+  if(sid==='s3') updStep();
+}
+
+// ── recommend ──
+function rec(rid,v){
+  const [base]=rid.split('-');
+  // determine which state key
+  const skey = rid==='r1'?'s1':rid==='r2'?'s2':'s3';
+  ST[skey].rec=v;
+  document.getElementById(rid+'-y').classList.toggle('on',v==='y');
+  document.getElementById(rid+'-n').classList.toggle('on',v==='n');
+  chkSub(skey);
+  // concept 3 step 2
+  if(rid==='r3'){
+    const rw=document.getElementById('st2-reason');
+    if(rw) rw.style.display=v==='n'?'block':'none';
+    document.getElementById('st-next').disabled=false;
+  }
+}
+
+function chkSub(sid){
+  const btn=document.getElementById('sub'+sid.slice(-1));
+  if(btn) btn.disabled=!(ST[sid].r>0 && ST[sid].cl>0 && ST[sid].sv>0 && ST[sid].cv>0 && ST[sid].rec!==null);
+}
+
+// ── char count ──
+function cc(id,n,max){document.getElementById(id).textContent=n+' / '+max;}
+
+// ── modal 1 ──
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id,e){
+  if(e && e.target!==document.getElementById(id) && typeof e==='object') return;
+  document.getElementById(id).classList.remove('open');
+  setTimeout(()=>resetM1(),280);
+}
+function resetM1(){
+  ST.s1={r:0,cl:0,sv:0,cv:0,rec:null};
+  document.querySelectorAll('#s1-stars .star').forEach(s=>s.classList.remove('on','hov'));
+  const l=document.getElementById('s1-lbl'); if(l){l.textContent='Select a rating';l.classList.remove('on');}
+  ['s1-cl','s1-sv','s1-cv'].forEach(id=>{const el=document.getElementById(id);if(el){el.dataset.v=0;document.querySelectorAll('#'+id+' .star-sm').forEach(s=>s.classList.remove('on','hov'));}});
+  document.getElementById('r1-y').classList.remove('on');
+  document.getElementById('r1-n').classList.remove('on');
+  document.getElementById('t1').value='';
+  document.getElementById('cc1').textContent='0 / 500';
+  document.getElementById('m1-form').style.display='';
+  document.getElementById('m1-ok').style.display='none';
+  chkSub('s1');
+}
+function submit(id){
+  document.getElementById(id+'-form').style.display='none';
+  document.getElementById(id+'-ok').style.display='';
+}
+
+// ── sheet ──
+function openSheet(){document.getElementById('sh-bg').classList.add('open');}
+function closeSheet(e){
+  if(e && e.target!==document.getElementById('sh-bg')) return;
+  document.getElementById('sh-bg').classList.remove('open');
+  setTimeout(()=>resetSheet(),320);
+}
+function resetSheet(){
+  ST.s2={r:0,cl:0,sv:0,cv:0,rec:null};
+  document.querySelectorAll('#s2-stars .star').forEach(s=>s.classList.remove('on','hov'));
+  const l=document.getElementById('s2-lbl'); if(l){l.textContent='Select a rating';l.classList.remove('on');}
+  ['s2-cl','s2-sv','s2-cv'].forEach(id=>{
+    const el=document.getElementById(id); if(el){el.dataset.v=0;document.querySelectorAll('#'+id+' .star-sm').forEach(s=>s.classList.remove('on','hov'));}
+  });
+  document.getElementById('r2-y').classList.remove('on');
+  document.getElementById('r2-n').classList.remove('on');
+  document.getElementById('t2').value='';
+  document.getElementById('cc2').textContent='0 / 600';
+  document.getElementById('sh-form').style.display='';
+  document.getElementById('sh-ok').style.display='none';
+  document.getElementById('sh-foot').style.display='';
+  chkSub('s2');
+}
+function submitSheet(){
+  document.getElementById('sh-form').style.display='none';
+  document.getElementById('sh-foot').style.display='none';
+  document.getElementById('sh-ok').style.display='flex';
+}
+
+// ── stepped modal ──
+const STEP_TITLES=['How was your stay?','Would you recommend this hotel?','Anything else to share?'];
+const STEP_SUBS=['Step 1 of 3','Step 2 of 3','Step 3 of 3'];
+const PROG=['33%','66%','100%'];
+
+function openStep(){
+  ST.step=1; ST.s3={r:0,cl:0,sv:0,cv:0,rec:null};
+  document.getElementById('m3').classList.add('open');
+  updStep();
+}
+function closeStep(e){
+  if(e && e.target!==document.getElementById('m3') && typeof e==='object') return;
+  document.getElementById('m3').classList.remove('open');
+  setTimeout(resetStep,280);
+}
+function resetStep(){
+  ST.step=1; ST.s3={r:0,cl:0,sv:0,cv:0,rec:null};
+  document.querySelectorAll('#s3-stars .star').forEach(s=>s.classList.remove('on','hov'));
+  const l=document.getElementById('s3-lbl'); if(l){l.textContent='Select a rating';l.classList.remove('on');}
+  ['s3-cl','s3-sv','s3-cv'].forEach(id=>{const el=document.getElementById(id);if(el){el.dataset.v=0;document.querySelectorAll('#'+id+' .star-sm').forEach(s=>s.classList.remove('on','hov'));}});
+  document.getElementById('r3-y').classList.remove('on');
+  document.getElementById('r3-n').classList.remove('on');
+  document.getElementById('t3').value='';
+  document.getElementById('cc3').textContent='0 / 500';
+  const rw=document.getElementById('st2-reason'); if(rw) rw.style.display='none';
+  document.getElementById('m3-body').style.display='';
+  document.getElementById('m3-ok').style.display='none';
+  document.getElementById('m3-foot').style.display='';
+  updStep();
+}
+function updStep(){
+  const s=ST.step;
+  document.getElementById('st-label').textContent=STEP_SUBS[s-1];
+  document.getElementById('st-title').textContent=STEP_TITLES[s-1];
+  document.getElementById('p3').style.width=PROG[s-1];
+  document.getElementById('st1').style.display=s===1?'':'none';
+  document.getElementById('st2').style.display=s===2?'':'none';
+  document.getElementById('st3').style.display=s===3?'':'none';
+  document.getElementById('st-hotel').style.display=s<3?'':'none';
+  for(let i=1;i<=3;i++){
+    const d=document.getElementById('sd'+i);
+    d.classList.remove('active','done');
+    if(i<s) d.classList.add('done');
+    else if(i===s) d.classList.add('active');
+  }
+  const back=document.getElementById('st-back');
+  back.style.display=s>1?'':'none';
+  const next=document.getElementById('st-next');
+  next.textContent=s===3?'Submit review':'Next';
+  if(s===1) next.disabled=!(ST.s3.r>0&&ST.s3.cl>0&&ST.s3.sv>0&&ST.s3.cv>0);
+  else if(s===2) next.disabled=ST.s3.rec===null;
+  else next.disabled=false;
+}
+function stepNext(){
+  if(ST.step<3){ST.step++;updStep();}
+  else{
+    document.getElementById('m3-body').style.display='none';
+    document.getElementById('m3-foot').style.display='none';
+    document.getElementById('m3-summary').textContent=LABELS[ST.s3.r]+' ('+ST.s3.r+'/5 stars) · '+(ST.s3.rec==='y'?'Recommended':'Not recommended');
+    document.getElementById('m3-ok').style.display='';
+  }
+}
+function stepBack(){if(ST.step>1){ST.step--;updStep();}}
+
+// ── admin ──
+const REVIEWS = [
+  {id:1, hotel:'Marriott Marquis SF',    chain:'Marriott', loc:'San Francisco, CA', overall:5, cl:5, sv:4, cv:5, rec:true,  text:'Great location, easy walk to Moscone Center. Rooms were clean and well-maintained throughout.',  traveler:'J. Park',    date:'Nov 15, 2024'},
+  {id:2, hotel:'Hyatt Regency Chicago',  chain:'Hyatt',    loc:'Chicago, IL',       overall:3, cl:3, sv:2, cv:4, rec:false, text:'Room was acceptable but Wi-Fi was unreliable the entire stay. Front desk response was slow.',      traveler:'T. Williams',date:'Nov 8, 2024'},
+  {id:3, hotel:'Hilton Midtown NYC',     chain:'Hilton',   loc:'New York, NY',      overall:4, cl:5, sv:4, cv:5, rec:true,  text:'Clean, well-located, solid breakfast. Good value for the area and very convenient to midtown.',    traveler:'W. Noel',    date:'Oct 29, 2024'},
+  {id:4, hotel:'W Los Angeles',          chain:'Marriott', loc:'Los Angeles, CA',   overall:2, cl:3, sv:2, cv:2, rec:false, text:'Overpriced for what you get. Lobby is impressive but rooms feel dated and need significant work.',  traveler:'S. Chen',    date:'Oct 22, 2024'},
+  {id:5, hotel:'Westin Denver Downtown', chain:'Marriott', loc:'Denver, CO',        overall:5, cl:5, sv:5, cv:4, rec:true,  text:'Excellent service and incredibly comfortable beds. Would absolutely book again for a work trip.',   traveler:'M. Torres',  date:'Oct 14, 2024'},
+];
+
+let admSelected = new Set();
+let admEditId = null;
+let admVisible = [...REVIEWS];
+
+function admRenderTable(){
+  const tbody = document.getElementById('adm-tbody');
+  if(!tbody) return;
+  if(admVisible.length === 0){
+    tbody.innerHTML = '<tr><td colspan="11" style="padding:40px;text-align:center;font-size:13px;color:#9A9A9A">No reviews match the current filters.</td></tr>';
+    document.getElementById('adm-count').textContent = '0 reviews';
+    return;
+  }
+  document.getElementById('adm-count').textContent = 'Showing ' + admVisible.length + ' review' + (admVisible.length !== 1 ? 's' : '');
+  const rPill = n => `<span style="font-size:13px;font-weight:600;color:#141414">${n}</span><span style="font-size:11px;color:#9A9A9A">/5</span>`;
+  tbody.innerHTML = admVisible.map(r => {
+    const badge = r.rec
+      ? `<span class="badge-yes"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6L5 9L10 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Yes</span>`
+      : `<span class="badge-no"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M3 3L9 9M9 3L3 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>No</span>`;
+    const excerpt = r.text.length > 60 ? r.text.slice(0,60) + '…' : r.text;
+    const isSel = admSelected.has(r.id);
+    return `<tr class="tbl-row${isSel?' selected':''}" id="admrow-${r.id}">
+      <td style="padding:12px 14px;text-align:center"><input type="checkbox" ${isSel?'checked':''} onchange="admToggleSel(${r.id},this.checked)" style="cursor:pointer;accent-color:#141414"></td>
+      <td style="padding:12px 14px;min-width:160px">
+        <div style="font-size:13px;font-weight:600;color:#141414">${r.hotel}</div>
+        <div style="font-size:11px;color:#9A9A9A;margin-top:1px">${r.loc}</div>
+      </td>
+      <td style="padding:12px 14px;white-space:nowrap;font-size:12px;color:#5C5C5C">${r.chain}</td>
+      <td style="padding:12px 14px;white-space:nowrap">${rPill(r.overall)}</td>
+      <td style="padding:12px 14px;white-space:nowrap">${rPill(r.cl)}</td>
+      <td style="padding:12px 14px;white-space:nowrap">${rPill(r.sv)}</td>
+      <td style="padding:12px 14px;white-space:nowrap">${rPill(r.cv)}</td>
+      <td style="padding:12px 14px">${badge}</td>
+      <td style="padding:12px 14px;width:200px;max-width:200px"><span style="font-size:12px;color:#5C5C5C;line-height:1.5;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${excerpt}</span></td>
+      <td style="padding:12px 14px;font-size:12px;color:#5C5C5C;white-space:nowrap">${r.traveler}</td>
+      <td style="padding:12px 14px;font-size:12px;color:#9A9A9A;white-space:nowrap">${r.date}</td>
+    </tr>`;
+  }).join('');
+}
+
+function admFilter(){
+  const q = (document.getElementById('adm-search').value||'').toLowerCase();
+  const rat = document.getElementById('adm-rating').value;
+  const rec = document.getElementById('adm-rec').value;
+  admVisible = REVIEWS.filter(r=>{
+    if(q && !r.hotel.toLowerCase().includes(q) && !r.traveler.toLowerCase().includes(q)) return false;
+    if(rat==='5' && r.overall!==5) return false;
+    if(rat==='4' && r.overall!==4) return false;
+    if(rat==='3' && r.overall!==3) return false;
+    if(rat==='low' && r.overall>2) return false;
+    if(rec==='yes' && !r.rec) return false;
+    if(rec==='no' && r.rec) return false;
+    return true;
+  });
+  admRenderTable();
+}
+
+function admToggleSel(id, checked){
+  if(checked) admSelected.add(id); else admSelected.delete(id);
+  const row = document.getElementById('admrow-'+id);
+  if(row) row.classList.toggle('selected', checked);
+  admUpdateBulk();
+}
+
+function admSelAll(checked){
+  admVisible.forEach(r=>{ if(checked) admSelected.add(r.id); else admSelected.delete(r.id); });
+  admRenderTable();
+  admUpdateBulk();
+}
+
+function admUpdateBulk(){
+  const bar = document.getElementById('adm-bulk');
+  const lbl = document.getElementById('adm-bulk-lbl');
+  const n = admSelected.size;
+  if(n > 0){ bar.style.display='flex'; lbl.textContent=n+' selected'; }
+  else { bar.style.display='none'; }
+  const selAll = document.getElementById('adm-sel-all');
+  if(selAll) selAll.checked = admVisible.length > 0 && admVisible.every(r=>admSelected.has(r.id));
+}
+
+function admClearBulk(){
+  admSelected.clear();
+  admRenderTable();
+  admUpdateBulk();
+}
+
+function admBulkDelete(){
+  admSelected.forEach(id=>{ const i=REVIEWS.findIndex(r=>r.id===id); if(i>-1) REVIEWS.splice(i,1); });
+  admSelected.clear();
+  admVisible = admVisible.filter(r=>!admSelected.has(r.id));
+  admFilter();
+  admUpdateBulk();
+}
+
+function admDeletePrompt(id){
+  const cell = document.getElementById('admact-'+id);
+  if(!cell) return;
+  cell.innerHTML=`<div class="del-confirm"><span>Delete?</span><button class="del-yes" onclick="admConfirmDelete(${id})">Yes</button><button class="del-no" onclick="admRenderTable()">No</button></div>`;
+  document.getElementById('admrow-'+id).classList.add('deleting');
+}
+
+function admConfirmDelete(id){
+  const i = REVIEWS.findIndex(r=>r.id===id);
+  if(i>-1) REVIEWS.splice(i,1);
+  admSelected.delete(id);
+  admFilter();
+  admUpdateBulk();
+}
+
+function admEdit(id){
+  const r = REVIEWS.find(r=>r.id===id);
+  if(!r) return;
+  admEditId = id;
+  ST['edit'] = { r: r.rating, rec: r.rec ? 'y' : 'n' };
+  document.getElementById('edit-hotel-name').textContent = r.hotel;
+  // set stars
+  document.querySelectorAll('#edit-stars .star').forEach((s,i)=>{ s.classList.toggle('on',i<r.rating); s.classList.remove('hov'); });
+  const lbl = document.getElementById('edit-lbl');
+  if(lbl){ lbl.textContent=LABELS[r.rating]; lbl.classList.add('on'); }
+  // set recommend
+  document.getElementById('edit-y').classList.toggle('on', r.rec);
+  document.getElementById('edit-n').classList.toggle('on', !r.rec);
+  // set text
+  document.getElementById('edit-text').value = r.text;
+  document.getElementById('m-edit').classList.add('open');
+}
+
+function closeEditModal(e){
+  if(e && e.target!==document.getElementById('m-edit') && typeof e==='object') return;
+  document.getElementById('m-edit').classList.remove('open');
+  admEditId = null;
+}
+
+function saveEdit(){
+  const r = REVIEWS.find(r=>r.id===admEditId);
+  if(r){
+    r.rating = ST['edit'].r || r.rating;
+    r.rec = ST['edit'].rec === 'y';
+    r.text = document.getElementById('edit-text').value || r.text;
+  }
+  document.getElementById('m-edit').classList.remove('open');
+  admEditId = null;
+  admFilter();
+}
+
+function adminNav(el){
+  el.closest('div[style]').querySelectorAll('.anav-item').forEach(i=>i.classList.remove('anav-active'));
+  el.classList.add('anav-active');
+}
+
+// init admin table on load
+admFilter();
+admUpdateBulk();
+</script>
+</body>
+</html>

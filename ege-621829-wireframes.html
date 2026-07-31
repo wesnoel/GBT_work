@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EGE-621829 — Cancellation Penalty Display — Wireframe Concepts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#EBEBEB;--surface:#F7F7F7;--border:#D0D0D0;--border-light:#E0E0E0;
+  --text:#1A1A1A;--text-2:#555555;--text-3:#909090;
+  /* Bug states — only color in the doc */
+  --red:#DC2626;--red-lt:#FEF2F2;
+  /* Gray accent (replaces all blue/green) */
+  --accent:#333333;--accent-lt:#EBEBEB;--accent-mid:#C0C0C0;
+  /* Gray scale */
+  --g100:#F2F2F2;--g200:#E2E2E2;--g300:#C8C8C8;
+  --g400:#A0A0A0;--g500:#707070;--g600:#505050;--g900:#1A1A1A;
+  --r:8px;--r-sm:4px;
+  --sh:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);
+  --sh-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.05);
+  --font:'Inter',-apple-system,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth;font-size:14px}
+body{background:var(--bg);font-family:var(--font);color:var(--text);line-height:1.5}
+
+/* ── Nav ── */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(17,17,17,.97);backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(255,255,255,.07);
+  height:48px;display:flex;align-items:center;padding:0 24px;gap:0;
+}
+.nav-brand{font-size:12px;font-weight:600;color:#fff;letter-spacing:.02em;white-space:nowrap;margin-right:20px;flex-shrink:0}
+.nav-brand em{color:var(--g400);font-style:normal;font-weight:400}
+.nav-links{display:flex;align-items:center;gap:2px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.nav-links::-webkit-scrollbar{display:none}
+.nl{font-size:11px;font-weight:500;color:var(--g400);text-decoration:none;padding:5px 10px;border-radius:4px;transition:all .15s;white-space:nowrap}
+.nl:hover{color:#fff;background:rgba(255,255,255,.08)}
+.nl-sep{color:var(--g600);font-size:10px;margin:0 1px;flex-shrink:0}
+
+/* ── Page ── */
+.page{padding-top:48px}
+.sec{padding:56px 40px}
+.sec+.sec{border-top:1px solid var(--border)}
+.sec-white{background:var(--surface)}
+.sec-gray{background:var(--bg)}
+
+/* ── Hub ── */
+.hub-head{max-width:860px;margin:0 auto 40px}
+.eyebrow{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--g500);margin-bottom:10px}
+.hub-title{font-size:30px;font-weight:700;line-height:1.2;margin-bottom:14px}
+.hub-sub{font-size:15px;color:var(--text-2);line-height:1.6;margin-bottom:18px;max-width:660px}
+.hub-pills{display:flex;gap:8px;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;color:var(--text-2);background:var(--surface);border:1px solid var(--border);border-radius:100px;padding:4px 10px}
+.pill a{color:var(--text);text-decoration:none;font-weight:600}.pill a:hover{text-decoration:underline}
+.pill-dot{width:5px;height:5px;border-radius:50%;background:var(--g400);flex-shrink:0}
+.pill-dot.warn{background:var(--red)}
+
+/* ── Matrix ── */
+.matrix-wrap{max-width:860px;margin:0 auto 36px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.matrix-hd{padding:12px 18px;background:var(--g100);border-bottom:1px solid var(--border);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-2)}
+.mtbl{width:100%;border-collapse:collapse}
+.mtbl th,.mtbl td{padding:10px 18px;text-align:left;font-size:12px;border-bottom:1px solid var(--border-light)}
+.mtbl th{font-size:10px;font-weight:700;color:var(--text-2);text-transform:uppercase;letter-spacing:.06em;background:var(--g100)}
+.mtbl tr:last-child td{border-bottom:none}
+.mtbl td:first-child{font-weight:500}
+.bug-val{color:var(--red);font-family:var(--mono);font-size:11px}
+.fix-val{color:var(--accent);font-weight:600}
+.nc-val{color:var(--text-3);font-style:italic}
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:100px;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.b-dark{background:var(--g200);color:var(--g600)}
+.b-red{background:var(--red-lt);color:var(--red)}
+
+/* ── Scenario Cards ── */
+.cards{max-width:860px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px;text-decoration:none;color:inherit;transition:all .15s;display:block}
+.card:hover{border-color:var(--accent);box-shadow:var(--sh-md)}
+.card-sid{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--g500);margin-bottom:7px}
+.card-title{font-size:13px;font-weight:600;margin-bottom:5px}
+.card-desc{font-size:11px;color:var(--text-2);line-height:1.5;margin-bottom:12px}
+.card-foot{display:flex;align-items:center;justify-content:space-between}
+.card-vars{font-size:10px;color:var(--text-3)}
+.card-arrow{font-size:12px;color:var(--g500)}
+
+/* ── Section Headers ── */
+.sc-head{max-width:1100px;margin:0 auto 28px}
+.sc-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--g500);margin-bottom:8px}
+.sc-title{font-size:20px;font-weight:700;margin-bottom:8px}
+.sc-desc{font-size:13px;color:var(--text-2);line-height:1.6;max-width:580px}
+.sc-refs{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.reftag{font-size:10px;font-weight:600;letter-spacing:.03em;color:var(--text-2);background:var(--g100);border:1px solid var(--border);border-radius:3px;padding:2px 7px}
+
+/* ── Variant Grid ── */
+.vgrid{max-width:1100px;margin:0 auto 28px;display:grid;gap:20px;align-items:start}
+.vgrid-3{grid-template-columns:repeat(3,1fr)}
+.vgrid-4{grid-template-columns:repeat(4,1fr)}
+.vgrid-2{grid-template-columns:repeat(2,1fr)}
+.vgrid-1{grid-template-columns:320px}
+.vframe{display:flex;flex-direction:column;gap:10px}
+.vlabel{display:flex;align-items:center;gap:7px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--g500);padding:0 2px}
+.vlabel.bug{color:var(--red)}
+.vlabel.proposed{color:var(--accent)}
+.vlabel-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
+.vdesc{font-size:11px;color:var(--text-2);line-height:1.4;padding:0 2px;max-width:280px}
+
+/* ── Component Frame ── */
+.cf{background:#FFFFFF;border:1.5px solid var(--border);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;font-family:var(--font)}
+.cf.bug-frame{border-color:rgba(220,38,38,.35);background:#FFFFFF}
+.cf-hdr{padding:12px 14px;background:var(--g100);border-bottom:1px solid var(--border);font-size:12px;font-weight:600;color:var(--text)}
+.cf-hotel{padding:12px 14px;border-bottom:1px solid var(--border-light);display:flex;gap:9px;align-items:flex-start}
+.cf-img{width:32px;height:32px;background:var(--g200);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--g400);font-weight:500}
+.cf-name{font-size:11px;font-weight:600;margin-bottom:2px;line-height:1.3}
+.cf-dates{font-size:10px;color:var(--text-3)}
+.cf-sec{padding:12px 14px;border-bottom:1px solid var(--border-light)}
+.cf-sec:last-of-type{border-bottom:none}
+.cf-slabel{font-size:9px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--text-3);margin-bottom:9px}
+.cf-row{display:flex;justify-content:space-between;align-items:baseline;font-size:11px;color:var(--text-2);margin-bottom:5px;gap:8px}
+.cf-row:last-child{margin-bottom:0}
+.cf-row.total{font-weight:600;color:var(--text);border-top:1px solid var(--border-light);padding-top:7px;margin-top:3px;font-size:11px}
+.cf-v{font-weight:500;white-space:nowrap}
+.cf-v.bug-v{color:var(--red)}
+.cf-v.fix-v{color:var(--text)}
+/* Focus area — gray treatment, no color */
+.cf-focus{background:#E8E8E8;border-left:3px solid #888888}
+.cf-focus.bug-foc{background:var(--red-lt);border-left-color:var(--red)}
+.cf-fn{padding:7px 14px;background:var(--g100);font-size:10px;color:var(--text-2);font-style:italic;border-top:1px solid var(--border-light)}
+.cf-sub{font-size:10px;color:var(--text-3);margin-top:1px;line-height:1.3}
+.cf-cta{padding:11px 14px}
+.cf-btn{display:block;width:100%;padding:9px;background:var(--g900);color:#fff;font-size:11px;font-weight:600;border:none;border-radius:5px;text-align:center;font-family:var(--font)}
+.cf-btn.dim{background:var(--g200);color:var(--g500)}
+
+/* Annotation pin — inline, dark gray */
+.apin{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;background:var(--accent);color:#fff;font-size:8px;font-weight:700;flex-shrink:0;margin-left:3px;vertical-align:middle}
+
+/* ── Annotation Panel ── */
+.ann{max-width:1100px;margin:0 auto;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.ann-hd{padding:10px 18px;background:var(--g100);border-bottom:1px solid var(--border);font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--g600);display:flex;align-items:center;gap:7px}
+.ann-body{padding:14px 18px;display:flex;flex-direction:column;gap:9px}
+.ann-row{display:flex;gap:11px;align-items:flex-start}
+.ann-n{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:var(--accent);color:#fff;font-size:9px;font-weight:700;flex-shrink:0;margin-top:2px}
+.ann-t{font-size:12px;color:var(--text-2);line-height:1.5}
+.ann-t strong{color:var(--text);font-weight:600}
+.ann-ref{font-size:10px;color:var(--text-3);background:var(--g100);border:1px solid var(--border);border-radius:3px;padding:1px 5px;font-family:var(--mono);margin-left:4px}
+.ann-warn{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;color:var(--g600);background:var(--g200);border:1px solid var(--g300);border-radius:3px;padding:1px 6px;margin-left:4px}
+.ann-hr{border:none;border-top:1px solid var(--border-light);margin:2px 0}
+
+/* ── Legend ── */
+.legend{max-width:1100px;margin:0 auto 20px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.leg-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-2)}
+.leg-dot-bug{width:10px;height:10px;border-radius:2px;background:rgba(220,38,38,.12);border:1.5px solid var(--red);flex-shrink:0}
+.leg-dot-prop{width:10px;height:10px;border-radius:2px;background:#FFFFFF;border:1.5px solid var(--border);flex-shrink:0}
+.leg-dot-ref{width:10px;height:10px;border-radius:2px;background:var(--g100);border:1.5px solid var(--g300);flex-shrink:0}
+
+/* ── BLT Frame ── */
+.blt{background:#fff;border:1.5px solid var(--border);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;font-family:var(--font)}
+.blt-hdr{padding:10px 14px;background:#1C1C2E;color:#fff;font-size:11px;font-weight:600;display:flex;align-items:center;gap:8px}
+.blt-dot{width:7px;height:7px;border-radius:50%;background:#5865F2;flex-shrink:0}
+.blt-tab{font-size:10px;color:rgba(255,255,255,.4);margin-left:auto;background:rgba(255,255,255,.08);padding:2px 8px;border-radius:3px}
+.blt-sec{padding:12px 14px;border-bottom:1px solid var(--border-light)}
+.blt-stitle{font-size:9px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--text-3);margin-bottom:9px}
+.blt-r{display:flex;gap:12px;margin-bottom:7px;align-items:flex-start}
+.blt-r:last-child{margin-bottom:0}
+.blt-lbl{font-size:10px;color:var(--text-3);width:130px;flex-shrink:0;padding-top:1px}
+.blt-val{font-size:11px;color:var(--text);flex:1;line-height:1.4}
+.blt-val.bug-v{color:var(--red)}
+.blt-policy{font-size:10px;color:var(--text-2);background:var(--g100);border:1px solid var(--border);border-radius:4px;padding:7px 9px;line-height:1.5;font-family:var(--mono);margin-bottom:7px}
+.blt-inline-label{font-size:10px;color:var(--text-3);font-style:italic;margin-top:2px}
+
+/* ── S4 Note ── */
+.s4note{max-width:1100px;margin:0 auto 22px;background:var(--g100);border:1px solid var(--border);border-radius:var(--r);padding:11px 16px;font-size:12px;color:var(--text-2);display:flex;align-items:flex-start;gap:10px}
+.s4note-icon{font-size:14px;flex-shrink:0}
+
+/* ── Footer ── */
+.footer{max-width:1100px;margin:0 auto;padding:28px 40px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border)}
+.footer-l{font-size:11px;color:var(--text-3)}
+.footer-r{display:flex;gap:14px}
+.footer-a{font-size:11px;color:var(--text);text-decoration:none;font-weight:500}.footer-a:hover{text-decoration:underline}
+
+@media(max-width:900px){
+  .vgrid-3,.vgrid-4{grid-template-columns:repeat(2,1fr)}
+  .cards{grid-template-columns:repeat(2,1fr)}
+  .sec{padding:40px 20px}
+}
+@media(max-width:580px){
+  .vgrid-3,.vgrid-4,.vgrid-2,.cards{grid-template-columns:1fr}
+  .hub-title{font-size:22px}
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav class="nav">
+  <div class="nav-brand">EGE-621829 <em>Wireframes</em></div>
+  <div class="nav-links">
+    <a class="nl" href="#hub">Hub</a>
+    <span class="nl-sep">·</span>
+    <a class="nl" href="#s1">S1 — Amount unknown</a>
+    <span class="nl-sep">·</span>
+    <a class="nl" href="#s2">S2 — May apply</a>
+    <span class="nl-sep">·</span>
+    <a class="nl" href="#s3">S3 — Amount + timing</a>
+    <span class="nl-sep">·</span>
+    <a class="nl" href="#s4">S4 — Free window</a>
+    <span class="nl-sep">·</span>
+    <a class="nl" href="#blt">BLT</a>
+    <span class="nl-sep">·</span>
+    <a class="nl" href="#changehub">Change HUB</a>
+  </div>
+</nav>
+
+<div class="page">
+
+<!-- ══════════════════════════════════════════════════════════
+     HUB
+════════════════════════════════════════════════════════════ -->
+<section class="sec sec-white" id="hub">
+
+  <div class="hub-head">
+    <div class="eyebrow">Egencia Hotel — EGE-621829</div>
+    <h1 class="hub-title">Cancellation Penalty Display<br>Wireframe Concepts</h1>
+    <p class="hub-sub">Right-side payment component variants for the three Amadeus incomplete-data scenarios, plus the BLT internal tool. Focused on the cancellation charges area only — no full-page layouts.</p>
+    <div class="hub-pills">
+      <span class="pill"><span class="pill-dot"></span>v1.0 — 2026-07-27</span>
+      <span class="pill">Author: Wes Noel</span>
+      <span class="pill"><a href="https://confluence.amexgbt.com/spaces/EGEHOTEL/pages/682802120" target="_blank">PRD ↗</a></span>
+      <span class="pill"><a href="https://confluence.amexgbt.com/pages/viewpage.action?pageId=683127310" target="_blank">UX Spec ↗</a></span>
+      <span class="pill"><span class="pill-dot warn"></span>Copy strings pending voice/L10n review</span>
+    </div>
+  </div>
+
+  <!-- Change Matrix -->
+  <div class="matrix-wrap">
+    <div class="matrix-hd">Change matrix — cancellation charges component</div>
+    <table class="mtbl">
+      <thead>
+        <tr>
+          <th>Scenario</th>
+          <th>Condition</th>
+          <th>Current state (bug)</th>
+          <th>Cancellation penalty</th>
+          <th>Total due</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><a href="#s1" style="color:var(--text);text-decoration:none;font-weight:600">S1</a></td>
+          <td>Timing known, amount unknown</td>
+          <td><span class="bug-val">$0.00 / $0.00</span></td>
+          <td><span class="fix-val">Amount unknown</span></td>
+          <td><span class="fix-val">To be confirmed</span></td>
+          <td><span class="badge b-dark">In spec</span></td>
+        </tr>
+        <tr>
+          <td><a href="#s2" style="color:var(--text);text-decoration:none;font-weight:600">S2</a></td>
+          <td>Both timing and amount unknown</td>
+          <td><span class="bug-val">$0.00 / $0.00</span></td>
+          <td><span class="fix-val">May apply — contact hotel</span></td>
+          <td><span class="fix-val">To be confirmed</span></td>
+          <td><span class="badge b-dark">In spec</span></td>
+        </tr>
+        <tr>
+          <td><a href="#s3" style="color:var(--text);text-decoration:none;font-weight:600">S3</a></td>
+          <td>Amount known, timing unknown</td>
+          <td><span class="bug-val">EUR 0.00 / EUR 0.00</span></td>
+          <td><span class="fix-val">[Amount] (may apply)*</span></td>
+          <td><span class="fix-val">To be confirmed</span></td>
+          <td><span class="badge b-dark">3 variants</span></td>
+        </tr>
+        <tr>
+          <td><a href="#s4" style="color:var(--text);text-decoration:none;font-weight:600">S4</a></td>
+          <td>Within free cancellation window</td>
+          <td><span class="nc-val">$0.00 (correct)</span></td>
+          <td><span class="nc-val">No change</span></td>
+          <td><span class="nc-val">No change</span></td>
+          <td><span class="badge b-dark">Reference</span></td>
+        </tr>
+        <tr>
+          <td><a href="#blt" style="color:var(--text);text-decoration:none;font-weight:600">BLT</a></td>
+          <td>Travel Counselor view — internal tool</td>
+          <td><span class="bug-val">$0.00, no context</span></td>
+          <td colspan="2"><span class="fix-val">Free-text + inline label</span></td>
+          <td><span class="badge b-dark">In spec</span></td>
+        </tr>
+        <tr>
+          <td><a href="#changehub" style="color:var(--text);text-decoration:none;font-weight:600">Change HUB</a></td>
+          <td>"Change your hotel booking" — Room type card</td>
+          <td><span class="bug-val">$0.00 / EUR 0.00</span></td>
+          <td><span class="fix-val">Same copy as CKO per scenario</span></td>
+          <td><span class="fix-val">S1/S3: unchanged · S2: suppressed</span></td>
+          <td><span class="badge b-dark">In scope</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Scenario Cards -->
+  <div class="cards">
+    <a class="card" href="#s1">
+      <div class="card-sid">Scenario 1</div>
+      <div class="card-title">Timing known, amount unknown</div>
+      <div class="card-desc">startDate present in SMP; penaltyAmount absent. Traveler is past the penalty deadline but the amount is not structured.</div>
+      <div class="card-foot"><span class="card-vars">2 variants + current</span><span class="card-arrow">→</span></div>
+    </a>
+    <a class="card" href="#s2">
+      <div class="card-sid">Scenario 2</div>
+      <div class="card-title">Both timing and amount unknown</div>
+      <div class="card-desc">No structured deadline and no structured penalty amount in cancellationTimeline. Highest uncertainty for the traveler.</div>
+      <div class="card-foot"><span class="card-vars">2 variants + current</span><span class="card-arrow">→</span></div>
+    </a>
+    <a class="card" href="#s3">
+      <div class="card-sid">Scenario 3</div>
+      <div class="card-title">Amount known, timing unknown</div>
+      <div class="card-desc">penaltyAmount is present but no startDate or endDate. The amount is real but it's unclear if the penalty window applies.</div>
+      <div class="card-foot"><span class="card-vars">3 variants + current</span><span class="card-arrow">→</span></div>
+    </a>
+    <a class="card" href="#s4">
+      <div class="card-sid">Reference</div>
+      <div class="card-title">Free cancellation window (S4)</div>
+      <div class="card-desc">Traveler is within the free cancellation window. No changes to current behavior. $0.00 is correct here.</div>
+      <div class="card-foot"><span class="card-vars">Reference only</span><span class="card-arrow">→</span></div>
+    </a>
+    <a class="card" href="#blt">
+      <div class="card-sid">Internal Tool</div>
+      <div class="card-title">BLT — Travel Counselor view</div>
+      <div class="card-desc">Booking Lookup Tool (internal). TC needs raw free-text policy + a clear data-quality label for the missing structured amount.</div>
+      <div class="card-foot"><span class="card-vars">1 variant + current</span><span class="card-arrow">→</span></div>
+    </a>
+    <a class="card" href="#changehub">
+      <div class="card-sid">Change HUB</div>
+      <div class="card-title">"Change your hotel booking" page</div>
+      <div class="card-desc">Room type card shows penalty per scenario. S2 suppresses Total in right panel. CKO-consistent copy across all 3 scenarios.</div>
+      <div class="card-foot"><span class="card-vars">3 scenarios + current</span><span class="card-arrow">→</span></div>
+    </a>
+  </div>
+
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     S1 — TIMING KNOWN, AMOUNT UNKNOWN
+════════════════════════════════════════════════════════════ -->
+<section class="sec sec-gray" id="s1">
+
+  <div class="sc-head">
+    <div class="sc-label">Scenario 1 · Cancel / Change CKO</div>
+    <h2 class="sc-title">Timing known, amount unknown</h2>
+    <p class="sc-desc">startDate is present in the SMP cancellationTimeline — the traveler is past the penalty deadline — but penaltyAmount is absent. The current UI shows $0.00, implying a free action that isn't. The fix replaces the value with clear uncertainty language.</p>
+    <div class="sc-refs">
+      <span class="reftag">PRD §7 — AC for S1</span>
+      <span class="reftag">UX Spec §3 — Flow 1</span>
+      <span class="reftag">UX Spec §4 — CKO component</span>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="leg-item"><span class="leg-dot-bug"></span>Current state — bug</div>
+    <div class="leg-item"><span class="leg-dot-prop"></span>Proposed variant</div>
+  </div>
+
+  <div class="vgrid vgrid-3">
+
+    <!-- Current Bug -->
+    <div class="vframe">
+      <div class="vlabel bug"><span class="vlabel-dot"></span>Current state — Bug</div>
+      <p class="vdesc">$0.00 displayed. Traveler assumes the cancellation is free. Hotel charges the actual penalty.</p>
+      <div class="cf bug-frame">
+        <div class="cf-hdr">Cancellation summary</div>
+        <div class="cf-hotel">
+          <div class="cf-img">IMG</div>
+          <div>
+            <div class="cf-name">Le Méridien Chicago — Oakbrook</div>
+            <div class="cf-dates">Jul 28 – Jul 30 · 2 nights</div>
+          </div>
+        </div>
+        <div class="cf-sec">
+          <div class="cf-slabel">What you paid</div>
+          <div class="cf-row"><span>Room rate (2 nights)</span><span class="cf-v">$299.00</span></div>
+          <div class="cf-row"><span>Taxes &amp; fees</span><span class="cf-v">$45.23</span></div>
+          <div class="cf-row total"><span>Total paid</span><span class="cf-v">$344.23</span></div>
+        </div>
+        <div class="cf-sec cf-focus bug-foc">
+          <div class="cf-slabel">Cancellation charges</div>
+          <div class="cf-row"><span>Cancellation penalty</span><span class="cf-v bug-v">$0.00 ✕</span></div>
+          <div class="cf-row total"><span>Total due</span><span class="cf-v bug-v">$0.00 ✕</span></div>
+        </div>
+        <div class="cf-cta"><div class="cf-btn dim">Confirm cancellation</div></div>
+      </div>
+    </div>
+
+    <!-- Variant A -->
+    <div class="vframe">
+      <div class="vlabel proposed"><span class="vlabel-dot"></span>Variant A — Spec aligned</div>
+      <p class="vdesc">"Amount unknown" is direct and honest. No currency symbol. Total due becomes "To be confirmed." Minimal copy, clean.</p>
+      <div class="cf">
+        <div class="cf-hdr">Cancellation summary</div>
+        <div class="cf-hotel">
+          <div class="cf-img">IMG</div>
+          <div>
+            <div class="cf-name">Le Méridien Chicago — Oakbrook</div>
+            <div class="cf-dates">Jul 28 – Jul 30 · 2 nights</div>
+          </div>
+        </div>
+        <div class="cf-sec">
+          <div class="cf-slabel">What you paid</div>
+          <div class="cf-row"><span>Room rate (2 nights)</span><span class="cf-v">$299.00</span></div>
+          <div class="cf-row"><span>Taxes &amp; fees</span><span class="cf-v">$45.23</span></div>
+          <div class="cf-row total"><span>Total paid</span><span class="cf-v">$344.23</span></div>
+        </div>
+        <div class="cf-sec cf-focus">
+          <div class="cf-slabel">Cancellation charges</div>
+          <div class="cf-row">
+            <span>Cancellation penalty <span class="apin">1</span></span>
+            <span class="cf-v fix-v">Amount unknown</span>
+          </div>
+          <div class="cf-row total">
+            <span>Total due <span class="apin">2</span></span>
+            <span class="cf-v">To be confirmed</span>
+          </div>
+        </div>
+        <div class="cf-cta"><div class="cf-btn">Confirm cancellation</div></div>
+      </div>
+    </div>
+
+    <!-- Variant B -->
+    <div class="vframe">
+      <div class="vlabel proposed"><span class="vlabel-dot"></span>Variant B — With helper text</div>
+      <p class="vdesc">"Amount unknown" stays primary. A small helper line below Total due adds guidance without cluttering the label field.</p>
+      <div class="cf">
+        <div class="cf-hdr">Cancellation summary</div>
+        <div class="cf-hotel">
+          <div class="cf-img">IMG</div>
+          <div>
+            <div class="cf-name">Le Méridien Chicago — Oakbrook</div>
+            <div class="cf-dates">Jul 28 – Jul 30 · 2 nights</div>
+          </div>
+        </div>
+        <div class="cf-sec">
+          <div class="cf-slabel">What you paid</div>
+          <div class="cf-row"><span>Room rate (2 nights)</span><span class="cf-v">$299.00</span></div>
+          <div class="cf-row"><span>Taxes &amp; fees</span><span class="cf-v">$45.23</span></div>
+          <div class="cf-row total"><span>Total paid</span><span class="cf-v">$344.23</span></div>
+        </div>
+        <div class="cf-sec cf-focus">
+          <div class="cf-slabel">Cancellation charges</div>
+          <div class="cf-row">
+            <span>Cancellation penalty <span class="apin">1</span></span>
+            <span class="cf-v fix-v">Amount unknown</span>
+          </div>
+          <div class="cf-row total" style="flex-direction:column;align-items:flex-start;gap:3px">
+            <div style="display:flex;justify-content:space-between;width:100%">
+              <span>Total due <span class="apin">2</span></span>
+              <span class="cf-v">To be confirmed</span>
+            </div>
+            <div class="cf-sub">Contact hotel to confirm final charges <span class="apin">3</span></div>
+          </div>
+        </div>
+        <div class="cf-cta"><div class="cf-btn">Confirm cancellation</div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="ann">
+    <div class="ann-hd">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5.5" stroke="#505050"/><path d="M6 5.5v3M6 4h.01" stroke="#505050" stroke-width="1.2" stroke-linecap="round"/></svg>
+      Annotations — S1
+    </div>
+    <div class="ann-body">
+      <div class="ann-row">
+        <div class="ann-n">1</div>
+        <div class="ann-t"><strong>Cancellation penalty field:</strong> "Amount unknown" replaces $0.00. No currency symbol or amount figure. Text only — no icon or color treatment. <span class="ann-ref">PRD §7 AC-S1</span> <span class="ann-warn">⚠ Copy: voice/L10n review required</span></div>
+      </div>
+      <hr class="ann-hr">
+      <div class="ann-row">
+        <div class="ann-n">2</div>
+        <div class="ann-t"><strong>Total due field:</strong> "To be confirmed" replaces the calculated total. No variant should assert a dollar total when penalty is unknown. <span class="ann-ref">UX Spec §4</span></div>
+      </div>
+      <hr class="ann-hr">
+      <div class="ann-row">
+        <div class="ann-n">3</div>
+        <div class="ann-t"><strong>Variant B only — helper sub-text:</strong> "Contact hotel to confirm final charges" sits below the Total due line. Adds guidance but increases character count — consider localization impact before choosing. <span class="ann-ref">PRD §18 L10n</span></div>
+      </div>
+      <hr class="ann-hr">
+      <div class="ann-row">
+        <div class="ann-n">↓</div>
+        <div class="ann-t"><strong>Unchanged elements:</strong> Page headline, hotel info, "What you paid" section, cancellation policy free-text panel (left panel), and CTA button are all unchanged. <span class="ann-ref">UX Spec §3 Flow 1 step 6</span></div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     S2 — BOTH UNKNOWN
+════════════════════════════════════════════════════════════ -->
+<section class="sec sec-white" id="s2">
+
+  <div class="sc-head">
+    <div class="sc-label">Scenario 2 · Cancel / Change CKO</div>
+    <h2 class="sc-title">Both timing and amount unknown</h2>
+    <p class="sc-desc">No structured penalty deadline and no structured penalty amount in the SMP cancellationTimeline. The highest-uncertainty state for the traveler — they can't know if or how much they'll be charged. The fix must communicate uncertainty and direct them to the hotel.</p>
+    <div class="sc-refs">
+      <span class="reftag">PRD §7 — AC for S2</span>
+      <span class="reftag">UX Spec §3 — Flow 2</span>
+      <span class="reftag">UX Spec §4 — CKO component</span>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="leg-item"><span class="leg-dot-bug"></span>Current state — bug</div>
+    <div class="leg-item"><span class="leg-dot-prop"></span>Proposed variant</div>
+  </div>
+
+  <div class="vgrid vgrid-3">
+
+    <!-- Current Bug -->
+    <div class="vframe">
+      <div class="vlabel bug"><span class="vlabel-dot"></span>Current state — Bug</div>
+      <p class="vdesc">No deadline AND no amount in SMP. Component still shows $0.00/$0.00 — the worst-case false signal.</p>
+      <div class="cf bug-frame">
+        <div class="cf-hdr">Cancellation summary</div>
+        <div class="cf-hotel">
+          <div class="cf-img">IMG</div>
+          <div>
+            <div class="cf-name">Hilton Garden Inn Frankfurt Airport</div>
+            <div class="cf-dates">Aug 4 – Aug 6 · 2 nights</div>
+          </div>
+        </div>
+        <div class="cf-sec">
+          <div class="cf-slabel">What you paid</div>
+          <div class="cf-row"><span>Room rate (2 nights)</span><span class="cf-v">EUR 218.00</span></div>
+          <div class="cf-row"><span>Taxes &amp; fees</span><span class="cf-v">EUR 32.70</span></div>
+          <div class="cf-row total"><span>Total paid</span><span class="cf-v">EUR 250.70</span></div>
+        </div>
+        <div class="cf-sec cf-focus bug-foc">
+          <div class="cf-slabel">Cancellation charges</div>
+          <div class="cf-row"><span>Cancellation penalty</span><span class="cf-v bug-v">EUR 0.00 ✕</span></div>
+          <div class="cf-row total"><span>Total due</span><span class="cf-v bug-v">EUR 0.00 ✕</span></div>
+        </div>
+        <div class="cf-cta"><div class="cf-btn dim">Confirm cancellation</div></div>
+      </div>
+    </div>
+
+    <!-- Variant A -->
+    <div class="vframe">
+      <div class="vlabel proposed"><span class="vlabel-dot"></span>Variant A — Spec aligned</div>
+      <p class="vdesc">"May apply — contact hotel" is a complete, action-oriented phrase. Single line. Communicates the uncertainty and what to do about it.</p>
+      <div class="cf">
+        <div class="cf-hdr">Cancellation summary</div>
+        <div class="cf-hotel">
+          <div class="cf-img">IMG</div>
+          <div>
+            <div class="cf-name">Hilton Garden Inn Frankfurt Airport</div>
+            <div class="cf-dates">Aug 4 – Aug 6 · 2 nights</div>
+          </div>
+        </div>
+        <div class="cf-sec">
+          <div class="cf-slabel">What you paid</div>
+          <div class="cf-row"><span>Room rate (2 nights)</span><span class="cf-v">EUR 218.00</span></div>
+          <div class="cf-row"><span>Taxes &amp; fees</span><span class="cf-v">EUR 32.70</span></div>
+          <div class="cf-row total"><span>Total paid</span><span class="cf-v">EUR 250.70</span></div>
+        </div>
+        <div class="cf-sec cf-focus">
+          <div class="cf-slabel">Cancellation charges</div>
+          <div class="cf-row" style="align-items:flex-start">
+            <span>Cancellation penalty <span class="apin">1</span></span>
+            <span class="cf-v fix-v" style="text-align:right;max-width:140px;white-space:normal;line-height:1.3">May apply — contact hotel</span>
+          </div>
+          <div class="cf-row total">
+            <span>Total due <span class="apin">2</span></span>
+            <span class="cf-v">To be confirmed</span>
+          </div>
+        </div>
+        <div class="cf-cta"><div class="cf-btn">Confirm cancellation</div></div>
+      </div>
+    </div>
+
+    <!-- Variant B -->
+    <div class="vframe">
+      <div class="vlabel proposed"><span class="vlabel-dot"></span>Variant B — Two-line field</div>
+      <p class="vdesc">"May apply" is the primary value. "Contact hotel to confirm" drops to a secondary line. Cleaner hierarchy but may create layout tension at narrow widths.</p>
+      <div class="cf">
+        <div class="cf-hdr">Cancellation summary</div>
+        <div class="cf-hotel">
+          <div class="cf-img">IMG</div>
+          <div>
+            <div class="cf-name">Hilton Garden Inn Frankfurt Airport</div>
+            <div class="cf-dates">Aug 4 – Aug 6 · 2 nights</div>
+          </div>
+        </div>
+        <div class="cf-sec">
+          <div class="cf-slabel">What you paid</div>
+          <div class="cf-row"><span>Room rate (2 nights)</span><span class="cf-v">EUR 218.00</span></div>
+          <div class="cf-row"><span>Taxes &amp; fees</span><span class="cf-v">EUR 32.70</span></div>
+          <div class="cf-row total"><span>Total paid</span><span class="cf-v">EUR 250.70</span></div>
+        </div>
+        <div class="cf-sec cf-focus">
+          <div class="cf-slabel">Cancellation charges</div>
+          <div class="cf-row" style="align-items:flex-start">
+            <span>Cancellation penalty <span class="apin">1</span></span>
+            <span style="text-align:right">
+              <span class="cf-v fix-v" style="display:block">May apply</span>
+              <span class="cf-sub" style="display:block;margin-top:2px">Contact hotel to confirm <span class="apin">3</span></span>
+            </span>
+          </div>
+          <div class="cf-row total">
+            <span>Total due <span class="apin">2</span></span>
+            <span class="cf-v">To be confirmed</span>
+          </div>
+        </div>
+        <div class="cf-cta"><div class="cf-btn">Confirm cancellation</div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="ann">
+    <div class="ann-hd">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5.5" stroke="#505050"/><path d="M6 5.5v3M6 4h.01" stroke="#505050" stroke-width="1.2" stroke-linecap="round"/></svg>
+      Annotations — S2
+    </div>
+    <div class="ann-body">
+      <div class="ann-row">
+        <div class="ann-n">1</div>
+        <div class="ann-t"><strong>Cancellation penalty field:</strong> "May apply — contact hotel" is the spec-aligned string. Communicates uncertainty and gives a clear action. No currency symbol. Text only — no icon or color. <span class="ann-ref">PRD §7 AC-S2</span> <span class="ann-warn">⚠ Copy: voice/L10n review required</span></div>
+      </div>
+      <hr class="ann-hr">
+      <div class="ann-row">
+        <div class="ann-n">2</div>
+        <div class="ann-t"><strong>Total due:</strong> "To be confirmed" — same pattern as S1. No dollar amount is asserted. <span class="ann-ref">UX Spec §4</span></div>
+      </div>
+      <hr class="ann-hr">
+      <div class="ann-row">
+        <div class="ann-n">3</div>
+        <div class="ann-t"><strong>Variant B — split field:</strong> Separating "May apply" (primary) from "Contact hotel to confirm" (secondary) is cleaner visually, but introduces a two-line value in a right-aligned grid. This could cause reflow at mobile widths. Preferred only if the grid system supports variable-height row values. <span class="ann-ref">UX Spec §7 responsive</span></div>
+      </div>
+      <hr class="ann-hr">
+      <div class="ann-row">
+        <div class="ann-n">↓</div>
+        <div class="ann-t"><strong>PRD AC-S2:</strong> "No $0.00 or currency amount is shown in the Cancellation penalty field." Both variants satisfy this. <span class="ann-ref">PRD §7 AC-S2</span></div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     S3 — AMOUNT KNOWN, TIMING UNKNOWN
+════════════════════════════════════════════════════════════ -->
+<section class="sec sec-gray" id="s3">
+
+  <div class="sc-head">
+    <div class="sc-label">Scenario 3 · Cancel / Change CKO — Most design-critical</div>
+    <h2 class="sc-title">Amount known, timing unknown</h2>
+    <p class="sc-desc">penaltyAmount is present in SMP but there is no structured startDate or endDate. The amount is real data — but without a known deadline, we can't confirm it currently applies. The display must surface the amount while clearly framing it as conditional. Three distinct approaches explored here.</p>
+    <div class="sc-refs">
+      <span class="reftag">PRD §7 — AC for S3</span>
+      <span class="reftag">UX Spec §3 — Flow 3</span>
+      <span class="reftag">UX Spec §4 — CKO component</span>
+      <span class="reftag">Design session — 3 approaches discussed</span>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="leg-item"><span class="leg-dot-bug"></span>Current state — bug</div>
+    <div class="leg-item"><span class="leg-dot-prop"></span>Proposed variant</div>
+  </div>
+
+  <div class="vgrid vgrid-4">
+
+    <!-- Current Bug -->
+    <div class="vframe">
+      <div class="vlabel bug"><span class="vlabel-dot"></span>Current state — Bug</div>
+      <p class="vdesc">EUR 85.00 is in SMP but no deadline. Component zeroes it out — traveler proceeds and gets charged.</p>
+      <div class="cf bug-frame">
+        <div class="cf-hdr">Cancellation summary</div>
+        <div class="cf-hotel">
+          <div class="cf-img">IMG</div>
+          <div>
+            <div class="cf-name">Marriott Brussels Grand Place</div>
+            <div class="cf-dates">Sep 10 – Sep 12 · 2 nights</div>
+          </div>
+        </div>
+        <div class="cf-sec">
+          <div class="cf-slabel">What you paid</div>
+          <div class="cf-row"><span>Room rate (2 nights)</span><span class="cf-v">EUR 312.00</span></div>
+          <div class="cf-row"><span>Taxes &amp; fees</span><span class="cf-v">EUR 46.80</span></div>
+          <div class="cf-row total"><span>Total paid</span><span class="cf-v">EUR 358.80</span></div>
+        </div>
+        <div class="cf-sec cf-focus bug-foc">
+          <div class="cf-slabel">Cancellation charges</div>
+          <div class="cf-row"><span>Cancellation penalty</span><span class="cf-v bug-v">EUR 0.00 ✕</span></div>
+          <div class="cf-row total"><span>Total due</span><span class="cf-v bug-v">EUR 0.00 ✕</span></div>
+        </div>
+        <div class="cf-cta"><div class="cf-btn dim">Confirm cancellation</div></div>
+      </div>
+    </div>
+
+    <!-- Variant A -->
+    <div class="vframe">
+      <div class="vlabel proposed"><span class="vlabel-dot"></span>Variant A — Amount + inline qualifier</div>
+      <p class="vdesc">Amount is primary. "(may apply)*" qualifies it inline. Footnote explains why. Traveler sees the risk figure clearly. Closest to the spec direction.</p>
+      <div class="cf">
+        <div class="cf-hdr">Cancellation summary</div>
+        <div class="cf-hotel">
+          <div class="cf-img">IMG</div>
+          <div>
+            <div class="cf-name">Marriott Brussels Grand Place</div>
+            <div class="cf-dates">Sep 10 – Sep 12 · 2 nights</div>
+          </div>
+        </div>
+        <div class="cf-sec">
+          <div class="cf-slabel">What you paid</div>
+          <div class="cf-row"><span>Room rate (2 nights)</span><span class="cf-v">EUR 312.00</span></div>
+          <div class="cf-row"><span>Taxes &amp; fees</span><span class="cf-v">EUR 46.80</span></div>
+          <div class="cf-row total"><span>Total paid</span><span class="cf-v">EUR 358.80</span></div>
+        </div>
+        <div class="cf-sec cf-focus">
+          <div class="cf-slabel">Cancellation charges</div>
+          <div class="cf-row" style="align-items:flex-start">
+            <span>Cancellation penalty <span class="apin">1</span></span>
+            <span class="cf-v fix-v" style="text-align:right">EUR 85.00 (may apply)*</span>
+          </div>
+          <div class="cf-row total">
+            <span>Total due <span class="apin">2</span></span>
+            <span class="cf-v">To be confirmed</span>
+          </div>
+        </div>
+        <div class="cf-fn">* Cancellation deadline not provided by hotel <span class="apin">3</span></div>
+        <div class="cf-cta"><div class="cf-btn">Confirm cancellation</div></div>
+      </div>
+    </div>
+
+    <!-- Variant B -->
+    <div class="vframe">
+      <div class="vlabel proposed"><span class="vlabel-dot"></span>Variant B — May apply* (amount in footnote)</div>
+      <p class="vdesc">"May apply*" is the field value. Amount is surfaced in the footnote. De-emphasizes the figure — better if there's any doubt about the amount's accuracy.</p>
+      <div class="cf">
+        <div class="cf-hdr">Cancellation summary</div>
+        <div class="cf-hotel">
+          <div class="cf-img">IMG</div>
+          <div>
+            <div class="cf-name">Marriott Brussels Grand Place</div>
+            <div class="cf-dates">Sep 10 – Sep 12 · 2 nights</div>
+          </div>
+        </div>
+        <div class="cf-sec">
+          <div class="cf-slabel">What you paid</div>
+          <div class="cf-row"><span>Room rate (2 nights)</span><span class="cf-v">EUR 312.00</span></div>
+          <div class="cf-row"><span>Taxes &amp; fees</span><span class="cf-v">EUR 46.80</span></div>
+          <div class="cf-row total"><span>Total paid</span><span class="cf-v">EUR 358.80</span></div>
+        </div>
+        <div class="cf-sec cf-focus">
+          <div class="cf-slabel">Cancellation charges</div>
+          <div class="cf-row">
+            <span>Cancellation penalty <span class="apin">1</span></span>
+            <span class="cf-v fix-v">May apply*</span>
+          </div>
+          <div class="cf-row total">
+            <span>Total due <span class="apin">2</span></span>
+            <span class="cf-v">To be confirmed</span>
+          </div>
+        </div>
+        <div class="cf-fn">* EUR 85.00 may apply — cancellation deadline not confirmed by hotel <span class="apin">4</span></div>
+        <div class="cf-cta"><div class="cf-btn">Confirm cancellation</div></div>
+      </div>
+    </div>
+
+    <!-- Variant C -->
+    <div class="vframe">
+      <div class="vlabel proposed"><span class="vlabel-dot"></span>Variant C — Amount + sub-label</div>
+      <p class="vdesc">Amount is the field value, "May apply — deadline unavailable" is a smaller sub-label below. Most explicit hierarchy — strongest a11y case, no footnote complexity.</p>
+      <div class="cf">
+        <div class="cf-hdr">Cancellation summary</div>
+        <div class="cf-hotel">
+          <div class="cf-img">IMG</div>
+          <div>
+            <div class="cf-name">Marriott Brussels Grand Place</div>
+            <div class="cf-dates">Sep 10 – Sep 12 · 2 nights</div>
+          </div>
+        </div>
+        <div class="cf-sec">
+          <div class="cf-slabel">What you paid</div>
+          <div class="cf-row"><span>Room rate (2 nights)</span><span class="cf-v">EUR 312.00</span></div>
+          <div class="cf-row"><span>Taxes &amp; fees</span><span class="cf-v">EUR 46.80</span></div>
+          <div class="cf-row total"><span>Total paid</span><span class="cf-v">EUR 358.80</span></div>
+        </div>
+        <div class="cf-sec cf-focus">
+          <div class="cf-slabel">Cancellation charges</div>
+          <div class="cf-row" style="align-items:flex-start">
+            <span>Cancellation penalty <span class="apin">1</span></span>
+            <span style="text-align:right">
+              <span class="cf-v fix-v" style="display:block">EUR 85.00</span>
+              <span class="cf-sub" style="display:block;margin-top:2px">May apply — deadline unavailable <span class="apin">5</span></span>
+            </span>
+          </div>
+          <div class="cf-row total">
+            <span>Total due <span class="apin">2</span></span>
+            <span class="cf-v">To be confirmed</span>
+          </div>
+        </div>
+        <div class="cf-cta"><div class="cf-btn">Confirm cancellation</div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="ann">
+    <div class="ann-hd">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5.5" stroke="#505050"/><path d="M6 5.5v3M6 4h.01" stroke="#505050" stroke-width="1.2" stroke-linecap="round"/></svg>
+      Annotations — S3
+    </div>
+    <div class="ann-body">
+      <div class="ann-row">
+        <div class="ann-n">1</div>
+        <div class="ann-t"><strong>Cancellation penalty — all variants:</strong> The correct currency amount from SMP is surfaced alongside "may apply" framing. PRD requires "the correct penalty amount is displayed alongside may apply language — not $0.00, and not stated as a confirmed charge." All three variants satisfy this. <span class="ann-ref">PRD §7 AC-S3</span></div>
+      </div>
+      <hr class="ann-hr">
+      <div class="ann-row">
+        <div class="ann-n">2</div>
+        <div class="ann-t"><strong>Total due — all variants:</strong> "To be confirmed" — no deadline means we can't calculate a reliable total. <span class="ann-ref">UX Spec §4</span></div>
+      </div>
+      <hr class="ann-hr">
+      <div class="ann-row">
+        <div class="ann-n">3</div>
+        <div class="ann-t"><strong>Variant A footnote:</strong> "* Cancellation deadline not provided by hotel." Conditional render — S3 only. Requires <code style="font-family:var(--mono);font-size:10px">aria-describedby</code> to associate with the penalty field for screen readers. <span class="ann-ref">UX Spec §6 a11y</span> <span class="ann-warn">⚠ Copy: voice review required</span></div>
+      </div>
+      <hr class="ann-hr">
+      <div class="ann-row">
+        <div class="ann-n">4</div>
+        <div class="ann-t"><strong>Variant B footnote:</strong> Amount lives in the footnote rather than the field value. Use if PM is concerned about travelers treating the amount as confirmed. <span class="ann-ref">PRD §7 AC-S3</span></div>
+      </div>
+      <hr class="ann-hr">
+      <div class="ann-row">
+        <div class="ann-n">5</div>
+        <div class="ann-t"><strong>Variant C sub-label:</strong> Amount and qualifier are co-located without footnote complexity — strongest accessibility case. Risk: two-line row may break grid alignment at narrow widths. <span class="ann-ref">UX Spec §7 responsive</span></div>
+      </div>
+      <hr class="ann-hr">
+      <div class="ann-row">
+        <div class="ann-n">↓</div>
+        <div class="ann-t"><strong>No deadline date should be fabricated:</strong> PRD AC-S3 explicitly states "No deadline date is fabricated or implied when none was provided by SMP." All variants comply. <span class="ann-ref">PRD §7 AC-S3</span></div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     S4 — FREE CANCELLATION WINDOW (REFERENCE)
+════════════════════════════════════════════════════════════ -->
+<section class="sec sec-white" id="s4">
+
+  <div class="sc-head">
+    <div class="sc-label">Reference — No change required</div>
+    <h2 class="sc-title">S4 — Free cancellation window</h2>
+    <p class="sc-desc">Traveler is within the free cancellation window. Current behavior is correct. $0.00 is accurate here. No additional caveat about post-deadline uncertainty is added. Shown for reference only.</p>
+    <div class="sc-refs">
+      <span class="reftag">PRD §7 — AC for S4</span>
+      <span class="reftag">PRD §10 — Confirmed decisions</span>
+    </div>
+  </div>
+
+  <div class="s4note">
+    <span class="s4note-icon">✓</span>
+    <span><strong>No design changes required for S4.</strong> The component renders exactly as it does today. "Free cancellation before [date/time]" displays correctly. $0.00 is accurate. No post-deadline caveat is appended. Reference baseline only.</span>
+  </div>
+
+  <div class="vgrid vgrid-1">
+    <div class="vframe">
+      <div class="vlabel" style="color:var(--g500)"><span class="vlabel-dot" style="background:var(--g400)"></span>Current state — Correct (no change)</div>
+      <div class="cf">
+        <div class="cf-hdr">Cancellation summary</div>
+        <div class="cf-hotel">
+          <div class="cf-img">IMG</div>
+          <div>
+            <div class="cf-name">The Westin Dublin</div>
+            <div class="cf-dates">Oct 2 – Oct 4 · 2 nights</div>
+          </div>
+        </div>
+        <div class="cf-sec">
+          <div class="cf-slabel">What you paid</div>
+          <div class="cf-row"><span>Room rate (2 nights)</span><span class="cf-v">EUR 420.00</span></div>
+          <div class="cf-row"><span>Taxes &amp; fees</span><span class="cf-v">EUR 63.00</span></div>
+          <div class="cf-row total"><span>Total paid</span><span class="cf-v">EUR 483.00</span></div>
+        </div>
+        <div class="cf-sec cf-focus" style="background:#E8E8E8;border-left-color:#888888">
+          <div class="cf-slabel">Cancellation charges</div>
+          <div class="cf-row"><span>Cancellation penalty</span><span class="cf-v">$0.00 ✓</span></div>
+          <div class="cf-row" style="font-size:10px;color:var(--text-3)"><span style="font-style:italic">Free cancellation before Oct 2, 11:59 PM</span></div>
+          <div class="cf-row total"><span>Total due</span><span class="cf-v">$0.00</span></div>
+        </div>
+        <div class="cf-cta"><div class="cf-btn">Confirm cancellation</div></div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     BLT — BOOKING LOOKUP TOOL
+════════════════════════════════════════════════════════════ -->
+<section class="sec sec-gray" id="blt">
+
+  <div class="sc-head">
+    <div class="sc-label">BLT — Internal Tool · Travel Counselor</div>
+    <h2 class="sc-title">Booking Lookup Tool — Penalty section</h2>
+    <p class="sc-desc">Travel Counselors use BLT to look up bookings when advising customers on charges and disputes. Currently they see $0.00 with no context. The fix surfaces the raw cancellationPolicy free-text from SMP alongside a plain-English inline label.</p>
+    <div class="sc-refs">
+      <span class="reftag">PRD §7 — AC for S5</span>
+      <span class="reftag">UX Spec §3 — Flow 5</span>
+      <span class="reftag">UX Spec §4 — BLT component</span>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="leg-item"><span class="leg-dot-bug"></span>Current state — bug</div>
+    <div class="leg-item"><span class="leg-dot-prop"></span>Proposed variant</div>
+  </div>
+
+  <div class="vgrid vgrid-2">
+
+    <!-- BLT Current Bug -->
+    <div class="vframe">
+      <div class="vlabel bug"><span class="vlabel-dot"></span>Current state — Bug</div>
+      <p class="vdesc">TC sees $0.00. No free-text. No indication that structured data is missing. TC may advise the customer incorrectly.</p>
+      <div class="blt" style="border-color:rgba(220,38,38,.35)">
+        <div class="blt-hdr">
+          <div class="blt-dot"></div>
+          Booking Lookup Tool
+          <div class="blt-tab">Hotel detail</div>
+        </div>
+        <div class="blt-sec">
+          <div class="blt-stitle">Booking information</div>
+          <div class="blt-r"><div class="blt-lbl">Itinerary #</div><div class="blt-val">215618927809</div></div>
+          <div class="blt-r"><div class="blt-lbl">Provider</div><div class="blt-val">Amadeus GDS</div></div>
+          <div class="blt-r"><div class="blt-lbl">Status</div><div class="blt-val">Cancelled</div></div>
+        </div>
+        <div class="blt-sec">
+          <div class="blt-stitle">Cancellation policy</div>
+          <div class="blt-r"><div class="blt-lbl">Cancellation penalty</div><div class="blt-val bug-v">$0.00 ✕</div></div>
+          <div class="blt-r"><div class="blt-lbl">Policy text</div><div class="blt-val" style="color:var(--text-3);font-style:italic">Not displayed</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLT Proposed -->
+    <div class="vframe">
+      <div class="vlabel proposed"><span class="vlabel-dot"></span>Proposed — Inline label + free text</div>
+      <p class="vdesc">The raw cancellationPolicy free-text from SMP is shown. An inline label below the penalty section gives the TC clear context that the structured amount was not provided by the hotel.</p>
+      <div class="blt">
+        <div class="blt-hdr">
+          <div class="blt-dot"></div>
+          Booking Lookup Tool
+          <div class="blt-tab">Hotel detail</div>
+        </div>
+        <div class="blt-sec">
+          <div class="blt-stitle">Booking information</div>
+          <div class="blt-r"><div class="blt-lbl">Itinerary #</div><div class="blt-val">215618927809</div></div>
+          <div class="blt-r"><div class="blt-lbl">Provider</div><div class="blt-val">Amadeus GDS</div></div>
+          <div class="blt-r"><div class="blt-lbl">Status</div><div class="blt-val">Cancelled</div></div>
+        </div>
+        <div class="blt-sec" style="background:#E8E8E8;border-left:3px solid #888888">
+          <div class="blt-stitle">Cancellation policy <span class="apin" style="margin-left:4px">1</span></div>
+          <div class="blt-r">
+            <div class="blt-lbl">Policy text (SMP)</div>
+            <div class="blt-val">
+              <div class="blt-policy">CANCELLATION POLICY: The hotel allows free cancellation until 23:59 day of arrival. If cancelled or modified after this time, or in case of no-show, the hotel will charge 1 night room rate plus taxes.</div>
+            </div>
+          </div>
+          <div class="blt-r">
+            <div class="blt-lbl">Structured penalty</div>
+            <div class="blt-val">
+              <span style="color:var(--text-3);font-style:italic">Not provided by hotel</span>
+              <div class="blt-inline-label">Structured penalty amount not provided by hotel <span class="apin">2</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="ann">
+    <div class="ann-hd">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5.5" stroke="#505050"/><path d="M6 5.5v3M6 4h.01" stroke="#505050" stroke-width="1.2" stroke-linecap="round"/></svg>
+      Annotations — BLT
+    </div>
+    <div class="ann-body">
+      <div class="ann-row">
+        <div class="ann-n">1</div>
+        <div class="ann-t"><strong>cancellationPolicy free-text (SMP):</strong> The raw policy text from the SMP API response, rendered in a clearly labeled field. Not raw JSON — the policy string content, labeled in plain English. Gives the TC the actual hotel policy language to reference during customer calls. <span class="ann-ref">PRD §7 AC-S5</span></div>
+      </div>
+      <hr class="ann-hr">
+      <div class="ann-row">
+        <div class="ann-n">2</div>
+        <div class="ann-t"><strong>Inline label:</strong> "Structured penalty amount not provided by hotel" — plain text, same weight and size as other BLT annotation text. Not a badge or banner. Positioned below the penalty section. Component type agreed in UX spec design interview. <span class="ann-ref">UX Spec §4 BLT component</span></div>
+      </div>
+      <hr class="ann-hr">
+      <div class="ann-row">
+        <div class="ann-n">↓</div>
+        <div class="ann-t"><strong>Not shown:</strong> Raw API field names (e.g. <code style="font-family:var(--mono);font-size:10px">cancellationTimeline[0].penaltyAmount</code>), JSON objects, or technical notation. BLT surfaces actionable business context for Travel Counselors, not API debug output. <span class="ann-ref">PRD §7 AC-S5 / PRD §10</span></div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     CHANGE HUB — TRIP VIEW
+════════════════════════════════════════════════════════════ -->
+<section class="sec sec-white" id="changehub">
+
+  <div class="sc-head">
+    <div class="sc-label">Change HUB · "Change your hotel booking" page — Room type card</div>
+    <h2 class="sc-title">Change HUB — Cancellation penalty in the Room type card</h2>
+    <p class="sc-desc">The "Change your hotel booking" page has three left-side card components — Traveler details, Travel dates, and Room type — plus a right-side current booking summary. The cancellation policy text lives in the Room type card. For S2 (both timing and amount unknown), the Total in the right panel is also suppressed; asserting a definitive total when the penalty is unknowable is misleading. All three scenarios use the same copy strings as CKO per AC-S6.</p>
+    <div class="sc-refs">
+      <span class="reftag">PRD §7 — AC for S6</span>
+      <span class="reftag">UX Spec §3 — Flow 7</span>
+      <span class="reftag">PRD §10 — Confirmed decisions</span>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="leg-item"><span class="leg-dot-bug"></span>Current state — bug</div>
+    <div class="leg-item"><span class="leg-dot-prop"></span>Proposed</div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:1200px;margin:0 auto">
+
+    <!-- Bug State -->
+    <div class="vframe">
+      <div class="vlabel bug"><span class="vlabel-dot"></span>Current state — Bug</div>
+      <p class="vdesc">Room type card shows "$0.00" or free-cancellation copy regardless of scenario. Traveler cannot identify whether a real penalty applies.</p>
+      <div style="display:flex;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px">
+        <div style="flex:3;display:flex;flex-direction:column;gap:8px">
+          <div style="background:#fff;border:1px solid var(--border);border-radius:6px;padding:10px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+              <span style="font-size:11px;font-weight:700;color:var(--g900)">Traveler details</span>
+              <div style="font-size:9px;border:1px solid var(--border);border-radius:4px;padding:2px 8px;color:var(--g500)">Change</div>
+            </div>
+            <div style="font-size:9px;color:var(--text-2);line-height:1.7">
+              <div>Name: <span style="color:var(--g900)">CHRISTOPHER CUNNINGHAM</span></div>
+              <div>Bed type: None &nbsp;·&nbsp; Loyalty: None</div>
+            </div>
+          </div>
+          <div style="background:#fff;border:1px solid var(--border);border-radius:6px;padding:10px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+              <span style="font-size:11px;font-weight:700;color:var(--g900)">Travel dates</span>
+              <div style="font-size:9px;border:1px solid var(--border);border-radius:4px;padding:2px 8px;color:var(--g500)">Change</div>
+            </div>
+            <div style="font-size:9px;color:var(--text-2);line-height:1.7">
+              <div>Check-in: <span style="color:var(--g900)">Sat Jul 18, 2026</span></div>
+              <div>Check-out: <span style="color:var(--g900)">Sat Aug 15, 2026</span></div>
+              <div>1 guest &nbsp;·&nbsp; 1 room &nbsp;·&nbsp; 28 nights</div>
+            </div>
+          </div>
+          <div style="background:var(--red-lt);border:2px solid var(--red);border-radius:6px;padding:10px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+              <span style="font-size:11px;font-weight:700;color:var(--g900)">Room type</span>
+              <div style="font-size:9px;border:1px solid var(--border);border-radius:4px;padding:2px 8px;color:var(--g500)">Change</div>
+            </div>
+            <div style="font-size:9px;font-weight:600;color:var(--g900);margin-bottom:5px">2 Queen Standard 325 SqFt</div>
+            <div style="font-size:9px;color:var(--red);font-weight:600;margin-bottom:4px">$0.00 — Free cancellation ✕</div>
+            <div style="font-size:8px;color:var(--text-3)">Hotel Loyalty Points &nbsp;·&nbsp; Paid by company &nbsp;·&nbsp; Free Breakfast</div>
+          </div>
+        </div>
+        <div style="flex:2;background:#fff;border:1px solid var(--border);border-radius:6px;padding:10px;display:flex;flex-direction:column">
+          <div style="font-size:11px;font-weight:700;color:var(--g900);margin-bottom:6px">Current booking</div>
+          <div style="font-size:9px;font-weight:600;color:var(--g900)">Holiday Inn Express &amp; Suites</div>
+          <div style="font-size:8px;color:var(--text-3);margin-bottom:6px;line-height:1.4">603 Constitution Dr<br>West Monroe LA 71292</div>
+          <div style="font-size:8px;color:var(--text-2);margin-bottom:8px">2 Queen Standard 325 SqFt</div>
+          <div style="display:flex;align-items:center;gap:4px;margin-bottom:8px">
+            <span style="font-size:8px;color:var(--text-3)">Jul 18</span>
+            <div style="flex:1;border-top:1px dashed var(--border)"></div>
+            <span style="font-size:8px;color:var(--text-3)">Aug 15</span>
+          </div>
+          <div style="margin-top:auto;border-top:1px solid var(--border);padding-top:8px">
+            <div style="display:flex;justify-content:space-between;font-size:10px;font-weight:700;color:var(--g900)">
+              <span>Total</span><span>$4,651.64</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S1 -->
+    <div class="vframe">
+      <div class="vlabel proposed"><span class="vlabel-dot"></span>S1 — Timing known, amount unknown</div>
+      <p class="vdesc">Deadline shown (it's available). Penalty shows "Amount unknown." Right panel Total unchanged — the booking total is unaffected; only the penalty figure is missing.</p>
+      <div style="display:flex;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px">
+        <div style="flex:3;display:flex;flex-direction:column;gap:8px">
+          <div style="background:#fff;border:1px solid var(--border);border-radius:6px;padding:10px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+              <span style="font-size:11px;font-weight:700;color:var(--g900)">Traveler details</span>
+              <div style="font-size:9px;border:1px solid var(--border);border-radius:4px;padding:2px 8px;color:var(--g500)">Change</div>
+            </div>
+            <div style="font-size:9px;color:var(--text-2);line-height:1.7">
+              <div>Name: <span style="color:var(--g900)">CHRISTOPHER CUNNINGHAM</span></div>
+              <div>Bed type: None &nbsp;·&nbsp; Loyalty: None</div>
+            </div>
+          </div>
+          <div style="background:#fff;border:1px solid var(--border);border-radius:6px;padding:10px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+              <span style="font-size:11px;font-weight:700;color:var(--g900)">Travel dates</span>
+              <div style="font-size:9px;border:1px solid var(--border);border-radius:4px;padding:2px 8px;color:var(--g500)">Change</div>
+            </div>
+            <div style="font-size:9px;color:var(--text-2);line-height:1.7">
+              <div>Check-in: <span style="color:var(--g900)">Sat Jul 18, 2026</span></div>
+              <div>Check-out: <span style="color:var(--g900)">Sat Aug 15, 2026</span></div>
+              <div>1 guest &nbsp;·&nbsp; 1 room &nbsp;·&nbsp; 28 nights</div>
+            </div>
+          </div>
+          <div style="background:#fff;border:2px solid #888;border-radius:6px;padding:10px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+              <span style="font-size:11px;font-weight:700;color:var(--g900)">Room type</span>
+              <div style="font-size:9px;border:1px solid var(--border);border-radius:4px;padding:2px 8px;color:var(--g500)">Change</div>
+            </div>
+            <div style="font-size:9px;font-weight:600;color:var(--g900);margin-bottom:5px">2 Queen Standard 325 SqFt</div>
+            <div style="display:flex;justify-content:space-between;font-size:9px;margin-bottom:3px">
+              <span style="color:var(--text-2)">Cancellation deadline</span>
+              <span style="color:var(--g900);font-weight:600">Sep 15, 11:59 PM</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:9px;margin-bottom:5px">
+              <span style="color:var(--text-2)">Cancellation penalty <span class="apin">1</span></span>
+              <span style="color:var(--g900);font-weight:600">Amount unknown</span>
+            </div>
+            <div style="font-size:8px;color:var(--text-3)">Hotel Loyalty Points &nbsp;·&nbsp; Paid by company &nbsp;·&nbsp; Free Breakfast</div>
+          </div>
+        </div>
+        <div style="flex:2;background:#fff;border:1px solid var(--border);border-radius:6px;padding:10px;display:flex;flex-direction:column">
+          <div style="font-size:11px;font-weight:700;color:var(--g900);margin-bottom:6px">Current booking</div>
+          <div style="font-size:9px;font-weight:600;color:var(--g900)">Holiday Inn Express &amp; Suites</div>
+          <div style="font-size:8px;color:var(--text-3);margin-bottom:6px;line-height:1.4">603 Constitution Dr<br>West Monroe LA 71292</div>
+          <div style="font-size:8px;color:var(--text-2);margin-bottom:8px">2 Queen Standard 325 SqFt</div>
+          <div style="display:flex;align-items:center;gap:4px;margin-bottom:8px">
+            <span style="font-size:8px;color:var(--text-3)">Jul 18</span>
+            <div style="flex:1;border-top:1px dashed var(--border)"></div>
+            <span style="font-size:8px;color:var(--text-3)">Aug 15</span>
+          </div>
+          <div style="margin-top:auto;border-top:1px solid var(--border);padding-top:8px">
+            <div style="display:flex;justify-content:space-between;font-size:10px;font-weight:700;color:var(--g900)">
+              <span>Total</span><span>$4,651.64</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S2 -->
+    <div class="vframe">
+      <div class="vlabel proposed"><span class="vlabel-dot"></span>S2 — Both timing and amount unknown</div>
+      <p class="vdesc">No deadline, no amount. Room type shows "May apply — contact hotel." Right panel: Total suppressed — cannot assert a total when penalty is unknown. <span class="apin">2</span></p>
+      <div style="display:flex;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px">
+        <div style="flex:3;display:flex;flex-direction:column;gap:8px">
+          <div style="background:#fff;border:1px solid var(--border);border-radius:6px;padding:10px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+              <span style="font-size:11px;font-weight:700;color:var(--g900)">Traveler details</span>
+              <div style="font-size:9px;border:1px solid var(--border);border-radius:4px;padding:2px 8px;color:var(--g500)">Change</div>
+            </div>
+            <div style="font-size:9px;color:var(--text-2);line-height:1.7">
+              <div>Name: <span style="color:var(--g900)">CHRISTOPHER CUNNINGHAM</span></div>
+              <div>Bed type: None &nbsp;·&nbsp; Loyalty: None</div>
+            </div>
+          </div>
+          <div style="background:#fff;border:1px solid var(--border);border-radius:6px;padding:10px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+              <span style="font-size:11px;font-weight:700;color:var(--g900)">Travel dates</span>
+              <div style="font-size:9px;border:1px solid var(--border);border-radius:4px;padding:2px 8px;color:var(--g500)">Change</div>
+            </div>
+            <div style="font-size:9px;color:var(--text-2);line-height:1.7">
+              <div>Check-in: <span style="color:var(--g900)">Sat Jul 18, 2026</span></div>
+              <div>Check-out: <span style="color:var(--g900)">Sat Aug 15, 2026</span></div>
+              <div>1 guest &nbsp;·&nbsp; 1 room &nbsp;·&nbsp; 28 nights</div>
+            </div>
+          </div>
+          <div style="background:#fff;border:2px solid #888;border-radius:6px;padding:10px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+              <span style="font-size:11px;font-weight:700;color:var(--g900)">Room type</span>
+              <div style="font-size:9px;border:1px solid var(--border);border-radius:4px;padding:2px 8px;color:var(--g500)">Change</div>
+            </div>
+            <div style="font-size:9px;font-weight:600;color:var(--g900);margin-bottom:5px">2 Queen Standard 325 SqFt</div>
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;font-size:9px;margin-bottom:5px">
+              <span style="color:var(--text-2)">Cancellation penalty <span class="apin">1</span></span>
+              <span style="color:var(--g900);font-weight:600;text-align:right;max-width:110px;line-height:1.4">May apply — contact hotel</span>
+            </div>
+            <div style="font-size:8px;color:var(--text-3)">Hotel Loyalty Points &nbsp;·&nbsp; Paid by company &nbsp;·&nbsp; Free Breakfast</div>
+          </div>
+        </div>
+        <div style="flex:2;background:#fff;border:1px solid var(--border);border-radius:6px;padding:10px;display:flex;flex-direction:column">
+          <div style="font-size:11px;font-weight:700;color:var(--g900);margin-bottom:6px">Current booking</div>
+          <div style="font-size:9px;font-weight:600;color:var(--g900)">Hilton Garden Inn Frankfurt Airport</div>
+          <div style="font-size:8px;color:var(--text-3);margin-bottom:6px;line-height:1.4">Frankfurt Airport<br>60547 Frankfurt, Germany</div>
+          <div style="font-size:8px;color:var(--text-2);margin-bottom:8px">Standard Room</div>
+          <div style="display:flex;align-items:center;gap:4px;margin-bottom:8px">
+            <span style="font-size:8px;color:var(--text-3)">Aug 4</span>
+            <div style="flex:1;border-top:1px dashed var(--border)"></div>
+            <span style="font-size:8px;color:var(--text-3)">Aug 6</span>
+          </div>
+          <div style="margin-top:auto;border-top:1px solid var(--border);padding-top:8px">
+            <div style="font-size:8px;color:var(--text-3);font-style:italic;line-height:1.5">Total not shown — cancellation penalty unknown <span class="apin">2</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S3 -->
+    <div class="vframe">
+      <div class="vlabel proposed"><span class="vlabel-dot"></span>S3 — Amount known, timing unknown</div>
+      <p class="vdesc">Deadline omitted (unavailable). Room type shows "EUR 85.00 (may apply)*" with footnote. Right panel Total unchanged. Consistent with CKO Variant A.</p>
+      <div style="display:flex;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px">
+        <div style="flex:3;display:flex;flex-direction:column;gap:8px">
+          <div style="background:#fff;border:1px solid var(--border);border-radius:6px;padding:10px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+              <span style="font-size:11px;font-weight:700;color:var(--g900)">Traveler details</span>
+              <div style="font-size:9px;border:1px solid var(--border);border-radius:4px;padding:2px 8px;color:var(--g500)">Change</div>
+            </div>
+            <div style="font-size:9px;color:var(--text-2);line-height:1.7">
+              <div>Name: <span style="color:var(--g900)">CHRISTOPHER CUNNINGHAM</span></div>
+              <div>Bed type: None &nbsp;·&nbsp; Loyalty: None</div>
+            </div>
+          </div>
+          <div style="background:#fff;border:1px solid var(--border);border-radius:6px;padding:10px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+              <span style="font-size:11px;font-weight:700;color:var(--g900)">Travel dates</span>
+              <div style="font-size:9px;border:1px solid var(--border);border-radius:4px;padding:2px 8px;color:var(--g500)">Change</div>
+            </div>
+            <div style="font-size:9px;color:var(--text-2);line-height:1.7">
+              <div>Check-in: <span style="color:var(--g900)">Sat Sep 10, 2026</span></div>
+              <div>Check-out: <span style="color:var(--g900)">Mon Sep 12, 2026</span></div>
+              <div>1 guest &nbsp;·&nbsp; 1 room &nbsp;·&nbsp; 2 nights</div>
+            </div>
+          </div>
+          <div style="background:#fff;border:2px solid #888;border-radius:6px;padding:10px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+              <span style="font-size:11px;font-weight:700;color:var(--g900)">Room type</span>
+              <div style="font-size:9px;border:1px solid var(--border);border-radius:4px;padding:2px 8px;color:var(--g500)">Change</div>
+            </div>
+            <div style="font-size:9px;font-weight:600;color:var(--g900);margin-bottom:5px">Deluxe Room, City View</div>
+            <div style="display:flex;justify-content:space-between;font-size:9px;margin-bottom:3px">
+              <span style="color:var(--text-2)">Cancellation penalty <span class="apin">1</span></span>
+              <span style="color:var(--g900);font-weight:600">EUR 85.00 (may apply)*</span>
+            </div>
+            <div style="font-size:8px;color:var(--text-3);margin-bottom:5px">* Cancellation deadline not provided by hotel <span class="apin">3</span></div>
+            <div style="font-size:8px;color:var(--text-3)">Hotel Loyalty Points &nbsp;·&nbsp; Paid by company</div>
+          </div>
+        </div>
+        <div style="flex:2;background:#fff;border:1px solid var(--border);border-radius:6px;padding:10px;display:flex;flex-direction:column">
+          <div style="font-size:11px;font-weight:700;color:var(--g900);margin-bottom:6px">Current booking</div>
+          <div style="font-size:9px;font-weight:600;color:var(--g900)">Marriott Brussels Grand Place</div>
+          <div style="font-size:8px;color:var(--text-3);margin-bottom:6px;line-height:1.4">Grand Place<br>1000 Brussels, Belgium</div>
+          <div style="font-size:8px;color:var(--text-2);margin-bottom:8px">Deluxe Room, City View</div>
+          <div style="display:flex;align-items:center;gap:4px;margin-bottom:8px">
+            <span style="font-size:8px;color:var(--text-3)">Sep 10</span>
+            <div style="flex:1;border-top:1px dashed var(--border)"></div>
+            <span style="font-size:8px;color:var(--text-3)">Sep 12</span>
+          </div>
+          <div style="margin-top:auto;border-top:1px solid var(--border);padding-top:8px">
+            <div style="display:flex;justify-content:space-between;font-size:10px;font-weight:700;color:var(--g900)">
+              <span>Total</span><span>EUR 342.00</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /grid -->
+
+  <div class="ann">
+    <div class="ann-hd">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5.5" stroke="#505050"/><path d="M6 5.5v3M6 4h.01" stroke="#505050" stroke-width="1.2" stroke-linecap="round"/></svg>
+      Annotations — Change HUB
+    </div>
+    <div class="ann-body">
+      <div class="ann-row">
+        <div class="ann-n">1</div>
+        <div class="ann-t"><strong>Cancellation penalty in Room type card:</strong> Uses the same copy strings as the CKO confirmation page per AC-S6 — "Amount unknown" (S1), "May apply — contact hotel" (S2), or "EUR [Amount] (may apply)*" (S3). The cancellation deadline row shows when available (S1) and is omitted when not (S2, S3). Engineering to confirm current rendering behavior of this row. <span class="ann-ref">PRD §7 AC-S6</span> <span class="ann-warn">⚠ Copy: voice/L10n review required</span></div>
+      </div>
+      <hr class="ann-hr">
+      <div class="ann-row">
+        <div class="ann-n">2</div>
+        <div class="ann-t"><strong>S2 — Total suppressed in right panel:</strong> When both timing and penalty amount are unknown, the Total in the right booking summary is suppressed. Asserting a definitive total when the penalty cannot be quantified is misleading. Engineering to confirm which data fields drive the Total calculation in this view and whether "Total paid" and "Total due" are distinct line items — both are suppressed for S2. <span class="ann-ref">PRD §10</span></div>
+      </div>
+      <hr class="ann-hr">
+      <div class="ann-row">
+        <div class="ann-n">3</div>
+        <div class="ann-t"><strong>S3 footnote:</strong> "* Cancellation deadline not provided by hotel" — conditional render for S3 only, appears below the penalty line within the Room type card. Requires <code style="font-family:var(--mono);font-size:10px">aria-describedby</code> association for screen readers. <span class="ann-ref">UX Spec §6 a11y</span></div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     COPY ALTERNATIVES — "Amount unknown"
+════════════════════════════════════════════════════════════ -->
+<section class="sec sec-white" id="copy">
+
+  <div class="sc-head">
+    <div class="sc-label">Copy exploration · S1 — Timing known, amount unknown</div>
+    <h2 class="sc-title">Alternatives to "Amount unknown"</h2>
+    <p class="sc-desc">A few things to keep in mind before choosing: for S1 specifically, the penalty <em>does</em> apply — the traveler is past the deadline. So the phrasing shouldn't imply uncertainty about <em>whether</em> it applies, only about the specific figure. The reason we don't have a number is that Amadeus didn't provide it as structured data — the framing should quietly put that authority at the hotel, not at Egencia.</p>
+  </div>
+
+  <div style="max-width:860px;margin:0 auto;display:grid;grid-template-columns:repeat(2,1fr);gap:20px">
+
+    <div style="background:var(--g100);border:1px solid var(--border);border-radius:var(--r);padding:20px">
+      <div style="font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--g500);margin-bottom:14px">Action-oriented — hotel is the source of truth</div>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:8px">
+        <li style="font-size:13px;color:var(--text);background:#fff;border:1px solid var(--border);border-radius:5px;padding:9px 13px;font-weight:500">Contact hotel to confirm</li>
+        <li style="font-size:13px;color:var(--text);background:#fff;border:1px solid var(--border);border-radius:5px;padding:9px 13px;font-weight:500">Confirm with hotel</li>
+        <li style="font-size:13px;color:var(--text);background:#fff;border:1px solid var(--border);border-radius:5px;padding:9px 13px;font-weight:500">Hotel to advise</li>
+        <li style="font-size:13px;color:var(--text);background:#fff;border:1px solid var(--border);border-radius:5px;padding:9px 13px;font-weight:500">Hotel will confirm amount</li>
+        <li style="font-size:13px;color:var(--text);background:#fff;border:1px solid var(--border);border-radius:5px;padding:9px 13px;font-weight:500">Contact hotel for details</li>
+      </ul>
+    </div>
+
+    <div style="background:var(--g100);border:1px solid var(--border);border-radius:var(--r);padding:20px">
+      <div style="font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--g500);margin-bottom:14px">Process / timing — forward-looking, not a gap</div>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:8px">
+        <li style="font-size:13px;color:var(--text);background:#fff;border:1px solid var(--border);border-radius:5px;padding:9px 13px;font-weight:500">Pending hotel confirmation</li>
+        <li style="font-size:13px;color:var(--text);background:#fff;border:1px solid var(--border);border-radius:5px;padding:9px 13px;font-weight:500">Confirmed upon cancellation</li>
+        <li style="font-size:13px;color:var(--text);background:#fff;border:1px solid var(--border);border-radius:5px;padding:9px 13px;font-weight:500">Confirmed at time of cancellation</li>
+        <li style="font-size:13px;color:var(--text);background:#fff;border:1px solid var(--border);border-radius:5px;padding:9px 13px;font-weight:500">Awaiting hotel confirmation</li>
+      </ul>
+    </div>
+
+    <div style="background:var(--g100);border:1px solid var(--border);border-radius:var(--r);padding:20px">
+      <div style="font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--g500);margin-bottom:14px">Policy reference — authoritative, deflects to source</div>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:8px">
+        <li style="font-size:13px;color:var(--text);background:#fff;border:1px solid var(--border);border-radius:5px;padding:9px 13px;font-weight:500">Refer to hotel policy</li>
+        <li style="font-size:13px;color:var(--text);background:#fff;border:1px solid var(--border);border-radius:5px;padding:9px 13px;font-weight:500">Per hotel cancellation policy</li>
+        <li style="font-size:13px;color:var(--text);background:#fff;border:1px solid var(--border);border-radius:5px;padding:9px 13px;font-weight:500">See hotel cancellation terms</li>
+        <li style="font-size:13px;color:var(--text);background:#fff;border:1px solid var(--border);border-radius:5px;padding:9px 13px;font-weight:500">Subject to hotel terms</li>
+      </ul>
+    </div>
+
+    <div style="background:var(--g100);border:1px solid var(--border);border-radius:var(--r);padding:20px">
+      <div style="font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--g500);margin-bottom:14px">Neutral / soft — minimal, no blame</div>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:8px">
+        <li style="font-size:13px;color:var(--text);background:#fff;border:1px solid var(--border);border-radius:5px;padding:9px 13px;font-weight:500">To be confirmed</li>
+        <li style="font-size:13px;color:var(--text);background:#fff;border:1px solid var(--border);border-radius:5px;padding:9px 13px;font-weight:500">Not yet confirmed</li>
+        <li style="font-size:13px;color:var(--text);background:#fff;border:1px solid var(--border);border-radius:5px;padding:9px 13px;font-weight:500">Check hotel policy</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- Instinct note -->
+  <div style="max-width:860px;margin:24px auto 0;background:var(--g900);border-radius:var(--r);padding:20px 24px;display:flex;gap:14px;align-items:flex-start">
+    <div style="font-size:16px;flex-shrink:0;margin-top:1px">→</div>
+    <div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--g400);margin-bottom:8px">Design instinct</div>
+      <p style="font-size:13px;color:#E5E5E5;line-height:1.7;margin-bottom:10px"><strong style="color:#fff">Contact hotel to confirm</strong> or <strong style="color:#fff">Pending hotel confirmation</strong> work best for S1. Both subtly communicate that the hotel is the authoritative source — not that Egencia is missing data. "Pending hotel confirmation" has a slightly more professional, process-oriented tone that travel industry users would recognize. "Contact hotel to confirm" is more direct and gives the traveler a clear next action.</p>
+      <p style="font-size:12px;color:var(--g400);line-height:1.6">Whatever lands here will also affect the email and Change HUB copy once those surfaces are scoped in, so voice/L10n review matters even more for the final pick.</p>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ── FOOTER ── -->
+<section class="sec sec-white" style="padding-top:28px;padding-bottom:28px">
+  <div class="footer">
+    <div class="footer-l">EGE-621829 · Wireframe Concepts v1.1 · 2026-07-27 · Wes Noel</div>
+    <div class="footer-r">
+      <a class="footer-a" href="https://confluence.amexgbt.com/spaces/EGEHOTEL/pages/682802120" target="_blank">PRD ↗</a>
+      <a class="footer-a" href="https://confluence.amexgbt.com/pages/viewpage.action?pageId=683127310" target="_blank">UX Spec ↗</a>
+    </div>
+  </div>
+</section>
+
+</div>
+</body>
+</html>
