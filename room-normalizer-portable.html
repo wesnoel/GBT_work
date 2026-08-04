@@ -1,0 +1,1697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Room Normalizer — Concept Index</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #ffffff;
+    --surface: #f8f8f7;
+    --border: #e4e4e0;
+    --border-light: #f0f0ec;
+    --text: #1a1a18;
+    --text-secondary: #6b6b66;
+    --text-tertiary: #9b9b96;
+    --accent: #1a1a18;
+    --accent-soft: #f0f0ec;
+    --pill-bg: #f0f0ec;
+    --pill-text: #4a4a46;
+    --nav-width: 240px;
+    --font: 'system-ui', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.6;
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  nav {
+    width: var(--nav-width);
+    min-width: var(--nav-width);
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    overflow-y: auto;
+    padding: 28px 0 40px;
+    flex-shrink: 0;
+  }
+
+  nav .nav-logo {
+    padding: 0 20px 24px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 16px;
+  }
+
+  nav .nav-logo h1 {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    margin-bottom: 4px;
+  }
+
+  nav .nav-logo p {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+  }
+
+  nav .nav-group-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    padding: 12px 20px 6px;
+  }
+
+  nav a {
+    display: block;
+    padding: 7px 20px;
+    text-decoration: none;
+    color: var(--text-secondary);
+    font-size: 13px;
+    line-height: 1.4;
+    border-left: 2px solid transparent;
+    transition: color 0.1s, border-color 0.1s, background 0.1s;
+  }
+
+  nav a:hover {
+    color: var(--text);
+    background: var(--border-light);
+    border-left-color: var(--border);
+  }
+
+  nav a .nav-num {
+    font-size: 10px;
+    color: var(--text-tertiary);
+    margin-right: 6px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  nav a .nav-tag {
+    display: block;
+    font-size: 10px;
+    color: var(--text-tertiary);
+    margin-top: 1px;
+  }
+
+  /* MAIN */
+  main {
+    flex: 1;
+    min-width: 0;
+    padding: 0;
+  }
+
+  section {
+    padding: 56px 64px 72px;
+    border-bottom: 1px solid var(--border);
+    max-width: 860px;
+  }
+
+  section:last-child { border-bottom: none; }
+
+  /* SECTION HEADER */
+  .section-eyebrow {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    margin-bottom: 10px;
+  }
+
+  .section-title {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    line-height: 1.2;
+    margin-bottom: 6px;
+  }
+
+  .section-subtitle {
+    font-size: 15px;
+    color: var(--text-secondary);
+    margin-bottom: 32px;
+    line-height: 1.5;
+  }
+
+  /* HUB */
+  .hub-intro {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 28px 32px;
+    margin-bottom: 40px;
+  }
+
+  .hub-intro h2 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 10px;
+    letter-spacing: -0.01em;
+  }
+
+  .hub-intro p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin-bottom: 8px;
+  }
+
+  .hub-intro p:last-child { margin-bottom: 0; }
+
+  .hub-specs {
+    display: flex;
+    gap: 32px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .hub-spec { font-size: 12px; color: var(--text-secondary); }
+  .hub-spec strong { color: var(--text); display: block; font-size: 13px; margin-bottom: 2px; }
+
+  .concept-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .concept-card {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px 18px;
+    background: var(--bg);
+  }
+
+  .concept-card .card-num {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    margin-bottom: 6px;
+  }
+
+  .concept-card .card-tag {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    margin-bottom: 4px;
+  }
+
+  .concept-card h3 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+
+  .concept-card p {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+  }
+
+  /* CONTENT BLOCKS */
+  .content-block {
+    margin-bottom: 36px;
+  }
+
+  .content-block h2 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-light);
+    letter-spacing: -0.01em;
+  }
+
+  .content-block p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.65;
+  }
+
+  /* REVIEW GRID */
+  .review-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 36px;
+  }
+
+  .review-cell {
+    background: var(--bg);
+    padding: 18px 20px;
+  }
+
+  .review-cell h3 {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    margin-bottom: 6px;
+  }
+
+  .review-cell p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* ROOM DATA */
+  .room-group {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+
+  .room-group-header {
+    background: var(--surface);
+    padding: 14px 20px;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .room-group-header h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+
+  .room-group-header .room-meta {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  .room-group-header .room-from {
+    margin-left: auto;
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  .rate-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+
+  .rate-table th {
+    text-align: left;
+    padding: 8px 20px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .rate-table td {
+    padding: 10px 20px;
+    border-bottom: 1px solid var(--border-light);
+    color: var(--text-secondary);
+    vertical-align: middle;
+  }
+
+  .rate-table tr:last-child td { border-bottom: none; }
+
+  .rate-table .rate-name { color: var(--text); font-weight: 500; }
+
+  .rate-table .rate-price {
+    font-weight: 700;
+    color: var(--text);
+    white-space: nowrap;
+    text-align: right;
+  }
+
+  .pill {
+    display: inline-block;
+    background: var(--pill-bg);
+    color: var(--pill-text);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 20px;
+    margin-right: 4px;
+    letter-spacing: 0.02em;
+  }
+
+  .pill.green { background: #eaf5ee; color: #2d7a47; }
+  .pill.amber { background: #fdf4e7; color: #a05c00; }
+  .pill.blue  { background: #e8f0fd; color: #2555a0; }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: var(--border-light);
+    margin: 32px 0;
+  }
+
+  /* UX NOTES */
+  .ux-note {
+    background: var(--surface);
+    border-left: 3px solid var(--border);
+    padding: 14px 18px;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 12px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.65;
+  }
+
+  /* STEP WIZARD */
+  .step-list {
+    display: flex;
+    gap: 0;
+    margin-bottom: 24px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .step-item {
+    flex: 1;
+    padding: 10px 14px;
+    border-right: 1px solid var(--border);
+    font-size: 12px;
+    background: var(--bg);
+  }
+
+  .step-item:last-child { border-right: none; }
+
+  .step-item .step-num {
+    font-size: 10px;
+    color: var(--text-tertiary);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .step-item .step-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  /* OPTION ROWS */
+  .option-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .option-row:last-child { border-bottom: none; }
+
+  .option-toggle {
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    background: var(--bg);
+  }
+
+  .option-body { flex: 1; }
+
+  .option-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+
+  .option-desc {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  .option-price {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    white-space: nowrap;
+    margin-top: 1px;
+  }
+
+  .option-price.neg { color: #2d7a47; }
+
+  /* FEATURED RATE */
+  .featured-rate {
+    border: 1.5px solid var(--accent);
+    border-radius: 8px;
+    padding: 20px 22px;
+    margin-bottom: 12px;
+    position: relative;
+  }
+
+  .featured-rate .badge {
+    position: absolute;
+    top: -10px;
+    left: 18px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 20px;
+  }
+
+  .featured-rate .rate-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .featured-rate .rate-price-lg {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -0.02em;
+  }
+
+  .featured-rate .rate-price-lg span {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text-secondary);
+  }
+
+  /* CONFIDENCE METER */
+  .confidence-banner {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .confidence-label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    flex: 1;
+    line-height: 1.4;
+  }
+
+  .confidence-level {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 20px;
+  }
+
+  .confidence-level.high { background: #eaf5ee; color: #2d7a47; }
+  .confidence-level.medium { background: #fdf4e7; color: #a05c00; }
+
+  /* SUMMARY FOOTER */
+  .price-summary {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  .price-summary .ps-label { font-size: 12px; color: var(--text-secondary); }
+  .price-summary .ps-price { font-size: 20px; font-weight: 800; color: var(--text); letter-spacing: -0.02em; }
+  .price-summary .ps-night { font-size: 12px; color: var(--text-secondary); }
+
+  .btn {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 9px 18px;
+    border-radius: 5px;
+    text-decoration: none;
+    letter-spacing: 0.01em;
+  }
+
+  .btn-outline {
+    display: inline-block;
+    background: transparent;
+    color: var(--text);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 5px;
+    border: 1px solid var(--border);
+    text-decoration: none;
+  }
+
+  /* TABS MOCK */
+  .tab-row {
+    display: flex;
+    gap: 2px;
+    margin-bottom: 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 4px;
+    width: fit-content;
+  }
+
+  .tab {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 4px;
+    color: var(--text-secondary);
+  }
+
+  .tab.active {
+    background: var(--bg);
+    color: var(--text);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+
+  /* STATES CALLOUT */
+  .states-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+
+  .state-chip {
+    font-size: 11px;
+    color: var(--text-secondary);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 4px 10px;
+  }
+
+  .print-note {
+    margin-top: 64px;
+    padding: 20px 0 0;
+    border-top: 1px solid var(--border-light);
+    font-size: 11px;
+    color: var(--text-tertiary);
+    text-align: center;
+  }
+
+  @media (max-width: 800px) {
+    nav { display: none; }
+    section { padding: 40px 24px 56px; }
+    .concept-grid { grid-template-columns: 1fr; }
+    .review-grid { grid-template-columns: 1fr; }
+  }
+
+  @media print {
+    nav { display: none; }
+    section { page-break-after: always; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <h1>Design artifact</h1>
+    <p>Room Normalizer</p>
+  </div>
+
+  <div class="nav-group-label">Overview</div>
+  <a href="#hub"><span class="nav-num">00</span> Hub · Concept Index<span class="nav-tag">10 directions · 14 concepts</span></a>
+
+  <div class="nav-group-label">Concepts 01–10</div>
+  <a href="#concept-01"><span class="nav-num">01</span> Simple grouped list<span class="nav-tag">Density · flat list</span></a>
+  <a href="#concept-02"><span class="nav-num">02</span> Accordion room groups<span class="nav-tag">Collapsible groups</span></a>
+  <a href="#concept-03"><span class="nav-num">03</span> Featured room<span class="nav-tag">Room-first decision</span></a>
+  <a href="#concept-04"><span class="nav-num">04</span> Comparison table<span class="nav-tag">Aligned columns</span></a>
+  <a href="#concept-05"><span class="nav-num">05</span> Card stack<span class="nav-tag">Modular tiles</span></a>
+  <a href="#concept-06"><span class="nav-num">06</span> Best rate first<span class="nav-tag">Recommended-first</span></a>
+  <a href="#concept-07"><span class="nav-num">07</span> Tabs in group<span class="nav-tag">Per-group filters</span></a>
+  <a href="#concept-08"><span class="nav-num">08</span> Two-level mapping<span class="nav-tag">Hierarchical disclosure</span></a>
+  <a href="#concept-09"><span class="nav-num">09</span> Progressive disclosure<span class="nav-tag">Top 3 + reserve weight</span></a>
+  <a href="#concept-10"><span class="nav-num">10</span> Confidence-led<span class="nav-tag">Trust + match quality</span></a>
+
+  <div class="nav-group-label">Build 11–14</div>
+  <a href="#concept-11"><span class="nav-num">11</span> Add-on builder (opt-in)<span class="nav-tag">Compose · opt-in</span></a>
+  <a href="#concept-12"><span class="nav-num">12</span> Premium pre-selected<span class="nav-tag">Compose · opt-out</span></a>
+  <a href="#concept-13"><span class="nav-num">13</span> Step-by-step builder<span class="nav-tag">Compose · guided flow</span></a>
+  <a href="#concept-14"><span class="nav-num">14</span> Hybrid inline edits<span class="nav-tag">Compose · inline edits</span></a>
+</nav>
+
+<!-- MAIN -->
+<main>
+
+<!-- HUB -->
+<section id="hub">
+  <div class="section-eyebrow">Room Normalizer · PDP Component Exploration</div>
+  <div class="section-title">Concept Index</div>
+  <div class="section-subtitle">10 prebuilt rate concepts + 4 composition-based builds exploring organizational and interaction patterns for hotel room and rate presentation in a B2B travel booking flow.</div>
+
+  <div class="hub-intro">
+    <h2>Problem statement</h2>
+    <p>The current PDP displays a long list of room rates with inconsistent naming and overlapping rate plans. Users struggle with duplicate room types listed under different labels, making comparison difficult and reducing confidence in choices.</p>
+    <h2 style="margin-top:16px;">Solution goal</h2>
+    <p>Implement a Room Normalizer block that organizes messy inventory into intuitive room types, exposes 5–10 bookable rates per group, improves clarity and decision speed, while maintaining direct reservability for every option.</p>
+    <div class="hub-specs">
+      <div class="hub-spec"><strong>764 px</strong>Fixed width</div>
+      <div class="hub-spec"><strong>Hotel PDP</strong>Rooms section</div>
+      <div class="hub-spec"><strong>Mid-fidelity</strong>Grayscale wireframe</div>
+      <div class="hub-spec"><strong>14 concepts</strong>01–10 prebuilt · 11–14 compose</div>
+    </div>
+  </div>
+
+  <div class="section-eyebrow" style="margin-bottom:14px;">Concepts 01–10 · Prebuilt rate patterns</div>
+  <div class="concept-grid">
+    <div class="concept-card">
+      <div class="card-num">Concept 01</div>
+      <div class="card-tag">Density · flat list</div>
+      <h3>Simple grouped list</h3>
+      <p>Room-type headers with every rate listed flat beneath. Maximum visibility, zero hidden state.</p>
+    </div>
+    <div class="concept-card">
+      <div class="card-num">Concept 02</div>
+      <div class="card-tag">Collapsible groups</div>
+      <h3>Accordion room groups</h3>
+      <p>Each room type is a collapsible header with rate count and price-from. Users expand what they care about.</p>
+    </div>
+    <div class="concept-card">
+      <div class="card-num">Concept 03</div>
+      <div class="card-tag">Room-first decision</div>
+      <h3>Featured room with expandable rates</h3>
+      <p>Strong room summary card with bed, size and amenities; rates revealed in a separate panel below.</p>
+    </div>
+    <div class="concept-card">
+      <div class="card-num">Concept 04</div>
+      <div class="card-tag">Aligned columns</div>
+      <h3>Table-inspired comparison block</h3>
+      <p>Per-room table with aligned, sortable columns: Rate, Bed, Meals, Cancellation, Policy, Price, Reserve.</p>
+    </div>
+    <div class="concept-card">
+      <div class="card-num">Concept 05</div>
+      <div class="card-tag">Modular tiles</div>
+      <h3>Card stack by room type</h3>
+      <p>Soft outer card per room type; each rate is a discrete bordered tile with attributes and Reserve.</p>
+    </div>
+    <div class="concept-card">
+      <div class="card-num">Concept 06</div>
+      <div class="card-tag">Recommended-first</div>
+      <h3>Best rate first, others tucked below</h3>
+      <p>One recommended rate rendered as a hero block; remaining rates collapse behind a "+N more" control.</p>
+    </div>
+    <div class="concept-card">
+      <div class="card-num">Concept 07</div>
+      <div class="card-tag">Per-group filters</div>
+      <h3>Tabs inside a room group</h3>
+      <p>Segmented control inside each group filters rates: All · Refundable · Non-refundable · Breakfast.</p>
+    </div>
+    <div class="concept-card">
+      <div class="card-num">Concept 08</div>
+      <div class="card-tag">Hierarchical disclosure</div>
+      <h3>Two-level: room type → rate variants</h3>
+      <p>Pick a normalized room type at level 1; expand any rate variant to see its bookable offers.</p>
+    </div>
+    <div class="concept-card">
+      <div class="card-num">Concept 09</div>
+      <div class="card-tag">Top 3 + reserve weight</div>
+      <h3>Progressive disclosure with sticky CTA</h3>
+      <p>Top 2–3 rates shown initially; "Show N more" reveals the rest inline. Reserve buttons heavier and right-anchored.</p>
+    </div>
+    <div class="concept-card">
+      <div class="card-num">Concept 10</div>
+      <div class="card-tag">Trust + match quality</div>
+      <h3>Confidence-led concept</h3>
+      <p>Each group leads with a confidence banner plus a match meter and "How we matched" panel.</p>
+    </div>
+  </div>
+
+  <div class="section-eyebrow" style="margin-top:32px;margin-bottom:14px;">Build 11–14 · Composition-based patterns</div>
+  <div class="concept-grid">
+    <div class="concept-card">
+      <div class="card-num">Build 11</div>
+      <div class="card-tag">Compose · opt-in</div>
+      <h3>Add-on builder (opt-in)</h3>
+      <p>Start from a base room and add options one by one. Price grows from the base as the user opts in.</p>
+    </div>
+    <div class="concept-card">
+      <div class="card-num">Build 12</div>
+      <div class="card-tag">Compose · opt-out</div>
+      <h3>Premium pre-selected (opt-out)</h3>
+      <p>Start at a recommended premium configuration with everything on. Remove options to simplify and reduce price.</p>
+    </div>
+    <div class="concept-card">
+      <div class="card-num">Build 13</div>
+      <div class="card-tag">Compose · guided flow</div>
+      <h3>Step-by-step builder (guided)</h3>
+      <p>Four-step wizard inside a single component: room, flexibility, extras, confirm. Each step shows only what matters now.</p>
+    </div>
+    <div class="concept-card">
+      <div class="card-num">Build 14</div>
+      <div class="card-tag">Compose · inline edits</div>
+      <h3>Hybrid (prebuilt + editable)</h3>
+      <p>Familiar prebuilt rate rows with inline toggles for breakfast and refundability. Each row tracks its own customized state.</p>
+    </div>
+  </div>
+
+  <div style="margin-top:32px;">
+    <p style="font-size:12px;color:var(--text-tertiary);">Design principles: "Normalize without hiding rate-plan detail" · "Keep booking friction low — every rate one click from Reserve" · "Make comparison easy within a single normalized room type"</p>
+  </div>
+</section>
+
+<!-- CONCEPT 01 -->
+<section id="concept-01">
+  <div class="section-eyebrow">Concept 01 · 14 &nbsp;·&nbsp; Density · flat list</div>
+  <div class="section-title">Simple grouped list</div>
+  <div class="section-subtitle">Room-type headers with every rate listed flat beneath. Maximum visibility, zero hidden state.</div>
+
+  <div class="content-block">
+    <p>The most direct interpretation of the Room Normalizer: group by normalized room type, then show every bookable rate as a row. Nothing collapsed, nothing prioritized — let the user scan.</p>
+  </div>
+
+  <div class="room-group">
+    <div class="room-group-header">
+      <h3>King Room</h3>
+      <span class="room-meta">1 King Bed · Sleeps 2</span>
+      <span class="room-from">7 rates · from $214/night</span>
+    </div>
+    <table class="rate-table">
+      <thead><tr><th>Rate</th><th>Attributes</th><th style="text-align:right">Price</th></tr></thead>
+      <tbody>
+        <tr><td class="rate-name">Flexible · Bed &amp; Breakfast</td><td><span class="pill green">Free cancel</span><span class="pill">Breakfast</span><span class="pill blue">Egencia</span><span class="pill">Pay at hotel</span></td><td class="rate-price">$251/night</td></tr>
+        <tr><td class="rate-name">Best Available Rate</td><td><span class="pill green">Free cancel</span><span class="pill blue">Egencia</span><span class="pill">City view</span></td><td class="rate-price">$239/night</td></tr>
+        <tr><td class="rate-name">Flex + Parking</td><td><span class="pill green">Free cancel</span><span class="pill">Parking</span></td><td class="rate-price">$244/night</td></tr>
+        <tr><td class="rate-name">Loyalty Saver</td><td><span class="pill blue">Loyalty</span><span class="pill green">Free cancel</span></td><td class="rate-price">$228/night</td></tr>
+        <tr><td class="rate-name">Non-refundable · Breakfast</td><td><span class="pill amber">Cancel fee</span><span class="pill">Breakfast</span></td><td class="rate-price">$219/night</td></tr>
+        <tr><td class="rate-name">Advance Purchase 30d</td><td><span class="pill amber">Cancel fee</span><span class="pill">Pay online</span></td><td class="rate-price">$218/night</td></tr>
+        <tr><td class="rate-name">Advance Purchase 21d</td><td><span class="pill amber">Cancel fee</span><span class="pill">Standard view</span></td><td class="rate-price">$214/night</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="room-group">
+    <div class="room-group-header">
+      <h3>Queen Room</h3>
+      <span class="room-meta">1 Queen Bed · Sleeps 2</span>
+      <span class="room-from">5 rates · from $209/night</span>
+    </div>
+    <table class="rate-table">
+      <thead><tr><th>Rate</th><th>Attributes</th><th style="text-align:right">Price</th></tr></thead>
+      <tbody>
+        <tr><td class="rate-name">Flex · Bed &amp; Breakfast</td><td><span class="pill green">Free cancel</span><span class="pill">Breakfast</span><span class="pill blue">Egencia</span></td><td class="rate-price">$224/night</td></tr>
+        <tr><td class="rate-name">Loyalty Saver · Breakfast</td><td><span class="pill blue">Loyalty</span><span class="pill">Breakfast</span></td><td class="rate-price">$231/night</td></tr>
+        <tr><td class="rate-name">Best Available Rate</td><td><span class="pill green">Free cancel</span><span class="pill">Negotiated</span></td><td class="rate-price">$216/night</td></tr>
+        <tr><td class="rate-name">Non-refundable · Dinner</td><td><span class="pill amber">Cancel fee</span><span class="pill">Dinner</span></td><td class="rate-price">$219/night</td></tr>
+        <tr><td class="rate-name">Advance Purchase 21d</td><td><span class="pill amber">Cancel fee</span><span class="pill">Pay online</span></td><td class="rate-price">$209/night</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="room-group">
+    <div class="room-group-header">
+      <h3>Double Queen Room</h3>
+      <span class="room-meta">2 Queen Beds · Sleeps 4</span>
+      <span class="room-from">6 rates · from $239/night</span>
+    </div>
+    <table class="rate-table">
+      <thead><tr><th>Rate</th><th>Attributes</th><th style="text-align:right">Price</th></tr></thead>
+      <tbody>
+        <tr><td class="rate-name">Flexible · Bed &amp; Breakfast</td><td><span class="pill green">Free cancel</span><span class="pill">Breakfast</span></td><td class="rate-price">$267/night</td></tr>
+        <tr><td class="rate-name">Flex + Parking</td><td><span class="pill green">Free cancel</span><span class="pill">Parking</span></td><td class="rate-price">$259/night</td></tr>
+        <tr><td class="rate-name">Loyalty Saver</td><td><span class="pill blue">Loyalty</span><span class="pill green">Free cancel</span></td><td class="rate-price">$251/night</td></tr>
+        <tr><td class="rate-name">Best Available Rate</td><td><span class="pill green">Free cancel</span></td><td class="rate-price">$248/night</td></tr>
+        <tr><td class="rate-name">Non-refundable · Breakfast</td><td><span class="pill amber">Cancel fee</span><span class="pill">Breakfast</span></td><td class="rate-price">$245/night</td></tr>
+        <tr><td class="rate-name">Advance Purchase 21d</td><td><span class="pill amber">Cancel fee</span></td><td class="rate-price">$239/night</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="review-grid">
+    <div class="review-cell"><h3>What this is</h3><p>Group by normalized room type, then show every bookable rate as a flat row. Nothing collapsed, nothing prioritized — let the user scan.</p></div>
+    <div class="review-cell"><h3>Why it works</h3><p>Zero interaction cost. Full inventory visible at a glance. Power users and agents can scan all options without any extra clicks.</p></div>
+    <div class="review-cell"><h3>Best use case</h3><p>Properties with 2–3 room types and moderate rate density. Expert users who want to see everything before deciding.</p></div>
+    <div class="review-cell"><h3>Tradeoffs / risks</h3><p>Vertical footprint grows fast. Properties with 4+ room types and dense inventory will overwhelm. No prioritization guidance.</p></div>
+  </div>
+</section>
+
+<!-- CONCEPT 02 -->
+<section id="concept-02">
+  <div class="section-eyebrow">Concept 02 · 14 &nbsp;·&nbsp; Collapsible groups</div>
+  <div class="section-title">Accordion room groups</div>
+  <div class="section-subtitle">Each room type is a collapsible header with rate count and price-from. Users expand what they care about.</div>
+
+  <div class="content-block">
+    <p>Optimizes for properties with many room types where seeing every rate at once would overwhelm. The collapsed state acts as a triage view; expansion is opt-in per group.</p>
+  </div>
+
+  <div class="states-row">
+    <div class="state-chip">State 01 / 02 &nbsp;·&nbsp; All collapsed</div>
+    <div class="state-chip">State 02 / 02 &nbsp;·&nbsp; First group expanded</div>
+  </div>
+
+  <div style="display:flex;gap:8px;margin-bottom:16px;">
+    <span class="btn-outline">Expand all</span>
+    <span class="btn-outline">Collapse all</span>
+  </div>
+
+  <!-- Collapsed rows -->
+  <div class="room-group" style="margin-bottom:8px;">
+    <div class="room-group-header" style="cursor:pointer;">
+      <h3>King Room</h3>
+      <span class="room-meta">1 King Bed · Sleeps 2</span>
+      <span class="room-from">7 rates · from $214</span>
+    </div>
+  </div>
+  <div class="room-group" style="margin-bottom:8px;">
+    <div class="room-group-header" style="background:var(--bg);">
+      <h3>Queen Room</h3>
+      <span class="room-meta">1 Queen Bed · Sleeps 2</span>
+      <span class="room-from">5 rates · from $209</span>
+    </div>
+    <table class="rate-table">
+      <tbody>
+        <tr><td class="rate-name">Flexible · Bed &amp; Breakfast</td><td><span class="pill green">Free cancel</span><span class="pill">Breakfast</span><span class="pill blue">Egencia</span></td><td class="rate-price">$251/night</td></tr>
+        <tr><td class="rate-name">Best Available Rate</td><td><span class="pill green">Free cancel</span><span class="pill blue">Egencia</span></td><td class="rate-price">$239/night</td></tr>
+        <tr><td class="rate-name">Advance Purchase 21d</td><td><span class="pill amber">Cancel fee</span></td><td class="rate-price">$214/night</td></tr>
+        <tr><td class="rate-name">Loyalty Saver</td><td><span class="pill blue">Loyalty</span></td><td class="rate-price">$228/night</td></tr>
+        <tr><td class="rate-name">Non-refundable · Breakfast</td><td><span class="pill amber">Cancel fee</span><span class="pill">Breakfast</span></td><td class="rate-price">$219/night</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="room-group">
+    <div class="room-group-header" style="cursor:pointer;">
+      <h3>Double Queen Room</h3>
+      <span class="room-meta">2 Queen Beds · Sleeps 4</span>
+      <span class="room-from">6 rates · from $239</span>
+    </div>
+  </div>
+
+  <div class="review-grid" style="margin-top:28px;">
+    <div class="review-cell"><h3>What this is</h3><p>Each room type is a collapsible header showing rate count and price-from. Users expand the groups they care about; others stay collapsed.</p></div>
+    <div class="review-cell"><h3>Why it works</h3><p>Tames pages with many room types. The header summary (count + lowest price) lets users triage groups before drilling in.</p></div>
+    <div class="review-cell"><h3>Best use case</h3><p>Properties with 4+ room types and dense rate inventory where seeing everything at once would overwhelm.</p></div>
+    <div class="review-cell"><h3>Tradeoffs / risks</h3><p>Hidden inventory means users may miss a competitive rate. Extra click cost for power users. Default open/closed state matters a lot.</p></div>
+  </div>
+</section>
+
+<!-- CONCEPT 03 -->
+<section id="concept-03">
+  <div class="section-eyebrow">Concept 03 · 14 &nbsp;·&nbsp; Room-first decision</div>
+  <div class="section-title">Featured room with expandable rates</div>
+  <div class="section-subtitle">Strong room summary card with bed, size and amenities; rates revealed in a separate panel below.</div>
+
+  <div class="content-block">
+    <p>Splits the booking decision into two steps: pick the room, then pick the rate. Best when the room itself (not the rate) is the meaningful unit of choice.</p>
+  </div>
+
+  <div class="states-row">
+    <div class="state-chip">State 01 / 02 &nbsp;·&nbsp; Room selected, rates hidden</div>
+    <div class="state-chip">State 02 / 02 &nbsp;·&nbsp; Rates expanded</div>
+  </div>
+
+  <!-- Room cards -->
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:24px;">
+    <div style="border:1.5px solid var(--accent);border-radius:8px;padding:16px;">
+      <div style="font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:6px;">Selected</div>
+      <div style="font-size:14px;font-weight:700;margin-bottom:4px;">King Room</div>
+      <div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;">1 King Bed · Sleeps 2 · 32 m²</div>
+      <div style="font-size:12px;color:var(--text-secondary);">City view · AC · Workspace · Free Wi-Fi</div>
+      <div style="margin-top:12px;font-size:13px;font-weight:700;">from $214</div>
+    </div>
+    <div style="border:1px solid var(--border);border-radius:8px;padding:16px;">
+      <div style="font-size:14px;font-weight:700;margin-bottom:4px;">Queen Room</div>
+      <div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;">1 Queen Bed · Sleeps 2 · 28 m²</div>
+      <div style="font-size:12px;color:var(--text-secondary);">Standard view · AC · Free Wi-Fi</div>
+      <div style="margin-top:12px;font-size:13px;font-weight:700;">from $209</div>
+    </div>
+    <div style="border:1px solid var(--border);border-radius:8px;padding:16px;">
+      <div style="font-size:14px;font-weight:700;margin-bottom:4px;">Studio Suite</div>
+      <div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;">1 King + Sofa · Sleeps 3</div>
+      <div style="font-size:12px;color:var(--text-secondary);">Lounge area · Kitchenette · Free Wi-Fi</div>
+      <div style="margin-top:12px;font-size:13px;font-weight:700;">from $289</div>
+    </div>
+  </div>
+
+  <div style="font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:12px;letter-spacing:0.02em;">Available rates · 3 of 7 shown &nbsp;↓</div>
+
+  <div class="room-group">
+    <table class="rate-table">
+      <thead><tr><th>Rate</th><th>Attributes</th><th style="text-align:right">Price</th><th></th></tr></thead>
+      <tbody>
+        <tr><td class="rate-name">Flexible · Bed &amp; Breakfast · City view</td><td><span class="pill green">Free cancel</span><span class="pill">Breakfast</span></td><td class="rate-price">$251/night</td><td><span class="btn">Reserve</span></td></tr>
+        <tr><td class="rate-name">Best Available Rate · City view</td><td><span class="pill green">Free cancel</span><span class="pill blue">Egencia</span></td><td class="rate-price">$239/night</td><td><span class="btn">Reserve</span></td></tr>
+        <tr><td class="rate-name">Advance Purchase 21d · Standard view</td><td><span class="pill amber">Cancel fee</span></td><td class="rate-price">$214/night</td><td><span class="btn">Reserve</span></td></tr>
+      </tbody>
+    </table>
+    <div style="padding:12px 20px;border-top:1px solid var(--border-light);font-size:12px;color:var(--text-secondary);">Show 4 more rates ▾</div>
+  </div>
+
+  <div class="review-grid" style="margin-top:28px;">
+    <div class="review-cell"><h3>What this is</h3><p>Splits the booking decision into two steps: pick the room, then pick the rate. Room is the primary selector; rates are secondary.</p></div>
+    <div class="review-cell"><h3>Why it works</h3><p>Separates room selection from rate selection, reducing cognitive load per step. Room-level attributes (size, amenities) drive the first decision.</p></div>
+    <div class="review-cell"><h3>Best use case</h3><p>Leisure bookings and high-consideration trips where room choice matters more than rate type.</p></div>
+    <div class="review-cell"><h3>Tradeoffs / risks</h3><p>Can feel heavy with many room types. Rate count is initially hidden, which may frustrate price-first users.</p></div>
+  </div>
+</section>
+
+<!-- CONCEPT 04 -->
+<section id="concept-04">
+  <div class="section-eyebrow">Concept 04 · 14 &nbsp;·&nbsp; Aligned columns</div>
+  <div class="section-title">Table-inspired comparison block</div>
+  <div class="section-subtitle">Per-room table with aligned, sortable columns: Rate, Bed, Meals, Cancellation, Policy, Price, Reserve.</div>
+
+  <div class="content-block">
+    <p>Treats rate selection as a comparison task. Aligned columns expose attribute-level differences at a glance — the spreadsheet view of normalized inventory.</p>
+  </div>
+
+  <div class="states-row">
+    <div class="state-chip">State 01 / 03 &nbsp;·&nbsp; Default sort (price asc)</div>
+    <div class="state-chip">State 02 / 03 &nbsp;·&nbsp; Sorted by cancel policy</div>
+    <div class="state-chip">State 03 / 03 &nbsp;·&nbsp; Hover row</div>
+  </div>
+
+  <div class="room-group" style="margin-bottom:16px;">
+    <div class="room-group-header"><h3>King Room</h3><span class="room-meta">1 King Bed · Sleeps 2 · 7 rates</span></div>
+    <table class="rate-table">
+      <thead>
+        <tr>
+          <th>Rate ↕</th>
+          <th>Meals ↕</th>
+          <th>Cancel ↕</th>
+          <th>Pay</th>
+          <th style="text-align:right">Price ↕</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="rate-name">Advance Purchase 21d</td><td>—</td><td><span class="pill amber">Fee</span></td><td>Online</td><td class="rate-price">$214</td><td><span class="btn">Reserve</span></td></tr>
+        <tr><td class="rate-name">Advance Purchase 30d</td><td>—</td><td><span class="pill amber">Fee</span></td><td>Online</td><td class="rate-price">$218</td><td><span class="btn">Reserve</span></td></tr>
+        <tr><td class="rate-name">Non-refundable · Breakfast</td><td>Breakfast</td><td><span class="pill amber">Fee</span></td><td>Online</td><td class="rate-price">$219</td><td><span class="btn">Reserve</span></td></tr>
+        <tr><td class="rate-name">Loyalty Saver</td><td>—</td><td><span class="pill green">Free</span></td><td>Hotel</td><td class="rate-price">$228</td><td><span class="btn">Reserve</span></td></tr>
+        <tr><td class="rate-name">Best Available Rate</td><td>—</td><td><span class="pill green">Free</span></td><td>Online</td><td class="rate-price">$239</td><td><span class="btn">Reserve</span></td></tr>
+        <tr><td class="rate-name">Flex + Parking</td><td>—</td><td><span class="pill green">Free</span></td><td>Hotel</td><td class="rate-price">$244</td><td><span class="btn">Reserve</span></td></tr>
+        <tr><td class="rate-name">Flexible · Bed &amp; Breakfast</td><td>B&amp;B</td><td><span class="pill green">Free</span></td><td>Hotel</td><td class="rate-price">$251</td><td><span class="btn">Reserve</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="room-group">
+    <div class="room-group-header"><h3>Queen Room</h3><span class="room-meta">1 Queen Bed · Sleeps 2 · 5 rates</span></div>
+    <table class="rate-table">
+      <thead><tr><th>Rate ↕</th><th>Meals ↕</th><th>Cancel ↕</th><th>Pay</th><th style="text-align:right">Price ↕</th><th></th></tr></thead>
+      <tbody>
+        <tr><td class="rate-name">Advance Purchase 21d</td><td>—</td><td><span class="pill amber">Fee</span></td><td>Online</td><td class="rate-price">$209</td><td><span class="btn">Reserve</span></td></tr>
+        <tr><td class="rate-name">Best Available Rate</td><td>—</td><td><span class="pill green">Free</span></td><td>Online</td><td class="rate-price">$216</td><td><span class="btn">Reserve</span></td></tr>
+        <tr><td class="rate-name">Non-refundable · Dinner</td><td>Dinner</td><td><span class="pill amber">Fee</span></td><td>Online</td><td class="rate-price">$219</td><td><span class="btn">Reserve</span></td></tr>
+        <tr><td class="rate-name">Flex · Bed &amp; Breakfast</td><td>B&amp;B</td><td><span class="pill green">Free</span></td><td>Hotel</td><td class="rate-price">$224</td><td><span class="btn">Reserve</span></td></tr>
+        <tr><td class="rate-name">Loyalty Saver · Breakfast</td><td>Breakfast</td><td><span class="pill green">Free</span></td><td>Hotel</td><td class="rate-price">$231</td><td><span class="btn">Reserve</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="review-grid" style="margin-top:28px;">
+    <div class="review-cell"><h3>What this is</h3><p>Per-room table with aligned, sortable columns. Users can sort by any attribute to find what matters to them.</p></div>
+    <div class="review-cell"><h3>Why it works</h3><p>Best-in-class for like-for-like comparison. Aligned columns expose subtle differences (e.g. one rate is non-refundable but $30 cheaper) that pill-based rows hide.</p></div>
+    <div class="review-cell"><h3>Best use case</h3><p>B2B travel agents and corporate bookers who already know which attributes matter and want to compare them quickly.</p></div>
+    <div class="review-cell"><h3>Tradeoffs / risks</h3><p>Feels dense and spreadsheet-like. Mobile-hostile. Less warm than card-based concepts. Long rate-plan names break column alignment.</p></div>
+  </div>
+</section>
+
+<!-- CONCEPT 05 -->
+<section id="concept-05">
+  <div class="section-eyebrow">Concept 05 · 14 &nbsp;·&nbsp; Modular tiles</div>
+  <div class="section-title">Card stack by room type</div>
+  <div class="section-subtitle">Soft outer card per room type; each rate is a discrete bordered tile with attributes and Reserve.</div>
+
+  <div class="content-block">
+    <p>A modular, slightly softer take on the rate list. Each rate reads as a self-contained "offer" inside its room-type container, rather than a row in a list.</p>
+  </div>
+
+  <!-- Card UI mock -->
+  <div style="border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:16px;background:var(--surface);">
+    <div style="font-size:16px;font-weight:700;margin-bottom:4px;">King Room</div>
+    <div style="font-size:12px;color:var(--text-secondary);margin-bottom:16px;">1 King Bed · Sleeps 2 · 32 m²</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:14px;">
+        <div style="font-size:12px;font-weight:700;margin-bottom:6px;">Flexible · Bed &amp; Breakfast</div>
+        <div style="margin-bottom:8px;"><span class="pill blue">Egencia</span><span class="pill green">Free cancel</span><span class="pill">Breakfast</span></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;"><span style="font-size:15px;font-weight:800;">$251<span style="font-size:11px;font-weight:400;color:var(--text-secondary)">/night</span></span><span class="btn" style="font-size:11px;padding:6px 12px;">Reserve</span></div>
+      </div>
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:14px;">
+        <div style="font-size:12px;font-weight:700;margin-bottom:6px;">Best Available Rate</div>
+        <div style="margin-bottom:8px;"><span class="pill blue">Egencia</span><span class="pill green">Free cancel</span></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;"><span style="font-size:15px;font-weight:800;">$239<span style="font-size:11px;font-weight:400;color:var(--text-secondary)">/night</span></span><span class="btn" style="font-size:11px;padding:6px 12px;">Reserve</span></div>
+      </div>
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:14px;">
+        <div style="font-size:12px;font-weight:700;margin-bottom:6px;">Advance Purchase 21d</div>
+        <div style="margin-bottom:8px;"><span class="pill amber">Cancel fee</span></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;"><span style="font-size:15px;font-weight:800;">$214<span style="font-size:11px;font-weight:400;color:var(--text-secondary)">/night</span></span><span class="btn" style="font-size:11px;padding:6px 12px;">Reserve</span></div>
+      </div>
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:14px;">
+        <div style="font-size:12px;font-weight:700;margin-bottom:6px;">Loyalty Saver</div>
+        <div style="margin-bottom:8px;"><span class="pill blue">Loyalty</span><span class="pill green">Free cancel</span></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;"><span style="font-size:15px;font-weight:800;">$228<span style="font-size:11px;font-weight:400;color:var(--text-secondary)">/night</span></span><span class="btn" style="font-size:11px;padding:6px 12px;">Reserve</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="review-grid">
+    <div class="review-cell"><h3>What this is</h3><p>Each room type is a soft outer card. Inside, each rate is a smaller bordered tile with attributes and Reserve.</p></div>
+    <div class="review-cell"><h3>Why it works</h3><p>Friendlier feel than a table. Each rate reads as a discrete "offer" rather than a row in a list, reducing spreadsheet fatigue.</p></div>
+    <div class="review-cell"><h3>Best use case</h3><p>Customer-facing or hybrid B2B/B2C contexts where a softer, less spreadsheet-like interface is preferred.</p></div>
+    <div class="review-cell"><h3>Tradeoffs / risks</h3><p>Less efficient at attribute comparison than the table. More chrome per rate increases vertical footprint. Card boundaries can compete with room grouping for hierarchy.</p></div>
+  </div>
+</section>
+
+<!-- CONCEPT 06 -->
+<section id="concept-06">
+  <div class="section-eyebrow">Concept 06 · 14 &nbsp;·&nbsp; Recommended-first</div>
+  <div class="section-title">Best rate first, others tucked below</div>
+  <div class="section-subtitle">One recommended rate rendered as a hero block; remaining rates collapse behind a "+N more" control.</div>
+
+  <div class="content-block">
+    <p>Optimizes the common path. Most users will accept the recommended rate; surfacing it eliminates choice paralysis while keeping the long tail one click away.</p>
+  </div>
+
+  <div class="states-row">
+    <div class="state-chip">State 01 / 03 &nbsp;·&nbsp; Recommended only</div>
+    <div class="state-chip">State 02 / 03 &nbsp;·&nbsp; +N more expanded</div>
+    <div class="state-chip">State 03 / 03 &nbsp;·&nbsp; Alt rate selected</div>
+  </div>
+
+  <!-- Room 1 -->
+  <div class="room-group" style="margin-bottom:16px;">
+    <div class="room-group-header"><h3>King Room</h3><span class="room-meta">1 King Bed · Sleeps 2 · 7 rates total</span></div>
+    <div style="padding:18px 20px;">
+      <div class="featured-rate">
+        <div class="badge">Recommended</div>
+        <div class="rate-name" style="font-size:14px;font-weight:700;margin-bottom:8px;">Egencia Business rate &nbsp;·&nbsp; Flexible · Bed &amp; Breakfast</div>
+        <div style="margin-bottom:12px;"><span class="pill green">Free cancellation</span><span class="pill">Includes breakfast</span><span class="pill">Includes wifi</span><span class="pill">Pay at hotel</span></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div class="rate-price-lg">$251 <span>/night</span></div>
+          <span class="btn">Reserve</span>
+        </div>
+      </div>
+      <div style="margin-top:12px;">
+        <table class="rate-table">
+          <tbody>
+            <tr><td class="rate-name">Best Available Rate</td><td><span class="pill blue">Egencia</span><span class="pill">Negotiated</span></td><td class="rate-price">$239</td><td><span class="btn">Reserve</span></td></tr>
+            <tr><td class="rate-name">Advance Purchase 21d</td><td><span class="pill amber">Cancel fee</span></td><td class="rate-price">$214</td><td><span class="btn">Reserve</span></td></tr>
+          </tbody>
+        </table>
+        <div style="padding:10px 0;font-size:12px;color:var(--text-secondary);">+ 4 more rates ▾</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Room 2 -->
+  <div class="room-group">
+    <div class="room-group-header"><h3>Queen Room</h3><span class="room-meta">1 Queen Bed · Sleeps 2 · 5 rates total</span></div>
+    <div style="padding:18px 20px;">
+      <div class="featured-rate">
+        <div class="badge">Recommended</div>
+        <div class="rate-name" style="font-size:14px;font-weight:700;margin-bottom:8px;">Egencia Business rate &nbsp;·&nbsp; Flex · Bed &amp; Breakfast</div>
+        <div style="margin-bottom:12px;"><span class="pill green">Free cancellation</span><span class="pill">Includes breakfast</span><span class="pill">Includes wifi</span><span class="pill">Pay at hotel</span></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div class="rate-price-lg">$224 <span>/night</span></div>
+          <span class="btn">Reserve</span>
+        </div>
+      </div>
+      <div style="margin-top:12px;">
+        <table class="rate-table">
+          <tbody>
+            <tr><td class="rate-name">Best Available Rate</td><td><span class="pill">Negotiated</span></td><td class="rate-price">$216</td><td><span class="btn">Reserve</span></td></tr>
+            <tr><td class="rate-name">Advance Purchase 21d</td><td><span class="pill amber">Cancel fee</span></td><td class="rate-price">$209</td><td><span class="btn">Reserve</span></td></tr>
+          </tbody>
+        </table>
+        <div style="padding:10px 0;font-size:12px;color:var(--text-secondary);">+ 2 more rates ▾</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="review-grid" style="margin-top:28px;">
+    <div class="review-cell"><h3>What this is</h3><p>For each room type, one "Recommended" rate renders as a hero block with full detail and a prominent Reserve. Remaining rates collapse behind "+N more."</p></div>
+    <div class="review-cell"><h3>Why it works</h3><p>Optimizes for the common path: most users will accept the recommended option. Reduces choice paralysis without removing the long tail.</p></div>
+    <div class="review-cell"><h3>Best use case</h3><p>Default booking flows, repeat agents, and policy-driven environments where "the right answer" usually exists.</p></div>
+    <div class="review-cell"><h3>Tradeoffs / risks</h3><p>Trust depends entirely on recommendation logic being good. Bad recommendations erode confidence in normalization itself. Hidden rates feel arbitrary without explanation.</p></div>
+  </div>
+</section>
+
+<!-- CONCEPT 07 -->
+<section id="concept-07">
+  <div class="section-eyebrow">Concept 07 · 14 &nbsp;·&nbsp; Per-group filters</div>
+  <div class="section-title">Tabs inside a room group</div>
+  <div class="section-subtitle">Segmented control inside each group filters rates: All · Refundable · Non-refundable · Breakfast.</div>
+
+  <div class="content-block">
+    <p>Lets users apply intent quickly without leaving the group. Tab counts double as a summary of the rate mix — instant signal of how the inventory splits.</p>
+  </div>
+
+  <div class="room-group">
+    <div class="room-group-header"><h3>King Room</h3><span class="room-meta">1 King Bed · Sleeps 2</span><span class="room-from">7 rates · from $214</span></div>
+    <div style="padding:14px 20px 0;">
+      <div class="tab-row">
+        <div class="tab active">All &nbsp;<span style="color:var(--text-tertiary)">7</span></div>
+        <div class="tab">Free cancellation &nbsp;<span style="color:var(--text-tertiary)">4</span></div>
+        <div class="tab">Cancellation fee &nbsp;<span style="color:var(--text-tertiary)">3</span></div>
+        <div class="tab">Includes breakfast &nbsp;<span style="color:var(--text-tertiary)">3</span></div>
+      </div>
+    </div>
+    <table class="rate-table">
+      <tbody>
+        <tr><td class="rate-name">Flexible · Bed &amp; Breakfast</td><td><span class="pill green">Free cancel</span><span class="pill">Breakfast</span></td><td class="rate-price">$251/night</td><td><span class="btn">Reserve</span></td></tr>
+        <tr><td class="rate-name">Best Available Rate</td><td><span class="pill green">Free cancel</span><span class="pill blue">Egencia</span></td><td class="rate-price">$239/night</td><td><span class="btn">Reserve</span></td></tr>
+        <tr><td class="rate-name">Advance Purchase 21d</td><td><span class="pill amber">Cancel fee</span></td><td class="rate-price">$214/night</td><td><span class="btn">Reserve</span></td></tr>
+        <tr><td class="rate-name">Loyalty Saver</td><td><span class="pill blue">Loyalty</span><span class="pill green">Free cancel</span></td><td class="rate-price">$228/night</td><td><span class="btn">Reserve</span></td></tr>
+        <tr><td class="rate-name">Non-refundable · Breakfast</td><td><span class="pill amber">Cancel fee</span><span class="pill">Breakfast</span></td><td class="rate-price">$219/night</td><td><span class="btn">Reserve</span></td></tr>
+        <tr><td class="rate-name">Flex + Parking</td><td><span class="pill green">Free cancel</span><span class="pill">Parking</span></td><td class="rate-price">$244/night</td><td><span class="btn">Reserve</span></td></tr>
+        <tr><td class="rate-name">Advance Purchase 30d</td><td><span class="pill amber">Cancel fee</span></td><td class="rate-price">$218/night</td><td><span class="btn">Reserve</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="review-grid" style="margin-top:28px;">
+    <div class="review-cell"><h3>What this is</h3><p>A segmented control inside each room group filters the rate list (All, Refundable, Non-refundable, Breakfast). Counts on each tab signal how the inventory splits.</p></div>
+    <div class="review-cell"><h3>Why it works</h3><p>Lets users apply intent quickly without leaving the group. Tab counts double as a summary of the rate mix — useful signal even before filtering.</p></div>
+    <div class="review-cell"><h3>Best use case</h3><p>Users with strong constraints (must be refundable, must include breakfast) and properties with mixed-attribute inventory.</p></div>
+    <div class="review-cell"><h3>Tradeoffs / risks</h3><p>Adds an extra UI layer per room type. "Showing N of M" message is essential — without it, hidden rates feel unsafe.</p></div>
+  </div>
+</section>
+
+<!-- CONCEPT 08 -->
+<section id="concept-08">
+  <div class="section-eyebrow">Concept 08 · 14 &nbsp;·&nbsp; Hierarchical disclosure</div>
+  <div class="section-title">Two-level: room type → rate variants</div>
+  <div class="section-subtitle">Pick a normalized room type at level 1; expand any rate variant (Flexible, Advance Purchase, Member Saver…) to see its bookable offers.</div>
+
+  <div class="content-block">
+    <p>Two stacked levels of disclosure. Users see exactly which rate variants the normalizer collapsed under a single room type — strong transparency for policy-driven environments.</p>
+  </div>
+
+  <!-- Level 1 -->
+  <div style="display:flex;gap:10px;margin-bottom:20px;">
+    <div style="border:1.5px solid var(--accent);border-radius:7px;padding:14px 18px;flex:1;">
+      <div style="font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:4px;">Selected</div>
+      <div style="font-size:14px;font-weight:700;">King Room</div>
+      <div style="font-size:12px;color:var(--text-secondary);">1 King Bed · Sleeps 2 · 7 rate variants</div>
+    </div>
+    <div style="border:1px solid var(--border);border-radius:7px;padding:14px 18px;flex:1;">
+      <div style="font-size:14px;font-weight:700;">Queen Room</div>
+      <div style="font-size:12px;color:var(--text-secondary);">1 Queen Bed · Sleeps 2 · 5 rate variants</div>
+    </div>
+  </div>
+
+  <!-- Level 2 -->
+  <div class="room-group">
+    <div style="padding:10px 20px;background:var(--surface);border-bottom:1px solid var(--border);font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-tertiary);">Rate variants · King Room</div>
+    <table class="rate-table">
+      <tbody>
+        <tr><td class="rate-name">Flexible · Bed &amp; Breakfast</td><td><span class="pill green">Free cancel</span><span class="pill">Breakfast</span></td><td class="rate-price">from $251</td><td style="font-size:12px;color:var(--text-secondary);">▸ expand</td></tr>
+        <tr><td class="rate-name">Best Available Rate</td><td><span class="pill green">Free cancel</span><span class="pill blue">Egencia</span></td><td class="rate-price">from $239</td><td style="font-size:12px;color:var(--text-secondary);">▸ expand</td></tr>
+        <tr><td class="rate-name">Advance Purchase 21d</td><td><span class="pill amber">Cancel fee</span></td><td class="rate-price">from $214</td><td style="font-size:12px;color:var(--text-secondary);">▸ expand</td></tr>
+        <tr><td class="rate-name">Loyalty Saver</td><td><span class="pill blue">Loyalty</span><span class="pill green">Free cancel</span></td><td class="rate-price">from $228</td><td style="font-size:12px;color:var(--text-secondary);">▸ expand</td></tr>
+        <tr><td class="rate-name">Non-refundable · Breakfast</td><td><span class="pill amber">Cancel fee</span><span class="pill">Breakfast</span></td><td class="rate-price">from $219</td><td style="font-size:12px;color:var(--text-secondary);">▸ expand</td></tr>
+        <tr><td class="rate-name">Flex + Parking</td><td><span class="pill green">Free cancel</span><span class="pill">Parking</span></td><td class="rate-price">from $244</td><td style="font-size:12px;color:var(--text-secondary);">▸ expand</td></tr>
+        <tr><td class="rate-name">Advance Purchase 30d</td><td><span class="pill amber">Cancel fee</span></td><td class="rate-price">from $218</td><td style="font-size:12px;color:var(--text-secondary);">▸ expand</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="review-grid" style="margin-top:28px;">
+    <div class="review-cell"><h3>What this is</h3><p>Two stacked levels: pick a normalized room type at level 1, then expand rate variants at level 2 to see bookable offers.</p></div>
+    <div class="review-cell"><h3>Why it works</h3><p>Strong rate-plan transparency. Explicit room → rate-variant → offer trail reinforces booking confidence for policy-driven users.</p></div>
+    <div class="review-cell"><h3>Best use case</h3><p>B2B travel desks and corporate-policy environments where rate plan type (flexible vs. advance purchase) drives the decision.</p></div>
+    <div class="review-cell"><h3>Tradeoffs / risks</h3><p>Two clicks to reach a bookable rate. Hierarchy can feel slow for users who already know exactly what they want.</p></div>
+  </div>
+</section>
+
+<!-- CONCEPT 09 -->
+<section id="concept-09">
+  <div class="section-eyebrow">Concept 09 · 14 &nbsp;·&nbsp; Top 3 + reserve weight</div>
+  <div class="section-title">Progressive disclosure with sticky CTA</div>
+  <div class="section-subtitle">Top 2–3 rates shown initially; "Show N more" reveals the rest inline. Reserve buttons heavier and right-anchored.</div>
+
+  <div class="content-block">
+    <p>Balances density and full visibility. The weighted Reserve CTA reinforces that every visible rate is one click from booking — disclosure without losing momentum.</p>
+  </div>
+
+  <div class="room-group" style="margin-bottom:16px;">
+    <div class="room-group-header"><h3>King Room</h3><span class="room-meta">1 King Bed · Sleeps 2</span><span class="room-from">Showing 3 of 7</span></div>
+    <table class="rate-table">
+      <tbody>
+        <tr>
+          <td class="rate-name">Flexible · Bed &amp; Breakfast</td>
+          <td><span class="pill green">Free cancel</span><span class="pill">Breakfast</span></td>
+          <td class="rate-price">$251/night</td>
+          <td><span class="btn">Reserve</span></td>
+        </tr>
+        <tr>
+          <td class="rate-name">Best Available Rate</td>
+          <td><span class="pill green">Free cancel</span><span class="pill blue">Egencia</span></td>
+          <td class="rate-price">$239/night</td>
+          <td><span class="btn">Reserve</span></td>
+        </tr>
+        <tr>
+          <td class="rate-name">Advance Purchase 21d</td>
+          <td><span class="pill amber">Cancel fee</span></td>
+          <td class="rate-price">$214/night</td>
+          <td><span class="btn">Reserve</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="padding:12px 20px;border-top:1px solid var(--border-light);font-size:12px;color:var(--text-secondary);">Show 4 more rates ▾</div>
+  </div>
+
+  <div class="room-group">
+    <div class="room-group-header"><h3>Queen Room</h3><span class="room-meta">1 Queen Bed · Sleeps 2</span><span class="room-from">Showing 3 of 5</span></div>
+    <table class="rate-table">
+      <tbody>
+        <tr><td class="rate-name">Flex · Bed &amp; Breakfast</td><td><span class="pill green">Free cancel</span><span class="pill">Breakfast</span></td><td class="rate-price">$224/night</td><td><span class="btn">Reserve</span></td></tr>
+        <tr><td class="rate-name">Best Available Rate</td><td><span class="pill green">Free cancel</span><span class="pill">Negotiated</span></td><td class="rate-price">$216/night</td><td><span class="btn">Reserve</span></td></tr>
+        <tr><td class="rate-name">Advance Purchase 21d</td><td><span class="pill amber">Cancel fee</span></td><td class="rate-price">$209/night</td><td><span class="btn">Reserve</span></td></tr>
+      </tbody>
+    </table>
+    <div style="padding:12px 20px;border-top:1px solid var(--border-light);font-size:12px;color:var(--text-secondary);">Show 2 more rates ▾</div>
+  </div>
+
+  <div class="review-grid" style="margin-top:28px;">
+    <div class="review-cell"><h3>What this is</h3><p>Top 2–3 rates shown initially per room group. "Show N more" reveals the rest inline without navigating away.</p></div>
+    <div class="review-cell"><h3>Why it works</h3><p>Supports both fast bookers (top 3 is enough) and thorough comparers (full list available). Weighted Reserve reinforces booking confidence.</p></div>
+    <div class="review-cell"><h3>Best use case</h3><p>Mixed-inventory PDPs with diverse user behaviors. Good default for most B2B travel contexts.</p></div>
+    <div class="review-cell"><h3>Tradeoffs / risks</h3><p>Depends on sort clarity — if "top 3" isn't clearly defined, users may distrust the ordering. Adds click cost for thorough users.</p></div>
+  </div>
+</section>
+
+<!-- CONCEPT 10 -->
+<section id="concept-10">
+  <div class="section-eyebrow">Concept 10 · 14 &nbsp;·&nbsp; Trust + match quality</div>
+  <div class="section-title">Confidence-led concept</div>
+  <div class="section-subtitle">Each group leads with a confidence banner ("Same room across 6 offers · Matched across 4 rate plans") plus a meter and "How we matched" panel.</div>
+
+  <div class="content-block">
+    <p>Directly addresses the trust problem in normalization. Surfaces match quality so users know when to trust the grouping vs. when to look harder.</p>
+  </div>
+
+  <!-- King Room with confidence -->
+  <div class="room-group" style="margin-bottom:16px;">
+    <div class="room-group-header"><h3>King Room</h3><span class="room-meta">1 King Bed · Sleeps 2 · Normalized</span><span class="room-from">7 offers</span></div>
+    <div style="padding:12px 20px;border-bottom:1px solid var(--border-light);">
+      <div class="confidence-banner">
+        <div class="confidence-label">Same room across 7 offers &nbsp;·&nbsp; Matched across 7 rate plans</div>
+        <div class="confidence-level high">High confidence</div>
+        <span style="font-size:12px;color:var(--text-secondary);cursor:pointer;">How we matched ↗</span>
+      </div>
+    </div>
+    <table class="rate-table">
+      <tbody>
+        <tr><td class="rate-name">Flexible · Bed &amp; Breakfast · City view</td><td><span class="pill green">Free cancel</span><span class="pill">Breakfast</span></td><td class="rate-price">$251/night</td><td><span class="btn">Reserve</span></td></tr>
+        <tr><td class="rate-name">Best Available Rate · City view</td><td><span class="pill green">Free cancel</span><span class="pill blue">Egencia</span></td><td class="rate-price">$239/night</td><td><span class="btn">Reserve</span></td></tr>
+        <tr><td class="rate-name">Advance Purchase 21d · Standard view</td><td><span class="pill amber">Cancel fee</span></td><td class="rate-price">$214/night</td><td><span class="btn">Reserve</span></td></tr>
+      </tbody>
+    </table>
+    <div style="padding:12px 20px;border-top:1px solid var(--border-light);font-size:12px;color:var(--text-secondary);">Show all 7 offers ▾</div>
+  </div>
+
+  <!-- Double Queen with medium confidence -->
+  <div class="room-group">
+    <div class="room-group-header"><h3>Double Queen Room</h3><span class="room-meta">2 Queen Beds · Sleeps 4 · Normalized</span><span class="room-from">6 offers</span></div>
+    <div style="padding:12px 20px;border-bottom:1px solid var(--border-light);">
+      <div class="confidence-banner">
+        <div class="confidence-label">Same room across 6 offers &nbsp;·&nbsp; Matched across 6 rate plans</div>
+        <div class="confidence-level medium">Medium confidence</div>
+        <span style="font-size:12px;color:var(--text-secondary);cursor:pointer;">How we matched ↗</span>
+      </div>
+    </div>
+    <table class="rate-table">
+      <tbody>
+        <tr><td class="rate-name">Flex · Bed &amp; Breakfast · City view</td><td><span class="pill green">Free cancel</span><span class="pill">Breakfast</span></td><td class="rate-price">$267/night</td><td><span class="btn">Reserve</span></td></tr>
+        <tr><td class="rate-name">Best Available Rate</td><td><span class="pill green">Free cancel</span></td><td class="rate-price">$248/night</td><td><span class="btn">Reserve</span></td></tr>
+      </tbody>
+    </table>
+    <div style="padding:12px 20px;border-top:1px solid var(--border-light);font-size:12px;color:var(--text-secondary);">Show all 6 offers ▾</div>
+  </div>
+
+  <div class="review-grid" style="margin-top:28px;">
+    <div class="review-cell"><h3>What this is</h3><p>Each group leads with a confidence banner showing match count, match quality level, and a "How we matched" panel link.</p></div>
+    <div class="review-cell"><h3>Why it works</h3><p>Directly addresses the trust problem in normalization. Users know when to trust the grouping vs. when to scrutinize more carefully.</p></div>
+    <div class="review-cell"><h3>Best use case</h3><p>Any context where the quality of normalization logic is variable. Especially useful for first-time users of the feature.</p></div>
+    <div class="review-cell"><h3>Tradeoffs / risks</h3><p>Adds visual complexity. "Medium confidence" banners may cause users to distrust the entire normalizer, not just that group. Transparency requires accurate confidence scoring.</p></div>
+  </div>
+</section>
+
+<!-- CONCEPT 11 -->
+<section id="concept-11">
+  <div class="section-eyebrow">Build 11 · 14 &nbsp;·&nbsp; Compose · opt-in</div>
+  <div class="section-title">Add-on builder (opt-in)</div>
+  <div class="section-subtitle">Start from a base room and add options one by one. Price grows from the base as the user opts in.</div>
+
+  <div class="content-block">
+    <p>The simplest compositional model. Pick a room, then opt into refundability, breakfast, parking, and payment. Lowest cognitive load: the user starts at the cheapest valid rate and only pays for what they want.</p>
+  </div>
+
+  <div class="step-list">
+    <div class="step-item"><span class="step-num">Step 1</span><span class="step-label">Room</span></div>
+    <div class="step-item"><span class="step-num">Step 2</span><span class="step-label">Options</span></div>
+    <div class="step-item"><span class="step-num">Step 3</span><span class="step-label">Confirm</span></div>
+  </div>
+
+  <!-- Room picker -->
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:24px;">
+    <div style="border:1.5px solid var(--accent);border-radius:7px;padding:14px;text-align:center;">
+      <div style="font-size:13px;font-weight:700;">King Room</div>
+      <div style="font-size:12px;color:var(--text-secondary);margin:4px 0;">1 King Bed</div>
+      <div style="font-size:14px;font-weight:800;">from $219</div>
+    </div>
+    <div style="border:1px solid var(--border);border-radius:7px;padding:14px;text-align:center;">
+      <div style="font-size:13px;font-weight:700;">Queen Room</div>
+      <div style="font-size:12px;color:var(--text-secondary);margin:4px 0;">1 Queen Bed</div>
+      <div style="font-size:14px;font-weight:800;">from $209</div>
+    </div>
+    <div style="border:1px solid var(--border);border-radius:7px;padding:14px;text-align:center;">
+      <div style="font-size:13px;font-weight:700;">Studio Suite</div>
+      <div style="font-size:12px;color:var(--text-secondary);margin:4px 0;">1 King + Sofa</div>
+      <div style="font-size:14px;font-weight:800;">from $289</div>
+    </div>
+  </div>
+
+  <!-- Options -->
+  <div style="border:1px solid var(--border);border-radius:8px;padding:4px 20px 0;margin-bottom:20px;">
+    <div class="option-row">
+      <div class="option-toggle"></div>
+      <div class="option-body"><div class="option-label">Refundable</div><div class="option-desc">Free cancellation up to 24h before arrival.</div></div>
+      <div class="option-price">+$15</div>
+    </div>
+    <div class="option-row">
+      <div class="option-toggle"></div>
+      <div class="option-body"><div class="option-label">Breakfast included</div><div class="option-desc">Buffet breakfast for all guests.</div></div>
+      <div class="option-price">+$20</div>
+    </div>
+    <div class="option-row">
+      <div class="option-toggle"></div>
+      <div class="option-body"><div class="option-label">Parking</div><div class="option-desc">Self-parking on-site.</div></div>
+      <div class="option-price">+$12</div>
+    </div>
+    <div class="option-row">
+      <div class="option-toggle"></div>
+      <div class="option-body"><div class="option-label">Pay at property</div><div class="option-desc">Pay on arrival, no charge today.</div></div>
+      <div class="option-price" style="color:var(--text-secondary);">Included</div>
+    </div>
+    <div class="option-row">
+      <div class="option-toggle"></div>
+      <div class="option-body"><div class="option-label">Corporate rate</div><div class="option-desc">Billed to your company. Out of policy on Suite.</div></div>
+      <div class="option-price neg">−$8</div>
+    </div>
+    <div class="option-row">
+      <div class="option-toggle"></div>
+      <div class="option-body"><div class="option-label">Negotiated rate</div><div class="option-desc">Negotiated King-only rate. Not available for Queen or Suite.</div></div>
+      <div class="option-price neg">−$5</div>
+    </div>
+  </div>
+
+  <div class="price-summary">
+    <div>
+      <div class="ps-label">Base rate</div>
+      <div style="display:flex;align-items:baseline;gap:6px;"><div class="ps-price">$219</div><div class="ps-night">/night</div></div>
+    </div>
+    <div style="flex:1;font-size:12px;color:var(--text-secondary);">Select options to build your rate.</div>
+    <span class="btn">Reserve · $219</span>
+  </div>
+
+  <div class="review-grid" style="margin-top:28px;">
+    <div class="review-cell"><h3>What this is</h3><p>A 3-room picker followed by a list of opt-in toggles for refundability, breakfast, parking, payment, and corporate rate.</p></div>
+    <div class="review-cell"><h3>Why it works</h3><p>Lowest cognitive load: the user starts at the cheapest valid rate and only pays for what they want. Transparent cause and effect.</p></div>
+    <div class="review-cell"><h3>Best use case</h3><p>Price-sensitive bookers, repeat agents, audiences skeptical of pre-bundled premium defaults.</p></div>
+    <div class="review-cell"><h3>Tradeoffs / risks</h3><p>Anchors low — users may under-select valuable options like refundability. Lower attach rate than opt-out model.</p></div>
+  </div>
+</section>
+
+<!-- CONCEPT 12 -->
+<section id="concept-12">
+  <div class="section-eyebrow">Build 12 · 14 &nbsp;·&nbsp; Compose · opt-out</div>
+  <div class="section-title">Premium pre-selected (opt-out)</div>
+  <div class="section-subtitle">Start at a recommended premium configuration with everything on. Remove options to simplify and reduce price.</div>
+
+  <div class="content-block">
+    <p>Inverts the opt-in model. Anchor on the best experience, then let the user strip back to what they actually need. Tested behavioral default for higher attach rates.</p>
+  </div>
+
+  <!-- Room picker same as 11 -->
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:24px;">
+    <div style="border:1.5px solid var(--accent);border-radius:7px;padding:14px;text-align:center;"><div style="font-size:13px;font-weight:700;">King Room</div><div style="font-size:12px;color:var(--text-secondary);margin:4px 0;">1 King Bed</div><div style="font-size:14px;font-weight:800;">from $219</div></div>
+    <div style="border:1px solid var(--border);border-radius:7px;padding:14px;text-align:center;"><div style="font-size:13px;font-weight:700;">Queen Room</div><div style="font-size:12px;color:var(--text-secondary);margin:4px 0;">1 Queen Bed</div><div style="font-size:14px;font-weight:800;">from $209</div></div>
+    <div style="border:1px solid var(--border);border-radius:7px;padding:14px;text-align:center;"><div style="font-size:13px;font-weight:700;">Studio Suite</div><div style="font-size:12px;color:var(--text-secondary);margin:4px 0;">1 King + Sofa</div><div style="font-size:14px;font-weight:800;">from $289</div></div>
+  </div>
+
+  <div style="font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:10px;">Best experience pre-selected. Remove options to simplify.</div>
+
+  <!-- Options (all pre-selected) -->
+  <div style="border:1px solid var(--border);border-radius:8px;padding:4px 20px 0;margin-bottom:20px;">
+    <div class="option-row">
+      <div class="option-toggle" style="background:var(--accent);border-color:var(--accent);"></div>
+      <div class="option-body"><div class="option-label">Refundable <span style="background:#eaf5ee;color:#2d7a47;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;margin-left:4px;">Recommended</span></div><div class="option-desc">Free cancellation up to 24h before arrival.</div></div>
+      <div class="option-price">+$15</div>
+    </div>
+    <div class="option-row">
+      <div class="option-toggle" style="background:var(--accent);border-color:var(--accent);"></div>
+      <div class="option-body"><div class="option-label">Breakfast included <span style="background:#eaf5ee;color:#2d7a47;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;margin-left:4px;">Recommended</span></div><div class="option-desc">Buffet breakfast for all guests.</div></div>
+      <div class="option-price">+$20</div>
+    </div>
+    <div class="option-row">
+      <div class="option-toggle" style="background:var(--accent);border-color:var(--accent);"></div>
+      <div class="option-body"><div class="option-label">Parking</div><div class="option-desc">Self-parking on-site.</div></div>
+      <div class="option-price">+$12</div>
+    </div>
+    <div class="option-row">
+      <div class="option-toggle" style="background:var(--accent);border-color:var(--accent);"></div>
+      <div class="option-body"><div class="option-label">Corporate rate</div><div class="option-desc">Billed to your company.</div></div>
+      <div class="option-price neg">−$8</div>
+    </div>
+    <div class="option-row">
+      <div class="option-toggle" style="background:var(--accent);border-color:var(--accent);"></div>
+      <div class="option-body"><div class="option-label">Negotiated rate</div><div class="option-desc">Negotiated King-only rate.</div></div>
+      <div class="option-price neg">−$5</div>
+    </div>
+  </div>
+
+  <div class="price-summary">
+    <div>
+      <div class="ps-label">Total · all options on</div>
+      <div style="display:flex;align-items:baseline;gap:6px;"><div class="ps-price">$266</div><div class="ps-night">/night</div></div>
+    </div>
+    <div style="flex:1;font-size:12px;color:var(--text-secondary);">Base $219 + $47 options. Remove options to reduce price.</div>
+    <span class="btn">Reserve · $266</span>
+  </div>
+
+  <div class="states-row" style="margin-top:16px;">
+    <div class="state-chip">State 01 / 04 &nbsp;·&nbsp; All recommended on · $266/night</div>
+    <div class="state-chip">State 02 / 04 &nbsp;·&nbsp; Breakfast removed · $246/night</div>
+    <div class="state-chip">State 03 / 04 &nbsp;·&nbsp; Parking removed · $234/night</div>
+    <div class="state-chip">State 04 / 04 &nbsp;·&nbsp; Stripped to base · $219/night</div>
+  </div>
+
+  <div class="review-grid" style="margin-top:28px;">
+    <div class="review-cell"><h3>What this is</h3><p>Same option list as Concept 11, but every value-add is checked by default with a "Recommended" badge. Removing options strikes them through and decreases the total.</p></div>
+    <div class="review-cell"><h3>Why it works</h3><p>Anchoring + loss aversion lift attach for breakfast, refundability, and parking. Users see the premium total first and decide what they're willing to give up.</p></div>
+    <div class="review-cell"><h3>Best use case</h3><p>Leisure or hybrid audiences where flexibility and amenities are likely to be valued. Agents wanting to nudge toward a fuller experience.</p></div>
+    <div class="review-cell"><h3>Tradeoffs / risks</h3><p>Can feel paternalistic if defaults feel forced. Higher starting price may scare price-sensitive users before they realize options are removable.</p></div>
+  </div>
+</section>
+
+<!-- CONCEPT 13 -->
+<section id="concept-13">
+  <div class="section-eyebrow">Build 13 · 14 &nbsp;·&nbsp; Compose · guided flow</div>
+  <div class="section-title">Step-by-step builder (guided)</div>
+  <div class="section-subtitle">Four-step wizard inside a single component: room, flexibility, extras, confirm. Each step shows only what matters now.</div>
+
+  <div class="content-block">
+    <p>Trades scannability for guidance. Splits the rate composition into four ordered decisions so each screen is small, focused, and reversible.</p>
+  </div>
+
+  <div class="step-list" style="margin-bottom:24px;">
+    <div class="step-item" style="background:var(--surface);"><span class="step-num">Step 1</span><span class="step-label">Room</span></div>
+    <div class="step-item" style="background:var(--surface);"><span class="step-num">Step 2</span><span class="step-label">Flexibility</span></div>
+    <div class="step-item" style="background:var(--surface);"><span class="step-num">Step 3</span><span class="step-label">Extras</span></div>
+    <div class="step-item" style="background:var(--surface);"><span class="step-num">Step 4</span><span class="step-label">Confirm</span></div>
+  </div>
+
+  <!-- Step 1 content -->
+  <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:16px;">
+    <div style="background:var(--surface);padding:12px 20px;border-bottom:1px solid var(--border);font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-tertiary);">Step 1 · Room type</div>
+    <div style="padding:16px 20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+      <div style="border:1.5px solid var(--accent);border-radius:7px;padding:12px;text-align:center;"><div style="font-size:13px;font-weight:700;">King Room</div><div style="font-size:12px;color:var(--text-secondary);">1 King Bed</div><div style="font-size:14px;font-weight:800;margin-top:6px;">from $219</div></div>
+      <div style="border:1px solid var(--border);border-radius:7px;padding:12px;text-align:center;"><div style="font-size:13px;font-weight:700;">Queen Room</div><div style="font-size:12px;color:var(--text-secondary);">1 Queen Bed</div><div style="font-size:14px;font-weight:800;margin-top:6px;">from $209</div></div>
+      <div style="border:1px solid var(--border);border-radius:7px;padding:12px;text-align:center;"><div style="font-size:13px;font-weight:700;">Studio Suite</div><div style="font-size:12px;color:var(--text-secondary);">1 King + Sofa</div><div style="font-size:14px;font-weight:800;margin-top:6px;">from $289</div></div>
+    </div>
+  </div>
+
+  <!-- Step 2 content -->
+  <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:16px;">
+    <div style="background:var(--surface);padding:12px 20px;border-bottom:1px solid var(--border);font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-tertiary);">Step 2 · Flexibility</div>
+    <div style="padding:16px 20px;display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div style="border:1.5px solid var(--accent);border-radius:7px;padding:14px;">
+        <div style="font-size:13px;font-weight:700;margin-bottom:4px;">Best flexibility (Refundable)</div>
+        <div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;">Free cancellation up to 24h before arrival.</div>
+        <div style="font-size:15px;font-weight:800;">$234/night</div>
+      </div>
+      <div style="border:1px solid var(--border);border-radius:7px;padding:14px;">
+        <div style="font-size:13px;font-weight:700;margin-bottom:4px;">Non-refundable</div>
+        <div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;">Cancellation fee applies. Lowest price.</div>
+        <div style="font-size:15px;font-weight:800;">$219/night</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3 content -->
+  <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:16px;">
+    <div style="background:var(--surface);padding:12px 20px;border-bottom:1px solid var(--border);font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-tertiary);">Step 3 · Extras</div>
+    <div style="padding:4px 20px 0;">
+      <div class="option-row"><div class="option-toggle"></div><div class="option-body"><div class="option-label">Breakfast included</div><div class="option-desc">Buffet breakfast for all guests.</div></div><div class="option-price">+$20</div></div>
+      <div class="option-row"><div class="option-toggle"></div><div class="option-body"><div class="option-label">Parking</div><div class="option-desc">Self-parking on-site.</div></div><div class="option-price">+$12</div></div>
+      <div class="option-row"><div class="option-toggle"></div><div class="option-body"><div class="option-label">Corporate rate</div><div class="option-desc">Billed to your company.</div></div><div class="option-price neg">−$8</div></div>
+      <div class="option-row"><div class="option-toggle"></div><div class="option-body"><div class="option-label">Pay at property</div><div class="option-desc">Pay on arrival, no charge today.</div></div><div class="option-price" style="color:var(--text-secondary);">Included</div></div>
+    </div>
+  </div>
+
+  <!-- Step 4 confirm -->
+  <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:20px;">
+    <div style="background:var(--surface);padding:12px 20px;border-bottom:1px solid var(--border);font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-tertiary);">Step 4 · Confirm</div>
+    <div style="padding:18px 20px;font-size:13px;color:var(--text-secondary);line-height:1.7;">
+      <div><strong style="color:var(--text);">King Room</strong> &nbsp;·&nbsp; 1 King Bed · Sleeps 2</div>
+      <div>Refundable · Breakfast included · Parking · Pay at hotel · Corporate rate</div>
+      <div style="margin-top:10px;font-size:12px;"><span class="pill green">Free cancellation</span><span class="pill">Breakfast</span><span class="pill">Parking</span><span class="pill">Corporate rate</span></div>
+    </div>
+    <div class="price-summary" style="border-radius:0;border:none;border-top:1px solid var(--border);">
+      <div><div class="ps-label">Total per night</div><div style="display:flex;align-items:baseline;gap:6px;"><div class="ps-price">$266</div><div class="ps-night">/night</div></div></div>
+      <div style="flex:1;font-size:12px;color:var(--text-secondary);">Base $219 · +$47</div>
+      <span class="btn">Reserve · $266</span>
+    </div>
+  </div>
+
+  <div class="review-grid">
+    <div class="review-cell"><h3>What this is</h3><p>A wizard with a top step indicator. Each step gates the next; the final summary lists room, options, derived chips, total, and policy.</p></div>
+    <div class="review-cell"><h3>Why it works</h3><p>Trades scannability for guidance. Each screen is small, focused, and reversible. Reduces decision paralysis by sequencing choices.</p></div>
+    <div class="review-cell"><h3>Best use case</h3><p>First-time users, complex booking scenarios, or contexts where guidance is more valuable than speed.</p></div>
+    <div class="review-cell"><h3>Tradeoffs / risks</h3><p>Slowest path to booking. Feels heavy for experienced agents who know exactly what they want. Four steps to book vs. one click in flat list.</p></div>
+  </div>
+</section>
+
+<!-- CONCEPT 14 -->
+<section id="concept-14">
+  <div class="section-eyebrow">Build 14 · 14 &nbsp;·&nbsp; Compose · inline edits</div>
+  <div class="section-title">Hybrid (prebuilt + editable)</div>
+  <div class="section-subtitle">Familiar prebuilt rate rows with inline toggles for breakfast and refundability. Each row tracks its own customized state.</div>
+
+  <div class="content-block">
+    <p>Best of both worlds: keep the scannable prebuilt rate list, but let users tweak any row inline. Each row tracks its own cause-and-effect state with an audit trail.</p>
+  </div>
+
+  <div class="states-row">
+    <div class="state-chip">State 01 / 03 &nbsp;·&nbsp; Default presets</div>
+    <div class="state-chip">State 02 / 03 &nbsp;·&nbsp; Edited · Breakfast added</div>
+    <div class="state-chip">State 03 / 03 &nbsp;·&nbsp; Edited · Refundable added on row 2</div>
+  </div>
+
+  <div style="font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:12px;">King Room · 3 prebuilt rates · inline editable</div>
+
+  <div class="room-group">
+    <div class="room-group-header" style="background:var(--bg);">
+      <h3>King Room</h3>
+      <span class="room-meta">1 King Bed · Sleeps 2</span>
+    </div>
+    <table class="rate-table">
+      <thead><tr><th>Rate</th><th>Attributes</th><th>Customize</th><th style="text-align:right">Price</th><th></th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="rate-name">Flexible · Bed &amp; Breakfast</td>
+          <td><span class="pill blue">Egencia</span><span class="pill green">Free cancel</span><span class="pill">Breakfast</span><span class="pill">Pay at hotel</span></td>
+          <td style="font-size:11px;color:var(--text-tertiary);">Breakfast on · Refundable on</td>
+          <td class="rate-price">$251/night</td>
+          <td><span class="btn">Reserve</span></td>
+        </tr>
+        <tr>
+          <td class="rate-name">Best Available Rate</td>
+          <td><span class="pill blue">Egencia</span><span class="pill green">Free cancel</span><span class="pill">Pay online</span></td>
+          <td>
+            <div style="font-size:11px;color:var(--text-secondary);">
+              <span style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:2px 7px;margin-right:4px;cursor:pointer;">+ Breakfast +$20</span>
+              <span style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:2px 7px;cursor:pointer;">+ Refundable +$15</span>
+            </div>
+          </td>
+          <td class="rate-price">$239/night</td>
+          <td><span class="btn">Reserve</span></td>
+        </tr>
+        <tr>
+          <td class="rate-name">Advance Purchase 21d</td>
+          <td><span class="pill amber">Cancel fee</span><span class="pill">Pay online</span></td>
+          <td>
+            <div style="font-size:11px;color:var(--text-secondary);">
+              <span style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:2px 7px;margin-right:4px;cursor:pointer;">+ Breakfast +$20</span>
+              <span style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:2px 7px;cursor:pointer;">+ Refundable +$15</span>
+            </div>
+          </td>
+          <td class="rate-price">$214/night</td>
+          <td><span class="btn">Reserve</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="ux-note" style="margin-top:16px;">
+    <strong>Audit trail:</strong> Edited rows show a "Customized" marker. Removed options stay visible (struck through) so the user can re-add them. Running adjustments make the cause/effect tangible per row — no global state, each row independent.
+  </div>
+
+  <div class="review-grid" style="margin-top:24px;">
+    <div class="review-cell"><h3>What this is</h3><p>Familiar prebuilt rate rows with inline toggles for breakfast and refundability. Each row tracks its own customized state independently.</p></div>
+    <div class="review-cell"><h3>Why it works</h3><p>Best of both worlds — keeps the scannable rate list while enabling per-row customization. Migration-friendly: existing UI patterns are preserved.</p></div>
+    <div class="review-cell"><h3>Best use case</h3><p>Experienced agents who know the base rates but want to tweak one or two attributes without rebuilding from scratch.</p></div>
+    <div class="review-cell"><h3>Tradeoffs / risks</h3><p>Row-level state can become confusing if many rows are customized simultaneously. Inline toggles add visual complexity per row.</p></div>
+  </div>
+
+  <div class="print-note">Room Normalizer · PDP Component Exploration · 14 concepts · Internal design artifact · wes.noel@amexgbt.com</div>
+</section>
+
+</main>
+</body>
+</html>

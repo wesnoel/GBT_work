@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map Colors Presentation</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica", "Arial", sans-serif;
+            background: var(--color-background-tertiary, #f5f5f5);
+            padding: 40px 20px;
+            color: var(--color-text-primary, #000);
+        }
+        
+        .presentation-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .slide {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 60px 50px;
+            min-height: 600px;
+            margin-bottom: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .slide h1 {
+            font-size: 32px;
+            font-weight: 500;
+            margin-bottom: 12px;
+            color: #000;
+        }
+        
+        .slide h2 {
+            font-size: 16px;
+            color: #666;
+            margin: 0;
+            margin-bottom: 40px;
+            font-weight: 400;
+        }
+        
+        .slide-content {
+            flex: 1;
+            margin-bottom: 40px;
+        }
+        
+        .slide-content p {
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 12px;
+            color: #333;
+        }
+        
+        .slide-content ul {
+            margin-left: 20px;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+        
+        .slide-content li {
+            margin-bottom: 8px;
+            color: #333;
+        }
+        
+        .slide-content strong {
+            font-weight: 600;
+        }
+        
+        .color-demo {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            align-items: flex-start;
+        }
+        
+        .color-swatch {
+            width: 100px;
+            height: 100px;
+            border-radius: 8px;
+            flex-shrink: 0;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .color-info {
+            flex: 1;
+        }
+        
+        .color-info p {
+            margin-bottom: 4px;
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        
+        .summary-card {
+            padding: 12px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .summary-card img {
+            width: 100%;
+            height: 100px;
+            border-radius: 6px;
+            object-fit: cover;
+            margin-bottom: 8px;
+        }
+        
+        .summary-card p {
+            margin-bottom: 4px;
+            font-weight: 500;
+            font-size: 13px;
+        }
+        
+        .summary-card .token {
+            color: #666;
+            font-size: 12px;
+        }
+        
+        .principles-grid {
+            display: grid;
+            gap: 12px;
+        }
+        
+        .principle-card {
+            padding: 12px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .principle-card p:first-child {
+            font-weight: 500;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+        
+        .principle-card p:last-child {
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 0;
+        }
+        
+        .slide-footer {
+            font-size: 14px;
+            color: #999;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            padding: 8px 16px;
+            border: 1px solid #d0d0d0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        button:hover {
+            background: #f0f0f0;
+            border-color: #a0a0a0;
+        }
+        
+        button.download {
+            background: #0066cc;
+            color: white;
+            border-color: #0050aa;
+        }
+        
+        button.download:hover {
+            background: #0050aa;
+            border-color: #003d7a;
+        }
+        
+        .slide-counter {
+            text-align: center;
+            font-size: 13px;
+            color: #999;
+            margin-top: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <div id="slide" class="slide">
+            <div>
+                <h1 id="slideTitle">Map Location Category Colors</h1>
+                <h2 id="slideSubtitle">Research & Best Practices</h2>
+            </div>
+            <div class="slide-content" id="slideContent"></div>
+            <div class="slide-footer" id="slideFooter">Slide 1 of 11</div>
+        </div>
+
+        <div class="controls">
+            <button onclick="previousSlide()">← Previous</button>
+            <button class="download" onclick="downloadSlide()">⬇ Download PNG</button>
+            <button onclick="nextSlide()">Next →</button>
+        </div>
+
+        <div class="slide-counter">
+            Navigate through slides to view each category and download as PNG
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+
+        const slides = [
+            {
+                title: "Map Location Category Colors",
+                subtitle: "Research & Best Practices",
+                content: `
+                    <div style="text-align: center; padding-top: 40px;">
+                        <p style="font-size: 18px; color: #666; margin-top: 60px;">Industry standards for POI categories</p>
+                        <p style="font-size: 16px; color: #999; margin-top: 30px;">Bars • Restaurants • Fast Food • Coffee Shops • Shopping • Bus Stops • Train Stations</p>
+                    </div>
+                `
+            },
+            {
+                title: "Bars",
+                subtitle: "Deep Burgundy",
+                content: `
+                    <div class="color-demo">
+                        <div class="color-swatch" style="background-color: #64052B;"></div>
+                        <div class="color-info">
+                            <p><strong>Color Token:</strong> Color_Accent_9 at 600</p>
+                            <p><strong>Hex:</strong> #64052B</p>
+                        </div>
+                    </div>
+                    <p><strong>Why deep burgundy?</strong></p>
+                    <ul>
+                        <li>Conveys sophistication and social atmosphere</li>
+                        <li>Wine/cocktail industry standard</li>
+                        <li>Distinct from bright red (food delivery)</li>
+                        <li>Used by: Vivino, Untappd, Wine.com</li>
+                    </ul>
+                `
+            },
+            {
+                title: "Restaurants",
+                subtitle: "Orange-Red",
+                content: `
+                    <div class="color-demo">
+                        <div class="color-swatch" style="background-color: #C43D0A;"></div>
+                        <div class="color-info">
+                            <p><strong>Color Token:</strong> Color_Accent_6 at 600</p>
+                            <p><strong>Hex:</strong> #C43D0A</p>
+                        </div>
+                    </div>
+                    <p><strong>Why orange-red?</strong></p>
+                    <ul>
+                        <li>Warm, social environment ideal for dining</li>
+                        <li>Stimulates appetite while feeling welcoming</li>
+                        <li>Works for casual sit-down dining (Italian, Mexican, etc.)</li>
+                        <li>Shared with Fast Food for unified dining category</li>
+                    </ul>
+                `
+            },
+            {
+                title: "Fast Food",
+                subtitle: "Orange-Red",
+                content: `
+                    <div class="color-demo">
+                        <div class="color-swatch" style="background-color: #C43D0A;"></div>
+                        <div class="color-info">
+                            <p><strong>Color Token:</strong> Color_Accent_6 at 600</p>
+                            <p><strong>Hex:</strong> #C43D0A</p>
+                        </div>
+                    </div>
+                    <p><strong>Why orange-red?</strong></p>
+                    <ul>
+                        <li>Same color as Restaurants for unified dining category</li>
+                        <li>Stimulates appetite and energy</li>
+                        <li>Used by McDonald's, Burger King, major QSR chains</li>
+                        <li>Balanced between fast and fine dining on the spectrum</li>
+                    </ul>
+                `
+            },
+            {
+                title: "Coffee Shops",
+                subtitle: "Warm Brown",
+                content: `
+                    <div class="color-demo">
+                        <div class="color-swatch" style="background-color: #9D6800;"></div>
+                        <div class="color-info">
+                            <p><strong>Color Token:</strong> Color_Accent_2 at 700</p>
+                            <p><strong>Hex:</strong> #9D6800</p>
+                        </div>
+                    </div>
+                    <p><strong>Why brown?</strong></p>
+                    <ul>
+                        <li>Universal symbol for coffee across all cultures</li>
+                        <li>Used by Starbucks, Peet's, specialty coffee chains</li>
+                        <li>Conveys warmth and comfort</li>
+                        <li>Google Maps, Apple Maps standard</li>
+                    </ul>
+                `
+            },
+            {
+                title: "Shopping",
+                subtitle: "Magenta",
+                content: `
+                    <div class="color-demo">
+                        <div class="color-swatch" style="background-color: #B82962;"></div>
+                        <div class="color-info">
+                            <p><strong>Color Token:</strong> Color_Accent_9 at 400</p>
+                            <p><strong>Hex:</strong> #B82962</p>
+                        </div>
+                    </div>
+                    <p><strong>Why magenta?</strong></p>
+                    <ul>
+                        <li>Feels modern and trendy rather than formal</li>
+                        <li>Distinct from food categories</li>
+                        <li>High visibility on maps</li>
+                        <li>Bright enough for accessibility, playful for retail</li>
+                    </ul>
+                `
+            },
+            {
+                title: "Bus Stops",
+                subtitle: "Transit Blue",
+                content: `
+                    <div class="color-demo">
+                        <div class="color-swatch" style="background-color: #006FCF;"></div>
+                        <div class="color-info">
+                            <p><strong>Color Token:</strong> Color_Accent_1 at 600</p>
+                            <p><strong>Hex:</strong> #006FCF</p>
+                        </div>
+                    </div>
+                    <p><strong>Why blue?</strong></p>
+                    <ul>
+                        <li>ISO 3098-2 international standard for public transit</li>
+                        <li>Used globally: NYC MTA, London TfL, Tokyo Metro</li>
+                        <li>Conveys trust and reliability</li>
+                        <li>Bright enough for map visibility</li>
+                    </ul>
+                `
+            },
+            {
+                title: "Train Stations",
+                subtitle: "Transit Blue",
+                content: `
+                    <div class="color-demo">
+                        <div class="color-swatch" style="background-color: #006FCF;"></div>
+                        <div class="color-info">
+                            <p><strong>Color Token:</strong> Color_Accent_1 at 600</p>
+                            <p><strong>Hex:</strong> #006FCF</p>
+                        </div>
+                    </div>
+                    <p><strong>Why blue?</strong></p>
+                    <ul>
+                        <li>ISO 3098-2 standard (same family as buses)</li>
+                        <li>Unified color for consistent transit identity</li>
+                        <li>Creates visual hierarchy in transit system</li>
+                        <li>Still globally recognizable as transit</li>
+                    </ul>
+                `
+            },
+            {
+                title: "Color Palette Summary",
+                subtitle: "Recommended mapping",
+                content: `
+                    <div class="summary-grid">
+                        <div class="summary-card">
+                            <div class="color-swatch" style="background-color: #64052B;"></div>
+                            <p>Bars</p>
+                            <p class="token">Color_Accent_9 @ 600</p>
+                        </div>
+                        <div class="summary-card">
+                            <div class="color-swatch" style="background-color: #C43D0A;"></div>
+                            <p>Restaurants</p>
+                            <p class="token">Color_Accent_6 @ 600</p>
+                        </div>
+                        <div class="summary-card">
+                            <div class="color-swatch" style="background-color: #C43D0A;"></div>
+                            <p>Fast Food</p>
+                            <p class="token">Color_Accent_6 @ 600</p>
+                        </div>
+                        <div class="summary-card">
+                            <div class="color-swatch" style="background-color: #9D6800;"></div>
+                            <p>Coffee Shops</p>
+                            <p class="token">Color_Accent_2 @ 700</p>
+                        </div>
+                        <div class="summary-card">
+                            <div class="color-swatch" style="background-color: #B82962;"></div>
+                            <p>Shopping</p>
+                            <p class="token">Color_Accent_9 @ 400</p>
+                        </div>
+                        <div class="summary-card">
+                            <div class="color-swatch" style="background-color: #006FCF;"></div>
+                            <p>Bus Stops</p>
+                            <p class="token">Color_Accent_1 @ 600</p>
+                        </div>
+                        <div class="summary-card">
+                            <div class="color-swatch" style="background-color: #006FCF;"></div>
+                            <p>Train Stations</p>
+                            <p class="token">Color_Accent_1 @ 600</p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "Category Icons with Colors",
+                subtitle: "Visual reinforcement",
+                content: `
+                    <div class="summary-grid">
+                        <div class="summary-card">
+                            <img src="images/Bars.png" style="width: 100%; aspect-ratio: 1; border-radius: 6px; object-fit: cover;">
+                            <p>Bars</p>
+                            <p class="token">Color_Accent_9 @ 600</p>
+                        </div>
+                        <div class="summary-card">
+                            <img src="images/Restaurants.png" style="width: 100%; aspect-ratio: 1; border-radius: 6px; object-fit: cover;">
+                            <p>Restaurants</p>
+                            <p class="token">Color_Accent_6 @ 600</p>
+                        </div>
+                        <div class="summary-card">
+                            <img src="images/Fast_Food.png" style="width: 100%; aspect-ratio: 1; border-radius: 6px; object-fit: cover;">
+                            <p>Fast Food</p>
+                            <p class="token">Color_Accent_6 @ 600</p>
+                        </div>
+                        <div class="summary-card">
+                            <img src="images/Coffee_Shops.png" style="width: 100%; aspect-ratio: 1; border-radius: 6px; object-fit: cover;">
+                            <p>Coffee Shops</p>
+                            <p class="token">Color_Accent_2 @ 700</p>
+                        </div>
+                        <div class="summary-card">
+                            <img src="images/Shopping.png" style="width: 100%; aspect-ratio: 1; border-radius: 6px; object-fit: cover;">
+                            <p>Shopping</p>
+                            <p class="token">Color_Accent_9 @ 400</p>
+                        </div>
+                        <div class="summary-card">
+                            <img src="images/Bus_Stop.png" style="width: 100%; aspect-ratio: 1; border-radius: 6px; object-fit: cover;">
+                            <p>Bus Stops</p>
+                            <p class="token">Color_Accent_1 @ 600</p>
+                        </div>
+                        <div class="summary-card">
+                            <img src="images/Trains_Station.png" style="width: 100%; aspect-ratio: 1; border-radius: 6px; object-fit: cover;">
+                            <p>Train Stations</p>
+                            <p class="token">Color_Accent_1 @ 600</p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "Key Principles",
+                subtitle: "Design best practices",
+                content: `
+                    <div class="principles-grid">
+                        <div class="principle-card">
+                            <p>Visual Grouping</p>
+                            <p>Warm spectrum (food) → Cool accent (retail) → Blue (transit)</p>
+                        </div>
+                        <div class="principle-card">
+                            <p>Accessibility</p>
+                            <p>4.5:1 contrast on light backgrounds; 3:1 minimum on maps</p>
+                        </div>
+                        <div class="principle-card">
+                            <p>Icons Matter</p>
+                            <p>Use category-specific icons to reinforce color associations</p>
+                        </div>
+                        <div class="principle-card">
+                            <p>International Standards</p>
+                            <p>Transit blue (ISO 3098-2) ensures global consistency</p>
+                        </div>
+                    </div>
+                `
+            }
+        ];
+
+        function updateSlide() {
+            const slide = slides[currentSlide];
+            document.getElementById('slideTitle').textContent = slide.title;
+            document.getElementById('slideSubtitle').textContent = slide.subtitle;
+            document.getElementById('slideContent').innerHTML = slide.content;
+            document.getElementById('slideFooter').textContent = `Slide ${currentSlide + 1} of ${slides.length}`;
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            updateSlide();
+        }
+
+        function previousSlide() {
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            updateSlide();
+        }
+
+        function downloadSlide() {
+            const slideElement = document.getElementById('slide');
+            const fileName = `slide-${currentSlide + 1}-${slides[currentSlide].title.replace(/[^a-z0-9]/gi, '-').toLowerCase()}.png`;
+            
+            html2canvas(slideElement, {
+                scale: 2,
+                backgroundColor: '#ffffff',
+                width: 1000,
+                height: 600,
+                allowTaint: true,
+                useCORS: true,
+                logging: false
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.href = canvas.toDataURL('image/png');
+                link.download = fileName;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }).catch(error => {
+                console.error('Download failed:', error);
+                alert('Download failed. Please try again or check your browser console.');
+            });
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight') nextSlide();
+            if (event.key === 'ArrowLeft') previousSlide();
+        });
+
+        // Initialize
+        updateSlide();
+    </script>
+</body>
+</html>

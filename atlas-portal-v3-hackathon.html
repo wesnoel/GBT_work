@@ -1,0 +1,2303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atlas — UITK Design System</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── Zinc palette (shadcn-style) ── */
+:root {
+  --z50:  #fafafa;
+  --z100: #f4f4f5;
+  --z200: #e4e4e7;
+  --z300: #d4d4d8;
+  --z400: #a1a1aa;
+  --z500: #71717a;
+  --z600: #52525b;
+  --z700: #3f3f46;
+  --z800: #27272a;
+  --z900: #18181b;
+  --z950: #09090b;
+
+  --bg:       var(--z50);
+  --surface:  #ffffff;
+  --border:   var(--z200);
+  --border-strong: var(--z300);
+
+  --text-1: var(--z950);
+  --text-2: var(--z600);
+  --text-3: var(--z400);
+
+  --accent:       var(--z900);
+  --accent-hover: var(--z700);
+  --accent-fg:    #ffffff;
+  --accent-muted: var(--z100);
+
+  --success-bg: #f0fdf4; --success-fg: #15803d; --success-border: #bbf7d0;
+  --warn-bg:    #fefce8; --warn-fg:    #a16207; --warn-border:    #fde68a;
+  --danger-bg:  #fff1f2; --danger-fg:  #be123c; --danger-border:  #fecdd3;
+  --info-bg:    #f0f9ff; --info-fg:    #0369a1; --info-border:    #bae6fd;
+
+  --radius-sm: 4px;
+  --radius:    6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', monospace;
+
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.04);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.04);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.06), 0 2px 4px -2px rgb(0 0 0 / 0.04);
+
+  --sidebar-w: 228px;
+  --topbar-h:  49px;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;450;500;600&display=swap');
+
+html, body {
+  height: 100%; overflow: hidden;
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text-1);
+  font-size: 13px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Shell ── */
+#shell { display: flex; height: 100vh; }
+#sidebar { width: var(--sidebar-w); background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; }
+#main { flex: 1; display: flex; flex-direction: column; min-width: 0; overflow: hidden; }
+
+/* ── Sidebar header ── */
+#sb-head {
+  height: var(--topbar-h);
+  display: flex; align-items: center;
+  padding: 0 14px; gap: 9px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.logo-mark {
+  width: 26px; height: 26px; border-radius: var(--radius);
+  background: var(--z950); display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.logo-mark i { color: #fff; font-size: 14px; }
+.logo-text { font-size: 13px; font-weight: 600; color: var(--text-1); letter-spacing: -0.2px; }
+.logo-ver { font-size: 10px; color: var(--text-3); margin-left: auto; font-family: var(--mono); }
+
+/* ── Sidebar search ── */
+#sb-search { padding: 10px 10px 4px; flex-shrink: 0; }
+.sb-search-btn {
+  display: flex; align-items: center; gap: 6px;
+  width: 100%; padding: 6px 9px;
+  background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius);
+  font-size: 12px; color: var(--text-3); cursor: pointer; text-align: left;
+  font-family: var(--font); transition: border-color .12s, background .12s;
+}
+.sb-search-btn:hover { border-color: var(--border-strong); background: var(--z100); }
+.sb-search-btn i { font-size: 13px; }
+.sb-search-btn kbd {
+  margin-left: auto; font-size: 10px; color: var(--text-3);
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 1px 4px; font-family: var(--font);
+}
+
+/* ── Sidebar nav ── */
+#sb-nav { flex: 1; overflow-y: auto; padding: 4px 8px 8px; }
+#sb-nav::-webkit-scrollbar { width: 0; }
+
+.nav-label {
+  font-size: 10px; font-weight: 600; color: var(--text-3); text-transform: uppercase;
+  letter-spacing: .07em; padding: 12px 6px 4px;
+}
+.nav-item {
+  display: flex; align-items: center; gap: 7px;
+  padding: 5px 7px; border-radius: var(--radius); cursor: pointer;
+  font-size: 13px; color: var(--text-2); margin-bottom: 1px;
+  transition: background .1s, color .1s; user-select: none;
+}
+.nav-item:hover { background: var(--z100); color: var(--text-1); }
+.nav-item.active { background: var(--z100); color: var(--text-1); font-weight: 500; }
+.nav-item i.icon { font-size: 15px; flex-shrink: 0; color: var(--text-3); }
+.nav-item.active i.icon { color: var(--text-1); }
+.nav-item .lbl { flex: 1; }
+.nav-item .chev { font-size: 11px; color: var(--text-3); transition: transform .14s; }
+.nav-item.open .chev { transform: rotate(90deg); }
+.nav-item .count { font-size: 10px; color: var(--text-3); font-family: var(--mono); }
+
+.nav-sub { padding-left: 4px; }
+.nav-sub-item {
+  display: flex; align-items: center;
+  padding: 4px 7px 4px 24px; border-radius: var(--radius); cursor: pointer;
+  font-size: 12px; color: var(--text-2); margin-bottom: 1px;
+  transition: background .1s, color .1s; user-select: none;
+}
+.nav-sub-item:hover { background: var(--z100); color: var(--text-1); }
+.nav-sub-item.active { color: var(--text-1); font-weight: 500; }
+
+/* ── Topbar ── */
+#topbar {
+  height: var(--topbar-h);
+  background: var(--surface); border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; padding: 0 20px; gap: 10px; flex-shrink: 0;
+}
+#topbar-bc { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--text-3); }
+#topbar-bc a { color: var(--text-2); cursor: pointer; text-decoration: none; }
+#topbar-bc a:hover { color: var(--text-1); }
+#topbar-bc i { font-size: 10px; }
+#topbar-bc .current { color: var(--text-1); font-weight: 500; }
+.tb-gap { flex: 1; }
+.tb-sep { width: 1px; height: 18px; background: var(--border); }
+
+.icon-btn {
+  width: 30px; height: 30px; border-radius: var(--radius); border: none; background: transparent;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-3); cursor: pointer; transition: background .1s, color .1s;
+  position: relative;
+}
+.icon-btn:hover { background: var(--z100); color: var(--text-1); }
+.icon-btn i { font-size: 16px; }
+.notif-dot { position: absolute; top: 5px; right: 5px; width: 5px; height: 5px; background: var(--z900); border-radius: 50%; border: 1.5px solid var(--surface); }
+
+.version-chip { font-size: 10px; color: var(--text-3); font-family: var(--mono); padding: 3px 8px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); white-space: nowrap; }
+
+/* ── Content ── */
+#content { flex: 1; overflow-y: auto; }
+#content::-webkit-scrollbar { width: 5px; }
+#content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* ── Page layouts ── */
+.page { padding: 32px; max-width: 1080px; }
+.page-full { padding: 32px; }
+.page-hd { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 28px; gap: 20px; }
+.page-hd-left h1 { font-size: 18px; font-weight: 600; color: var(--text-1); letter-spacing: -0.4px; margin-bottom: 5px; }
+.page-hd-left p { font-size: 13px; color: var(--text-2); line-height: 1.65; max-width: 480px; }
+.page-hd-right { display: flex; gap: 7px; align-items: center; flex-shrink: 0; }
+
+/* ── Buttons ── */
+.btn { display: inline-flex; align-items: center; gap: 5px; padding: 6px 13px; border-radius: var(--radius); font-size: 12px; font-weight: 500; cursor: pointer; border: 1px solid transparent; font-family: var(--font); transition: all .1s; white-space: nowrap; }
+.btn-primary { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+.btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+.btn-outline { background: var(--surface); color: var(--text-2); border-color: var(--border); }
+.btn-outline:hover { background: var(--z100); color: var(--text-1); border-color: var(--border-strong); }
+.btn-ghost { background: transparent; color: var(--text-2); border-color: transparent; }
+.btn-ghost:hover { background: var(--z100); color: var(--text-1); }
+.btn i { font-size: 13px; }
+
+/* ── Badges ── */
+.badge { display: inline-flex; align-items: center; padding: 2px 7px; border-radius: var(--radius-sm); font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; border: 1px solid; }
+.badge-stable { background: var(--success-bg); color: var(--success-fg); border-color: var(--success-border); }
+.badge-beta { background: var(--warn-bg); color: var(--warn-fg); border-color: var(--warn-border); }
+.badge-deprecated { background: var(--danger-bg); color: var(--danger-fg); border-color: var(--danger-border); }
+.badge-new { background: var(--z100); color: var(--text-1); border-color: var(--border); }
+
+/* ── Stat cards ── */
+.stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 28px; }
+.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 18px 20px; box-shadow: var(--shadow-xs); }
+.stat-label { font-size: 11px; color: var(--text-3); font-weight: 500; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 9px; display: flex; align-items: center; gap: 5px; }
+.stat-val { font-size: 24px; font-weight: 600; color: var(--text-1); letter-spacing: -0.5px; margin-bottom: 5px; font-variant-numeric: tabular-nums; }
+.stat-delta { font-size: 11px; color: var(--text-3); display: flex; align-items: center; gap: 3px; }
+.delta-up { color: var(--success-fg); }
+.delta-neu { color: var(--text-3); }
+
+/* ── Feature cards ── */
+.feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 28px; }
+.feature-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md);
+  padding: 20px; cursor: pointer; transition: box-shadow .14s, border-color .14s;
+  box-shadow: var(--shadow-xs);
+}
+.feature-card:hover { border-color: var(--border-strong); box-shadow: var(--shadow-sm); }
+.feature-icon { width: 34px; height: 34px; border-radius: var(--radius); background: var(--z100); display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
+.feature-icon i { font-size: 17px; color: var(--text-1); }
+.feature-card h3 { font-size: 13px; font-weight: 600; color: var(--text-1); margin-bottom: 5px; }
+.feature-card p { font-size: 12px; color: var(--text-2); line-height: 1.6; }
+.feature-card .arrow { font-size: 12px; color: var(--text-3); margin-top: 14px; display: flex; align-items: center; gap: 3px; transition: color .12s, gap .12s; }
+.feature-card:hover .arrow { color: var(--text-1); gap: 6px; }
+
+/* ── Card ── */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); box-shadow: var(--shadow-xs); overflow: hidden; }
+.card-hd { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.card-hd h3 { font-size: 12px; font-weight: 600; color: var(--text-1); text-transform: uppercase; letter-spacing: .04em; }
+.card-bd { padding: 18px; }
+
+/* ── Component grid ── */
+.comp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
+.comp-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md);
+  padding: 12px; cursor: pointer; transition: border-color .12s, box-shadow .12s;
+  box-shadow: var(--shadow-xs);
+}
+.comp-card:hover { border-color: var(--border-strong); box-shadow: var(--shadow-sm); }
+.comp-preview { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); height: 60px; display: flex; align-items: center; justify-content: center; margin-bottom: 9px; color: var(--text-3); }
+.comp-preview i { font-size: 18px; }
+.comp-name { font-size: 12px; font-weight: 500; color: var(--text-1); margin-bottom: 5px; }
+
+/* ── Filter chips ── */
+.filters { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 20px; }
+.filter-chip { padding: 4px 11px; border-radius: var(--radius-sm); font-size: 12px; border: 1px solid var(--border); background: var(--surface); color: var(--text-2); cursor: pointer; transition: all .1s; }
+.filter-chip:hover { background: var(--z100); border-color: var(--border-strong); }
+.filter-chip.active { background: var(--z900); color: #fff; border-color: var(--z900); }
+
+/* ── Tabs ── */
+.tabs { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 22px; gap: 2px; }
+.tab { padding: 8px 14px; font-size: 13px; color: var(--text-3); cursor: pointer; border: none; border-bottom: 2px solid transparent; background: none; font-family: var(--font); font-weight: 400; margin-bottom: -1px; transition: color .1s; }
+.tab:hover { color: var(--text-1); }
+.tab.active { color: var(--text-1); border-bottom-color: var(--z900); font-weight: 500; }
+
+/* ── Table base ── */
+.data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.data-table th { text-align: left; padding: 9px 14px; color: var(--text-3); font-weight: 500; border-bottom: 1px solid var(--border); background: var(--bg); font-size: 11px; text-transform: uppercase; letter-spacing: .05em; }
+.data-table td { padding: 11px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tbody tr:hover td { background: var(--bg); }
+.mono { font-family: var(--mono); }
+
+/* ── Code block ── */
+.code-wrap { background: var(--z950); border-radius: var(--radius-md); overflow: hidden; margin-bottom: 20px; }
+.code-header { display: flex; align-items: center; border-bottom: 1px solid rgba(255,255,255,.06); }
+.code-lang { padding: 9px 14px; font-size: 11px; color: rgba(255,255,255,.35); cursor: pointer; border: none; background: none; font-family: var(--font); }
+.code-lang.active { color: rgba(255,255,255,.7); }
+.code-copy-btn { margin-left: auto; padding: 9px 12px; font-size: 11px; color: rgba(255,255,255,.35); cursor: pointer; border: none; background: none; font-family: var(--font); display: flex; align-items: center; gap: 4px; transition: color .1s; }
+.code-copy-btn:hover { color: rgba(255,255,255,.65); }
+pre.code { padding: 16px 18px; font-size: 12px; font-family: var(--mono); color: #e4e4e7; line-height: 1.75; overflow-x: auto; margin: 0; }
+.kw { color: #a78bfa; } .fn { color: #93c5fd; } .str { color: #86efac; } .cm { color: #52525b; } .attr { color: #fda4af; }
+
+/* ── Playground ── */
+.playground { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; margin-bottom: 20px; }
+.playground-stage { height: 110px; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 16px; }
+.playground-bar { border-top: 1px solid var(--border); padding: 10px 16px; display: flex; gap: 18px; background: var(--surface); }
+.ctrl { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--text-2); }
+.ctrl select { font-size: 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 3px 7px; background: var(--surface); color: var(--text-1); font-family: var(--font); }
+.ctrl label { display: flex; align-items: center; gap: 5px; cursor: pointer; }
+
+/* ── Detail layout ── */
+.detail-layout { display: flex; gap: 24px; }
+.detail-main { flex: 1; min-width: 0; }
+.detail-aside { width: 210px; flex-shrink: 0; }
+.aside-block { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); margin-bottom: 10px; overflow: hidden; }
+.aside-head { padding: 10px 14px; border-bottom: 1px solid var(--border); font-size: 10px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: .06em; }
+.aside-body { padding: 12px 14px; }
+.aside-row { display: flex; justify-content: space-between; padding: 3px 0; font-size: 12px; }
+.aside-row .k { color: var(--text-3); }
+.aside-row .v { color: var(--text-1); font-weight: 500; }
+
+/* ── Do/Don't ── */
+.dodo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
+.dodo { border-radius: var(--radius-md); overflow: hidden; border: 1px solid; }
+.dodo.do { border-color: var(--success-border); }
+.dodo.dont { border-color: var(--danger-border); }
+.dodo-label { padding: 7px 12px; font-size: 11px; font-weight: 600; display: flex; align-items: center; gap: 5px; }
+.dodo.do .dodo-label { background: var(--success-bg); color: var(--success-fg); }
+.dodo.dont .dodo-label { background: var(--danger-bg); color: var(--danger-fg); }
+.dodo-body { padding: 10px 12px; font-size: 12px; color: var(--text-2); line-height: 1.55; background: var(--surface); }
+
+/* ── Search ── */
+.search-input-wrap { display: flex; align-items: center; gap: 8px; background: var(--surface); border: 1px solid var(--border-strong); border-radius: var(--radius-md); padding: 10px 14px; margin-bottom: 20px; box-shadow: var(--shadow-xs); }
+.search-input-wrap i { font-size: 16px; color: var(--text-3); }
+.search-input-wrap input { border: none; outline: none; font-size: 14px; color: var(--text-1); flex: 1; background: transparent; font-family: var(--font); }
+.search-input-wrap input::placeholder { color: var(--text-3); }
+.search-meta { font-size: 12px; color: var(--text-3); margin-bottom: 22px; }
+.search-meta strong { color: var(--text-1); }
+.result-group-label { font-size: 10px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: .07em; margin: 18px 0 8px; }
+.result-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px; border: 1px solid var(--border); border-radius: var(--radius-md); margin-bottom: 5px; cursor: pointer; transition: border-color .1s; background: var(--surface); }
+.result-item:hover { border-color: var(--border-strong); }
+.result-type { padding: 2px 7px; border-radius: var(--radius-sm); font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; white-space: nowrap; margin-top: 2px; border: 1px solid; }
+.rt-comp { background: var(--z100); color: var(--text-1); border-color: var(--border); }
+.rt-tok { background: #f5f3ff; color: #6d28d9; border-color: #ddd6fe; }
+.rt-guide { background: var(--success-bg); color: var(--success-fg); border-color: var(--success-border); }
+.result-name { font-size: 13px; font-weight: 500; color: var(--text-1); margin-bottom: 2px; }
+.result-desc { font-size: 12px; color: var(--text-2); line-height: 1.5; }
+
+/* ── Changelog ── */
+.cl-item { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); }
+.cl-item:last-child { border-bottom: none; }
+.cl-date { font-size: 11px; color: var(--text-3); white-space: nowrap; padding-top: 2px; min-width: 68px; font-family: var(--mono); }
+.cl-title { font-size: 13px; font-weight: 500; color: var(--text-1); margin-bottom: 3px; }
+.cl-desc { font-size: 12px; color: var(--text-2); line-height: 1.55; }
+.cl-type { display: inline-flex; padding: 2px 7px; border-radius: var(--radius-sm); font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; border: 1px solid; }
+.cl-new { background: var(--success-bg); color: var(--success-fg); border-color: var(--success-border); }
+.cl-update { background: var(--z100); color: var(--text-2); border-color: var(--border); }
+.cl-fix { background: var(--info-bg); color: var(--info-fg); border-color: var(--info-border); }
+.cl-deprecate { background: var(--danger-bg); color: var(--danger-fg); border-color: var(--danger-border); }
+.cl-token { background: #f5f3ff; color: #6d28d9; border-color: #ddd6fe; }
+
+/* ── Spacing viz ── */
+.space-row { display: flex; align-items: center; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+.space-row:last-child { border-bottom: none; }
+.space-token { font-family: var(--mono); color: var(--text-1); width: 110px; flex-shrink: 0; }
+.space-bar { height: 8px; background: var(--z900); opacity: .14; border-radius: 2px; }
+.space-px { width: 38px; text-align: right; color: var(--text-3); flex-shrink: 0; font-family: var(--mono); }
+.space-usage { color: var(--text-2); flex: 1; }
+
+/* ── A11y ── */
+.a11y-row { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+.a11y-row:last-child { border-bottom: none; }
+.a11y-key { min-width: 150px; font-family: var(--mono); color: var(--text-1); flex-shrink: 0; padding-top: 1px; }
+.a11y-val { color: var(--text-2); line-height: 1.5; }
+.pass-badge { display: inline-flex; padding: 2px 7px; border-radius: var(--radius-sm); font-size: 10px; font-weight: 600; text-transform: uppercase; background: var(--success-bg); color: var(--success-fg); border: 1px solid var(--success-border); }
+
+/* ── Guide ── */
+.guide-layout { display: flex; gap: 36px; }
+.guide-main { flex: 1; min-width: 0; }
+.guide-toc { width: 150px; flex-shrink: 0; }
+.guide-toc-head { font-size: 10px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 10px; }
+.guide-toc-item { font-size: 12px; color: var(--text-2); padding: 4px 0 4px 10px; border-left: 2px solid var(--border); margin-bottom: 2px; cursor: pointer; transition: all .1s; }
+.guide-toc-item:hover { color: var(--text-1); border-color: var(--border-strong); }
+.guide-toc-item.active { color: var(--text-1); border-color: var(--z900); font-weight: 500; }
+.guide-section { margin-bottom: 28px; }
+.guide-section h2 { font-size: 15px; font-weight: 600; color: var(--text-1); margin-bottom: 8px; letter-spacing: -0.2px; }
+.guide-section p { font-size: 13px; color: var(--text-2); line-height: 1.7; margin-bottom: 12px; }
+pre.guide-code { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 16px; font-size: 12px; font-family: var(--mono); color: var(--text-2); overflow-x: auto; margin-bottom: 12px; line-height: 1.7; }
+
+/* ── 404 ── */
+.notfound { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; min-height: 420px; text-align: center; }
+.nf-code { font-size: 80px; font-weight: 700; color: var(--border); letter-spacing: -6px; line-height: 1; margin-bottom: 20px; font-variant-numeric: tabular-nums; }
+.notfound h2 { font-size: 18px; font-weight: 600; color: var(--text-1); margin-bottom: 8px; }
+.notfound p { font-size: 13px; color: var(--text-2); max-width: 300px; line-height: 1.65; margin-bottom: 24px; }
+
+/* ── Swatch ── */
+.swatch { width: 22px; height: 22px; border-radius: var(--radius-sm); border: 1px solid var(--border); flex-shrink: 0; }
+
+/* ── Playground Prop Controls ── */
+.pg-layout { display: flex; height: 100%; overflow: hidden; }
+.pg-controls { width: 296px; flex-shrink: 0; border-right: 1px solid var(--border); background: var(--surface); display: flex; flex-direction: column; overflow: hidden; }
+.pg-preview { flex: 1; background: var(--bg); display: flex; flex-direction: column; overflow: hidden; }
+.pg-search-wrap { padding: 10px 12px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.pg-comp-search { display: flex; align-items: center; gap: 7px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 6px 10px; }
+.pg-comp-search i { font-size: 13px; color: var(--text-3); flex-shrink: 0; }
+.pg-comp-search input { border: none; outline: none; font-size: 12px; color: var(--text-1); background: transparent; font-family: var(--font); flex: 1; min-width: 0; }
+.pg-comp-search input::placeholder { color: var(--text-3); }
+.pg-comp-name { padding: 8px 12px 6px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.pg-comp-name span { font-size: 13px; font-weight: 600; color: var(--text-1); flex: 1; }
+.pg-panel { flex: 1; overflow-y: auto; padding: 4px 0 16px; }
+.pg-panel::-webkit-scrollbar { width: 4px; }
+.pg-panel::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+.pg-cat-label { font-size: 10px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: .07em; padding: 14px 14px 5px; display: flex; align-items: center; justify-content: space-between; }
+.pg-divider { height: 1px; background: var(--border); margin: 6px 0; }
+.pg-prop-row { display: flex; align-items: center; justify-content: space-between; padding: 5px 14px; gap: 8px; min-height: 32px; }
+.pg-prop-row:hover { background: var(--z50); }
+.pg-prop-left { display: flex; align-items: center; gap: 4px; min-width: 0; flex: 1; }
+.pg-prop-name { font-size: 11.5px; color: var(--text-1); font-family: var(--mono); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pg-prop-req { font-size: 9px; color: var(--danger-fg); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; flex-shrink: 0; }
+.pg-prop-ctrl { flex-shrink: 0; }
+.pg-dep-badge { display: inline-flex; padding: 1px 5px; border-radius: var(--radius-sm); font-size: 9px; font-weight: 600; text-transform: uppercase; background: var(--danger-bg); color: var(--danger-fg); border: 1px solid var(--danger-border); flex-shrink: 0; }
+.pg-advanced-row { display: flex; align-items: center; justify-content: space-between; padding: 5px 14px; gap: 8px; opacity: .55; }
+.pg-advanced-row .pg-prop-name { font-size: 11px; }
+.pg-adv-type { font-size: 10px; color: var(--text-3); font-family: var(--mono); }
+
+/* Toggle switch */
+.toggle { position: relative; display: inline-block; width: 30px; height: 17px; flex-shrink: 0; }
+.toggle input { opacity: 0; width: 0; height: 0; position: absolute; }
+.toggle-slider { position: absolute; cursor: pointer; inset: 0; background: var(--z300); border-radius: 9px; transition: background .15s; }
+.toggle-slider:before { content: ''; position: absolute; width: 13px; height: 13px; left: 2px; top: 2px; background: white; border-radius: 50%; transition: transform .15s; box-shadow: 0 1px 2px rgb(0 0 0/.15); }
+.toggle input:checked + .toggle-slider { background: var(--z900); }
+.toggle input:checked + .toggle-slider:before { transform: translateX(13px); }
+
+.pg-select { font-size: 11px; font-family: var(--mono); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 3px 6px; background: var(--surface); color: var(--text-1); max-width: 126px; cursor: pointer; }
+.pg-input { font-size: 11px; font-family: var(--mono); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 3px 7px; background: var(--surface); color: var(--text-1); width: 126px; }
+.pg-input-sm { width: 64px; }
+
+.pg-preview-hd { padding: 11px 18px; border-bottom: 1px solid var(--border); background: var(--surface); display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.pg-preview-hd h2 { font-size: 13px; font-weight: 600; color: var(--text-1); flex: 1; letter-spacing: -0.2px; }
+.pg-stage { flex: 1; display: flex; align-items: center; justify-content: center; padding: 48px; overflow: auto; }
+.pg-stage-inner { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 28px 32px; box-shadow: var(--shadow-md); min-width: 280px; max-width: 440px; }
+
+/* Concept 2 layout */
+.pg2-layout { display: flex; flex-direction: column; height: 100%; overflow: hidden; }
+.pg2-top { padding: 11px 18px; border-bottom: 1px solid var(--border); background: var(--surface); display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+.pg2-top h2 { font-size: 13px; font-weight: 600; color: var(--text-1); letter-spacing: -0.2px; }
+.pg2-stage { flex: 0 0 200px; display: flex; align-items: center; justify-content: center; background: var(--bg); border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.pg2-bottom { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+.pg2-tabs { display: flex; border-bottom: 1px solid var(--border); background: var(--surface); padding: 0 16px; flex-shrink: 0; gap: 2px; }
+.pg2-tab-btn { padding: 9px 12px; font-size: 12px; color: var(--text-3); cursor: pointer; border: none; border-bottom: 2px solid transparent; background: none; font-family: var(--font); font-weight: 400; margin-bottom: -1px; transition: color .1s; display: flex; align-items: center; gap: 5px; }
+.pg2-tab-btn:hover { color: var(--text-1); }
+.pg2-tab-btn.active { color: var(--text-1); border-bottom-color: var(--z900); font-weight: 500; }
+.pg2-panel { flex: 1; overflow-y: auto; }
+.pg2-panel::-webkit-scrollbar { width: 4px; }
+.pg2-panel::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+.pg2-controls-grid { display: grid; grid-template-columns: repeat(2, 1fr); }
+.pg2-prop-row { display: flex; align-items: center; justify-content: space-between; padding: 7px 18px; border-bottom: 1px solid var(--border); gap: 10px; min-height: 36px; }
+.pg2-prop-row:hover { background: var(--bg); }
+.pg2-prop-row:nth-child(odd) { border-right: 1px solid var(--border); }
+.pg2-prop-section { padding: 10px 18px 4px; font-size: 10px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: .07em; border-bottom: 1px solid var(--border); grid-column: span 2; }
+.pg2-code-wrap { padding: 20px; }
+.pg2-api-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.pg2-api-table th { text-align: left; padding: 9px 18px; color: var(--text-3); font-weight: 500; border-bottom: 1px solid var(--border); background: var(--bg); font-size: 11px; text-transform: uppercase; letter-spacing: .05em; position: sticky; top: 0; }
+.pg2-api-table td { padding: 9px 18px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+.pg2-api-table tr:last-child td { border-bottom: none; }
+.pg2-api-table tbody tr:hover td { background: var(--bg); }
+.pg2-a11y-section { padding: 20px; }
+.pg2-a11y-section h3 { font-size: 12px; font-weight: 600; color: var(--text-1); margin-bottom: 12px; }
+.pg2-a11y-row { display: flex; align-items: flex-start; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+.pg2-a11y-row:last-child { border-bottom: none; }
+
+/* ── Playground Concept C ── */
+.pg3-layout { display: flex; flex-direction: column; height: 100%; overflow: hidden; }
+.pg3-main { display: flex; flex: 1; min-height: 0; overflow: hidden; }
+.pg3-preview { flex: 1; background: var(--bg); display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+.pg3-resize-handle {
+  flex-shrink: 0; height: 5px; background: var(--border);
+  cursor: row-resize; position: relative; z-index: 10;
+  transition: background .1s;
+}
+.pg3-resize-handle:hover, .pg3-resize-handle.dragging { background: var(--z400); }
+.pg3-resize-handle::after {
+  content: ''; position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%,-50%);
+  width: 28px; height: 3px; border-radius: 2px;
+  background: var(--z300);
+}
+.pg3-resize-handle:hover::after, .pg3-resize-handle.dragging::after { background: var(--z500); }
+.pg3-bottom { flex-shrink: 0; display: flex; flex-direction: column; overflow: hidden; background: var(--surface); border-top: none; }
+.pg3-bottom-tabs { display: flex; border-bottom: 1px solid var(--border); padding: 0 16px; flex-shrink: 0; gap: 2px; background: var(--surface); }
+.pg3-bottom-tab { padding: 8px 12px; font-size: 12px; color: var(--text-3); cursor: pointer; border: none; border-bottom: 2px solid transparent; background: none; font-family: var(--font); font-weight: 400; margin-bottom: -1px; transition: color .1s; display: flex; align-items: center; gap: 5px; }
+.pg3-bottom-tab:hover { color: var(--text-1); }
+.pg3-bottom-tab.active { color: var(--text-1); border-bottom-color: var(--z900); font-weight: 500; }
+.pg3-bottom-panel { flex: 1; overflow-y: auto; }
+.pg3-bottom-panel::-webkit-scrollbar { width: 4px; }
+.pg3-bottom-panel::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+.pg3-side-toggle { display: flex; align-items: center; gap: 5px; padding: 4px 8px; border-radius: var(--radius); font-size: 11px; color: var(--text-3); cursor: pointer; border: 1px solid var(--border); background: var(--surface); font-family: var(--font); transition: all .1s; }
+.pg3-side-toggle:hover { background: var(--z100); color: var(--text-1); border-color: var(--border-strong); }
+
+/* ── Animations ── */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+.page, .page-full { animation: fadeUp .16s ease; }
+</style>
+</head>
+<body>
+<div id="shell">
+
+  <!-- ══ Sidebar ══ -->
+  <nav id="sidebar" aria-label="Site navigation">
+    <div id="sb-head">
+      <div class="logo-mark"><i class="ti ti-layers-difference"></i></div>
+      <span class="logo-text">Atlas</span>
+      <span class="logo-ver">v2.4</span>
+    </div>
+
+    <div id="sb-search">
+      <button class="sb-search-btn" onclick="go(5)">
+        <i class="ti ti-search"></i>
+        <span>Search...</span>
+        <kbd>⌘K</kbd>
+      </button>
+    </div>
+
+    <div id="sb-nav">
+      <div class="nav-label">Overview</div>
+      <div class="nav-item" id="ni-home" onclick="go(0)">
+        <i class="ti ti-home-2 icon"></i><span class="lbl">Home</span>
+      </div>
+      <div class="nav-item" id="ni-cl" onclick="go('cl')">
+        <i class="ti ti-clock icon"></i><span class="lbl">What's new</span>
+        <span class="badge badge-new" style="font-size:9px;padding:1px 6px;text-transform:none;font-weight:600">3</span>
+      </div>
+
+      <div class="nav-label">Design</div>
+      <div class="nav-item" id="ni-cp" onclick="toggleComp()">
+        <i class="ti ti-layout-grid icon"></i><span class="lbl">Components</span>
+        <span class="count">27</span>
+        <i class="ti ti-chevron-right chev" id="cp-chev"></i>
+      </div>
+      <div class="nav-sub" id="cp-sub" style="display:none">
+        <div class="nav-sub-item" id="ni-cp-all"  onclick="goComp('')">All</div>
+        <div class="nav-sub-item" id="ni-cp-act"  onclick="goComp('Actions')">Actions</div>
+        <div class="nav-sub-item" id="ni-cp-frm"  onclick="goComp('Forms')">Forms</div>
+        <div class="nav-sub-item" id="ni-cp-fb"   onclick="goComp('Feedback')">Feedback</div>
+        <div class="nav-sub-item" id="ni-cp-lay"  onclick="goComp('Layout')">Layout</div>
+        <div class="nav-sub-item" id="ni-cp-nav"  onclick="goComp('Navigation')">Navigation</div>
+        <div class="nav-sub-item" id="ni-cp-dat"  onclick="goComp('Data')">Data</div>
+      </div>
+
+      <div class="nav-item" id="ni-tk" onclick="toggleTok()">
+        <i class="ti ti-palette icon"></i><span class="lbl">Tokens</span>
+        <i class="ti ti-chevron-right chev" id="tk-chev"></i>
+      </div>
+      <div class="nav-sub" id="tk-sub" style="display:none">
+        <div class="nav-sub-item" id="ni-tk-col" onclick="goTok(0)">Color</div>
+        <div class="nav-sub-item" id="ni-tk-sp"  onclick="goTok(1)">Spacing</div>
+        <div class="nav-sub-item" id="ni-tk-ty"  onclick="goTok(2)">Typography</div>
+      </div>
+
+      <div class="nav-label">Resources</div>
+      <div class="nav-item" id="ni-guide" onclick="go(4)">
+        <i class="ti ti-book icon"></i><span class="lbl">Guidelines</span>
+      </div>
+      <div class="nav-item" id="ni-figma" onclick="go('figma')">
+        <i class="ti ti-brand-figma icon"></i><span class="lbl">Figma library</span>
+        <i class="ti ti-external-link" style="font-size:11px;color:var(--text-3)"></i>
+      </div>
+
+      <div class="nav-label">Dev Tools</div>
+      <div class="nav-item" id="ni-pg1" onclick="go('pg1')">
+        <i class="ti ti-terminal-2 icon"></i><span class="lbl">Playground</span>
+        <span style="font-size:9px;color:var(--text-3);font-family:var(--mono);flex-shrink:0">A</span>
+      </div>
+      <div class="nav-item" id="ni-pg2" onclick="go('pg2')">
+        <i class="ti ti-code icon"></i><span class="lbl">Playground</span>
+        <span style="font-size:9px;color:var(--text-3);font-family:var(--mono);flex-shrink:0">B</span>
+      </div>
+      <div class="nav-item" id="ni-pg3" onclick="go('pg3')">
+        <i class="ti ti-layout-bottombar icon"></i><span class="lbl">Playground</span>
+        <span style="font-size:9px;color:var(--text-3);font-family:var(--mono);flex-shrink:0">C</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══ Main ══ -->
+  <div id="main">
+    <header id="topbar">
+      <div id="topbar-bc"></div>
+      <div class="tb-gap"></div>
+      <span class="version-chip">v2.4.0</span>
+      <div class="tb-sep"></div>
+      <button class="icon-btn" title="Notifications" aria-label="Notifications">
+        <i class="ti ti-bell"></i>
+        <span class="notif-dot"></span>
+      </button>
+      <button class="icon-btn" title="Keyboard shortcuts" aria-label="Keyboard shortcuts">
+        <i class="ti ti-keyboard"></i>
+      </button>
+      <button class="icon-btn" title="Send feedback" aria-label="Send feedback">
+        <i class="ti ti-message-circle"></i>
+      </button>
+    </header>
+
+    <main id="content" aria-live="polite"></main>
+  </div>
+</div>
+
+<script>
+// ── State ──────────────────────────────────────────────────────────────────
+let S = 0, CAT = '', TTK = 0, CFT = 0, CDT = 0;
+let CP_OPEN = false, TK_OPEN = false;
+
+// ── Data ──────────────────────────────────────────────────────────────────
+const ALL = [
+  {n:'Button',st:'s',cat:'Actions'},{n:'IconButton',st:'s',cat:'Actions'},{n:'Link',st:'s',cat:'Actions'},{n:'DropdownMenu',st:'b',cat:'Actions'},
+  {n:'TextInput',st:'s',cat:'Forms'},{n:'Select',st:'s',cat:'Forms'},{n:'Checkbox',st:'s',cat:'Forms'},{n:'Combobox',st:'s',cat:'Forms'},{n:'RadioGroup',st:'s',cat:'Forms'},{n:'DatePicker',st:'b',cat:'Forms'},
+  {n:'Toast',st:'s',cat:'Feedback'},{n:'Banner',st:'s',cat:'Feedback'},{n:'Modal',st:'b',cat:'Feedback'},{n:'Badge',st:'s',cat:'Feedback'},{n:'Spinner',st:'d',cat:'Feedback'},{n:'Skeleton',st:'b',cat:'Feedback'},
+  {n:'Grid',st:'s',cat:'Layout'},{n:'Stack',st:'s',cat:'Layout'},{n:'Divider',st:'s',cat:'Layout'},{n:'Card',st:'s',cat:'Layout'},
+  {n:'Tabs',st:'s',cat:'Navigation'},{n:'Breadcrumb',st:'s',cat:'Navigation'},{n:'Sidebar',st:'b',cat:'Navigation'},{n:'Pagination',st:'s',cat:'Navigation'},
+  {n:'DataTable',st:'b',cat:'Data'},{n:'SortableList',st:'b',cat:'Data'},{n:'EmptyState',st:'s',cat:'Data'},
+];
+
+// ── Nav ────────────────────────────────────────────────────────────────────
+function clearActive() { document.querySelectorAll('.nav-item,.nav-sub-item').forEach(e=>e.classList.remove('active')); }
+function setActive(id) { clearActive(); const e=document.getElementById(id); if(e)e.classList.add('active'); }
+
+function go(s) { S=s; CFT=0; CDT=0; if(typeof s==='number'&&s!==1&&s!==3)CAT=''; render(); }
+
+function goComp(cat) {
+  CP_OPEN=true; S=1; CAT=cat; CFT=0;
+  renderNav(); renderContent();
+}
+
+function goTok(t) {
+  TK_OPEN=true; S=3; TTK=t;
+  renderNav(); renderContent();
+}
+
+function toggleComp() {
+  CP_OPEN=!CP_OPEN;
+  if(CP_OPEN){S=1;CAT='';}
+  renderNav();
+  if(CP_OPEN) renderContent();
+}
+
+function toggleTok() {
+  TK_OPEN=!TK_OPEN;
+  if(TK_OPEN){S=3;TTK=0;}
+  renderNav();
+  if(TK_OPEN) renderContent();
+}
+
+function render() { renderNav(); renderContent(); }
+
+function renderNav() {
+  clearActive();
+  const cpSub=document.getElementById('cp-sub');
+  const tkSub=document.getElementById('tk-sub');
+  const cpParent=document.getElementById('ni-cp');
+  const tkParent=document.getElementById('ni-tk');
+  const cpChev=document.getElementById('cp-chev');
+  const tkChev=document.getElementById('tk-chev');
+
+  cpSub.style.display=CP_OPEN?'block':'none';
+  tkSub.style.display=TK_OPEN?'block':'none';
+  cpParent.classList.toggle('open',CP_OPEN);
+  tkParent.classList.toggle('open',TK_OPEN);
+
+  if(S===0) setActive('ni-home');
+  else if(S==='cl') setActive('ni-cl');
+  else if(S===4) setActive('ni-guide');
+  else if(S==='figma') setActive('ni-figma');
+  else if(S==='pg1') setActive('ni-pg1');
+  else if(S==='pg2') setActive('ni-pg2');
+  else if(S==='pg3') setActive('ni-pg3');
+  else if(S===1) {
+    CP_OPEN=true; cpSub.style.display='block'; cpParent.classList.add('open');
+    const map={'':'ni-cp-all','Actions':'ni-cp-act','Forms':'ni-cp-frm','Feedback':'ni-cp-fb','Layout':'ni-cp-lay','Navigation':'ni-cp-nav','Data':'ni-cp-dat'};
+    setActive(map[CAT]||'ni-cp-all');
+  }
+  else if(S===2) {
+    CP_OPEN=true; cpSub.style.display='block'; cpParent.classList.add('open');
+    setActive('ni-cp-act');
+  }
+  else if(S===3) {
+    TK_OPEN=true; tkSub.style.display='block'; tkParent.classList.add('open');
+    setActive(['ni-tk-col','ni-tk-sp','ni-tk-ty'][TTK]);
+  }
+
+  // Breadcrumb
+  const bc=document.getElementById('topbar-bc');
+  const crumbMap={
+    0:[['Home',null]],
+    1:[['Home',0],['Components',null]],
+    2:[['Home',0],['Components',1],['Actions',()=>goComp('Actions')],['Button',null]],
+    3:[['Home',0],['Tokens',null]],
+    4:[['Home',0],['Guidelines',null]],
+    5:[['Home',0],['Search',null]],
+    cl:[['Home',0],["What's new",null]],
+    figma:[['Home',0],['Figma library',null]],
+    pg1:[['Home',0],['Playground — Concept A',null]],
+    pg2:[['Home',0],['Playground — Concept B',null]],
+    pg3:[['Home',0],['Playground — Concept C',null]],
+    404:[['Home',0],['404',null]],
+  };
+  const crumbs=crumbMap[S]||[['Home',null]];
+  bc.innerHTML=crumbs.map((c,i)=>{
+    const last=i===crumbs.length-1;
+    const sep=i>0?'<i class="ti ti-chevron-right" style="font-size:10px"></i>':'';
+    if(last||c[1]===null) return sep+`<span class="${last?'current':''}">${c[0]}</span>`;
+    const oc=typeof c[1]==='number'?`go(${c[1]})`:`(${c[1].toString()})()`;
+    return sep+`<a onclick="${oc}">${c[0]}</a>`;
+  }).join('');
+}
+
+function renderContent() {
+  const el=document.getElementById('content');
+  const map={0:scHome,1:scCatalog,2:scDetail,3:scTokens,4:scGuide,5:scSearch,cl:scChangelog,figma:scFigma,pg1:scPlayground1,pg2:scPlayground2,pg3:scPlayground3,404:sc404};
+  const fn=map[S]||sc404;
+  el.innerHTML='';
+  el.appendChild(fn());
+  el.scrollTop=0;
+}
+
+// ── Utility ────────────────────────────────────────────────────────────────
+function el(tag,cls,html){const e=document.createElement(tag);if(cls)e.className=cls;if(html)e.innerHTML=html;return e;}
+function div(cls,html){return el('div',cls,html);}
+
+// ══════════════════════════════════════════════════════════════════════════
+// SCREENS
+// ══════════════════════════════════════════════════════════════════════════
+
+function scHome() {
+  const w=div('page');
+  w.innerHTML=`
+    <div class="page-hd">
+      <div class="page-hd-left">
+        <h1>UITK</h1>
+        <p>The canonical source for building accessible, on-brand UITK products. Find the right component, copy integration code, and explore design tokens.</p>
+      </div>
+      <div class="page-hd-right">
+        <button class="btn btn-outline" onclick="go(5)"><i class="ti ti-search"></i>Search</button>
+        <button class="btn btn-primary" onclick="go(4)"><i class="ti ti-book"></i>Get started</button>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      ${[
+        ['ti-layout-grid','Components','27','<i class="ti ti-trending-up" style="font-size:11px"></i> 3 added this quarter','delta-up'],
+        ['ti-palette','Tokens','142','— Stable this release','delta-neu'],
+        ['ti-check-circle','Adoption','84%','<i class="ti ti-trending-up" style="font-size:11px"></i> Up from 71% in Q1','delta-up'],
+        ['ti-accessible','A11y score','AA','WCAG 2.1 compliant','delta-neu'],
+      ].map(([ic,l,v,d,dc])=>`
+        <div class="stat-card">
+          <div class="stat-label"><i class="ti ${ic}" style="font-size:12px"></i>${l}</div>
+          <div class="stat-val">${v}</div>
+          <div class="stat-delta ${dc}">${d}</div>
+        </div>`).join('')}
+    </div>
+
+    <div class="feature-grid">
+      ${[
+        ['ti-layout-grid','Browse components','27 production-ready components with live playground, API docs, and accessibility guidelines.',1],
+        ['ti-palette','Explore tokens','Design tokens for color, spacing, and typography — consumed as CSS custom properties.',3],
+        ['ti-book','Integration guide','Install the package, configure your entry point, and start building in minutes.',4],
+      ].map(([ic,t,d,s])=>`
+        <div class="feature-card" onclick="go(${s})">
+          <div class="feature-icon"><i class="ti ${ic}"></i></div>
+          <h3>${t}</h3>
+          <p>${d}</p>
+          <div class="arrow">Learn more <i class="ti ti-arrow-right"></i></div>
+        </div>`).join('')}
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 300px;gap:16px">
+      <div class="card">
+        <div class="card-hd"><h3>Featured components</h3><button class="btn btn-ghost" style="font-size:12px" onclick="go(1)">View all <i class="ti ti-arrow-right" style="font-size:12px"></i></button></div>
+        <div class="card-bd">
+          <div class="comp-grid">
+            ${[['Button','s'],['TextInput','s'],['Modal','b'],['Toast','s'],['DataTable','b'],['Combobox','s'],['Badge','s'],['DatePicker','b'],['Tabs','s']].map(([n,st])=>`
+              <div class="comp-card" onclick="go(2)">
+                <div class="comp-preview"><i class="ti ti-square-rounded"></i></div>
+                <div class="comp-name">${n}</div>
+                <span class="badge badge-${st==='s'?'stable':'beta'}">${st==='s'?'stable':'beta'}</span>
+              </div>`).join('')}
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><h3>What's new</h3><button class="btn btn-ghost" style="font-size:12px" onclick="go('cl')">All <i class="ti ti-arrow-right" style="font-size:12px"></i></button></div>
+        <div style="padding:0 18px">
+          ${[
+            ['Jul 2026','DatePicker v1.0','Single and range selection, fully accessible'],
+            ['Jun 2026','Color token aliases','Semantic aliases for all component roles'],
+            ['Jun 2026','Button update','Loading state and icon slot support added'],
+          ].map(([d,t,desc])=>`<div class="cl-item"><div class="cl-date">${d}</div><div><div class="cl-title">${t}</div><div class="cl-desc">${desc}</div></div></div>`).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+  return w;
+}
+
+function scCatalog() {
+  const w=div('page');
+  const stMap=['','s','b','d'];
+  const base=CAT?ALL.filter(c=>c.cat===CAT):ALL;
+  const items=CFT===0?base:base.filter(c=>c.st===stMap[CFT]);
+
+  w.innerHTML=`
+    <div class="page-hd">
+      <div class="page-hd-left">
+        <h1>${CAT||'All components'}</h1>
+        <p>${items.length} component${items.length!==1?'s':''} — click any card to view documentation, API reference, and live playground.</p>
+      </div>
+      <div class="page-hd-right">
+        ${CAT?`<button class="btn btn-outline" onclick="goComp('')"><i class="ti ti-x" style="font-size:12px"></i>Clear filter</button>`:''}
+      </div>
+    </div>
+  `;
+
+  const filters=div('filters');
+  ['All','Stable','Beta','Deprecated'].forEach((f,i)=>{
+    const b=document.createElement('button');
+    b.className='filter-chip'+(i===CFT?' active':'');
+    b.textContent=f;
+    b.onclick=()=>{CFT=i;renderContent();};
+    filters.appendChild(b);
+  });
+  w.appendChild(filters);
+
+  if(!items.length){
+    w.insertAdjacentHTML('beforeend','<div style="padding:48px;text-align:center;color:var(--text-3)"><i class="ti ti-search-off" style="font-size:28px;display:block;margin-bottom:10px"></i>No components match this filter.</div>');
+    return w;
+  }
+
+  const grid=div('comp-grid');
+  items.forEach(c=>{
+    const stClass={s:'stable',b:'beta',d:'deprecated'}[c.st];
+    const card=div('comp-card');
+    card.onclick=()=>go(2);
+    card.innerHTML=`<div class="comp-preview"><i class="ti ti-square-rounded"></i></div><div class="comp-name">${c.n}</div><span class="badge badge-${stClass}">${stClass}</span>`;
+    grid.appendChild(card);
+  });
+  w.appendChild(grid);
+  return w;
+}
+
+function scDetail() {
+  const w=div('page');
+  w.innerHTML=`
+    <div class="page-hd">
+      <div class="page-hd-left" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <h1 style="margin-bottom:0">Button</h1>
+        <span class="badge badge-stable">stable</span>
+        <span style="font-size:11px;color:var(--text-3);font-family:var(--mono)">3.1.2</span>
+      </div>
+      <div class="page-hd-right">
+        <button class="btn btn-outline" onclick="(function(b){b.textContent='Copied';setTimeout(()=>b.innerHTML='<i class=\\'ti ti-link\\' style=\\'font-size:13px\\'></i>Link',1800)})(this)"><i class="ti ti-link" style="font-size:13px"></i>Link</button>
+        <button class="btn btn-primary" onclick="go('figma')"><i class="ti ti-brand-figma" style="font-size:13px"></i>Open in Figma</button>
+      </div>
+    </div>
+    <p style="font-size:13px;color:var(--text-2);line-height:1.7;margin-bottom:22px;max-width:560px">Triggers an action or event. Supports primary, secondary, ghost, and destructive variants with optional icon slots and a loading state.</p>
+  `;
+
+  const tabs=div('tabs');
+  ['Overview','API reference','Accessibility','Design decisions'].forEach((t,i)=>{
+    const b=document.createElement('button');
+    b.className='tab'+(i===CDT?' active':'');
+    b.textContent=t;
+    b.onclick=()=>{CDT=i;renderContent();};
+    tabs.appendChild(b);
+  });
+  w.appendChild(tabs);
+
+  const layout=div('detail-layout');
+  const main=div('detail-main');
+
+  if(CDT===0){
+    main.innerHTML=`
+      <div class="playground">
+        <div class="playground-stage">
+          <button style="padding:7px 16px;background:var(--z950);color:#fff;border:none;border-radius:var(--radius);font-size:13px;font-weight:500;cursor:pointer;font-family:var(--font)">Primary</button>
+          <button style="padding:7px 16px;background:var(--surface);color:var(--text-1);border:1px solid var(--border);border-radius:var(--radius);font-size:13px;cursor:pointer;font-family:var(--font)">Secondary</button>
+          <button style="padding:7px 16px;background:transparent;border:none;border-radius:var(--radius);font-size:13px;color:var(--text-2);cursor:pointer;font-family:var(--font)">Ghost</button>
+          <button style="padding:7px 16px;background:var(--danger-bg);color:var(--danger-fg);border:1px solid var(--danger-border);border-radius:var(--radius);font-size:13px;cursor:pointer;font-family:var(--font)">Destructive</button>
+        </div>
+        <div class="playground-bar">
+          <div class="ctrl">Variant <select><option>Primary</option><option>Secondary</option><option>Ghost</option><option>Destructive</option></select></div>
+          <div class="ctrl">Size <select><option>Small</option><option selected>Medium</option><option>Large</option></select></div>
+          <div class="ctrl"><label><input type="checkbox"> Loading</label></div>
+          <div class="ctrl"><label><input type="checkbox"> Disabled</label></div>
+        </div>
+      </div>
+      <div class="code-wrap">
+        <div class="code-header">
+          <button class="code-lang active">React</button>
+          <button class="code-lang">HTML</button>
+          <button class="code-copy-btn" onclick="this.textContent='Copied';setTimeout(()=>{this.innerHTML='<i class=\\'ti ti-copy\\' style=\\'font-size:12px\\'></i> Copy'},2000)"><i class="ti ti-copy" style="font-size:12px"></i> Copy</button>
+        </div>
+        <pre class="code"><span class="kw">import</span> { <span class="fn">Button</span> } <span class="kw">from</span> <span class="str">'@uitk/design-system'</span>;
+
+<span class="cm">// Primary (default)</span>
+&lt;<span class="fn">Button</span> variant=<span class="str">"primary"</span> size=<span class="str">"md"</span>&gt;
+  Save changes
+&lt;/<span class="fn">Button</span>&gt;
+
+<span class="cm">// With leading icon</span>
+&lt;<span class="fn">Button</span> variant=<span class="str">"primary"</span> icon={&lt;<span class="fn">PlusIcon</span> /&gt;}&gt;
+  Add component
+&lt;/<span class="fn">Button</span>&gt;
+
+<span class="cm">// Loading state</span>
+&lt;<span class="fn">Button</span> loading={<span class="kw">true</span>}&gt;Saving...&lt;/<span class="fn">Button</span>&gt;</pre>
+      </div>
+      <div class="dodo-grid">
+        <div class="dodo do"><div class="dodo-label"><i class="ti ti-check"></i> Do</div><div class="dodo-body">Use imperative, verb-first labels: "Save changes", "Delete project", "Add member"</div></div>
+        <div class="dodo dont"><div class="dodo-label"><i class="ti ti-x"></i> Don't</div><div class="dodo-body">Use vague labels like "OK", "Submit", "Yes", or "Click here"</div></div>
+        <div class="dodo do"><div class="dodo-label"><i class="ti ti-check"></i> Do</div><div class="dodo-body">Use a single primary action per view. Reserve secondary and ghost for supporting actions.</div></div>
+        <div class="dodo dont"><div class="dodo-label"><i class="ti ti-x"></i> Don't</div><div class="dodo-body">Place two primary buttons side by side — it creates ambiguity about which action is primary.</div></div>
+      </div>
+    `;
+  } else if(CDT===1){
+    main.innerHTML=`<div class="card"><table class="data-table">
+      <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Req.</th><th>Description</th></tr></thead>
+      <tbody>${[
+        ['children','ReactNode','—','Yes','Button label or icon+label content'],
+        ['variant','primary | secondary | ghost | destructive','primary','No','Visual treatment'],
+        ['size','sm | md | lg','md','No','Controls padding and font size'],
+        ['disabled','boolean','false','No','Prevents interaction and grays out the button'],
+        ['loading','boolean','false','No','Shows spinner, prevents double-submit'],
+        ['icon','ReactNode','—','No','Icon element placed before the label'],
+        ['iconPosition','leading | trailing','leading','No','Icon position relative to label'],
+        ['onClick','(e: MouseEvent) => void','—','No','Not called when disabled or loading'],
+        ['type','button | submit | reset','button','No','Native button type'],
+        ['aria-label','string','—','No','Required for icon-only buttons'],
+      ].map(([p,t,d,r,de])=>`<tr>
+        <td><span class="mono" style="color:var(--text-1);font-weight:500">${p}</span></td>
+        <td><span class="mono" style="color:var(--z600);font-size:11px">${t}</span></td>
+        <td><span class="mono" style="color:var(--text-3)">${d}</span></td>
+        <td style="color:${r==='Yes'?'var(--success-fg)':'var(--text-3)'}; font-weight:${r==='Yes'?'500':'400'}">${r}</td>
+        <td style="color:var(--text-2)">${de}</td>
+      </tr>`).join('')}
+      </tbody>
+    </table></div>`;
+  } else if(CDT===2){
+    main.innerHTML=`
+      <div class="card" style="margin-bottom:14px">
+        <div class="card-hd"><h3>ARIA role & attributes</h3></div>
+        <div class="card-bd">
+          ${[['role','button (implicit from <button> element)'],['aria-disabled','true when disabled prop is set'],['aria-busy','true when loading prop is set'],['aria-label','Required for icon-only buttons']].map(([k,v])=>`<div class="a11y-row"><span class="a11y-key">${k}</span><span class="a11y-val">${v}</span></div>`).join('')}
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:14px">
+        <div class="card-hd"><h3>Keyboard interaction</h3></div>
+        <div class="card-bd">
+          ${[['Enter / Space','Activates the button action'],['Tab','Moves focus forward'],['Shift+Tab','Moves focus backward']].map(([k,v])=>`<div class="a11y-row"><span class="a11y-key mono">${k}</span><span class="a11y-val">${v}</span></div>`).join('')}
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><h3>Color contrast</h3></div>
+        <div class="card-bd">
+          ${[['Primary on white','6.1:1'],['Primary text on surface','18.4:1'],['Ghost label on white','4.6:1']].map(([t,r])=>`<div class="a11y-row"><span class="a11y-val" style="flex:1">${t}</span><strong style="color:var(--text-1);min-width:50px;font-size:12px">${r}</strong><span class="pass-badge">AA</span></div>`).join('')}
+        </div>
+      </div>
+    `;
+  } else {
+    main.innerHTML=`<div style="padding:48px;text-align:center;max-width:340px;margin:0 auto">
+      <i class="ti ti-message-dots" style="font-size:32px;color:var(--text-3);display:block;margin-bottom:14px"></i>
+      <div style="font-size:14px;font-weight:500;color:var(--text-1);margin-bottom:8px">No decisions documented yet</div>
+      <div style="font-size:13px;color:var(--text-2);line-height:1.65;margin-bottom:20px">Design rationale, rejected alternatives, and constraints are captured here to help future contributors understand why.</div>
+      <button class="btn btn-outline"><i class="ti ti-plus" style="font-size:12px"></i>Contribute</button>
+    </div>`;
+  }
+
+  const aside=div('detail-aside');
+  aside.innerHTML=`
+    <div class="aside-block">
+      <div class="aside-head">Component info</div>
+      <div class="aside-body">
+        <div class="aside-row"><span class="k">Category</span><span class="v">Actions</span></div>
+        <div class="aside-row"><span class="k">Version</span><span class="v mono" style="font-size:12px">3.1.2</span></div>
+        <div class="aside-row"><span class="k">Status</span><span class="v"><span class="badge badge-stable">stable</span></span></div>
+        <div class="aside-row"><span class="k">Updated</span><span class="v">Jul 2026</span></div>
+      </div>
+    </div>
+    <div class="aside-block">
+      <div class="aside-head">Package</div>
+      <div class="aside-body">
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:8px;font-size:11px;font-family:var(--mono);color:var(--text-2)">@uitk/design-system</div>
+      </div>
+    </div>
+    <div class="aside-block">
+      <div class="aside-head">Related</div>
+      <div class="aside-body">
+        ${['IconButton','Link','DropdownMenu'].map(n=>`<div style="font-size:12px;color:var(--text-2);cursor:pointer;padding:3px 0;display:flex;align-items:center;justify-content:space-between" onclick="go(2)">${n}<i class="ti ti-arrow-right" style="font-size:11px;color:var(--text-3)"></i></div>`).join('')}
+      </div>
+    </div>
+  `;
+
+  layout.appendChild(main);
+  layout.appendChild(aside);
+  w.appendChild(layout);
+  return w;
+}
+
+function scTokens() {
+  const w=div('page');
+  w.innerHTML=`
+    <div class="page-hd">
+      <div class="page-hd-left">
+        <h1>Token reference</h1>
+        <p>Atomic values defining the UITK visual language. Reference as CSS custom properties or consume via the design token package.</p>
+      </div>
+      <div class="page-hd-right">
+        <button class="btn btn-outline"><i class="ti ti-download" style="font-size:12px"></i>Export tokens</button>
+      </div>
+    </div>
+  `;
+
+  const tabs=div('tabs');
+  ['Color','Spacing','Typography'].forEach((t,i)=>{
+    const b=document.createElement('button');
+    b.className='tab'+(i===TTK?' active':'');
+    b.textContent=t;
+    b.onclick=()=>{TTK=i;renderContent();};
+    tabs.appendChild(b);
+  });
+  w.appendChild(tabs);
+
+  if(TTK===0){
+    w.insertAdjacentHTML('beforeend',`<div class="card"><table class="data-table">
+      <thead><tr><th>Token</th><th>Swatch</th><th>Value</th><th>Usage</th><th>Contrast</th></tr></thead>
+      <tbody>${[
+        ['--color-brand-primary','#1A56DB','Primary actions, links, active states','6.1:1'],
+        ['--color-brand-hover','#1E429F','Brand hover state','9.2:1'],
+        ['--color-text-primary','#09090B','Body text, headings','21:1'],
+        ['--color-text-secondary','#52525B','Supporting text, captions','7.4:1'],
+        ['--color-text-muted','#A1A1AA','Placeholder, disabled labels','4.6:1'],
+        ['--color-surface-0','#FAFAFA','Page background','—'],
+        ['--color-surface-1','#FFFFFF','Raised surface (cards)','—'],
+        ['--color-border','#E4E4E7','Dividers, input borders','—'],
+        ['--color-success','#15803D','Success states','4.5:1'],
+        ['--color-warning','#A16207','Warning states','4.7:1'],
+        ['--color-danger','#BE123C','Error, destructive','5.9:1'],
+      ].map(([t,h,u,c])=>`<tr>
+        <td class="mono" style="color:var(--text-1)">${t}</td>
+        <td><div class="swatch" style="background:${h}"></div></td>
+        <td class="mono" style="color:var(--text-3)">${h}</td>
+        <td style="color:var(--text-2)">${u}</td>
+        <td>${c!=='—'?`<span class="pass-badge">AA</span> <span style="font-size:11px;color:var(--text-3);margin-left:5px">${c}</span>`:c}</td>
+      </tr>`).join('')}</tbody>
+    </table></div>`);
+  } else if(TTK===1){
+    w.insertAdjacentHTML('beforeend',`<div class="card"><div class="card-bd">
+      ${[['--space-1','4px','Tight inline gaps'],['--space-2','8px','Component internal gaps'],['--space-3','12px','List item padding'],['--space-4','16px','Card padding'],['--space-5','20px','Large card padding'],['--space-6','24px','Section spacing'],['--space-8','32px','Page section spacing'],['--space-10','40px','Hero sections'],['--space-12','48px','Large content blocks'],['--space-16','64px','Page-level margins']].map(([t,v,u])=>`
+        <div class="space-row">
+          <span class="space-token">${t}</span>
+          <div style="flex:1"><div class="space-bar" style="width:${parseInt(v)*3.2}px"></div></div>
+          <span class="space-px">${v}</span>
+          <span class="space-usage">${u}</span>
+        </div>`).join('')}
+    </div></div>`);
+  } else {
+    w.insertAdjacentHTML('beforeend',`<div class="card"><table class="data-table">
+      <thead><tr><th>Token</th><th>Family</th><th>Size</th><th>Weight</th><th>Line height</th><th>Preview</th></tr></thead>
+      <tbody>${[
+        ['--type-display','Inter','32px','600','1.2'],
+        ['--type-heading-1','Inter','24px','600','1.3'],
+        ['--type-heading-2','Inter','20px','600','1.35'],
+        ['--type-heading-3','Inter','16px','500','1.4'],
+        ['--type-body-lg','Inter','15px','400','1.7'],
+        ['--type-body','Inter','13px','400','1.65'],
+        ['--type-body-sm','Inter','12px','400','1.6'],
+        ['--type-caption','Inter','11px','400','1.5'],
+        ['--type-code','JetBrains Mono','12px','400','1.65'],
+      ].map(([t,f,sz,w,lh])=>`<tr>
+        <td class="mono" style="color:var(--text-1);font-size:11px">${t}</td>
+        <td style="color:var(--text-2)">${f}</td>
+        <td class="mono" style="color:var(--text-3)">${sz}</td>
+        <td style="color:var(--text-2)">${w}</td>
+        <td style="color:var(--text-2)">${lh}</td>
+        <td><span style="font-size:${sz};font-weight:${w};line-height:${lh};color:var(--text-1)">Aa</span></td>
+      </tr>`).join('')}</tbody>
+    </table></div>`);
+  }
+  return w;
+}
+
+function scGuide() {
+  const w=div('page');
+  w.innerHTML=`
+    <div class="page-hd">
+      <div class="page-hd-left">
+        <h1>Integration guide</h1>
+        <p>Install UITK, configure your entry point, and start building.</p>
+      </div>
+      <div class="page-hd-right">
+        <span style="font-size:11px;color:var(--text-3);font-family:var(--mono)">Updated Jul 8, 2026</span>
+      </div>
+    </div>
+  `;
+
+  const layout=div('guide-layout');
+  const main=div('guide-main');
+  const toc=div('guide-toc');
+
+  toc.innerHTML=`
+    <div class="guide-toc-head">On this page</div>
+    ${['Installation','Configuration','Basic usage','Token consumption','TypeScript'].map((s,i)=>`<div class="guide-toc-item${i===0?' active':''}" onclick="document.querySelectorAll('.guide-toc-item').forEach(x=>x.classList.remove('active'));this.classList.add('active')">${s}</div>`).join('')}
+  `;
+
+  main.innerHTML=`
+    <div class="guide-section">
+      <h2>Installation</h2>
+      <p>Install the package from the AMEX GBT private npm registry. Both npm and yarn are supported.</p>
+      <pre class="guide-code">npm install @uitk/design-system
+# or
+yarn add @uitk/design-system</pre>
+    </div>
+    <div class="guide-section">
+      <h2>Configuration</h2>
+      <p>Import the global stylesheet once at your application entry point — <code style="font-family:var(--mono);font-size:12px;background:var(--bg);padding:1px 5px;border-radius:var(--radius-sm);border:1px solid var(--border)">main.tsx</code> or <code style="font-family:var(--mono);font-size:12px;background:var(--bg);padding:1px 5px;border-radius:var(--radius-sm);border:1px solid var(--border)">_app.tsx</code>.</p>
+      <pre class="guide-code">import '@uitk/design-system/dist/styles.css';</pre>
+      <p>This pulls in design token custom properties, component base styles, and a light CSS reset. Unused styles are removed during bundling.</p>
+    </div>
+    <div class="guide-section">
+      <h2>Basic usage</h2>
+      <p>All components are individually importable and tree-shakeable. Named imports are recommended.</p>
+      <pre class="guide-code">import { Button, TextInput, Toast } from '@uitk/design-system';
+
+export function LoginForm() {
+  return (
+    &lt;form&gt;
+      &lt;TextInput label="Email" type="email" required /&gt;
+      &lt;TextInput label="Password" type="password" required /&gt;
+      &lt;Button variant="primary" type="submit"&gt;Sign in&lt;/Button&gt;
+    &lt;/form&gt;
+  );
+}</pre>
+    </div>
+    <div class="guide-section">
+      <h2>Token consumption</h2>
+      <p>Design tokens are CSS custom properties available globally once the stylesheet is imported.</p>
+      <pre class="guide-code">.my-component {
+  color: var(--color-text-primary);
+  background: var(--color-surface-1);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}</pre>
+    </div>
+    <div class="guide-section">
+      <h2>TypeScript</h2>
+      <p>UITK ships full TypeScript declarations. Props are fully typed and exported so you can safely extend or recompose any component.</p>
+      <pre class="guide-code">import type { ButtonProps } from '@uitk/design-system';
+
+interface TrackedButtonProps extends ButtonProps {
+  analyticsId: string;
+}
+
+export function TrackedButton({ analyticsId, ...props }: TrackedButtonProps) {
+  return &lt;Button {...props} data-analytics={analyticsId} /&gt;;
+}</pre>
+    </div>
+  `;
+
+  layout.appendChild(main);
+  layout.appendChild(toc);
+  w.appendChild(layout);
+  return w;
+}
+
+function scSearch() {
+  const w=div('page');
+  w.innerHTML=`
+    <div class="page-hd"><div class="page-hd-left"><h1>Search</h1></div></div>
+    <div class="search-input-wrap">
+      <i class="ti ti-search"></i>
+      <input id="sq" value="button" placeholder="Search components, tokens, guidelines...">
+      <i class="ti ti-x" onclick="go(0)" style="cursor:pointer;color:var(--text-3);font-size:14px" title="Clear"></i>
+    </div>
+    <div class="search-meta">8 results for <strong>"button"</strong></div>
+
+    <div class="result-group-label">Components</div>
+    ${[{n:'Button',d:'Triggers an action or event. Supports primary, secondary, ghost, and destructive variants.'},
+       {n:'IconButton',d:'A button with icon only and an accessible aria-label.'},
+       {n:'ButtonGroup',d:'Groups related buttons into a set with shared border treatment.'}].map(r=>`
+      <div class="result-item" onclick="go(2)">
+        <span class="result-type rt-comp">Component</span>
+        <div><div class="result-name">${r.n}</div><div class="result-desc">${r.d}</div></div>
+      </div>`).join('')}
+
+    <div class="result-group-label">Tokens</div>
+    ${[{n:'--color-button-primary',d:'Background color for the primary button variant.'},
+       {n:'--color-button-secondary',d:'Background for the secondary button variant.'},
+       {n:'--color-button-destructive',d:'Background for the destructive button variant.'}].map(r=>`
+      <div class="result-item" onclick="go(3)">
+        <span class="result-type rt-tok">Token</span>
+        <div><div class="result-name mono" style="font-size:12px">${r.n}</div><div class="result-desc">${r.d}</div></div>
+      </div>`).join('')}
+
+    <div class="result-group-label">Guidelines</div>
+    <div class="result-item" onclick="go(4)">
+      <span class="result-type rt-guide">Guideline</span>
+      <div><div class="result-name">When to use a button vs. a link</div><div class="result-desc">Choosing the right interactive element for actions vs. navigation.</div></div>
+    </div>
+    <div class="result-item" onclick="go(4)">
+      <span class="result-type rt-guide">Guideline</span>
+      <div><div class="result-name">Button label writing guidelines</div><div class="result-desc">Imperative verb-first labels, character limits, and internationalization.</div></div>
+    </div>
+  `;
+  return w;
+}
+
+function scChangelog() {
+  const w=div('page');
+  w.innerHTML=`
+    <div class="page-hd">
+      <div class="page-hd-left"><h1>What's new</h1><p>Release notes, new components, token updates, and deprecation notices.</p></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 260px;gap:18px">
+      <div>${[
+        {v:'v2.4.0',d:'Jul 8, 2026',items:[
+          {type:'new',t:'DatePicker',d:'New stable component — single date, range, and calendar popover. Fully keyboard accessible.'},
+          {type:'update',t:'Button',d:'Added loading state with spinner and icon slot support. Deprecated the as prop.'},
+          {type:'token',t:'Color token aliases',d:'Semantic aliases added for all component color roles including --color-button-*, --color-input-*, and --color-feedback-*.'},
+        ]},
+        {v:'v2.3.1',d:'Jun 12, 2026',items:[
+          {type:'fix',t:'TextInput',d:'Fixed focus ring regression on Firefox 126 that caused the ring to disappear after blur.'},
+          {type:'update',t:'Toast',d:'Auto-dismisses after 5s by default. Set duration={null} to disable.'},
+        ]},
+        {v:'v2.3.0',d:'May 30, 2026',items:[
+          {type:'new',t:'SortableList',d:'New beta component — drag-and-drop list reordering with keyboard support.'},
+          {type:'deprecate',t:'Table',d:'Deprecated in favor of DataTable. Will be removed in v3.0. See the migration guide.'},
+        ]},
+      ].map(release=>`
+        <div style="margin-bottom:28px">
+          <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:14px">
+            <span style="font-size:15px;font-weight:600;color:var(--text-1)">${release.v}</span>
+            <span class="mono" style="font-size:11px;color:var(--text-3)">${release.d}</span>
+          </div>
+          ${release.items.map(it=>`
+            <div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)">
+              <span class="cl-type cl-${it.type}">${it.type}</span>
+              <div><div class="cl-title">${it.t}</div><div class="cl-desc">${it.d}</div></div>
+            </div>`).join('')}
+        </div>`).join('')}
+      </div>
+      <div>
+        <div class="card" style="position:sticky;top:20px">
+          <div class="card-hd"><h3>Subscribe</h3></div>
+          <div class="card-bd">
+            <p style="font-size:12px;color:var(--text-2);margin-bottom:12px;line-height:1.6">Get notified when components ship or breaking changes land.</p>
+            <button class="btn btn-primary" style="width:100%;justify-content:center"><i class="ti ti-mail"></i>Subscribe</button>
+            <div style="margin-top:16px">
+              <div style="font-size:10px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Jump to version</div>
+              ${['v2.4.0','v2.3.1','v2.3.0','v2.2.0','v2.1.0'].map(v=>`<div class="mono" style="font-size:11px;color:var(--text-2);cursor:pointer;padding:4px 0;border-bottom:1px solid var(--border)">${v}</div>`).join('')}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  return w;
+}
+
+function scFigma() {
+  const w=div('page');
+  w.innerHTML=`
+    <div class="page-hd">
+      <div class="page-hd-left"><h1>Figma library</h1><p>The UITK Figma library is the design source of truth. All components map 1:1 to their code counterparts via Code Connect.</p></div>
+      <div class="page-hd-right"><button class="btn btn-primary"><i class="ti ti-brand-figma"></i>Open in Figma</button></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px">
+      ${[['Components','27 ready-to-use','ti-layout-grid'],['Color styles','142 token-backed','ti-palette'],['Text styles','9 type scales','ti-typography']].map(([t,d,ic])=>`
+        <div class="card" style="padding:18px">
+          <i class="ti ${ic}" style="font-size:20px;color:var(--text-3);display:block;margin-bottom:10px"></i>
+          <div style="font-size:13px;font-weight:500;color:var(--text-1);margin-bottom:4px">${t}</div>
+          <div style="font-size:12px;color:var(--text-2)">${d}</div>
+        </div>`).join('')}
+    </div>
+    <div class="card">
+      <div class="card-hd"><h3>Code Connect</h3><span class="badge badge-stable" style="text-transform:none;font-size:10px">active</span></div>
+      <div class="card-bd">
+        <p style="font-size:13px;color:var(--text-2);line-height:1.65;margin-bottom:14px">When you inspect any component in Figma, you'll see the exact import and usage snippet for UITK — bridging design and code in both directions.</p>
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;font-size:12px;color:var(--text-2)">All 27 components connected. Last synced: <strong style="color:var(--text-1)">Jul 8, 2026 · 09:14</strong></div>
+      </div>
+    </div>
+  `;
+  return w;
+}
+
+// ─── Playground shared data ───────────────────────────────────────────────
+const PG_COMPS = ['DatePicker','Button','TextInput','Select','Checkbox','Modal','Toast','Tabs','Badge','Combobox'];
+
+function pgDatePickerPreview(st) {
+  const disabled = st.disabled;
+  const single   = st.singleMode || st.singleDateSelect;
+  const label    = st.buttonText || (single ? (st.singleTriggerLabel||'Select date') : 'Select dates');
+  const renderLabel = st.renderType==='dialog' ? 'Opens as dialog' : 'Opens as dropdown menu';
+  const clearable = st.clear;
+  return `
+    <div style="font-size:11px;color:var(--text-3);font-family:var(--mono);margin-bottom:14px;text-align:center">${renderLabel}</div>
+    <div style="display:flex;flex-direction:column;gap:8px;align-items:center">
+      ${single ? `
+        <button style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid var(--border);border-radius:var(--radius-md);font-size:13px;font-family:var(--font);background:${disabled?'var(--bg)':'var(--surface)'};color:${disabled?'var(--text-3)':'var(--text-1)'};cursor:${disabled?'not-allowed':'pointer'};min-width:200px;justify-content:space-between" ${disabled?'disabled':''}>
+          <span style="display:flex;align-items:center;gap:7px"><i class="ti ti-calendar" style="font-size:14px;color:var(--text-3)"></i>${st.startDate||label}</span>
+          ${clearable?'<i class="ti ti-x" style="font-size:12px;color:var(--text-3)"></i>':''}
+        </button>
+      ` : `
+        <div style="display:inline-flex;border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;background:${disabled?'var(--bg)':'var(--surface)'}">
+          <button style="display:inline-flex;align-items:center;gap:7px;padding:8px 14px;font-size:13px;font-family:var(--font);background:transparent;color:${disabled?'var(--text-3)':'var(--text-1)'};border:none;border-right:1px solid var(--border);cursor:${disabled?'not-allowed':'pointer'}" ${disabled?'disabled':''}>
+            <i class="ti ti-calendar" style="font-size:14px;color:var(--text-3)"></i>${st.startDate||'Check-in'}
+          </button>
+          <button style="display:inline-flex;align-items:center;gap:7px;padding:8px 14px;font-size:13px;font-family:var(--font);background:transparent;color:${disabled?'var(--text-3)':'var(--text-1)'};border:none;cursor:${disabled?'not-allowed':'pointer'}" ${disabled?'disabled':''}>
+            <i class="ti ti-calendar" style="font-size:14px;color:var(--text-3)"></i>${st.endDate||st.endDatePlaceholder||'Check-out'}
+          </button>
+          ${clearable?`<button style="display:inline-flex;align-items:center;padding:8px 10px;border:none;border-left:1px solid var(--border);background:transparent;color:var(--text-3);cursor:pointer"><i class="ti ti-x" style="font-size:12px"></i></button>`:''}
+        </div>
+      `}
+      ${st.firstSelectableDate||st.lastSelectableDate ? `<div style="font-size:11px;color:var(--text-3);font-family:var(--mono)">${st.firstSelectableDate?'from '+st.firstSelectableDate:''} ${st.lastSelectableDate?'to '+st.lastSelectableDate:''}</div>` : ''}
+      ${st.footerText?`<div style="font-size:11px;color:var(--text-2);padding:6px 10px;background:var(--bg);border-radius:var(--radius);border:1px solid var(--border)">${st.footerText}</div>`:''}
+    </div>
+  `;
+}
+
+function pgToggle(id, checked, onChange) {
+  const wrap = document.createElement('label');
+  wrap.className = 'toggle';
+  wrap.innerHTML = `<input type="checkbox" id="${id}" ${checked?'checked':''}><span class="toggle-slider"></span>`;
+  wrap.querySelector('input').onchange = onChange;
+  return wrap;
+}
+
+function pgSelect(id, options, val, onChange) {
+  const s = document.createElement('select');
+  s.className = 'pg-select';
+  s.id = id;
+  options.forEach(o => {
+    const opt = document.createElement('option');
+    opt.value = o; opt.textContent = o; if(o===val) opt.selected=true;
+    s.appendChild(opt);
+  });
+  s.onchange = onChange;
+  return s;
+}
+
+function pgInput(id, val, type, cls, onChange) {
+  const inp = document.createElement('input');
+  inp.className = 'pg-input' + (cls?' '+cls:'');
+  inp.type = type||'text'; inp.value = val||''; inp.id = id;
+  inp.placeholder = type==='date'?'yyyy-mm-dd':(type==='number'?'':'—');
+  inp.oninput = onChange;
+  return inp;
+}
+
+function pgPropRow(name, required, ctrlEl, deprecated) {
+  const row = document.createElement('div');
+  row.className = 'pg-prop-row';
+  const left = document.createElement('div');
+  left.className = 'pg-prop-left';
+  const nm = document.createElement('span');
+  nm.className = 'pg-prop-name'; nm.textContent = name;
+  left.appendChild(nm);
+  if(required) { const r=document.createElement('span'); r.className='pg-prop-req'; r.textContent='req'; left.appendChild(r); }
+  if(deprecated) { const d=document.createElement('span'); d.className='pg-dep-badge'; d.textContent='dep'; left.appendChild(d); }
+  const ctrl = document.createElement('div');
+  ctrl.className = 'pg-prop-ctrl';
+  if(ctrlEl) ctrl.appendChild(ctrlEl);
+  row.appendChild(left); row.appendChild(ctrl);
+  return row;
+}
+
+// ── Playground Concept A: Split panel ─────────────────────────────────────
+function scPlayground1() {
+  const st = {
+    renderType:'dialog', singleMode:false, singleDateSelect:false, useSingleTrigger:false,
+    disabled:false, clear:true, doubleMonths:true, manualEditModeEnabled:false,
+    preventAutoFocus:false, yearMonthSelectMode:false,
+    buttonText:'', singleTriggerLabel:'Select date', endDatePlaceholder:'Check-out',
+    footerText:'', footerRangeOption:'nights', triggeredSelector:'none',
+    daysBookableInAdvance:500, midnightBookingOffset:4,
+    startDate:'', endDate:'', firstSelectableDate:'', lastSelectableDate:'',
+  };
+
+  const w = document.createElement('div');
+  w.style.cssText = 'display:flex;height:100%;overflow:hidden;';
+
+  // ── Controls sidebar ──────────────────────────────────────────────────
+  const sidebar = document.createElement('div');
+  sidebar.className = 'pg-controls';
+
+  // Search
+  const searchWrap = div('pg-search-wrap');
+  searchWrap.innerHTML = `<div class="pg-comp-search"><i class="ti ti-search"></i><input id="pg1-search" type="text" placeholder="Search components…" autocomplete="off"></div>`;
+  searchWrap.querySelector('input').oninput = function() {
+    const q = this.value.toLowerCase();
+    const dd = document.getElementById('pg1-dropdown');
+    if(!dd) return;
+    if(!q) { dd.style.display='none'; return; }
+    const matches = PG_COMPS.filter(c=>c.toLowerCase().includes(q));
+    dd.innerHTML = matches.map(c=>`<div class="pg-search-result" onclick="document.getElementById('pg1-search').value='${c}';document.getElementById('pg1-comp-name').textContent='${c}';document.getElementById('pg1-dropdown').style.display='none'">${c}</div>`).join('') || '<div style="padding:8px 12px;font-size:12px;color:var(--text-3)">No results</div>';
+    dd.style.display='block';
+  };
+  const searchDropdown = document.createElement('div');
+  searchDropdown.id = 'pg1-dropdown';
+  searchDropdown.style.cssText = 'position:absolute;top:100%;left:0;right:0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);box-shadow:var(--shadow-md);z-index:100;display:none;max-height:200px;overflow-y:auto;';
+  const style = document.createElement('style');
+  style.textContent = '.pg-search-result{padding:7px 12px;font-size:12px;color:var(--text-1);cursor:pointer}.pg-search-result:hover{background:var(--bg)}';
+  searchWrap.style.position = 'relative';
+  searchWrap.appendChild(style);
+  searchWrap.appendChild(searchDropdown);
+  document.addEventListener('click', e => { if(!searchWrap.contains(e.target) && searchDropdown) searchDropdown.style.display='none'; }, {once:false});
+  sidebar.appendChild(searchWrap);
+
+  // Component name row
+  const compName = div('pg-comp-name');
+  compName.innerHTML = `<span id="pg1-comp-name" style="font-size:13px;font-weight:600;color:var(--text-1)">DatePicker</span><span class="badge badge-beta">beta</span><i class="ti ti-arrow-up-right" style="font-size:12px;color:var(--text-3);margin-left:auto;cursor:pointer" onclick="go(2)" title="View docs"></i>`;
+  sidebar.appendChild(compName);
+
+  // Prop panel
+  const panel = div('pg-panel');
+
+  function refresh() {
+    const stage = document.getElementById('pg1-stage');
+    if(stage) stage.innerHTML = pgDatePickerPreview(st);
+  }
+
+  function bool(propName, checked) {
+    return pgToggle('pg1-'+propName, checked, function(){ st[propName]=this.checked; refresh(); });
+  }
+  function sel(propName, options, val) {
+    return pgSelect('pg1-'+propName, options, val, function(){ st[propName]=this.value; refresh(); });
+  }
+  function inp(propName, val, type, cls) {
+    return pgInput('pg1-'+propName, val, type, cls, function(){ st[propName]=this.value; refresh(); });
+  }
+
+  const sections = [
+    { label:'Core', props:[
+      ['renderType', sel('renderType',['dialog','menu'],'dialog')],
+      ['singleMode', bool('singleMode',false)],
+      ['singleDateSelect', bool('singleDateSelect',false)],
+      ['useSingleTrigger', bool('useSingleTrigger',false)],
+      ['disabled', bool('disabled',false)],
+      ['clear', bool('clear',true)],
+    ]},
+    { label:'Dates', props:[
+      ['startDate *', inp('startDate','','date'), true],
+      ['endDate', inp('endDate','','date')],
+      ['firstSelectableDate', inp('firstSelectableDate','','date')],
+      ['lastSelectableDate', inp('lastSelectableDate','','date')],
+      ['daysBookableInAdvance', inp('daysBookableInAdvance',500,'number','pg-input-sm')],
+      ['midnightBookingOffset', inp('midnightBookingOffset',4,'number','pg-input-sm')],
+    ]},
+    { label:'Behavior', props:[
+      ['doubleMonths', bool('doubleMonths',true)],
+      ['manualEditModeEnabled', bool('manualEditModeEnabled',false)],
+      ['preventAutoFocus', bool('preventAutoFocus',false)],
+      ['yearMonthSelectMode', bool('yearMonthSelectMode',false)],
+    ]},
+    { label:'Display', props:[
+      ['buttonText', inp('buttonText','','text')],
+      ['singleTriggerLabel', inp('singleTriggerLabel','Select date','text')],
+      ['endDatePlaceholder', inp('endDatePlaceholder','Check-out','text')],
+      ['footerText', inp('footerText','','text')],
+      ['footerRangeOption', sel('footerRangeOption',['nights','days'],'nights')],
+      ['triggeredSelector', sel('triggeredSelector',['none','start','end'],'none')],
+    ]},
+    { label:'Deprecated', props:[
+      ['cutoffDate', inp('cutoffDate','','date'), false, true],
+      ['validStartDate', inp('validStartDate','','date'), false, true],
+    ]},
+  ];
+
+  sections.forEach(sec => {
+    const lbl = div('pg-cat-label', sec.label);
+    panel.appendChild(lbl);
+    sec.props.forEach(([name, ctrl, req, dep]) => {
+      panel.appendChild(pgPropRow(name.replace(' *',''), req, ctrl, dep));
+    });
+    panel.appendChild(div('pg-divider'));
+  });
+
+  // Advanced / callbacks (collapsed, read-only)
+  const advLbl = div('pg-cat-label');
+  advLbl.innerHTML = 'Advanced <span style="font-size:10px;color:var(--text-3);font-weight:400;text-transform:none;letter-spacing:0">callbacks &amp; handlers</span>';
+  panel.appendChild(advLbl);
+  ['onDateChange','onFocusedInputChange','onOpen','onClose','onApply','onClear','renderCalendarDay','customFooter','renderTrigger'].forEach(name => {
+    const row = document.createElement('div');
+    row.className = 'pg-advanced-row';
+    row.innerHTML = `<span class="pg-prop-name">${name}</span><span class="pg-adv-type">function</span>`;
+    panel.appendChild(row);
+  });
+
+  sidebar.appendChild(panel);
+
+  // ── Preview pane ──────────────────────────────────────────────────────
+  const preview = document.createElement('div');
+  preview.className = 'pg-preview';
+
+  const previewHd = div('pg-preview-hd');
+  previewHd.innerHTML = `
+    <h2>Live preview</h2>
+    <span style="font-size:11px;color:var(--text-3)">Interact with controls to see updates</span>
+    <button class="btn btn-outline" style="margin-left:auto" onclick="go('pg1')"><i class="ti ti-refresh"></i>Reset</button>
+  `;
+  preview.appendChild(previewHd);
+
+  const stage = document.createElement('div');
+  stage.className = 'pg-stage';
+  const stageInner = div('pg-stage-inner');
+  stageInner.id = 'pg1-stage';
+  stageInner.innerHTML = pgDatePickerPreview(st);
+  stage.appendChild(stageInner);
+  preview.appendChild(stage);
+
+  // Info strip at bottom
+  const info = document.createElement('div');
+  info.style.cssText = 'padding:12px 18px;border-top:1px solid var(--border);background:var(--surface);display:flex;align-items:center;gap:16px;flex-shrink:0;';
+  info.innerHTML = `
+    <span style="font-size:11px;color:var(--text-3)">Concept A — Split panel</span>
+    <div style="display:flex;gap:10px;margin-left:auto">
+      <button class="btn btn-outline" onclick="go('pg2')"><i class="ti ti-columns"></i>View Concept B</button>
+      <button class="btn btn-primary" onclick="go(2)"><i class="ti ti-book"></i>Full docs</button>
+    </div>
+  `;
+  preview.appendChild(info);
+
+  w.appendChild(sidebar);
+  w.appendChild(preview);
+  return w;
+}
+
+// ── Playground Concept B: Tabbed code-gen ──────────────────────────────────
+function scPlayground2() {
+  const st = {
+    renderType:'dialog', singleMode:false, singleDateSelect:false, useSingleTrigger:false,
+    disabled:false, clear:true, doubleMonths:true, manualEditModeEnabled:false,
+    preventAutoFocus:false, yearMonthSelectMode:false,
+    buttonText:'', singleTriggerLabel:'Select date', endDatePlaceholder:'Check-out',
+    footerText:'', footerRangeOption:'nights', triggeredSelector:'none',
+    daysBookableInAdvance:500, midnightBookingOffset:4,
+    startDate:'', endDate:'', firstSelectableDate:'', lastSelectableDate:'',
+  };
+  let activeTab = 'controls';
+
+  const w = document.createElement('div');
+  w.className = 'pg2-layout';
+
+  // ── Top bar ───────────────────────────────────────────────────────────
+  const top = div('pg2-top');
+  top.innerHTML = `
+    <div style="display:flex;align-items:center;gap:7px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-md);padding:6px 10px;width:220px">
+      <i class="ti ti-search" style="font-size:13px;color:var(--text-3);flex-shrink:0"></i>
+      <input id="pg2-search" type="text" placeholder="Search components…" style="border:none;outline:none;font-size:12px;color:var(--text-1);background:transparent;font-family:var(--font);flex:1;min-width:0" autocomplete="off">
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <h2>DatePicker</h2>
+      <span class="badge badge-beta">beta</span>
+    </div>
+    <div style="margin-left:auto;display:flex;gap:7px;align-items:center">
+      <span style="font-size:11px;color:var(--text-3)">Concept B — Tabbed</span>
+      <button class="btn btn-ghost" onclick="go('pg1')"><i class="ti ti-layout-sidebar"></i>Concept A</button>
+      <button class="btn btn-outline" onclick="go(2)"><i class="ti ti-book"></i>Full docs</button>
+    </div>
+  `;
+  w.appendChild(top);
+
+  // Setup search
+  setTimeout(() => {
+    const inp2 = document.getElementById('pg2-search');
+    if(inp2) inp2.oninput = function() {
+      const q = this.value.toLowerCase();
+      if(!q) { this.closest('div').querySelector('.pg2-search-dd') && (this.closest('div').querySelector('.pg2-search-dd').style.display='none'); return; }
+      let dd2 = this.closest('div').querySelector('.pg2-search-dd');
+      if(!dd2) {
+        dd2 = document.createElement('div');
+        dd2.className = 'pg2-search-dd';
+        dd2.style.cssText = 'position:absolute;top:100%;left:0;right:0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);box-shadow:var(--shadow-md);z-index:100;max-height:180px;overflow-y:auto;';
+        this.closest('div').style.position = 'relative';
+        this.closest('div').appendChild(dd2);
+      }
+      const matches = PG_COMPS.filter(c=>c.toLowerCase().includes(q));
+      dd2.innerHTML = matches.map(c=>`<div class="pg-search-result" onclick="document.getElementById('pg2-search').value='';this.closest('.pg2-search-dd').style.display='none'">${c}</div>`).join('') || '<div style="padding:8px 12px;font-size:12px;color:var(--text-3)">No results</div>';
+      dd2.style.display='block';
+    };
+  }, 0);
+
+  // ── Preview stage ─────────────────────────────────────────────────────
+  const stage = div('pg2-stage');
+  const stageInner = div('pg-stage-inner');
+  stageInner.id = 'pg2-stage';
+  stageInner.innerHTML = pgDatePickerPreview(st);
+  stage.appendChild(stageInner);
+  w.appendChild(stage);
+
+  function refresh2() {
+    const s = document.getElementById('pg2-stage');
+    if(s) s.innerHTML = pgDatePickerPreview(st);
+    updateCode();
+  }
+
+  // ── Bottom tabbed area ────────────────────────────────────────────────
+  const bottom = div('pg2-bottom');
+
+  const tabBar = div('pg2-tabs');
+  const tabs2 = [
+    {id:'controls', label:'Controls', icon:'ti-sliders'},
+    {id:'code',     label:'Code',     icon:'ti-code'},
+    {id:'api',      label:'API reference', icon:'ti-table'},
+    {id:'a11y',     label:'Accessibility', icon:'ti-accessible'},
+  ];
+  tabs2.forEach(t => {
+    const btn = document.createElement('button');
+    btn.className = 'pg2-tab-btn' + (t.id===activeTab?' active':'');
+    btn.id = 'pg2-tab-'+t.id;
+    btn.innerHTML = `<i class="ti ${t.icon}" style="font-size:13px"></i>${t.label}`;
+    btn.onclick = () => {
+      activeTab = t.id;
+      tabs2.forEach(tt => { const b=document.getElementById('pg2-tab-'+tt.id); if(b) b.classList.toggle('active', tt.id===t.id); });
+      renderPanel();
+    };
+    tabBar.appendChild(btn);
+  });
+  bottom.appendChild(tabBar);
+
+  const panelWrap = div('pg2-panel');
+  panelWrap.id = 'pg2-panel';
+  bottom.appendChild(panelWrap);
+
+  function bool2(propName, checked) {
+    return pgToggle('pg2-'+propName, checked, function(){ st[propName]=this.checked; refresh2(); });
+  }
+  function sel2(propName, options, val) {
+    return pgSelect('pg2-'+propName, options, val, function(){ st[propName]=this.value; refresh2(); });
+  }
+  function inp2(propName, val, type, cls) {
+    return pgInput('pg2-'+propName, val, type, cls, function(){ st[propName]=this.value; refresh2(); });
+  }
+
+  function buildCodeSnippet() {
+    const props = [];
+    if(st.renderType!=='dialog') props.push(`  renderType="${st.renderType}"`);
+    if(st.singleMode) props.push(`  singleMode`);
+    if(st.singleDateSelect) props.push(`  singleDateSelect`);
+    if(st.useSingleTrigger) props.push(`  useSingleTrigger`);
+    if(st.disabled) props.push(`  disabled`);
+    if(!st.clear) props.push(`  clear={false}`);
+    if(!st.doubleMonths) props.push(`  doubleMonths={false}`);
+    if(st.manualEditModeEnabled) props.push(`  manualEditModeEnabled`);
+    if(st.preventAutoFocus) props.push(`  preventAutoFocus`);
+    if(st.yearMonthSelectMode) props.push(`  yearMonthSelectMode`);
+    if(st.buttonText) props.push(`  buttonText="${st.buttonText}"`);
+    if(st.singleTriggerLabel&&st.singleTriggerLabel!=='Select date') props.push(`  singleTriggerLabel="${st.singleTriggerLabel}"`);
+    if(st.endDatePlaceholder&&st.endDatePlaceholder!=='Check-out') props.push(`  endDatePlaceholder="${st.endDatePlaceholder}"`);
+    if(st.footerText) props.push(`  footerText="${st.footerText}"`);
+    if(st.footerRangeOption!=='nights') props.push(`  footerRangeOption="${st.footerRangeOption}"`);
+    if(st.triggeredSelector!=='none') props.push(`  triggeredSelector="${st.triggeredSelector}"`);
+    if(st.daysBookableInAdvance!==500) props.push(`  daysBookableInAdvance={${st.daysBookableInAdvance}}`);
+    if(st.midnightBookingOffset!==4) props.push(`  midnightBookingOffset={${st.midnightBookingOffset}}`);
+    if(st.startDate) props.push(`  startDate="${st.startDate}"`);
+    if(st.endDate) props.push(`  endDate="${st.endDate}"`);
+    if(st.firstSelectableDate) props.push(`  firstSelectableDate="${st.firstSelectableDate}"`);
+    if(st.lastSelectableDate) props.push(`  lastSelectableDate="${st.lastSelectableDate}"`);
+    const inner = props.length ? '\n'+props.join('\n')+'\n' : '';
+    return `<span class="kw">import</span> { <span class="fn">DatePicker</span> } <span class="kw">from</span> <span class="str">'@uitk/components'</span>;\n\n<span class="kw">function</span> <span class="fn">Example</span>() {\n  <span class="kw">return</span> (\n    &lt;<span class="fn">DatePicker</span>${inner.replace(/\n/g,'\n    ')}    <span class="attr">startDate</span>={<span class="fn">startDate</span>}\n    <span class="attr">onDateChange</span>={<span class="fn">handleChange</span>}\n  /&gt;\n  );\n}`;
+  }
+
+  function updateCode() {
+    const codeEl = document.getElementById('pg2-code-content');
+    if(codeEl) codeEl.innerHTML = buildCodeSnippet();
+  }
+
+  function renderPanel() {
+    const p = panelWrap;
+    if(!p) return;
+    p.innerHTML = '';
+
+    if(activeTab === 'controls') {
+      const grid = div('pg2-controls-grid');
+
+      const sections2 = [
+        { label:'Core', props:[
+          ['renderType', sel2('renderType',['dialog','menu'],'dialog')],
+          ['singleMode', bool2('singleMode',false)],
+          ['singleDateSelect', bool2('singleDateSelect',false)],
+          ['useSingleTrigger', bool2('useSingleTrigger',false)],
+          ['disabled', bool2('disabled',false)],
+          ['clear', bool2('clear',true)],
+        ]},
+        { label:'Dates', props:[
+          ['startDate', inp2('startDate','','date'), true],
+          ['endDate', inp2('endDate','','date')],
+          ['firstSelectableDate', inp2('firstSelectableDate','','date')],
+          ['lastSelectableDate', inp2('lastSelectableDate','','date')],
+          ['daysBookableInAdvance', inp2('daysBookableInAdvance',500,'number','pg-input-sm')],
+          ['midnightBookingOffset', inp2('midnightBookingOffset',4,'number','pg-input-sm')],
+        ]},
+        { label:'Behavior', props:[
+          ['doubleMonths', bool2('doubleMonths',true)],
+          ['manualEditModeEnabled', bool2('manualEditModeEnabled',false)],
+          ['preventAutoFocus', bool2('preventAutoFocus',false)],
+          ['yearMonthSelectMode', bool2('yearMonthSelectMode',false)],
+        ]},
+        { label:'Display', props:[
+          ['buttonText', inp2('buttonText','','text')],
+          ['singleTriggerLabel', inp2('singleTriggerLabel','Select date','text')],
+          ['endDatePlaceholder', inp2('endDatePlaceholder','Check-out','text')],
+          ['footerText', inp2('footerText','','text')],
+          ['footerRangeOption', sel2('footerRangeOption',['nights','days'],'nights')],
+          ['triggeredSelector', sel2('triggeredSelector',['none','start','end'],'none')],
+        ]},
+      ];
+
+      sections2.forEach(sec => {
+        const secHd = div('pg2-prop-section', sec.label);
+        grid.appendChild(secHd);
+        sec.props.forEach(([name, ctrl, req]) => {
+          const row = document.createElement('div');
+          row.className = 'pg2-prop-row';
+          const left = document.createElement('div');
+          left.style.cssText = 'display:flex;align-items:center;gap:4px;min-width:0;flex:1';
+          left.innerHTML = `<span style="font-size:11.5px;color:var(--text-1);font-family:var(--mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${name}</span>${req?'<span style="font-size:9px;color:var(--danger-fg);font-weight:600;text-transform:uppercase;flex-shrink:0">req</span>':''}`;
+          const rightWrap = document.createElement('div');
+          rightWrap.style.flexShrink='0';
+          if(ctrl) rightWrap.appendChild(ctrl);
+          row.appendChild(left); row.appendChild(rightWrap);
+          grid.appendChild(row);
+        });
+      });
+
+      // Deprecated section
+      const depHd = div('pg2-prop-section');
+      depHd.innerHTML = 'Deprecated <span style="font-size:10px;color:var(--danger-fg);font-weight:400;text-transform:none;letter-spacing:0">avoid in new code</span>';
+      grid.appendChild(depHd);
+      [['cutoffDate','Use lastSelectableDate'],['validStartDate','Use firstSelectableDate']].forEach(([name,note]) => {
+        const row = document.createElement('div');
+        row.className = 'pg2-prop-row';
+        row.style.opacity = '.6';
+        row.innerHTML = `<div style="display:flex;align-items:center;gap:5px;flex:1;min-width:0"><span style="font-size:11.5px;color:var(--text-1);font-family:var(--mono)">${name}</span><span style="font-size:9px;color:var(--danger-fg);font-weight:600;text-transform:uppercase;border:1px solid var(--danger-border);background:var(--danger-bg);border-radius:2px;padding:0 4px">dep</span></div><span style="font-size:10px;color:var(--text-3)">${note}</span>`;
+        grid.appendChild(row);
+      });
+
+      p.appendChild(grid);
+
+    } else if(activeTab === 'code') {
+      const codeWrap = div('pg2-code-wrap');
+      codeWrap.innerHTML = `
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <div>
+            <div style="font-size:13px;font-weight:600;color:var(--text-1);margin-bottom:3px">Generated code</div>
+            <div style="font-size:12px;color:var(--text-2)">Updates live as you change props in Controls.</div>
+          </div>
+          <button class="btn btn-outline" onclick="navigator.clipboard.writeText(document.getElementById('pg2-code-content').textContent)"><i class="ti ti-copy"></i>Copy</button>
+        </div>
+        <div class="code-wrap">
+          <div class="code-header">
+            <button class="code-lang active">TSX</button>
+          </div>
+          <pre class="code" id="pg2-code-content">${buildCodeSnippet()}</pre>
+        </div>
+        <div class="code-wrap" style="margin-top:0">
+          <div class="code-header"><button class="code-lang active">Install</button></div>
+          <pre class="code"><span class="cm"># npm</span>\nnpm install <span class="str">@uitk/components</span>\n\n<span class="cm"># yarn</span>\nyarn add <span class="str">@uitk/components</span></pre>
+        </div>
+      `;
+      p.appendChild(codeWrap);
+
+    } else if(activeTab === 'api') {
+      const apiWrap = div('pg2-api-table');
+      const allProps = [
+        ['startDate','Date','—','Required. The currently selected start date.','','true'],
+        ['endDate','Date','—','The currently selected end date.','','false'],
+        ['renderType','"dialog" | "menu"','"dialog"','Controls how the calendar is rendered.','','false'],
+        ['singleMode','boolean','false','Enables single-date selection mode.','','false'],
+        ['singleDateSelect','boolean','false','Allow selecting one date in range mode.','','false'],
+        ['useSingleTrigger','boolean','false','Use a single button trigger instead of two.','','false'],
+        ['disabled','boolean','false','Disables the component.','','false'],
+        ['clear','boolean','true','Show clear/reset button.','','false'],
+        ['doubleMonths','boolean','true','Show two calendar months side by side.','','false'],
+        ['manualEditModeEnabled','boolean','false','Allow keyboard date entry in input field.','','false'],
+        ['preventAutoFocus','boolean','false','Prevent auto-focusing the start input on open.','','false'],
+        ['yearMonthSelectMode','boolean','false','Enable year/month dropdowns in calendar header.','','false'],
+        ['buttonText','string','—','Custom label for the single trigger button.','','false'],
+        ['singleTriggerLabel','string','"Select date"','Accessible label for the single trigger.','','false'],
+        ['endDatePlaceholder','string','"Check-out"','Placeholder text for end date trigger.','','false'],
+        ['footerText','string','—','Static text shown in the calendar footer.','','false'],
+        ['footerRangeOption','"nights" | "days"','"nights"','Unit label for selected range footer.','','false'],
+        ['triggeredSelector','"start" | "end" | "none"','"none"','Which input opens the calendar on mount.','','false'],
+        ['daysBookableInAdvance','number','500','Max future days that can be selected.','','false'],
+        ['midnightBookingOffset','number','4','Hours past midnight still treated as same day.','','false'],
+        ['firstSelectableDate','Date','—','Earliest selectable date.','','false'],
+        ['lastSelectableDate','Date','—','Latest selectable date.','','false'],
+        ['onDateChange','function','—','Called when dates change. Receives {startDate, endDate}.','','false'],
+        ['onFocusedInputChange','function','—','Called when focused input (start/end) changes.','','false'],
+        ['onOpen','function','—','Called when calendar opens.','','false'],
+        ['onClose','function','—','Called when calendar closes.','','false'],
+        ['onApply','function','—','Called when user confirms selection.','','false'],
+        ['onClear','function','—','Called when user clears selection.','','false'],
+        ['renderCalendarDay','function','—','Custom render function for individual days.','','false'],
+        ['customFooter','ReactNode','—','Custom footer content to replace default.','','false'],
+        ['cutoffDate','Date','—','Deprecated. Use lastSelectableDate.','dep','false'],
+        ['validStartDate','Date','—','Deprecated. Use firstSelectableDate.','dep','false'],
+      ];
+      const table = document.createElement('table');
+      table.className = 'pg2-api-table';
+      table.innerHTML = `<thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th><th>Required</th></tr></thead>`;
+      const tbody = document.createElement('tbody');
+      allProps.forEach(([name,type,def,desc,dep,req]) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="mono" style="white-space:nowrap">${name}${dep?` <span style="display:inline-flex;padding:1px 5px;border-radius:2px;font-size:9px;font-weight:600;text-transform:uppercase;background:var(--danger-bg);color:var(--danger-fg);border:1px solid var(--danger-border);font-family:var(--font)">dep</span>`:''}${req==='true'?` <span style="display:inline-flex;padding:1px 5px;border-radius:2px;font-size:9px;font-weight:600;text-transform:uppercase;background:var(--danger-bg);color:var(--danger-fg);border:1px solid var(--danger-border);font-family:var(--font)">req</span>`:''}</td>
+          <td><code style="font-family:var(--mono);font-size:11px;background:var(--bg);padding:2px 6px;border-radius:var(--radius-sm);border:1px solid var(--border)">${type}</code></td>
+          <td class="mono" style="color:var(--text-3)">${def}</td>
+          <td style="color:var(--text-2);max-width:280px">${desc}</td>
+          <td style="text-align:center">${req==='true'?'<i class="ti ti-check" style="color:var(--success-fg)"></i>':'<span style="color:var(--text-3)">—</span>'}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+      table.appendChild(tbody);
+      p.appendChild(table);
+
+    } else if(activeTab === 'a11y') {
+      const a11yWrap = div('pg2-a11y-section');
+      a11yWrap.innerHTML = `
+        <h3>Accessibility</h3>
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px">
+          ${[['WCAG 2.1 AA','Compliant'],['Keyboard nav','Full support'],['Screen reader','ARIA live regions'],['Focus management','Trap + restore']].map(([l,v])=>`
+            <div style="background:var(--surface);border:1px solid var(--success-border);border-radius:var(--radius-md);padding:14px 16px;background:var(--success-bg)">
+              <div style="font-size:11px;color:var(--success-fg);font-weight:600;margin-bottom:3px">${l}</div>
+              <div style="font-size:13px;font-weight:500;color:var(--text-1)">${v}</div>
+            </div>`).join('')}
+        </div>
+        <h3>Keyboard interactions</h3>
+        <div style="margin-bottom:20px">
+          ${[
+            ['Tab / Shift+Tab','Move focus between triggers and calendar'],
+            ['Enter / Space','Open calendar or select focused date'],
+            ['Arrow keys','Navigate between days in open calendar'],
+            ['Page Up / Down','Navigate months'],
+            ['Home / End','Jump to first or last day of week'],
+            ['Escape','Close calendar, return focus to trigger'],
+          ].map(([key,desc])=>`
+            <div class="pg2-a11y-row">
+              <code style="font-family:var(--mono);font-size:11px;background:var(--bg);padding:3px 8px;border-radius:var(--radius-sm);border:1px solid var(--border);white-space:nowrap;flex-shrink:0">${key}</code>
+              <span style="font-size:12px;color:var(--text-2)">${desc}</span>
+            </div>`).join('')}
+        </div>
+        <h3>ARIA attributes</h3>
+        <div>
+          ${[
+            ['role="dialog"','Applied to calendar popover when renderType is dialog'],
+            ['aria-modal="true"','Set on dialog calendar to trap screen reader'],
+            ['aria-label','Each trigger button has a descriptive label'],
+            ['aria-selected','Applied to selected date cells'],
+            ['aria-disabled','Applied to blocked/unavailable date cells'],
+            ['aria-live="polite"','Announces month navigation changes'],
+          ].map(([attr,desc])=>`
+            <div class="pg2-a11y-row">
+              <code style="font-family:var(--mono);font-size:11px;background:var(--bg);padding:3px 8px;border-radius:var(--radius-sm);border:1px solid var(--border);white-space:nowrap;flex-shrink:0">${attr}</code>
+              <span style="font-size:12px;color:var(--text-2)">${desc}</span>
+            </div>`).join('')}
+        </div>
+      `;
+      p.appendChild(a11yWrap);
+    }
+  }
+
+  renderPanel();
+  w.appendChild(bottom);
+
+  // Add style for search results
+  const sty = document.createElement('style');
+  sty.textContent = '.pg-search-result{padding:7px 12px;font-size:12px;color:var(--text-1);cursor:pointer}.pg-search-result:hover{background:var(--bg)}';
+  w.appendChild(sty);
+
+  return w;
+}
+
+// ── Playground Concept C: Split controls + resizable bottom panel ───────────
+function scPlayground3() {
+  const st = {
+    renderType:'dialog', singleMode:false, singleDateSelect:false, useSingleTrigger:false,
+    disabled:false, clear:true, doubleMonths:true, manualEditModeEnabled:false,
+    preventAutoFocus:false, yearMonthSelectMode:false,
+    buttonText:'', singleTriggerLabel:'Select date', endDatePlaceholder:'Check-out',
+    footerText:'', footerRangeOption:'nights', triggeredSelector:'none',
+    daysBookableInAdvance:500, midnightBookingOffset:4,
+    startDate:'', endDate:'', firstSelectableDate:'', lastSelectableDate:'',
+  };
+  let controlsSide = 'left';  // 'left' | 'right'
+  let bottomH = 240;
+  let activeTab = 'code';
+
+  const w = document.createElement('div');
+  w.className = 'pg3-layout';
+
+  // ── Top toolbar ─────────────────────────────────────────────────────────
+  const toolbar = document.createElement('div');
+  toolbar.style.cssText = 'display:flex;align-items:center;gap:10px;padding:9px 16px;border-bottom:1px solid var(--border);background:var(--surface);flex-shrink:0;';
+  toolbar.innerHTML = `
+    <div style="display:flex;align-items:center;gap:7px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-md);padding:5px 10px;width:200px;position:relative">
+      <i class="ti ti-search" style="font-size:13px;color:var(--text-3);flex-shrink:0"></i>
+      <input id="pg3-search" type="text" placeholder="Search components…" autocomplete="off"
+        style="border:none;outline:none;font-size:12px;color:var(--text-1);background:transparent;font-family:var(--font);flex:1;min-width:0">
+    </div>
+    <div style="display:flex;align-items:center;gap:7px">
+      <span style="font-size:13px;font-weight:600;color:var(--text-1)" id="pg3-comp-label">DatePicker</span>
+      <span class="badge badge-beta">beta</span>
+    </div>
+    <div style="margin-left:auto;display:flex;align-items:center;gap:7px">
+      <span style="font-size:11px;color:var(--text-3)">Controls panel</span>
+      <button class="pg3-side-toggle" id="pg3-side-btn" title="Move controls to other side">
+        <i class="ti ti-layout-sidebar" id="pg3-side-icon"></i><span id="pg3-side-label">Left</span>
+      </button>
+      <div class="tb-sep"></div>
+      <button class="btn btn-ghost" onclick="go('pg1')" style="font-size:12px"><i class="ti ti-layout-sidebar"></i>A</button>
+      <button class="btn btn-ghost" onclick="go('pg2')" style="font-size:12px"><i class="ti ti-columns"></i>B</button>
+      <div class="tb-sep"></div>
+      <button class="btn btn-outline" onclick="go(2)" style="font-size:12px"><i class="ti ti-book"></i>Docs</button>
+    </div>
+  `;
+  w.appendChild(toolbar);
+
+  // ── Main area (controls + preview) ──────────────────────────────────────
+  const main = document.createElement('div');
+  main.className = 'pg3-main';
+  main.id = 'pg3-main';
+
+  // Controls sidebar (reuse shared helpers)
+  function buildControlsSidebar() {
+    const sidebar = document.createElement('div');
+    sidebar.className = 'pg-controls';
+    sidebar.id = 'pg3-controls';
+
+    // Search
+    const sw = div('pg-search-wrap');
+    sw.innerHTML = `<div class="pg-comp-search"><i class="ti ti-search"></i><input id="pg3-ctrl-search" type="text" placeholder="Search components…" autocomplete="off"></div>`;
+    sw.querySelector('input').oninput = function() {
+      const q = this.value.toLowerCase();
+      let dd = sw.querySelector('.pg-sdrop');
+      if(!dd) {
+        dd = document.createElement('div');
+        dd.className = 'pg-sdrop';
+        dd.style.cssText = 'position:absolute;top:calc(100% + 2px);left:12px;right:12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);box-shadow:var(--shadow-md);z-index:100;max-height:180px;overflow-y:auto;';
+        sw.style.position = 'relative';
+        sw.appendChild(dd);
+      }
+      if(!q) { dd.style.display='none'; return; }
+      const hits = PG_COMPS.filter(c=>c.toLowerCase().includes(q));
+      dd.innerHTML = hits.map(c=>`<div class="pg-search-result" onclick="document.getElementById('pg3-ctrl-search').value='';document.querySelector('.pg-sdrop').style.display='none';document.getElementById('pg3-comp-label').textContent='${c}';document.getElementById('pg3-preview-title').textContent='${c}'">${c}</div>`).join('')||`<div style="padding:8px 12px;font-size:12px;color:var(--text-3)">No results</div>`;
+      dd.style.display = 'block';
+    };
+    document.addEventListener('click', e=>{ const d=sw.querySelector('.pg-sdrop'); if(d&&!sw.contains(e.target))d.style.display='none'; });
+    sidebar.appendChild(sw);
+
+    // Component name row
+    const cn = div('pg-comp-name');
+    cn.innerHTML = `<span style="font-size:13px;font-weight:600;color:var(--text-1)">DatePicker</span><span class="badge badge-beta">beta</span><i class="ti ti-arrow-up-right" style="font-size:12px;color:var(--text-3);margin-left:auto;cursor:pointer" onclick="go(2)" title="View docs"></i>`;
+    sidebar.appendChild(cn);
+
+    // Prop panel
+    const panel = div('pg-panel');
+
+    function refresh() {
+      const s = document.getElementById('pg3-stage');
+      if(s) s.innerHTML = pgDatePickerPreview(st);
+      updateBottomCode();
+    }
+    function bool(k,v){ return pgToggle('pg3-'+k,v,function(){st[k]=this.checked;refresh();}); }
+    function sel(k,opts,v){ return pgSelect('pg3-'+k,opts,v,function(){st[k]=this.value;refresh();}); }
+    function inp(k,v,t,c){ return pgInput('pg3-'+k,v,t,c,function(){st[k]=this.value;refresh();}); }
+
+    const sections = [
+      { label:'Core', rows:[
+        ['renderType', sel('renderType',['dialog','menu'],'dialog')],
+        ['singleMode', bool('singleMode',false)],
+        ['singleDateSelect', bool('singleDateSelect',false)],
+        ['useSingleTrigger', bool('useSingleTrigger',false)],
+        ['disabled', bool('disabled',false)],
+        ['clear', bool('clear',true)],
+      ]},
+      { label:'Dates', rows:[
+        ['startDate', inp('startDate','','date'), true],
+        ['endDate', inp('endDate','','date')],
+        ['firstSelectableDate', inp('firstSelectableDate','','date')],
+        ['lastSelectableDate', inp('lastSelectableDate','','date')],
+        ['daysBookableInAdvance', inp('daysBookableInAdvance',500,'number','pg-input-sm')],
+        ['midnightBookingOffset', inp('midnightBookingOffset',4,'number','pg-input-sm')],
+      ]},
+      { label:'Behavior', rows:[
+        ['doubleMonths', bool('doubleMonths',true)],
+        ['manualEditModeEnabled', bool('manualEditModeEnabled',false)],
+        ['preventAutoFocus', bool('preventAutoFocus',false)],
+        ['yearMonthSelectMode', bool('yearMonthSelectMode',false)],
+      ]},
+      { label:'Display', rows:[
+        ['buttonText', inp('buttonText','','text')],
+        ['singleTriggerLabel', inp('singleTriggerLabel','Select date','text')],
+        ['endDatePlaceholder', inp('endDatePlaceholder','Check-out','text')],
+        ['footerText', inp('footerText','','text')],
+        ['footerRangeOption', sel('footerRangeOption',['nights','days'],'nights')],
+        ['triggeredSelector', sel('triggeredSelector',['none','start','end'],'none')],
+      ]},
+      { label:'Deprecated', rows:[
+        ['cutoffDate', inp('cutoffDate','','date'), false, true],
+        ['validStartDate', inp('validStartDate','','date'), false, true],
+      ]},
+    ];
+
+    sections.forEach(sec => {
+      panel.appendChild(div('pg-cat-label', sec.label));
+      sec.rows.forEach(([name, ctrl, req, dep]) => {
+        panel.appendChild(pgPropRow(name, req, ctrl, dep));
+      });
+      panel.appendChild(div('pg-divider'));
+    });
+
+    const advLbl = div('pg-cat-label');
+    advLbl.innerHTML = 'Advanced <span style="font-size:10px;color:var(--text-3);font-weight:400;text-transform:none;letter-spacing:0">callbacks</span>';
+    panel.appendChild(advLbl);
+    ['onDateChange','onFocusedInputChange','onOpen','onClose','onApply','onClear','renderCalendarDay','customFooter','renderTrigger'].forEach(name => {
+      const r = document.createElement('div');
+      r.className = 'pg-advanced-row';
+      r.innerHTML = `<span class="pg-prop-name">${name}</span><span class="pg-adv-type">function</span>`;
+      panel.appendChild(r);
+    });
+
+    sidebar.appendChild(panel);
+    return sidebar;
+  }
+
+  // Preview pane
+  const preview = document.createElement('div');
+  preview.className = 'pg3-preview';
+
+  const previewHd = div('pg-preview-hd');
+  previewHd.innerHTML = `<h2 id="pg3-preview-title">Live preview</h2><span style="font-size:11px;color:var(--text-3)">Props update instantly</span><button class="btn btn-outline" style="margin-left:auto" onclick="go('pg3')"><i class="ti ti-refresh"></i>Reset</button>`;
+  preview.appendChild(previewHd);
+
+  const stage = div('pg-stage');
+  const stageInner = div('pg-stage-inner');
+  stageInner.id = 'pg3-stage';
+  stageInner.innerHTML = pgDatePickerPreview(st);
+  stage.appendChild(stageInner);
+  preview.appendChild(stage);
+
+  // Assemble main with correct side ordering
+  function assembleSides() {
+    main.innerHTML = '';
+    const sidebar = buildControlsSidebar();
+    if(controlsSide === 'left') {
+      main.appendChild(sidebar);
+      main.appendChild(preview);
+    } else {
+      main.appendChild(preview);
+      main.appendChild(sidebar);
+    }
+  }
+  assembleSides();
+  w.appendChild(main);
+
+  // ── Resize handle ────────────────────────────────────────────────────────
+  const resizeHandle = div('pg3-resize-handle');
+  resizeHandle.title = 'Drag to resize';
+  w.appendChild(resizeHandle);
+
+  // ── Bottom panel ─────────────────────────────────────────────────────────
+  const bottom = document.createElement('div');
+  bottom.className = 'pg3-bottom';
+  bottom.style.height = bottomH + 'px';
+
+  const tabBar = div('pg3-bottom-tabs');
+  const tabs3 = [
+    {id:'code',  label:'Code',          icon:'ti-code'},
+    {id:'api',   label:'API reference', icon:'ti-table'},
+    {id:'a11y',  label:'Accessibility', icon:'ti-accessible'},
+  ];
+  tabs3.forEach(t => {
+    const btn = document.createElement('button');
+    btn.className = 'pg3-bottom-tab' + (t.id===activeTab?' active':'');
+    btn.id = 'pg3-btab-'+t.id;
+    btn.innerHTML = `<i class="ti ${t.icon}" style="font-size:13px"></i>${t.label}`;
+    btn.onclick = () => {
+      activeTab = t.id;
+      tabs3.forEach(tt => { const b=document.getElementById('pg3-btab-'+tt.id); if(b)b.classList.toggle('active',tt.id===t.id); });
+      renderBottomPanel();
+    };
+    tabBar.appendChild(btn);
+  });
+
+  // Height display chip in tab bar
+  const heightChip = document.createElement('span');
+  heightChip.style.cssText = 'margin-left:auto;font-size:10px;color:var(--text-3);font-family:var(--mono);padding:0 4px;align-self:center';
+  heightChip.id = 'pg3-height-chip';
+  heightChip.textContent = bottomH + 'px';
+  tabBar.appendChild(heightChip);
+
+  bottom.appendChild(tabBar);
+  const bottomPanelWrap = div('pg3-bottom-panel');
+  bottomPanelWrap.id = 'pg3-bottom-panel';
+  bottom.appendChild(bottomPanelWrap);
+  w.appendChild(bottom);
+
+  // ── Code gen helper ──────────────────────────────────────────────────────
+  function buildPg3Code() {
+    const props = [];
+    if(st.renderType!=='dialog') props.push(`  renderType="${st.renderType}"`);
+    if(st.singleMode) props.push(`  singleMode`);
+    if(st.singleDateSelect) props.push(`  singleDateSelect`);
+    if(st.useSingleTrigger) props.push(`  useSingleTrigger`);
+    if(st.disabled) props.push(`  disabled`);
+    if(!st.clear) props.push(`  clear={false}`);
+    if(!st.doubleMonths) props.push(`  doubleMonths={false}`);
+    if(st.manualEditModeEnabled) props.push(`  manualEditModeEnabled`);
+    if(st.preventAutoFocus) props.push(`  preventAutoFocus`);
+    if(st.yearMonthSelectMode) props.push(`  yearMonthSelectMode`);
+    if(st.buttonText) props.push(`  buttonText="${st.buttonText}"`);
+    if(st.singleTriggerLabel&&st.singleTriggerLabel!=='Select date') props.push(`  singleTriggerLabel="${st.singleTriggerLabel}"`);
+    if(st.endDatePlaceholder&&st.endDatePlaceholder!=='Check-out') props.push(`  endDatePlaceholder="${st.endDatePlaceholder}"`);
+    if(st.footerText) props.push(`  footerText="${st.footerText}"`);
+    if(st.footerRangeOption!=='nights') props.push(`  footerRangeOption="${st.footerRangeOption}"`);
+    if(st.triggeredSelector!=='none') props.push(`  triggeredSelector="${st.triggeredSelector}"`);
+    if(st.daysBookableInAdvance!==500) props.push(`  daysBookableInAdvance={${st.daysBookableInAdvance}}`);
+    if(st.midnightBookingOffset!==4) props.push(`  midnightBookingOffset={${st.midnightBookingOffset}}`);
+    if(st.startDate) props.push(`  startDate="${st.startDate}"`);
+    if(st.endDate) props.push(`  endDate="${st.endDate}"`);
+    if(st.firstSelectableDate) props.push(`  firstSelectableDate="${st.firstSelectableDate}"`);
+    if(st.lastSelectableDate) props.push(`  lastSelectableDate="${st.lastSelectableDate}"`);
+    const inner = props.length ? '\n'+props.join('\n')+'\n' : '';
+    return `<span class="kw">import</span> { <span class="fn">DatePicker</span> } <span class="kw">from</span> <span class="str">'@uitk/components'</span>;\n\n<span class="kw">function</span> <span class="fn">Example</span>() {\n  <span class="kw">return</span> (\n    &lt;<span class="fn">DatePicker</span>${inner.replace(/\n/g,'\n    ')}    <span class="attr">startDate</span>={<span class="fn">startDate</span>}\n    <span class="attr">onDateChange</span>={<span class="fn">handleChange</span>}\n  /&gt;\n  );\n}`;
+  }
+
+  function updateBottomCode() {
+    const el = document.getElementById('pg3-code-content');
+    if(el) el.innerHTML = buildPg3Code();
+  }
+
+  // ── Bottom panel renderer ────────────────────────────────────────────────
+  function renderBottomPanel() {
+    bottomPanelWrap.innerHTML = '';
+
+    if(activeTab === 'code') {
+      const wrap = div('pg2-code-wrap');
+      wrap.innerHTML = `
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <div>
+            <div style="font-size:13px;font-weight:600;color:var(--text-1);margin-bottom:3px">Generated code</div>
+            <div style="font-size:12px;color:var(--text-2)">Updates live as you change props in the controls panel.</div>
+          </div>
+          <button class="btn btn-outline" onclick="navigator.clipboard.writeText(document.getElementById('pg3-code-content').textContent)"><i class="ti ti-copy"></i>Copy</button>
+        </div>
+        <div class="code-wrap" style="margin-bottom:12px">
+          <div class="code-header"><button class="code-lang active">TSX</button></div>
+          <pre class="code" id="pg3-code-content">${buildPg3Code()}</pre>
+        </div>
+        <div class="code-wrap">
+          <div class="code-header"><button class="code-lang active">Install</button></div>
+          <pre class="code"><span class="cm"># npm</span>\nnpm install <span class="str">@uitk/components</span>\n\n<span class="cm"># yarn</span>\nyarn add <span class="str">@uitk/components</span></pre>
+        </div>`;
+      bottomPanelWrap.appendChild(wrap);
+
+    } else if(activeTab === 'api') {
+      const allProps = [
+        ['startDate','Date','—','Required. Currently selected start date.','','true'],
+        ['endDate','Date','—','Currently selected end date.','','false'],
+        ['renderType','"dialog" | "menu"','"dialog"','How the calendar is presented.','','false'],
+        ['singleMode','boolean','false','Single-date selection mode.','','false'],
+        ['singleDateSelect','boolean','false','Allow selecting one date in range mode.','','false'],
+        ['useSingleTrigger','boolean','false','Single button trigger instead of two.','','false'],
+        ['disabled','boolean','false','Disables the component.','','false'],
+        ['clear','boolean','true','Show clear/reset button.','','false'],
+        ['doubleMonths','boolean','true','Show two calendar months side by side.','','false'],
+        ['manualEditModeEnabled','boolean','false','Allow keyboard date entry.','','false'],
+        ['preventAutoFocus','boolean','false','Prevent auto-focusing start input on open.','','false'],
+        ['yearMonthSelectMode','boolean','false','Year/month dropdowns in calendar header.','','false'],
+        ['buttonText','string','—','Custom label for the single trigger.','','false'],
+        ['singleTriggerLabel','string','"Select date"','Accessible label for single trigger.','','false'],
+        ['endDatePlaceholder','string','"Check-out"','Placeholder for end date trigger.','','false'],
+        ['footerText','string','—','Static text in calendar footer.','','false'],
+        ['footerRangeOption','"nights" | "days"','"nights"','Unit for selected range in footer.','','false'],
+        ['triggeredSelector','"start" | "end" | "none"','"none"','Which input opens calendar on mount.','','false'],
+        ['daysBookableInAdvance','number','500','Max future days selectable.','','false'],
+        ['midnightBookingOffset','number','4','Hours past midnight treated as same day.','','false'],
+        ['firstSelectableDate','Date','—','Earliest selectable date.','','false'],
+        ['lastSelectableDate','Date','—','Latest selectable date.','','false'],
+        ['onDateChange','function','—','Called when dates change. Receives {startDate, endDate}.','','false'],
+        ['onFocusedInputChange','function','—','Called when focused input (start/end) changes.','','false'],
+        ['onOpen','function','—','Called when calendar opens.','','false'],
+        ['onClose','function','—','Called when calendar closes.','','false'],
+        ['onApply','function','—','Called when user confirms selection.','','false'],
+        ['onClear','function','—','Called when user clears selection.','','false'],
+        ['renderCalendarDay','function','—','Custom renderer for individual day cells.','','false'],
+        ['customFooter','ReactNode','—','Custom footer replacing the default.','','false'],
+        ['cutoffDate','Date','—','Deprecated — use lastSelectableDate.','dep','false'],
+        ['validStartDate','Date','—','Deprecated — use firstSelectableDate.','dep','false'],
+      ];
+      const table = document.createElement('table');
+      table.className = 'pg2-api-table';
+      table.style.marginBottom = '0';
+      table.innerHTML = `<thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th><th style="text-align:center">Req</th></tr></thead>`;
+      const tbody = document.createElement('tbody');
+      allProps.forEach(([name,type,def,desc,dep,req]) => {
+        const tr = document.createElement('tr');
+        const depBadge = dep ? ` <span style="display:inline-flex;padding:1px 5px;border-radius:2px;font-size:9px;font-weight:600;text-transform:uppercase;background:var(--danger-bg);color:var(--danger-fg);border:1px solid var(--danger-border);font-family:var(--font)">dep</span>` : '';
+        const reqBadge = req==='true' ? ` <span style="display:inline-flex;padding:1px 5px;border-radius:2px;font-size:9px;font-weight:600;text-transform:uppercase;background:var(--danger-bg);color:var(--danger-fg);border:1px solid var(--danger-border);font-family:var(--font)">req</span>` : '';
+        tr.innerHTML = `
+          <td class="mono" style="white-space:nowrap">${name}${depBadge}${reqBadge}</td>
+          <td><code style="font-family:var(--mono);font-size:11px;background:var(--bg);padding:2px 6px;border-radius:var(--radius-sm);border:1px solid var(--border)">${type}</code></td>
+          <td class="mono" style="color:var(--text-3)">${def}</td>
+          <td style="color:var(--text-2)">${desc}</td>
+          <td style="text-align:center">${req==='true'?'<i class="ti ti-check" style="color:var(--success-fg)"></i>':'<span style="color:var(--text-3)">—</span>'}</td>`;
+        tbody.appendChild(tr);
+      });
+      table.appendChild(tbody);
+      bottomPanelWrap.appendChild(table);
+
+    } else if(activeTab === 'a11y') {
+      const wrap = div('pg2-a11y-section');
+      wrap.innerHTML = `
+        <h3 style="margin-bottom:14px">Keyboard interactions</h3>
+        ${[
+          ['Tab / Shift+Tab','Move focus between triggers and calendar'],
+          ['Enter / Space','Open calendar or select focused date'],
+          ['Arrow keys','Navigate between days in the open calendar'],
+          ['Page Up / Down','Navigate months'],
+          ['Home / End','Jump to first or last day of the week'],
+          ['Escape','Close calendar, return focus to trigger'],
+        ].map(([k,d])=>`<div class="pg2-a11y-row"><code style="font-family:var(--mono);font-size:11px;background:var(--bg);padding:3px 8px;border-radius:var(--radius-sm);border:1px solid var(--border);white-space:nowrap;flex-shrink:0">${k}</code><span style="font-size:12px;color:var(--text-2)">${d}</span></div>`).join('')}
+        <h3 style="margin:18px 0 14px">ARIA attributes</h3>
+        ${[
+          ['role="dialog"','Applied to the calendar popover when renderType is dialog'],
+          ['aria-modal="true"','Set on dialog calendar to trap screen reader'],
+          ['aria-label','Each trigger button has a descriptive accessible label'],
+          ['aria-selected','Applied to selected date cells'],
+          ['aria-disabled','Applied to blocked or unavailable date cells'],
+          ['aria-live="polite"','Announces month navigation changes to screen readers'],
+        ].map(([a,d])=>`<div class="pg2-a11y-row"><code style="font-family:var(--mono);font-size:11px;background:var(--bg);padding:3px 8px;border-radius:var(--radius-sm);border:1px solid var(--border);white-space:nowrap;flex-shrink:0">${a}</code><span style="font-size:12px;color:var(--text-2)">${d}</span></div>`).join('')}
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px">
+          ${[['WCAG 2.1 AA','Compliant'],['Keyboard nav','Full support'],['Screen reader','ARIA live regions'],['Focus trap','Dialog mode']].map(([l,v])=>`
+            <div style="background:var(--success-bg);border:1px solid var(--success-border);border-radius:var(--radius-md);padding:12px 14px">
+              <div style="font-size:10px;color:var(--success-fg);font-weight:600;margin-bottom:3px;text-transform:uppercase;letter-spacing:.04em">${l}</div>
+              <div style="font-size:12px;font-weight:500;color:var(--text-1)">${v}</div>
+            </div>`).join('')}
+        </div>`;
+      bottomPanelWrap.appendChild(wrap);
+    }
+  }
+
+  renderBottomPanel();
+
+  // ── Side toggle wiring ───────────────────────────────────────────────────
+  setTimeout(() => {
+    const sideBtn = document.getElementById('pg3-side-btn');
+    const sideIcon = document.getElementById('pg3-side-icon');
+    const sideLbl = document.getElementById('pg3-side-label');
+    if(sideBtn) sideBtn.onclick = () => {
+      controlsSide = controlsSide === 'left' ? 'right' : 'left';
+      sideIcon.className = controlsSide === 'left' ? 'ti ti-layout-sidebar' : 'ti ti-layout-sidebar-right';
+      sideLbl.textContent = controlsSide === 'left' ? 'Left' : 'Right';
+      assembleSides();
+      // re-stage since assembleSides rebuilds
+      const s2 = document.getElementById('pg3-stage');
+      if(s2) s2.innerHTML = pgDatePickerPreview(st);
+    };
+  }, 0);
+
+  // ── Drag-to-resize ───────────────────────────────────────────────────────
+  let isDragging = false, dragStartY = 0, dragStartH = 0;
+
+  resizeHandle.addEventListener('mousedown', e => {
+    isDragging = true;
+    dragStartY = e.clientY;
+    dragStartH = bottomH;
+    resizeHandle.classList.add('dragging');
+    document.body.style.userSelect = 'none';
+    document.body.style.cursor = 'row-resize';
+
+    function onMove(e2) {
+      if(!isDragging) return;
+      const delta = dragStartY - e2.clientY; // drag up = bigger panel
+      bottomH = Math.max(100, Math.min(560, dragStartH + delta));
+      bottom.style.height = bottomH + 'px';
+      const chip = document.getElementById('pg3-height-chip');
+      if(chip) chip.textContent = Math.round(bottomH) + 'px';
+    }
+
+    function onUp() {
+      isDragging = false;
+      resizeHandle.classList.remove('dragging');
+      document.body.style.userSelect = '';
+      document.body.style.cursor = '';
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onUp);
+    }
+
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+    e.preventDefault();
+  });
+
+  return w;
+}
+
+function sc404() {
+  const w=div('page-full');
+  w.style.height='100%';
+  w.innerHTML=`
+    <div class="notfound">
+      <div class="nf-code">404</div>
+      <h2>Page not found</h2>
+      <p>That page doesn't exist or may have been moved. Try searching, or go back home.</p>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-primary" onclick="go(0)"><i class="ti ti-home-2"></i>Home</button>
+        <button class="btn btn-outline" onclick="go(5)"><i class="ti ti-search"></i>Search</button>
+      </div>
+    </div>
+  `;
+  return w;
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────
+render();
+
+// ── Keyboard ──────────────────────────────────────────────────────────────
+document.addEventListener('keydown',e=>{
+  if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();go(5);}
+  if(e.key==='Escape'&&S===5)go(0);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,3084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loyalty Enrollment — All 9 Concepts</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --card-max: 663px;
+    --radius-card: 10px;
+    --radius-sm: 6px;
+    --radius-xs: 4px;
+    --border: 1px solid #e0e0e0;
+    --border-focus: 1px solid #888;
+    --shadow-card: 0 1px 4px rgba(0,0,0,.08), 0 0 0 1px rgba(0,0,0,.06);
+    --shadow-elevated: 0 4px 16px rgba(0,0,0,.12);
+
+    --gray-0: #ffffff;
+    --gray-50: #f7f7f7;
+    --gray-100: #efefef;
+    --gray-200: #e0e0e0;
+    --gray-300: #cacaca;
+    --gray-400: #aaaaaa;
+    --gray-500: #888888;
+    --gray-600: #666666;
+    --gray-700: #444444;
+    --gray-800: #222222;
+    --gray-900: #111111;
+
+    --accent: #1a1a1a;
+    --accent-soft: #f0f0f0;
+    --green: #2d7a3a;
+    --green-bg: #edf7ef;
+    --amber: #7a5c00;
+    --amber-bg: #fef9ec;
+    --amber-border: #e8c84a;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    background: #f2f2f2;
+    color: var(--gray-800);
+    padding: 48px 24px 80px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  /* ── Page header ── */
+  .page-header {
+    max-width: 760px;
+    margin: 0 auto 48px;
+  }
+  .page-header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--gray-900);
+    letter-spacing: -.3px;
+    margin-bottom: 6px;
+  }
+  .page-header p {
+    font-size: 13px;
+    color: var(--gray-500);
+    line-height: 1.6;
+    max-width: 560px;
+  }
+  .page-header .meta {
+    display: flex;
+    gap: 16px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+  .badge-meta {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .4px;
+    text-transform: uppercase;
+    color: var(--gray-500);
+    background: var(--gray-100);
+    border: var(--border);
+    padding: 4px 10px;
+    border-radius: 20px;
+  }
+
+  /* ── Concept sections ── */
+  .concept-section {
+    max-width: 760px;
+    margin: 0 auto 64px;
+  }
+  .concept-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .concept-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--gray-800);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .concept-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--gray-900);
+    letter-spacing: -.2px;
+  }
+  .concept-desc {
+    font-size: 12px;
+    color: var(--gray-500);
+    margin-left: 38px;
+    margin-top: -14px;
+    margin-bottom: 20px;
+    line-height: 1.6;
+    max-width: 500px;
+  }
+
+  /* ── States row ── */
+  .states-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .state-col {
+    flex: 1;
+    min-width: 200px;
+    max-width: 230px;
+  }
+  .state-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .8px;
+    text-transform: uppercase;
+    color: var(--gray-400);
+    margin-bottom: 10px;
+    padding-left: 2px;
+  }
+
+  /* ── Base hotel card ── */
+  .hotel-card {
+    width: 100%;
+    max-width: var(--card-max);
+    background: var(--gray-0);
+    border: var(--border);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .preferred-tag {
+    position: absolute;
+    top: -1px;
+    left: 12px;
+    background: var(--amber-bg);
+    border: 1px solid var(--amber-border);
+    border-top: none;
+    border-radius: 0 0 var(--radius-xs) var(--radius-xs);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .3px;
+    color: var(--amber);
+    padding: 3px 8px 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .preferred-tag svg { width: 9px; height: 9px; }
+
+  .card-body {
+    display: flex;
+    align-items: stretch;
+    padding: 14px 14px 14px 14px;
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  .card-img {
+    width: 110px;
+    height: 90px;
+    border-radius: var(--radius-sm);
+    background: var(--gray-200);
+    flex-shrink: 0;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .card-img-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--gray-200) 0%, var(--gray-300) 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+  }
+  .img-icon { font-size: 18px; opacity: .4; }
+  .img-label { font-size: 9px; color: var(--gray-500); font-weight: 600; letter-spacing: .4px; text-transform: uppercase; }
+
+  /* nav arrows */
+  .img-arrow {
+    position: absolute;
+    top: 50%; transform: translateY(-50%);
+    width: 20px; height: 20px;
+    background: rgba(0,0,0,.35);
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    font-size: 10px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .img-arrow.left { left: 4px; }
+  .img-arrow.right { right: 4px; }
+
+  .card-info { flex: 1; min-width: 0; }
+  .hotel-name { font-size: 14px; font-weight: 700; color: var(--gray-900); margin-bottom: 3px; line-height: 1.3; }
+  .hotel-meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-size: 11px; color: var(--gray-500); margin-bottom: 5px; }
+  .stars { color: var(--gray-700); letter-spacing: 1px; font-size: 10px; }
+  .dot { color: var(--gray-300); }
+  .eco-badge {
+    font-size: 10px; font-weight: 600; color: var(--green);
+    background: var(--green-bg); padding: 2px 6px;
+    border-radius: 3px; display: inline-flex; align-items: center; gap: 3px;
+  }
+  .coworker-line { font-size: 11px; color: var(--gray-600); margin-bottom: 4px; }
+  .coworker-pct { font-weight: 700; color: var(--gray-800); }
+  .rating-line { font-size: 11px; color: var(--gray-500); }
+  .rating-score { font-weight: 700; color: var(--gray-800); }
+
+  .card-price {
+    text-align: right;
+    flex-shrink: 0;
+    padding-left: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-start;
+    padding-top: 2px;
+  }
+  .price-from { font-size: 10px; color: var(--gray-500); }
+  .price-amount { font-size: 22px; font-weight: 800; color: var(--gray-900); letter-spacing: -1px; line-height: 1.1; }
+  .price-taxes { font-size: 10px; color: var(--gray-500); margin-top: 2px; }
+  .price-pay { font-size: 10px; color: var(--gray-500); }
+
+  /* divider */
+  .card-divider { height: 1px; background: var(--gray-100); margin: 0 14px; }
+
+  /* ── LOYALTY ZONES ── */
+
+  /* ── CONCEPT A: Inline strip ── */
+  .loyalty-strip {
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--gray-50);
+    border-radius: 0 0 var(--radius-card) var(--radius-card);
+    cursor: pointer;
+    transition: background .15s;
+    position: relative;
+  }
+  .loyalty-strip:hover { background: var(--gray-100); }
+
+  .loyalty-icon-wrap {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: var(--gray-200);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 13px;
+  }
+
+  .loyalty-strip-text { flex: 1; min-width: 0; }
+  .loyalty-strip-headline { font-size: 12px; font-weight: 600; color: var(--gray-800); line-height: 1.3; }
+  .loyalty-strip-sub { font-size: 11px; color: var(--gray-500); margin-top: 1px; }
+  .loyalty-pts { font-weight: 700; color: var(--gray-800); }
+
+  .enroll-btn-sm {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--gray-0);
+    background: var(--gray-800);
+    border: none;
+    border-radius: var(--radius-xs);
+    padding: 6px 12px;
+    cursor: pointer;
+    flex-shrink: 0;
+    white-space: nowrap;
+    transition: background .15s;
+  }
+  .enroll-btn-sm:hover { background: var(--gray-700); }
+
+  /* strip — enrolling state */
+  .loyalty-strip.enrolling {
+    background: var(--gray-50);
+    cursor: default;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .enrollment-form-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .enroll-input {
+    flex: 1;
+    height: 32px;
+    border: var(--border-focus);
+    border-radius: var(--radius-xs);
+    padding: 0 10px;
+    font-size: 12px;
+    color: var(--gray-800);
+    background: var(--gray-0);
+    outline: none;
+    font-family: inherit;
+  }
+  .enroll-input:focus { border-color: var(--gray-800); box-shadow: 0 0 0 2px rgba(0,0,0,.06); }
+  .btn-confirm {
+    height: 32px;
+    padding: 0 14px;
+    background: var(--gray-900);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    border: none;
+    border-radius: var(--radius-xs);
+    cursor: pointer;
+    white-space: nowrap;
+    font-family: inherit;
+  }
+  .btn-ghost {
+    height: 32px;
+    padding: 0 10px;
+    background: transparent;
+    color: var(--gray-500);
+    font-size: 11px;
+    border: var(--border);
+    border-radius: var(--radius-xs);
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .form-hint { font-size: 10px; color: var(--gray-400); }
+
+  /* strip — enrolled state */
+  .loyalty-strip.enrolled {
+    background: var(--green-bg);
+    border-top: 1px solid #c8e8cc;
+    cursor: default;
+  }
+  .enrolled-icon {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--green);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+  .enrolled-headline { font-size: 12px; font-weight: 700; color: var(--green); }
+  .enrolled-sub { font-size: 11px; color: var(--green); opacity: .75; }
+
+  /* ── CONCEPT B: Expandable loyalty row within card ── */
+  .loyalty-row {
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 0 0 var(--radius-card) var(--radius-card);
+    background: var(--gray-0);
+    cursor: pointer;
+    position: relative;
+  }
+  .loyalty-row:hover { background: var(--gray-50); }
+
+  .loyalty-pill-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--gray-100);
+    border: var(--border);
+    border-radius: 20px;
+    padding: 3px 8px 3px 6px;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--gray-600);
+    white-space: nowrap;
+  }
+  .loyalty-pill-badge.amber {
+    background: var(--amber-bg);
+    border-color: #e0c44a;
+    color: var(--amber);
+  }
+  .loyalty-pill-badge.green {
+    background: var(--green-bg);
+    border-color: #b8ddc0;
+    color: var(--green);
+  }
+  .loyalty-pill-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: .6;
+  }
+
+  .loyalty-row-text { flex: 1; font-size: 11px; color: var(--gray-600); }
+  .loyalty-row-action { font-size: 11px; font-weight: 600; color: var(--gray-800); text-decoration: underline; text-underline-offset: 2px; cursor: pointer; white-space: nowrap; }
+
+  .expand-chevron {
+    width: 16px; height: 16px;
+    color: var(--gray-400);
+    transition: transform .2s;
+    flex-shrink: 0;
+  }
+  .expand-chevron.open { transform: rotate(180deg); }
+
+  /* expanded drawer */
+  .loyalty-drawer {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height .25s ease;
+    background: var(--gray-50);
+    border-top: 1px solid var(--gray-100);
+    border-radius: 0 0 var(--radius-card) var(--radius-card);
+  }
+  .loyalty-drawer.open { max-height: 200px; }
+  .loyalty-drawer-inner { padding: 12px 14px 14px; }
+  .drawer-headline { font-size: 12px; font-weight: 700; color: var(--gray-900); margin-bottom: 4px; }
+  .drawer-sub { font-size: 11px; color: var(--gray-500); margin-bottom: 10px; line-height: 1.5; }
+  .drawer-form { display: flex; gap: 8px; align-items: center; }
+  .drawer-form .enroll-input { background: var(--gray-0); }
+
+  /* enrolled row */
+  .loyalty-row.enrolled-row {
+    background: var(--green-bg);
+    border-top: 1px solid #c8e8cc;
+    cursor: default;
+  }
+  .loyalty-row.enrolled-row:hover { background: var(--green-bg); }
+
+  /* ── CONCEPT C: Tooltip prompt ── */
+  .loyalty-tooltip-anchor {
+    padding: 10px 14px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    background: var(--gray-0);
+    border-radius: 0 0 var(--radius-card) var(--radius-card);
+    position: relative;
+  }
+
+  .loyalty-chip-group { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+
+  .loyalty-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .1px;
+    border: 1px dashed var(--gray-300);
+    background: var(--gray-50);
+    color: var(--gray-600);
+    cursor: pointer;
+    transition: all .15s;
+    position: relative;
+  }
+  .loyalty-chip:hover { border-style: solid; border-color: var(--gray-500); background: var(--gray-100); }
+  .loyalty-chip.active-chip {
+    border: 1px solid var(--gray-800);
+    background: var(--gray-900);
+    color: #fff;
+  }
+  .loyalty-chip.enrolled-chip {
+    border: 1px solid #b8ddc0;
+    background: var(--green-bg);
+    color: var(--green);
+  }
+  .chip-pts { font-weight: 800; }
+
+  /* tooltip popover */
+  .loyalty-tooltip {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 14px;
+    background: var(--gray-900);
+    color: #fff;
+    border-radius: 8px;
+    padding: 12px 14px;
+    width: 260px;
+    box-shadow: var(--shadow-elevated);
+    z-index: 100;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity .15s, transform .15s;
+  }
+  .loyalty-tooltip.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+  }
+  .tooltip-arrow {
+    position: absolute;
+    bottom: -5px;
+    left: 20px;
+    width: 10px; height: 10px;
+    background: var(--gray-900);
+    transform: rotate(45deg);
+    border-radius: 1px;
+  }
+  .tooltip-headline { font-size: 12px; font-weight: 700; margin-bottom: 4px; }
+  .tooltip-body { font-size: 11px; opacity: .75; line-height: 1.5; margin-bottom: 10px; }
+  .tooltip-actions { display: flex; gap: 8px; }
+  .tooltip-btn-primary {
+    flex: 1;
+    height: 30px;
+    background: #fff;
+    color: var(--gray-900);
+    border: none;
+    border-radius: var(--radius-xs);
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .tooltip-btn-ghost {
+    height: 30px;
+    padding: 0 12px;
+    background: transparent;
+    color: rgba(255,255,255,.6);
+    border: 1px solid rgba(255,255,255,.2);
+    border-radius: var(--radius-xs);
+    font-size: 11px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  /* c inline form replacing chip row */
+  .c-enroll-form-row {
+    display: flex; gap: 8px; align-items: center; flex: 1;
+  }
+  .c-pts-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 600;
+    border: 1px solid #b8ddc0;
+    background: var(--green-bg);
+    color: var(--green);
+  }
+
+  /* ── Divider ── */
+  .section-divider {
+    max-width: 760px;
+    margin: 0 auto 48px;
+    height: 1px;
+    background: var(--gray-200);
+  }
+
+  /* ── Interactive instruction note ── */
+  .interaction-note {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--gray-500);
+    background: var(--gray-100);
+    border: var(--border);
+    padding: 5px 10px;
+    border-radius: 20px;
+    margin-bottom: 18px;
+  }
+  .note-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gray-800); }
+
+  /* ── Full-width live demo ── */
+  .live-demo-wrap {
+    background: #e8e8e8;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 28px;
+  }
+  .live-demo-label {
+    font-size: 10px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase;
+    color: var(--gray-500); margin-bottom: 16px;
+  }
+
+  /* ── Annotation ── */
+  .annotation-row {
+    display: flex; gap: 16px; flex-wrap: wrap; margin-top: 16px;
+  }
+  .annotation {
+    flex: 1; min-width: 160px;
+    background: var(--gray-0);
+    border: var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+  }
+  .annotation-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--gray-500); margin-bottom: 4px; }
+  .annotation-body { font-size: 11px; color: var(--gray-700); line-height: 1.6; }
+
+  /* ── State static breakdowns ── */
+  .breakdowns-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 12px;
+  }
+  @media (max-width: 600px) {
+    .breakdowns-grid { grid-template-columns: 1fr; }
+    .states-row { flex-direction: column; }
+    .state-col { max-width: 100%; }
+  }
+  .bd-state-label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .7px;
+    color: var(--gray-400); margin-bottom: 8px;
+  }
+
+  /* ── Hover behavior for non-interactive states ── */
+  .static-card { cursor: default; pointer-events: none; }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 3px; }
+
+  /* ── CONCEPT D: Split card panel ── */
+  .split-card-body {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+  }
+  .split-hotel-col {
+    flex: 1;
+    display: flex;
+    align-items: stretch;
+    padding: 14px;
+    gap: 12px;
+    margin-top: 16px;
+    min-width: 0;
+  }
+  .split-divider-v {
+    width: 1px;
+    background: var(--gray-100);
+    margin: 12px 0;
+    flex-shrink: 0;
+  }
+  .split-loyalty-col {
+    width: 176px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 14px 14px 14px 16px;
+    margin-top: 16px;
+    justify-content: center;
+    gap: 8px;
+  }
+  .split-loyalty-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    color: var(--gray-400);
+    margin-bottom: 2px;
+  }
+  .split-pts-value {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--gray-900);
+    letter-spacing: -1px;
+    line-height: 1;
+  }
+  .split-pts-label {
+    font-size: 10px;
+    color: var(--gray-500);
+    margin-top: 1px;
+  }
+  .split-pts-sub {
+    font-size: 11px;
+    color: var(--gray-500);
+    line-height: 1.4;
+    margin-top: 2px;
+  }
+  .split-enroll-btn {
+    margin-top: 4px;
+    height: 30px;
+    background: var(--gray-900);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-xs);
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    width: 100%;
+    transition: background .15s;
+  }
+  .split-enroll-btn:hover { background: var(--gray-700); }
+
+  /* split — form state */
+  #d-panel-form {
+    flex-direction: column;
+    gap: 7px;
+    justify-content: center;
+    display: none;
+  }
+  .split-form-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--gray-700);
+    text-transform: uppercase;
+    letter-spacing: .4px;
+  }
+  .split-form-hint {
+    font-size: 10px;
+    color: var(--gray-400);
+    line-height: 1.4;
+    margin-top: -2px;
+  }
+  .split-form-input {
+    height: 30px;
+    border: var(--border-focus);
+    border-radius: var(--radius-xs);
+    padding: 0 8px;
+    font-size: 11px;
+    font-family: inherit;
+    outline: none;
+    color: var(--gray-800);
+  }
+  .split-form-input:focus { border-color: var(--gray-900); box-shadow: 0 0 0 2px rgba(0,0,0,.06); }
+  .split-form-actions { display: flex; gap: 6px; }
+  .split-confirm-btn {
+    flex: 1; height: 28px;
+    background: var(--gray-900); color: #fff;
+    border: none; border-radius: var(--radius-xs);
+    font-size: 10px; font-weight: 700;
+    cursor: pointer; font-family: inherit;
+  }
+  .split-cancel-btn {
+    height: 28px; padding: 0 8px;
+    background: transparent; color: var(--gray-500);
+    border: var(--border); border-radius: var(--radius-xs);
+    font-size: 10px; cursor: pointer; font-family: inherit;
+  }
+
+  /* split — enrolled state */
+  #d-panel-enrolled {
+    flex-direction: column;
+    gap: 5px;
+    justify-content: center;
+    display: none;
+    background: var(--green-bg);
+    margin: -14px -14px -14px -16px;
+    padding: 14px 14px 14px 16px;
+    border-radius: 0 var(--radius-card) var(--radius-card) 0;
+  }
+  .d-enrolled-check {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--green);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .d-enrolled-pts {
+    font-size: 18px; font-weight: 800; color: var(--green); letter-spacing: -.5px; line-height: 1;
+  }
+  .d-enrolled-label { font-size: 10px; color: var(--green); font-weight: 600; opacity: .8; }
+  .d-enrolled-num { font-size: 10px; color: var(--green); opacity: .65; margin-top: 1px; }
+
+  /* ── CONCEPT E: Notification banner ── */
+  .e-banner {
+    margin: 0 10px 0;
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    border: 1px solid var(--amber-border);
+    border-bottom: none;
+    overflow: hidden;
+    transition: background .3s, border-color .3s;
+  }
+  .e-banner-amber { background: var(--amber-bg); }
+  .e-banner-green { background: var(--green-bg); border-color: #b8ddc0; }
+
+  .e-banner-inner {
+    padding: 9px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .e-banner-icon {
+    font-size: 14px; flex-shrink: 0;
+  }
+  .e-banner-text { flex: 1; min-width: 0; }
+  .e-banner-headline { font-size: 11px; font-weight: 700; color: var(--gray-900); line-height: 1.3; }
+  .e-banner-sub { font-size: 10px; color: var(--gray-500); margin-top: 1px; }
+  .e-banner-actions { display: flex; gap: 6px; align-items: center; flex-shrink: 0; }
+  .e-enroll-btn {
+    height: 26px; padding: 0 10px;
+    background: var(--gray-900); color: #fff;
+    border: none; border-radius: var(--radius-xs);
+    font-size: 10px; font-weight: 700;
+    cursor: pointer; font-family: inherit; white-space: nowrap;
+  }
+  .e-dismiss-btn {
+    height: 26px; width: 26px;
+    background: transparent; color: var(--gray-400);
+    border: none; border-radius: var(--radius-xs);
+    font-size: 14px; cursor: pointer; font-family: inherit;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .e-dismiss-btn:hover { color: var(--gray-700); }
+
+  /* banner form state */
+  #e-banner-form {
+    align-items: center; gap: 8px; padding: 9px 12px;
+    display: none;
+  }
+  #e-banner-enrolled {
+    align-items: center; gap: 8px; padding: 9px 12px;
+    display: none;
+  }
+  .e-enrolled-icon {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: var(--green); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700; flex-shrink: 0;
+  }
+  .e-enrolled-headline { font-size: 11px; font-weight: 700; color: var(--green); }
+  .e-enrolled-num { font-size: 10px; color: var(--green); opacity: .7; }
+
+  .e-input {
+    height: 28px; flex: 1;
+    border: var(--border-focus); border-radius: var(--radius-xs);
+    padding: 0 8px; font-size: 11px;
+    font-family: inherit; outline: none;
+  }
+  .e-input:focus { border-color: var(--gray-900); }
+  .e-confirm-btn {
+    height: 28px; padding: 0 12px;
+    background: var(--gray-900); color: #fff;
+    border: none; border-radius: var(--radius-xs);
+    font-size: 10px; font-weight: 700;
+    cursor: pointer; font-family: inherit; white-space: nowrap;
+  }
+  .e-cancel-btn {
+    height: 28px; padding: 0 8px;
+    background: transparent; color: var(--gray-500);
+    border: var(--border); border-radius: var(--radius-xs);
+    font-size: 10px; cursor: pointer; font-family: inherit;
+  }
+  .e-card-body-wrapper { margin-top: 0; }
+
+  /* ── CONCEPT F: Image badge + slide-up panel ── */
+  .f-card-img-wrap {
+    position: relative;
+    width: 110px; height: 90px;
+    flex-shrink: 0;
+  }
+  .f-badge {
+    position: absolute;
+    bottom: 6px; left: 6px;
+    background: rgba(0,0,0,.72);
+    color: #fff;
+    font-size: 10px; font-weight: 700;
+    padding: 3px 7px;
+    border-radius: 20px;
+    cursor: pointer;
+    border: 1px solid rgba(255,255,255,.2);
+    white-space: nowrap;
+    transition: background .15s, border-color .15s;
+    z-index: 2;
+    user-select: none;
+  }
+  .f-badge:hover { background: rgba(0,0,0,.88); }
+  .f-badge.f-badge-active { background: var(--gray-900); border-color: rgba(255,255,255,.35); }
+  .f-badge.f-badge-enrolled { background: var(--green); border-color: transparent; }
+
+  .f-slide-panel {
+    background: var(--gray-50);
+    border-top: var(--border);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .28s ease;
+    border-radius: 0 0 var(--radius-card) var(--radius-card);
+  }
+  .f-slide-panel.f-slide-open { max-height: 160px; }
+
+  .f-slide-inner { padding: 14px 14px 16px; }
+  .f-slide-headline { font-size: 12px; font-weight: 700; color: var(--gray-900); margin-bottom: 3px; }
+  .f-slide-sub { font-size: 11px; color: var(--gray-500); margin-bottom: 10px; line-height: 1.5; }
+  .f-slide-form { display: flex; gap: 8px; align-items: center; }
+  .f-slide-input {
+    flex: 1; height: 32px;
+    border: var(--border-focus); border-radius: var(--radius-xs);
+    padding: 0 10px; font-size: 12px;
+    font-family: inherit; outline: none; background: #fff;
+  }
+  .f-slide-input:focus { border-color: var(--gray-900); box-shadow: 0 0 0 2px rgba(0,0,0,.06); }
+  .f-slide-confirm {
+    height: 32px; padding: 0 16px;
+    background: var(--gray-900); color: #fff;
+    border: none; border-radius: var(--radius-xs);
+    font-size: 11px; font-weight: 700;
+    cursor: pointer; font-family: inherit;
+  }
+  .f-slide-cancel {
+    height: 32px; padding: 0 10px;
+    background: transparent; color: var(--gray-500);
+    border: var(--border); border-radius: var(--radius-xs);
+    font-size: 11px; cursor: pointer; font-family: inherit;
+  }
+
+  .f-enrolled-strip {
+    padding: 9px 14px;
+    background: var(--green-bg);
+    border-top: 1px solid #c8e8cc;
+    border-radius: 0 0 var(--radius-card) var(--radius-card);
+    display: none;
+    align-items: center;
+    gap: 8px;
+  }
+  .f-enrolled-check {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: var(--green); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700; flex-shrink: 0;
+  }
+  .f-enrolled-headline { font-size: 11px; font-weight: 700; color: var(--green); }
+  .f-enrolled-num { font-size: 10px; color: var(--green); opacity: .7; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --radius-card: 10px;
+  --radius-sm: 6px;
+  --radius-xs: 4px;
+  --border: 1px solid #e0e0e0;
+  --shadow-card: 0 1px 4px rgba(0,0,0,.08), 0 0 0 1px rgba(0,0,0,.06);
+  --shadow-sheet: -4px 0 24px rgba(0,0,0,.12);
+  --shadow-elevated: 0 8px 32px rgba(0,0,0,.16);
+
+  --gray-0:   #ffffff;
+  --gray-50:  #f7f7f7;
+  --gray-100: #efefef;
+  --gray-200: #e0e0e0;
+  --gray-300: #cacaca;
+  --gray-400: #aaaaaa;
+  --gray-500: #888888;
+  --gray-600: #666666;
+  --gray-700: #444444;
+  --gray-800: #222222;
+  --gray-900: #111111;
+
+  --green:    #2d7a3a;
+  --green-bg: #edf7ef;
+  --green-border: #b8ddc0;
+  --amber:    #7a5c00;
+  --amber-bg: #fef9ec;
+  --amber-border: #e8c84a;
+
+  --sheet-width: 340px;
+  --sheet-width-wide: 400px;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  background: #f2f2f2;
+  color: var(--gray-800);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* ── Page header ── */
+.page-header {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 48px 24px 36px;
+}
+.page-header h1 { font-size: 22px; font-weight: 700; color: var(--gray-900); letter-spacing: -.3px; margin-bottom: 6px; }
+.page-header p { font-size: 13px; color: var(--gray-500); max-width: 560px; line-height: 1.6; }
+.meta { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+.badge-meta { font-size: 11px; font-weight: 600; letter-spacing: .4px; text-transform: uppercase; color: var(--gray-500); background: var(--gray-100); border: var(--border); padding: 4px 10px; border-radius: 20px; }
+
+/* ── Concept wrapper ── */
+.concept-block {
+  max-width: 900px;
+  margin: 0 auto 64px;
+  padding: 0 24px;
+}
+.concept-label { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.concept-num { width: 28px; height: 28px; border-radius: 50%; background: var(--gray-800); color: #fff; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.concept-title { font-size: 16px; font-weight: 700; color: var(--gray-900); letter-spacing: -.2px; }
+.concept-desc { font-size: 12px; color: var(--gray-500); margin-left: 38px; margin-bottom: 18px; line-height: 1.6; max-width: 540px; }
+.interaction-note { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; color: var(--gray-500); background: var(--gray-100); border: var(--border); padding: 5px 10px; border-radius: 20px; margin-left: 38px; margin-bottom: 18px; }
+.note-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gray-800); }
+.section-divider { max-width: 900px; margin: 0 auto 56px; padding: 0 24px; }
+.section-divider hr { border: none; height: 1px; background: var(--gray-200); }
+
+/* ── Demo viewport ── */
+.demo-viewport {
+  position: relative;
+  background: #e8e8e8;
+  border-radius: 12px;
+  overflow: hidden;
+  height: 520px;
+}
+.demo-viewport--tall { height: 620px; }
+.demo-label { position: absolute; top: 14px; left: 16px; font-size: 10px; font-weight: 700; letter-spacing: .7px; text-transform: uppercase; color: var(--gray-500); z-index: 1; }
+
+/* ── Mini SRP list (shared) ── */
+.srp-list {
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  padding: 40px 16px 16px;
+  display: flex; flex-direction: column; gap: 10px;
+  overflow: hidden;
+  transition: width 0.3s cubic-bezier(.4,0,.2,1), right 0.3s;
+  width: 100%;
+}
+
+/* Hotel mini card */
+.mini-card {
+  background: var(--gray-0);
+  border: var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  transition: box-shadow 0.15s, border-color 0.15s;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.mini-card:hover { box-shadow: 0 2px 10px rgba(0,0,0,.12); }
+.mini-card.highlighted { border-color: var(--gray-700); box-shadow: 0 2px 12px rgba(0,0,0,.14); }
+
+.mini-card__img { width: 64px; height: 52px; border-radius: var(--radius-xs); background: var(--gray-200); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 18px; opacity: .4; }
+.mini-card__info { flex: 1; min-width: 0; }
+.mini-card__name { font-size: 13px; font-weight: 700; color: var(--gray-900); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mini-card__meta { font-size: 11px; color: var(--gray-500); margin-top: 1px; }
+.mini-card__loyalty { margin-top: 4px; display: flex; align-items: center; gap: 5px; }
+.loyalty-chip-mini {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 10px; font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 20px;
+  border: 1px dashed var(--gray-300);
+  color: var(--gray-600); background: var(--gray-50);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all .12s;
+}
+.loyalty-chip-mini:hover { border-style: solid; border-color: var(--gray-500); background: var(--gray-100); }
+.loyalty-chip-mini.enrolled { border: 1px solid var(--green-border); background: var(--green-bg); color: var(--green); border-style: solid; }
+.mini-card__price { text-align: right; flex-shrink: 0; }
+.mini-price { font-size: 16px; font-weight: 700; color: var(--gray-900); letter-spacing: -.5px; }
+.mini-fees { font-size: 10px; color: var(--gray-500); }
+
+.preferred-float {
+  position: absolute; top: -1px; left: 10px;
+  background: var(--amber-bg);
+  border: 1px solid var(--amber-border); border-top: none;
+  border-radius: 0 0 4px 4px;
+  font-size: 9px; font-weight: 700; letter-spacing: .2px;
+  color: var(--amber); padding: 2px 6px;
+}
+
+/* ── Side sheet (shared base) ── */
+.side-sheet {
+  position: absolute;
+  top: 0; right: 0; bottom: 0;
+  width: var(--sheet-width);
+  background: var(--gray-0);
+  border-left: var(--border);
+  box-shadow: var(--shadow-sheet);
+  display: flex; flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.28s cubic-bezier(.4,0,.2,1);
+  z-index: 20;
+  overflow: hidden;
+}
+.side-sheet.open { transform: translateX(0); }
+.side-sheet--wide { width: var(--sheet-width-wide); }
+
+/* Sheet header */
+.sheet-header {
+  padding: 16px 16px 12px;
+  border-bottom: var(--border);
+  display: flex; align-items: flex-start; gap: 10px;
+  flex-shrink: 0;
+}
+.sheet-close {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: var(--border);
+  background: var(--gray-0);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; cursor: pointer; flex-shrink: 0;
+  color: var(--gray-600);
+  transition: background .12s;
+  margin-left: auto;
+}
+.sheet-close:hover { background: var(--gray-100); }
+
+.sheet-hotel-context {
+  display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0;
+}
+.sheet-hotel-img { width: 40px; height: 36px; border-radius: 4px; background: var(--gray-200); flex-shrink: 0; }
+.sheet-hotel-name { font-size: 12px; font-weight: 700; color: var(--gray-900); line-height: 1.3; }
+.sheet-hotel-sub { font-size: 10px; color: var(--gray-500); margin-top: 1px; }
+
+/* Sheet body */
+.sheet-body { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 16px; }
+
+/* Program block */
+.program-block {
+  border: var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.program-header {
+  padding: 12px 14px;
+  background: var(--gray-50);
+  display: flex; align-items: center; gap: 10px;
+  border-bottom: var(--border);
+}
+.program-icon { width: 32px; height: 32px; border-radius: 6px; background: var(--gray-200); display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+.program-name { font-size: 12px; font-weight: 700; color: var(--gray-900); }
+.program-status { font-size: 10px; color: var(--gray-500); margin-top: 1px; }
+.program-pts { margin-left: auto; text-align: right; flex-shrink: 0; }
+.program-pts-value { font-size: 18px; font-weight: 800; color: var(--gray-900); letter-spacing: -1px; line-height: 1; }
+.program-pts-label { font-size: 10px; color: var(--gray-500); }
+
+.program-body { padding: 12px 14px; }
+.program-pitch { font-size: 11px; color: var(--gray-600); line-height: 1.5; margin-bottom: 10px; }
+
+/* Enroll form in sheet */
+.sheet-input {
+  width: 100%; height: 36px;
+  border: 1px solid var(--gray-300); border-radius: var(--radius-xs);
+  padding: 0 10px; font-size: 12px; font-family: inherit;
+  color: var(--gray-800); background: var(--gray-0); outline: none;
+  transition: border-color .15s, box-shadow .15s;
+  margin-bottom: 8px;
+}
+.sheet-input:focus { border-color: var(--gray-800); box-shadow: 0 0 0 2px rgba(0,0,0,.07); }
+.sheet-input::placeholder { color: var(--gray-400); }
+
+.btn-sheet-primary {
+  width: 100%; height: 36px;
+  background: var(--gray-900); color: #fff;
+  border: none; border-radius: var(--radius-xs);
+  font-size: 12px; font-weight: 700; font-family: inherit;
+  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+  transition: background .12s;
+}
+.btn-sheet-primary:hover { background: var(--gray-700); }
+.btn-sheet-ghost {
+  width: 100%; height: 32px; margin-top: 6px;
+  background: transparent; color: var(--gray-500);
+  border: var(--border); border-radius: var(--radius-xs);
+  font-size: 11px; font-family: inherit; cursor: pointer;
+  transition: border-color .12s;
+}
+.btn-sheet-ghost:hover { border-color: var(--gray-500); color: var(--gray-700); }
+
+/* Enrolled state in sheet */
+.enrolled-block {
+  background: var(--green-bg);
+  border: 1px solid var(--green-border);
+  border-radius: var(--radius-xs);
+  padding: 12px;
+  display: flex; align-items: center; gap: 10px;
+}
+.enrolled-check { width: 24px; height: 24px; border-radius: 50%; background: var(--green); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+.enrolled-headline { font-size: 12px; font-weight: 700; color: var(--green); }
+.enrolled-sub { font-size: 10px; color: var(--green); opacity: .7; margin-top: 2px; }
+
+/* Sheet footer */
+.sheet-footer {
+  padding: 12px 16px;
+  border-top: var(--border);
+  background: var(--gray-50);
+  flex-shrink: 0;
+}
+.sheet-footer-note { font-size: 10px; color: var(--gray-400); line-height: 1.5; }
+
+/* Dim overlay */
+.dim-overlay {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0);
+  z-index: 10;
+  pointer-events: none;
+  transition: background 0.28s;
+}
+.dim-overlay.active { background: rgba(0,0,0,.22); pointer-events: all; }
+
+/* ── CONCEPT A specific ── */
+/* Sheet pushes list width */
+/* g-srp stays full width — sheet overlays */
+
+/* ── CONCEPT B specific ── */
+/* Sheet slides over with dim */
+/* No list shrink — overlay */
+
+/* ── CONCEPT C specific ── */
+/* Persistent right panel, multiple programs */
+.c-panel {
+  position: absolute;
+  top: 0; right: 0; bottom: 0;
+  width: var(--sheet-width-wide);
+  background: var(--gray-0);
+  border-left: var(--border);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+.c-srp { width: calc(100% - var(--sheet-width-wide)); }
+
+.c-panel-header {
+  padding: 14px 16px 10px;
+  border-bottom: var(--border);
+  background: var(--gray-50);
+  flex-shrink: 0;
+}
+.c-panel-title { font-size: 12px; font-weight: 700; color: var(--gray-900); margin-bottom: 2px; }
+.c-panel-sub { font-size: 11px; color: var(--gray-500); }
+.c-panel-body { flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+
+.c-program-row {
+  border: var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  transition: border-color 0.15s;
+}
+.c-program-row.expanded { border-color: var(--gray-500); }
+.c-program-row-header {
+  padding: 10px 12px;
+  display: flex; align-items: center; gap: 8px;
+  cursor: pointer; background: var(--gray-0);
+  transition: background .12s;
+}
+.c-program-row-header:hover { background: var(--gray-50); }
+.c-prog-icon { width: 28px; height: 28px; border-radius: 5px; background: var(--gray-200); display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+.c-prog-name { font-size: 12px; font-weight: 700; color: var(--gray-900); }
+.c-prog-sub { font-size: 10px; color: var(--gray-500); }
+.c-prog-pts { margin-left: auto; text-align: right; flex-shrink: 0; }
+.c-prog-pts-val { font-size: 14px; font-weight: 800; color: var(--gray-900); letter-spacing: -.5px; }
+.c-prog-pts-lbl { font-size: 9px; color: var(--gray-500); }
+.c-prog-chevron { width: 16px; height: 16px; color: var(--gray-400); transition: transform .2s; flex-shrink: 0; }
+.c-prog-chevron.open { transform: rotate(180deg); }
+.c-program-expand {
+  max-height: 0; overflow: hidden;
+  transition: max-height .22s ease;
+  border-top: none;
+}
+.c-program-expand.open {
+  max-height: 200px;
+  border-top: var(--border);
+}
+.c-program-expand-inner { padding: 10px 12px; background: var(--gray-50); }
+
+.c-panel-empty {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center; padding: 24px;
+  color: var(--gray-400);
+  gap: 8px;
+}
+.c-panel-empty-icon { font-size: 28px; opacity: .3; }
+.c-panel-empty-text { font-size: 11px; line-height: 1.5; }
+
+/* Annotation row */
+.annotation-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 14px; }
+.annotation { flex: 1; min-width: 150px; background: var(--gray-0); border: var(--border); border-radius: var(--radius-sm); padding: 10px 12px; }
+.annotation-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--gray-500); margin-bottom: 4px; }
+.annotation-body { font-size: 11px; color: var(--gray-700); line-height: 1.6; }
+
+/* Sheet section label */
+.sheet-section-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: var(--gray-400); margin-bottom: 6px; }
+.divider-line { height: 1px; background: var(--gray-100); margin: 4px 0 8px; }
+
+/* Pending state tag */
+.status-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 10px; font-weight: 600;
+  padding: 2px 7px; border-radius: 20px;
+}
+.status-tag--not-enrolled { background: var(--gray-100); color: var(--gray-600); border: var(--border); }
+.status-tag--enrolled { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--gray-200); border-radius: 3px; }
+
+  /* ── Section group headers ── */
+  .group-header {
+    max-width: 760px;
+    margin: 0 auto 40px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .group-header__line { flex: 1; height: 1px; background: var(--gray-200); }
+  .group-header__label {
+    font-size: 11px; font-weight: 700; letter-spacing: .8px;
+    text-transform: uppercase; color: var(--gray-500);
+    white-space: nowrap; padding: 0 4px;
+  }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <h1>Loyalty Enrollment — All Concepts</h1>
+  <p>Nine interactive mid-fi wireframe concepts across two pattern families — inline card patterns and right side sheet patterns. Click to interact with each.</p>
+  <div class="meta">
+    <span class="badge-meta">Wireframe</span>
+    <span class="badge-meta">9 Concepts</span>
+    <span class="badge-meta">Card Patterns</span>
+    <span class="badge-meta">Side Sheet Patterns</span>
+    <span class="badge-meta">Grayscale</span>
+    <span class="badge-meta">Interactive</span>
+  </div>
+</div>
+
+<div class="group-header">
+  <div class="group-header__line"></div>
+  <div class="group-header__label">Card-Level Patterns — A through F</div>
+  <div class="group-header__line"></div>
+</div>
+<div class="concept-section">
+  <div class="concept-label">
+    <div class="concept-num">A</div>
+    <div class="concept-title">Inline Bottom Strip</div>
+  </div>
+  <div class="concept-desc">A persistent loyalty strip lives below the card content, always visible. One tap triggers an inline micro-form within the same strip. Enrollment completes in place with a green confirmation state. Least disruptive approach.</div>
+
+  <div class="interaction-note">
+    <div class="note-dot"></div>
+    Click "Enroll now" to progress through states
+  </div>
+
+  <!-- Live interactive demo -->
+  <div class="live-demo-wrap">
+    <div class="live-demo-label">Live Concept</div>
+    <div class="hotel-card" id="concept-a-card" style="max-width:663px;">
+      <div class="preferred-tag">
+        <svg viewBox="0 0 10 10" fill="currentColor"><path d="M5 0l1.5 3h3l-2.4 1.8.9 3-2.5-1.6-2.5 1.6.9-3L0.5 3h3z"/></svg>
+        Egencia preferred
+      </div>
+      <div class="card-body">
+        <div class="card-img">
+          <div class="card-img-placeholder">
+            <div class="img-icon">🏨</div>
+            <div class="img-label">Hotel photo</div>
+          </div>
+          <button class="img-arrow left">‹</button>
+          <button class="img-arrow right">›</button>
+        </div>
+        <div class="card-info">
+          <div class="hotel-name">Hilton Chicago</div>
+          <div class="hotel-meta">
+            <span class="stars">★★★★</span>
+            <span class="dot">·</span>
+            <span>0.3 miles away</span>
+          </div>
+          <div class="hotel-meta" style="margin-bottom:5px;">
+            <span class="eco-badge">🌿 Eco-friendly</span>
+          </div>
+          <div class="coworker-line"><span class="coworker-pct">42%</span> of coworker bookings</div>
+          <div class="rating-line"><span class="rating-score">4.3/5</span> Excellent (882 reviews)</div>
+        </div>
+        <div class="card-price">
+          <div class="price-from">From</div>
+          <div class="price-amount">$289</div>
+          <div class="price-taxes">$194 taxes and fees</div>
+          <div class="price-pay">Pay online</div>
+        </div>
+      </div>
+      <div class="card-divider"></div>
+
+      <!-- STATE: default -->
+      <div class="loyalty-strip" id="a-strip-default" onclick="aTransitionToEnroll()">
+        <div class="loyalty-icon-wrap">🎖</div>
+        <div class="loyalty-strip-text">
+          <div class="loyalty-strip-headline">You're not enrolled in Hilton Honors</div>
+          <div class="loyalty-strip-sub">Enroll now to earn <span class="loyalty-pts">3,400 points</span> on this stay</div>
+        </div>
+        <button class="enroll-btn-sm">Enroll now</button>
+      </div>
+
+      <!-- STATE: enrolling (hidden initially) -->
+      <div class="loyalty-strip enrolling" id="a-strip-enrolling" style="display:none;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px;">
+          <div class="loyalty-icon-wrap">🎖</div>
+          <div class="loyalty-strip-text">
+            <div class="loyalty-strip-headline">Add your Hilton Honors number</div>
+            <div class="form-hint">Your number will be saved to your profile for future trips</div>
+          </div>
+        </div>
+        <div class="enrollment-form-row">
+          <input class="enroll-input" id="a-input" type="text" placeholder="Hilton Honors # (e.g. 1234567)" />
+          <button class="btn-confirm" onclick="aTransitionToEnrolled()">Confirm</button>
+          <button class="btn-ghost" onclick="aReset()">Cancel</button>
+        </div>
+      </div>
+
+      <!-- STATE: enrolled (hidden initially) -->
+      <div class="loyalty-strip enrolled" id="a-strip-enrolled" style="display:none;">
+        <div class="enrolled-icon">✓</div>
+        <div class="loyalty-strip-text">
+          <div class="enrolled-headline">You're earning 3,400 Hilton Honors points on this booking</div>
+          <div class="enrolled-sub">Loyalty number saved to your profile · #1234567</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Annotation -->
+  <div class="annotation-row">
+    <div class="annotation">
+      <div class="annotation-title">Before</div>
+      <div class="annotation-body">Persistent strip with icon, program name, point value, and "Enroll now" CTA. Always visible — no discovery needed.</div>
+    </div>
+    <div class="annotation">
+      <div class="annotation-title">During</div>
+      <div class="annotation-body">Strip expands slightly to reveal inline input. Pre-fills loyalty number from profile if available. Cancel option present.</div>
+    </div>
+    <div class="annotation">
+      <div class="annotation-title">After</div>
+      <div class="annotation-body">Green confirmation state with point total and profile save note. No page change, no redirect.</div>
+    </div>
+    <div class="annotation">
+      <div class="annotation-title">Tradeoffs</div>
+      <div class="annotation-body">Most compact. Consistent card height. Low friction. Small strip may reduce visibility of the enrollment opportunity.</div>
+    </div>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+
+<div class="concept-section">
+  <div class="concept-label">
+    <div class="concept-num">B</div>
+    <div class="concept-title">Expandable Loyalty Row</div>
+  </div>
+  <div class="concept-desc">A compact row with a loyalty status pill and action link sits below the card. Clicking expands an inline drawer with the enrollment form. Balances card density with clear affordance.</div>
+
+  <div class="interaction-note">
+    <div class="note-dot"></div>
+    Click the loyalty row or "Enroll in 1 tap" to expand — then confirm to enroll
+  </div>
+
+  <div class="live-demo-wrap">
+    <div class="live-demo-label">Live Concept</div>
+    <div class="hotel-card" id="concept-b-card" style="max-width:663px;">
+      <div class="preferred-tag">
+        <svg viewBox="0 0 10 10" fill="currentColor"><path d="M5 0l1.5 3h3l-2.4 1.8.9 3-2.5-1.6-2.5 1.6.9-3L0.5 3h3z"/></svg>
+        Egencia preferred
+      </div>
+      <div class="card-body">
+        <div class="card-img">
+          <div class="card-img-placeholder">
+            <div class="img-icon">🏨</div>
+            <div class="img-label">Hotel photo</div>
+          </div>
+          <button class="img-arrow left">‹</button>
+          <button class="img-arrow right">›</button>
+        </div>
+        <div class="card-info">
+          <div class="hotel-name">Hilton Chicago</div>
+          <div class="hotel-meta">
+            <span class="stars">★★★★</span>
+            <span class="dot">·</span>
+            <span>0.3 miles away</span>
+          </div>
+          <div class="hotel-meta" style="margin-bottom:5px;">
+            <span class="eco-badge">🌿 Eco-friendly</span>
+          </div>
+          <div class="coworker-line"><span class="coworker-pct">42%</span> of coworker bookings</div>
+          <div class="rating-line"><span class="rating-score">4.3/5</span> Excellent (882 reviews)</div>
+        </div>
+        <div class="card-price">
+          <div class="price-from">From</div>
+          <div class="price-amount">$289</div>
+          <div class="price-taxes">$194 taxes and fees</div>
+          <div class="price-pay">Pay online</div>
+        </div>
+      </div>
+      <div class="card-divider"></div>
+
+      <!-- Default row -->
+      <div class="loyalty-row" id="b-row-default" onclick="bToggleDrawer()">
+        <span class="loyalty-pill-badge amber">
+          <span class="loyalty-pill-dot"></span>
+          Hilton Honors — Not enrolled
+        </span>
+        <div class="loyalty-row-text">Earn <strong>3,400 pts</strong> on this stay</div>
+        <span class="loyalty-row-action" id="b-row-action-link">Enroll in 1 tap</span>
+        <svg class="expand-chevron" id="b-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 6l4 4 4-4"/>
+        </svg>
+      </div>
+
+      <!-- Expandable drawer -->
+      <div class="loyalty-drawer" id="b-drawer">
+        <div class="loyalty-drawer-inner">
+          <div class="drawer-headline">Enroll in Hilton Honors — earn 3,400 points on this stay</div>
+          <div class="drawer-sub">Enter your Hilton Honors number to auto-apply to this booking. It'll be saved to your profile so you never miss points again.</div>
+          <div class="drawer-form" id="b-form">
+            <input class="enroll-input" id="b-input" type="text" placeholder="Hilton Honors # (e.g. 1234567)" style="background:#fff;" />
+            <button class="btn-confirm" onclick="bConfirm()">Confirm &amp; Apply</button>
+            <button class="btn-ghost" onclick="bToggleDrawer()">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Enrolled row (hidden) -->
+      <div class="loyalty-row enrolled-row" id="b-row-enrolled" style="display:none;">
+        <span class="loyalty-pill-badge green">
+          <span class="loyalty-pill-dot"></span>
+          Hilton Honors — Enrolled
+        </span>
+        <div class="loyalty-row-text" style="color:var(--green);font-weight:600;">Earning <strong>3,400 points</strong> · #1234567 saved</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="annotation-row">
+    <div class="annotation">
+      <div class="annotation-title">Before</div>
+      <div class="annotation-body">Compact row uses color-coded status pill so enrollment state is immediately scannable across multiple cards.</div>
+    </div>
+    <div class="annotation">
+      <div class="annotation-title">During</div>
+      <div class="annotation-body">Smooth expand drawer. Input is the only focus. Confirm closes drawer and transforms the row — no page jump.</div>
+    </div>
+    <div class="annotation">
+      <div class="annotation-title">After</div>
+      <div class="annotation-body">Row converts to green enrolled pill + point total. Drawer collapses. Card height returns to near-default.</div>
+    </div>
+    <div class="annotation">
+      <div class="annotation-title">Tradeoffs</div>
+      <div class="annotation-body">Slightly more complex state management. Status pill pattern scales well to multiple programs shown on one card.</div>
+    </div>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+
+<div class="concept-section">
+  <div class="concept-label">
+    <div class="concept-num">C</div>
+    <div class="concept-title">Chip + Tooltip Popover</div>
+  </div>
+  <div class="concept-desc">A dashed loyalty chip sits alongside other card metadata chips. Hovering reveals a dark tooltip popover with the enrollment pitch and a one-tap action. Clicking converts to an inline micro-form, then a confirmed chip. Lightest footprint on the card.</div>
+
+  <div class="interaction-note">
+    <div class="note-dot"></div>
+    Hover the loyalty chip to see the tooltip — then click "Enroll" to interact
+  </div>
+
+  <div class="live-demo-wrap">
+    <div class="live-demo-label">Live Concept</div>
+    <div class="hotel-card" id="concept-c-card" style="max-width:663px;">
+      <div class="preferred-tag">
+        <svg viewBox="0 0 10 10" fill="currentColor"><path d="M5 0l1.5 3h3l-2.4 1.8.9 3-2.5-1.6-2.5 1.6.9-3L0.5 3h3z"/></svg>
+        Egencia preferred
+      </div>
+      <div class="card-body">
+        <div class="card-img">
+          <div class="card-img-placeholder">
+            <div class="img-icon">🏨</div>
+            <div class="img-label">Hotel photo</div>
+          </div>
+          <button class="img-arrow left">‹</button>
+          <button class="img-arrow right">›</button>
+        </div>
+        <div class="card-info">
+          <div class="hotel-name">Hilton Chicago</div>
+          <div class="hotel-meta">
+            <span class="stars">★★★★</span>
+            <span class="dot">·</span>
+            <span>0.3 miles away</span>
+          </div>
+          <div class="hotel-meta" style="margin-bottom:5px;">
+            <span class="eco-badge">🌿 Eco-friendly</span>
+          </div>
+          <div class="coworker-line"><span class="coworker-pct">42%</span> of coworker bookings</div>
+          <div class="rating-line"><span class="rating-score">4.3/5</span> Excellent (882 reviews)</div>
+        </div>
+        <div class="card-price">
+          <div class="price-from">From</div>
+          <div class="price-amount">$289</div>
+          <div class="price-taxes">$194 taxes and fees</div>
+          <div class="price-pay">Pay online</div>
+        </div>
+      </div>
+      <div class="card-divider"></div>
+
+      <!-- Chip row -->
+      <div class="loyalty-tooltip-anchor" id="c-anchor">
+
+        <!-- Default chip group -->
+        <div class="loyalty-chip-group" id="c-chip-group">
+          <span class="loyalty-chip" id="c-chip"
+            onmouseenter="cShowTooltip()" onmouseleave="cHideTooltipDelay()">
+            🎖 Hilton Honors — <span class="chip-pts">3,400 pts</span> available
+          </span>
+          <span style="font-size:11px;color:var(--gray-400);">Enroll to earn on this stay</span>
+        </div>
+
+        <!-- Tooltip -->
+        <div class="loyalty-tooltip" id="c-tooltip"
+          onmouseenter="cKeepTooltip()" onmouseleave="cHideTooltip()">
+          <div class="tooltip-arrow"></div>
+          <div class="tooltip-headline">Don't leave points on the table</div>
+          <div class="tooltip-body">Enroll in Hilton Honors in one tap and start earning 3,400 points on this booking.</div>
+          <div class="tooltip-actions">
+            <button class="tooltip-btn-primary" onclick="cStartEnroll()">Enroll in 1 tap</button>
+            <button class="tooltip-btn-ghost" onclick="cHideTooltip()">Not now</button>
+          </div>
+        </div>
+
+        <!-- Inline form (hidden) -->
+        <div class="c-enroll-form-row" id="c-form" style="display:none;">
+          <input class="enroll-input" id="c-input" type="text" placeholder="Hilton Honors # (e.g. 1234567)" style="background:#fff;"/>
+          <button class="btn-confirm" onclick="cConfirm()">Apply</button>
+          <button class="btn-ghost" onclick="cReset()">✕</button>
+        </div>
+
+        <!-- Enrolled state (hidden) -->
+        <div class="loyalty-chip-group" id="c-enrolled-group" style="display:none;">
+          <span class="loyalty-chip enrolled-chip">
+            ✓ Earning <span class="chip-pts" style="margin-left:2px;">3,400 pts</span>
+          </span>
+          <span style="font-size:11px;color:var(--green);font-weight:600;">#1234567 saved to profile</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="annotation-row">
+    <div class="annotation">
+      <div class="annotation-title">Before</div>
+      <div class="annotation-body">Lightweight dashed chip. Tooltip appears on hover with the full enrollment pitch and "Enroll in 1 tap" CTA.</div>
+    </div>
+    <div class="annotation">
+      <div class="annotation-title">During</div>
+      <div class="annotation-body">Click converts chip row to inline form. Tooltip closes. Single input and confirm button — ultra-fast completion.</div>
+    </div>
+    <div class="annotation">
+      <div class="annotation-title">After</div>
+      <div class="annotation-body">Enrolled chip with green styling replaces default chip. Points earned shown inline. Smallest footprint of all three.</div>
+    </div>
+    <div class="annotation">
+      <div class="annotation-title">Tradeoffs</div>
+      <div class="annotation-body">Tooltip requires hover — less discoverable on touch. Best suited for desktop-first contexts. Scales well if multiple programs shown as chips.</div>
+    </div>
+  </div>
+</div>
+
+
+<div class="concept-section">
+  <div class="concept-label">
+    <div class="concept-num">D</div>
+    <div class="concept-title">Split Card Panel</div>
+  </div>
+  <div class="concept-desc">The card body is divided into two columns: hotel info on the left, a dedicated loyalty panel on the right. The loyalty column mirrors the price column's visual weight — point value rendered at the same size as the room rate. One click converts the panel to an inline form, then a green confirmation state.</div>
+
+  <div class="interaction-note">
+    <div class="note-dot"></div>
+    Click "Enroll" in the right panel to progress through states
+  </div>
+
+  <div class="live-demo-wrap">
+    <div class="live-demo-label">Live Concept</div>
+    <div class="hotel-card" style="max-width:663px;">
+      <div class="preferred-tag">
+        <svg viewBox="0 0 10 10" fill="currentColor"><path d="M5 0l1.5 3h3l-2.4 1.8.9 3-2.5-1.6-2.5 1.6.9-3L0.5 3h3z"/></svg>
+        Egencia preferred
+      </div>
+      <div class="split-card-body">
+        <!-- Hotel info col -->
+        <div class="split-hotel-col">
+          <div class="card-img">
+            <div class="card-img-placeholder">
+              <div class="img-icon">🏨</div>
+              <div class="img-label">Hotel photo</div>
+            </div>
+            <button class="img-arrow left">‹</button>
+            <button class="img-arrow right">›</button>
+          </div>
+          <div class="card-info">
+            <div class="hotel-name">Hilton Chicago</div>
+            <div class="hotel-meta">
+              <span class="stars">★★★★</span>
+              <span class="dot">·</span>
+              <span>0.3 miles away</span>
+            </div>
+            <div class="hotel-meta" style="margin-bottom:5px;">
+              <span class="eco-badge">🌿 Eco-friendly</span>
+            </div>
+            <div class="coworker-line"><span class="coworker-pct">42%</span> of coworker bookings</div>
+            <div class="rating-line"><span class="rating-score">4.3/5</span> Excellent (882 reviews)</div>
+          </div>
+          <div class="card-price">
+            <div class="price-from">From</div>
+            <div class="price-amount">$289</div>
+            <div class="price-taxes">$194 taxes and fees</div>
+            <div class="price-pay">Pay online</div>
+          </div>
+        </div>
+
+        <!-- Vertical rule -->
+        <div class="split-divider-v"></div>
+
+        <!-- Loyalty col -->
+        <div class="split-loyalty-col">
+          <!-- Default state -->
+          <div id="d-panel-default" style="display:flex;flex-direction:column;gap:5px;">
+            <div class="split-loyalty-label">Hilton Honors</div>
+            <div class="split-pts-value">3,400</div>
+            <div class="split-pts-label">points available</div>
+            <div class="split-pts-sub">You're not enrolled. Enroll once and earn on every Hilton stay.</div>
+            <button class="split-enroll-btn" onclick="dStartEnroll()">Enroll &amp; earn points</button>
+          </div>
+          <!-- Form state -->
+          <div id="d-panel-form">
+            <div class="split-form-label">Your loyalty #</div>
+            <div class="split-form-hint">Saved to profile — applied to all future Hilton bookings</div>
+            <input class="split-form-input" id="d-input" type="text" placeholder="e.g. 1234567" />
+            <div class="split-form-actions">
+              <button class="split-confirm-btn" onclick="dConfirm()">Confirm</button>
+              <button class="split-cancel-btn" onclick="dReset()">Cancel</button>
+            </div>
+          </div>
+          <!-- Enrolled state -->
+          <div id="d-panel-enrolled">
+            <div class="d-enrolled-check">✓</div>
+            <div class="d-enrolled-pts">3,400</div>
+            <div class="d-enrolled-label">points on this stay</div>
+            <div class="d-enrolled-num">#1234567 saved to profile</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="annotation-row">
+    <div class="annotation">
+      <div class="annotation-title">Before</div>
+      <div class="annotation-body">Loyalty panel mirrors the price column's visual rhythm — point value at the same scale as room rate. Creates a natural visual comparison.</div>
+    </div>
+    <div class="annotation">
+      <div class="annotation-title">During</div>
+      <div class="annotation-body">Panel converts to a compact inline form within the same column. Hotel info and price remain fully visible during enrollment.</div>
+    </div>
+    <div class="annotation">
+      <div class="annotation-title">After</div>
+      <div class="annotation-body">Column turns green with a large point confirmation. Reinforces the value earned in the same visual weight as the room price.</div>
+    </div>
+    <div class="annotation">
+      <div class="annotation-title">Tradeoffs</div>
+      <div class="annotation-body">Most visually prominent of all concepts. Reduces horizontal space for hotel info and price. Best for cases where loyalty is a primary booking driver.</div>
+    </div>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+
+<div class="concept-section">
+  <div class="concept-label">
+    <div class="concept-num">E</div>
+    <div class="concept-title">Notification Banner</div>
+  </div>
+  <div class="concept-desc">A slim amber notification banner sits above the card — connected to the card visually, but clearly a system-level message. It contains the loyalty prompt and a compact CTA. Clicking "Enroll" converts the banner to an inline form. Enrolled state turns the banner green. Dismissing it removes it entirely.</div>
+
+  <div class="interaction-note">
+    <div class="note-dot"></div>
+    Click "Enroll" in the banner to see the form state — then confirm to complete enrollment
+  </div>
+
+  <div class="live-demo-wrap">
+    <div class="live-demo-label">Live Concept</div>
+
+    <!-- Banner sits above the card, visually attached -->
+    <div style="max-width:663px;">
+      <div class="e-banner e-banner-amber" id="e-banner">
+        <!-- Default content -->
+        <div class="e-banner-inner" id="e-banner-content">
+          <div class="e-banner-icon">🎖</div>
+          <div class="e-banner-text">
+            <div class="e-banner-headline">You're not enrolled in Hilton Honors — earn 3,400 points on this stay</div>
+            <div class="e-banner-sub">Don't leave points on the table. Enroll in one tap and start earning on this booking.</div>
+          </div>
+          <div class="e-banner-actions">
+            <button class="e-enroll-btn" onclick="eStartEnroll()">Enroll now</button>
+            <button class="e-dismiss-btn" onclick="eDismissBanner()" title="Dismiss">✕</button>
+          </div>
+        </div>
+        <!-- Form content -->
+        <div id="e-banner-form">
+          <div class="e-banner-icon">🎖</div>
+          <div style="flex:1;font-size:11px;font-weight:600;color:var(--gray-800);">Add your Hilton Honors number</div>
+          <input class="e-input" id="e-input" type="text" placeholder="e.g. 1234567" />
+          <button class="e-confirm-btn" onclick="eConfirm()">Apply</button>
+          <button class="e-cancel-btn" onclick="eReset()">Cancel</button>
+        </div>
+        <!-- Enrolled content -->
+        <div id="e-banner-enrolled">
+          <div class="e-enrolled-icon">✓</div>
+          <div>
+            <div class="e-enrolled-headline">Earning 3,400 Hilton Honors points on this booking</div>
+            <div class="e-enrolled-num">#1234567 saved to profile</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hotel-card" style="border-radius:0 0 var(--radius-card) var(--radius-card);border-top:none;">
+        <div class="card-body" style="margin-top:0;padding-top:14px;">
+          <div class="card-img">
+            <div class="card-img-placeholder">
+              <div class="img-icon">🏨</div>
+              <div class="img-label">Hotel photo</div>
+            </div>
+            <button class="img-arrow left">‹</button>
+            <button class="img-arrow right">›</button>
+          </div>
+          <div class="card-info">
+            <div class="hotel-name">Hilton Chicago</div>
+            <div class="hotel-meta">
+              <span class="stars">★★★★</span>
+              <span class="dot">·</span>
+              <span>0.3 miles away</span>
+            </div>
+            <div class="hotel-meta" style="margin-bottom:5px;">
+              <span class="eco-badge">🌿 Eco-friendly</span>
+            </div>
+            <div class="coworker-line"><span class="coworker-pct">42%</span> of coworker bookings</div>
+            <div class="rating-line"><span class="rating-score">4.3/5</span> Excellent (882 reviews)</div>
+          </div>
+          <div class="card-price">
+            <div class="price-from">From</div>
+            <div class="price-amount">$289</div>
+            <div class="price-taxes">$194 taxes and fees</div>
+            <div class="price-pay">Pay online</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="annotation-row">
+    <div class="annotation">
+      <div class="annotation-title">Before</div>
+      <div class="annotation-body">Amber banner above the card signals an actionable notification without altering the card's internal layout. Dismissible for users who are already enrolled elsewhere.</div>
+    </div>
+    <div class="annotation">
+      <div class="annotation-title">During</div>
+      <div class="annotation-body">Banner morphs to an inline form in place. Card stays untouched below. One focused input with confirm and cancel.</div>
+    </div>
+    <div class="annotation">
+      <div class="annotation-title">After</div>
+      <div class="annotation-body">Banner transitions to green confirmation — persistent reminder that points are being earned. Can be made auto-dismissing after a few seconds.</div>
+    </div>
+    <div class="annotation">
+      <div class="annotation-title">Tradeoffs</div>
+      <div class="annotation-body">Highest visibility. Card layout is never altered. Risk: banner pattern can feel like an ad or notification noise if overused across many cards.</div>
+    </div>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+
+<div class="concept-section">
+  <div class="concept-label">
+    <div class="concept-num">F</div>
+    <div class="concept-title">Image Badge + Slide-Up Panel</div>
+  </div>
+  <div class="concept-desc">A small floating badge anchors to the bottom-left corner of the hotel image. It communicates the loyalty opportunity in the same visual space as the photo — zero additional card height in the default state. Clicking the badge slides up a compact enrollment panel from the bottom of the card. Enrolled state converts the badge to green and shows a slim confirmation strip.</div>
+
+  <div class="interaction-note">
+    <div class="note-dot"></div>
+    Click the badge on the hotel image to open the slide-up panel
+  </div>
+
+  <div class="live-demo-wrap">
+    <div class="live-demo-label">Live Concept</div>
+    <div class="hotel-card" style="max-width:663px;">
+      <div class="preferred-tag">
+        <svg viewBox="0 0 10 10" fill="currentColor"><path d="M5 0l1.5 3h3l-2.4 1.8.9 3-2.5-1.6-2.5 1.6.9-3L0.5 3h3z"/></svg>
+        Egencia preferred
+      </div>
+      <div class="card-body">
+        <!-- Image with badge -->
+        <div class="f-card-img-wrap">
+          <div class="card-img" style="width:110px;height:90px;border-radius:var(--radius-sm);position:relative;">
+            <div class="card-img-placeholder">
+              <div class="img-icon">🏨</div>
+              <div class="img-label">Hotel photo</div>
+            </div>
+            <button class="img-arrow left">‹</button>
+            <button class="img-arrow right">›</button>
+          </div>
+          <div class="f-badge" id="f-badge" onclick="fToggleSlide()">🎖 3,400 pts</div>
+        </div>
+        <div class="card-info">
+          <div class="hotel-name">Hilton Chicago</div>
+          <div class="hotel-meta">
+            <span class="stars">★★★★</span>
+            <span class="dot">·</span>
+            <span>0.3 miles away</span>
+          </div>
+          <div class="hotel-meta" style="margin-bottom:5px;">
+            <span class="eco-badge">🌿 Eco-friendly</span>
+          </div>
+          <div class="coworker-line"><span class="coworker-pct">42%</span> of coworker bookings</div>
+          <div class="rating-line"><span class="rating-score">4.3/5</span> Excellent (882 reviews)</div>
+        </div>
+        <div class="card-price">
+          <div class="price-from">From</div>
+          <div class="price-amount">$289</div>
+          <div class="price-taxes">$194 taxes and fees</div>
+          <div class="price-pay">Pay online</div>
+        </div>
+      </div>
+
+      <!-- Slide-up enrollment panel -->
+      <div class="f-slide-panel" id="f-slide-panel">
+        <div class="f-slide-inner">
+          <div class="f-slide-headline">Enroll in Hilton Honors — earn 3,400 points</div>
+          <div class="f-slide-sub">Add your number once. It saves to your profile and applies to every future Hilton booking automatically.</div>
+          <div class="f-slide-form">
+            <input class="f-slide-input" id="f-input" type="text" placeholder="Hilton Honors # (e.g. 1234567)" />
+            <button class="f-slide-confirm" onclick="fConfirm()">Confirm &amp; Apply</button>
+            <button class="f-slide-cancel" onclick="fReset()">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Enrolled strip (shown after confirm) -->
+      <div class="f-enrolled-strip" id="f-enrolled-strip">
+        <div class="f-enrolled-check">✓</div>
+        <div>
+          <div class="f-enrolled-headline">Earning 3,400 Hilton Honors points on this stay</div>
+          <div class="f-enrolled-num">Hilton Honors #1234567 saved to your profile</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="annotation-row">
+    <div class="annotation">
+      <div class="annotation-title">Before</div>
+      <div class="annotation-body">Zero additional card height. Loyalty badge lives in the image — feels like hotel metadata rather than a system prompt. Subtle but always present.</div>
+    </div>
+    <div class="annotation">
+      <div class="annotation-title">During</div>
+      <div class="annotation-body">Slide-up panel reveals smoothly from the bottom of the card. Hotel info and price stay readable above. Badge highlights to show active state.</div>
+    </div>
+    <div class="annotation">
+      <div class="annotation-title">After</div>
+      <div class="annotation-body">Badge converts to green with a checkmark. Panel closes. A slim green confirmation strip anchors at the bottom of the card.</div>
+    </div>
+    <div class="annotation">
+      <div class="annotation-title">Tradeoffs</div>
+      <div class="annotation-body">Least disruptive default state. Badge may be missed on first scan. Works best when the image is the first thing a user's eye lands on — which is typical.</div>
+    </div>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+
+<!-- ─────────────────────────────────────────────
+     STATIC BREAKDOWNS — all three concepts
+───────────────────────────────────────────── -->
+<div class="concept-section">
+  <div class="concept-label" style="margin-bottom:8px;">
+    <div class="concept-num" style="background:var(--gray-500);">↓</div>
+    <div class="concept-title" style="font-size:14px;color:var(--gray-600);">Full State Breakdowns — All Six Concepts</div>
+  </div>
+  <p style="font-size:12px;color:var(--gray-500);margin-bottom:24px;max-width:500px;">Isolated views of each loyalty component state across all three concepts for handoff reference.</p>
+
+  <!-- Concept A breakdowns -->
+  <div style="margin-bottom:24px;">
+    <div class="bd-state-label">Concept A States</div>
+    <div class="breakdowns-grid">
+      <!-- A Before -->
+      <div>
+        <div class="state-label">Before — Unenrolled</div>
+        <div style="background:#fff;border:var(--border);border-radius:var(--radius-sm);overflow:hidden;">
+          <div class="loyalty-strip static-card" style="cursor:default;border-radius:var(--radius-sm);">
+            <div class="loyalty-icon-wrap">🎖</div>
+            <div class="loyalty-strip-text">
+              <div class="loyalty-strip-headline">You're not enrolled in Hilton Honors</div>
+              <div class="loyalty-strip-sub">Enroll now to earn <span class="loyalty-pts">3,400 points</span></div>
+            </div>
+            <div class="enroll-btn-sm">Enroll now</div>
+          </div>
+        </div>
+      </div>
+      <!-- A During -->
+      <div>
+        <div class="state-label">During — Input open</div>
+        <div style="background:#fff;border:var(--border);border-radius:var(--radius-sm);overflow:hidden;">
+          <div class="loyalty-strip enrolling static-card" style="cursor:default;border-radius:var(--radius-sm);">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px;">
+              <div class="loyalty-icon-wrap">🎖</div>
+              <div class="loyalty-strip-text">
+                <div class="loyalty-strip-headline">Add your Hilton Honors number</div>
+                <div class="form-hint">Saved to profile for future trips</div>
+              </div>
+            </div>
+            <div class="enrollment-form-row">
+              <div class="enroll-input" style="display:flex;align-items:center;color:var(--gray-300);font-size:12px;padding:0 10px;">1234567</div>
+              <div class="btn-confirm">Confirm</div>
+              <div class="btn-ghost">Cancel</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- A After -->
+      <div>
+        <div class="state-label">After — Enrolled</div>
+        <div style="background:#fff;border:var(--border);border-radius:var(--radius-sm);overflow:hidden;">
+          <div class="loyalty-strip enrolled static-card" style="border-radius:var(--radius-sm);">
+            <div class="enrolled-icon">✓</div>
+            <div class="loyalty-strip-text">
+              <div class="enrolled-headline">Earning 3,400 Hilton Honors points</div>
+              <div class="enrolled-sub">Number saved to profile · #1234567</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Concept B breakdowns -->
+  <div style="margin-bottom:24px;">
+    <div class="bd-state-label">Concept B States</div>
+    <div class="breakdowns-grid">
+      <div>
+        <div class="state-label">Before — Row collapsed</div>
+        <div style="background:#fff;border:var(--border);border-radius:var(--radius-sm);overflow:hidden;">
+          <div class="loyalty-row static-card" style="border-radius:var(--radius-sm);">
+            <span class="loyalty-pill-badge amber"><span class="loyalty-pill-dot"></span>Hilton Honors — Not enrolled</span>
+            <div class="loyalty-row-text">Earn <strong>3,400 pts</strong></div>
+            <span class="loyalty-row-action">Enroll in 1 tap</span>
+            <svg class="expand-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6l4 4 4-4"/></svg>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="state-label">During — Drawer expanded</div>
+        <div style="background:#fff;border:var(--border);border-radius:var(--radius-sm);overflow:hidden;">
+          <div class="loyalty-row static-card" style="border-bottom:1px solid var(--gray-100);">
+            <span class="loyalty-pill-badge amber"><span class="loyalty-pill-dot"></span>Hilton Honors — Not enrolled</span>
+            <div class="loyalty-row-text">Earn <strong>3,400 pts</strong></div>
+            <svg class="expand-chevron open" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6l4 4 4-4"/></svg>
+          </div>
+          <div style="background:var(--gray-50);padding:12px 14px;">
+            <div class="drawer-headline">Add your Hilton Honors number</div>
+            <div class="drawer-sub" style="margin-bottom:8px;">Saved to profile. Applied to this booking.</div>
+            <div class="drawer-form static-card">
+              <div class="enroll-input" style="display:flex;align-items:center;color:var(--gray-300);font-size:12px;padding:0 10px;height:32px;">1234567</div>
+              <div class="btn-confirm">Confirm &amp; Apply</div>
+              <div class="btn-ghost">Cancel</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="state-label">After — Enrolled row</div>
+        <div style="background:#fff;border:var(--border);border-radius:var(--radius-sm);overflow:hidden;">
+          <div class="loyalty-row enrolled-row static-card" style="border-radius:var(--radius-sm);">
+            <span class="loyalty-pill-badge green"><span class="loyalty-pill-dot"></span>Hilton Honors — Enrolled</span>
+            <div class="loyalty-row-text" style="color:var(--green);font-weight:600;">Earning <strong>3,400 pts</strong> · #1234567 saved</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Concept C breakdowns -->
+  <div>
+    <div class="bd-state-label">Concept C States</div>
+    <div class="breakdowns-grid">
+      <div>
+        <div class="state-label">Before — Chip default</div>
+        <div style="background:#fff;border:var(--border);border-radius:var(--radius-sm);padding:10px 14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+          <span class="loyalty-chip" style="cursor:default;">🎖 Hilton Honors — <span class="chip-pts">3,400 pts</span> available</span>
+          <span style="font-size:11px;color:var(--gray-400);">Enroll to earn</span>
+        </div>
+      </div>
+      <div>
+        <div class="state-label">During — Inline form</div>
+        <div style="background:#fff;border:var(--border);border-radius:var(--radius-sm);padding:10px 14px;display:flex;align-items:center;gap:8px;">
+          <div class="enroll-input" style="display:flex;align-items:center;color:var(--gray-300);font-size:12px;padding:0 10px;height:32px;flex:1;border:var(--border-focus);">1234567</div>
+          <div class="btn-confirm">Apply</div>
+          <div class="btn-ghost">✕</div>
+        </div>
+      </div>
+      <div>
+        <div class="state-label">After — Enrolled chip</div>
+        <div style="background:#fff;border:var(--border);border-radius:var(--radius-sm);padding:10px 14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+          <span class="loyalty-chip enrolled-chip" style="cursor:default;">✓ Earning <span class="chip-pts" style="margin-left:2px;">3,400 pts</span></span>
+          <span style="font-size:11px;color:var(--green);font-weight:600;">#1234567 saved</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Concept D breakdowns -->
+  <div style="margin-bottom:24px;margin-top:24px;">
+    <div class="bd-state-label">Concept D States</div>
+    <div class="breakdowns-grid">
+      <div>
+        <div class="state-label">Before — Default panel</div>
+        <div style="background:#fff;border:var(--border);border-radius:var(--radius-sm);display:flex;overflow:hidden;">
+          <div style="flex:1;padding:10px 10px;border-right:1px solid var(--gray-100);display:flex;gap:8px;align-items:center;">
+            <div style="width:50px;height:44px;background:var(--gray-200);border-radius:4px;flex-shrink:0;"></div>
+            <div>
+              <div style="font-size:10px;font-weight:700;color:var(--gray-900);margin-bottom:2px;">Hilton Chicago</div>
+              <div style="font-size:9px;color:var(--gray-400);">★★★★ · 0.3 mi</div>
+            </div>
+          </div>
+          <div style="width:100px;flex-shrink:0;padding:10px;display:flex;flex-direction:column;gap:3px;">
+            <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--gray-400);">Hilton Honors</div>
+            <div style="font-size:16px;font-weight:800;color:var(--gray-900);letter-spacing:-1px;line-height:1;">3,400</div>
+            <div style="font-size:9px;color:var(--gray-500);">points available</div>
+            <div style="margin-top:3px;height:20px;background:var(--gray-900);border-radius:3px;font-size:9px;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center;">Enroll &amp; earn</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="state-label">During — Form in panel</div>
+        <div style="background:#fff;border:var(--border);border-radius:var(--radius-sm);display:flex;overflow:hidden;">
+          <div style="flex:1;padding:10px;border-right:1px solid var(--gray-100);display:flex;gap:8px;align-items:center;">
+            <div style="width:50px;height:44px;background:var(--gray-200);border-radius:4px;flex-shrink:0;"></div>
+            <div>
+              <div style="font-size:10px;font-weight:700;color:var(--gray-900);margin-bottom:2px;">Hilton Chicago</div>
+              <div style="font-size:9px;color:var(--gray-400);">★★★★ · 0.3 mi</div>
+            </div>
+          </div>
+          <div style="width:100px;flex-shrink:0;padding:10px;display:flex;flex-direction:column;gap:4px;">
+            <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--gray-700);">Your loyalty #</div>
+            <div style="height:22px;border:1px solid var(--gray-800);border-radius:3px;padding:0 6px;font-size:10px;color:var(--gray-400);display:flex;align-items:center;">1234567</div>
+            <div style="display:flex;gap:4px;">
+              <div style="flex:1;height:20px;background:var(--gray-900);border-radius:3px;font-size:9px;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;">Confirm</div>
+              <div style="height:20px;padding:0 5px;border:var(--border);border-radius:3px;font-size:9px;color:var(--gray-500);display:flex;align-items:center;">✕</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="state-label">After — Enrolled panel</div>
+        <div style="background:#fff;border:var(--border);border-radius:var(--radius-sm);display:flex;overflow:hidden;">
+          <div style="flex:1;padding:10px;border-right:1px solid var(--gray-100);display:flex;gap:8px;align-items:center;">
+            <div style="width:50px;height:44px;background:var(--gray-200);border-radius:4px;flex-shrink:0;"></div>
+            <div>
+              <div style="font-size:10px;font-weight:700;color:var(--gray-900);margin-bottom:2px;">Hilton Chicago</div>
+              <div style="font-size:9px;color:var(--gray-400);">★★★★ · 0.3 mi</div>
+            </div>
+          </div>
+          <div style="width:100px;flex-shrink:0;padding:10px;background:var(--green-bg);display:flex;flex-direction:column;gap:3px;">
+            <div style="width:18px;height:18px;border-radius:50%;background:var(--green);color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;">✓</div>
+            <div style="font-size:16px;font-weight:800;color:var(--green);letter-spacing:-1px;line-height:1;">3,400</div>
+            <div style="font-size:9px;color:var(--green);font-weight:600;">pts on this stay</div>
+            <div style="font-size:8px;color:var(--green);opacity:.7;">#1234567 saved</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Concept E breakdowns -->
+  <div style="margin-bottom:24px;">
+    <div class="bd-state-label">Concept E States</div>
+    <div class="breakdowns-grid">
+      <div>
+        <div class="state-label">Before — Amber banner</div>
+        <div style="background:#fff;border:var(--border);border-radius:var(--radius-sm);overflow:hidden;">
+          <div style="background:var(--amber-bg);border-bottom:1px solid var(--amber-border);padding:8px 10px;display:flex;align-items:center;gap:8px;">
+            <span style="font-size:13px;">🎖</span>
+            <div style="flex:1;">
+              <div style="font-size:10px;font-weight:700;color:var(--gray-900);">Not enrolled in Hilton Honors</div>
+              <div style="font-size:9px;color:var(--gray-500);">Earn 3,400 points on this stay</div>
+            </div>
+            <div style="height:22px;padding:0 8px;background:var(--gray-900);color:#fff;border-radius:3px;font-size:9px;font-weight:700;display:flex;align-items:center;white-space:nowrap;">Enroll now</div>
+            <div style="font-size:12px;color:var(--gray-400);">✕</div>
+          </div>
+          <div style="padding:8px 10px;display:flex;gap:8px;align-items:center;">
+            <div style="width:40px;height:34px;background:var(--gray-200);border-radius:3px;flex-shrink:0;"></div>
+            <div style="flex:1;"><div style="font-size:10px;font-weight:700;color:var(--gray-800);">Hilton Chicago</div><div style="font-size:9px;color:var(--gray-400);">★★★★</div></div>
+            <div style="text-align:right;"><div style="font-size:9px;color:var(--gray-500);">From</div><div style="font-size:14px;font-weight:800;color:var(--gray-900);">$289</div></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="state-label">During — Banner form</div>
+        <div style="background:#fff;border:var(--border);border-radius:var(--radius-sm);overflow:hidden;">
+          <div style="background:var(--amber-bg);border-bottom:1px solid var(--amber-border);padding:8px 10px;display:flex;align-items:center;gap:6px;">
+            <span style="font-size:13px;">🎖</span>
+            <div style="font-size:10px;font-weight:600;color:var(--gray-800);white-space:nowrap;">Hilton Honors #</div>
+            <div style="flex:1;height:24px;border:1px solid var(--gray-800);border-radius:3px;padding:0 6px;font-size:10px;color:var(--gray-400);display:flex;align-items:center;">1234567</div>
+            <div style="height:24px;padding:0 8px;background:var(--gray-900);color:#fff;border-radius:3px;font-size:9px;font-weight:700;display:flex;align-items:center;">Apply</div>
+          </div>
+          <div style="padding:8px 10px;display:flex;gap:8px;align-items:center;">
+            <div style="width:40px;height:34px;background:var(--gray-200);border-radius:3px;flex-shrink:0;"></div>
+            <div style="flex:1;"><div style="font-size:10px;font-weight:700;color:var(--gray-800);">Hilton Chicago</div><div style="font-size:9px;color:var(--gray-400);">★★★★</div></div>
+            <div style="text-align:right;"><div style="font-size:9px;color:var(--gray-500);">From</div><div style="font-size:14px;font-weight:800;color:var(--gray-900);">$289</div></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="state-label">After — Green banner</div>
+        <div style="background:#fff;border:var(--border);border-radius:var(--radius-sm);overflow:hidden;">
+          <div style="background:var(--green-bg);border-bottom:1px solid #b8ddc0;padding:8px 10px;display:flex;align-items:center;gap:8px;">
+            <div style="width:18px;height:18px;border-radius:50%;background:var(--green);color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">✓</div>
+            <div style="flex:1;">
+              <div style="font-size:10px;font-weight:700;color:var(--green);">Earning 3,400 Hilton Honors points</div>
+              <div style="font-size:9px;color:var(--green);opacity:.7;">#1234567 saved to profile</div>
+            </div>
+          </div>
+          <div style="padding:8px 10px;display:flex;gap:8px;align-items:center;">
+            <div style="width:40px;height:34px;background:var(--gray-200);border-radius:3px;flex-shrink:0;"></div>
+            <div style="flex:1;"><div style="font-size:10px;font-weight:700;color:var(--gray-800);">Hilton Chicago</div><div style="font-size:9px;color:var(--gray-400);">★★★★</div></div>
+            <div style="text-align:right;"><div style="font-size:9px;color:var(--gray-500);">From</div><div style="font-size:14px;font-weight:800;color:var(--gray-900);">$289</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Concept F breakdowns -->
+  <div>
+    <div class="bd-state-label">Concept F States</div>
+    <div class="breakdowns-grid">
+      <div>
+        <div class="state-label">Before — Image badge</div>
+        <div style="background:#fff;border:var(--border);border-radius:var(--radius-sm);padding:10px;display:flex;gap:10px;align-items:center;">
+          <div style="width:60px;height:50px;background:var(--gray-200);border-radius:4px;flex-shrink:0;position:relative;">
+            <div style="position:absolute;bottom:4px;left:4px;background:rgba(0,0,0,.72);color:#fff;font-size:9px;font-weight:700;padding:2px 6px;border-radius:10px;white-space:nowrap;">🎖 3,400 pts</div>
+          </div>
+          <div><div style="font-size:10px;font-weight:700;color:var(--gray-900);margin-bottom:2px;">Hilton Chicago</div><div style="font-size:9px;color:var(--gray-400);">★★★★ · 0.3 mi</div></div>
+          <div style="margin-left:auto;text-align:right;"><div style="font-size:9px;color:var(--gray-500);">From</div><div style="font-size:14px;font-weight:800;color:var(--gray-900);">$289</div></div>
+        </div>
+      </div>
+      <div>
+        <div class="state-label">During — Slide panel open</div>
+        <div style="background:#fff;border:var(--border);border-radius:var(--radius-sm);overflow:hidden;">
+          <div style="padding:10px;display:flex;gap:10px;align-items:center;border-bottom:1px solid var(--gray-100);">
+            <div style="width:60px;height:50px;background:var(--gray-200);border-radius:4px;flex-shrink:0;position:relative;">
+              <div style="position:absolute;bottom:4px;left:4px;background:var(--gray-900);color:#fff;font-size:9px;font-weight:700;padding:2px 6px;border-radius:10px;white-space:nowrap;">🎖 3,400 pts</div>
+            </div>
+            <div><div style="font-size:10px;font-weight:700;color:var(--gray-900);margin-bottom:2px;">Hilton Chicago</div><div style="font-size:9px;color:var(--gray-400);">★★★★</div></div>
+            <div style="margin-left:auto;text-align:right;"><div style="font-size:14px;font-weight:800;color:var(--gray-900);">$289</div></div>
+          </div>
+          <div style="background:var(--gray-50);padding:8px 10px;">
+            <div style="font-size:10px;font-weight:700;color:var(--gray-900);margin-bottom:4px;">Enroll in Hilton Honors</div>
+            <div style="display:flex;gap:5px;align-items:center;">
+              <div style="flex:1;height:24px;border:1px solid var(--gray-800);border-radius:3px;font-size:10px;color:var(--gray-400);display:flex;align-items:center;padding:0 6px;">1234567</div>
+              <div style="height:24px;padding:0 8px;background:var(--gray-900);color:#fff;border-radius:3px;font-size:9px;font-weight:700;display:flex;align-items:center;white-space:nowrap;">Confirm</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="state-label">After — Enrolled badge + strip</div>
+        <div style="background:#fff;border:var(--border);border-radius:var(--radius-sm);overflow:hidden;">
+          <div style="padding:10px;display:flex;gap:10px;align-items:center;border-bottom:1px solid #c8e8cc;">
+            <div style="width:60px;height:50px;background:var(--gray-200);border-radius:4px;flex-shrink:0;position:relative;">
+              <div style="position:absolute;bottom:4px;left:4px;background:var(--green);color:#fff;font-size:9px;font-weight:700;padding:2px 6px;border-radius:10px;white-space:nowrap;">✓ 3,400 pts</div>
+            </div>
+            <div><div style="font-size:10px;font-weight:700;color:var(--gray-900);margin-bottom:2px;">Hilton Chicago</div><div style="font-size:9px;color:var(--gray-400);">★★★★</div></div>
+            <div style="margin-left:auto;text-align:right;"><div style="font-size:14px;font-weight:800;color:var(--gray-900);">$289</div></div>
+          </div>
+          <div style="background:var(--green-bg);padding:7px 10px;display:flex;align-items:center;gap:6px;">
+            <div style="width:16px;height:16px;border-radius:50%;background:var(--green);color:#fff;font-size:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:700;">✓</div>
+            <div style="font-size:10px;font-weight:600;color:var(--green);">Earning 3,400 pts · #1234567 saved</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+
+<div class="section-divider" style="max-width:760px;margin:0 auto 48px;"></div>
+
+<div class="group-header">
+  <div class="group-header__line"></div>
+  <div class="group-header__label">Side Sheet Patterns — G through I</div>
+  <div class="group-header__line"></div>
+</div>
+
+<!-- ─────────────── PAGE HEADER ─────────────── -->
+<div class="page-header">
+  <h1>Loyalty Enrollment — Right Side Sheet</h1>
+  <p>Three mid-fi wireframe concepts for a right-side sheet that surfaces loyalty enrollment without taking the user out of the search results flow.</p>
+  <div class="meta">
+    <span class="badge-meta">Mid-Fi Wireframe</span>
+    <span class="badge-meta">Side Sheet</span>
+    <span class="badge-meta">3 Concepts</span>
+    <span class="badge-meta">Interactive</span>
+    <span class="badge-meta">Grayscale</span>
+  </div>
+</div>
+
+
+<div class="concept-block">
+  <div class="concept-label">
+    <div class="concept-num">G</div>
+    <div class="concept-title">Overlay Sheet</div>
+  </div>
+  <div class="concept-desc">Clicking the loyalty chip on a hotel card slides a sheet in from the right, overlaying the results list. The list stays visible behind the sheet at full width. Sheet contains hotel context, enrollment form, and confirmation.</div>
+  <div class="interaction-note"><div class="note-dot"></div>Click the loyalty chip on any card to open the sheet · Click × to close</div>
+
+  <div class="demo-viewport demo-viewport--tall">
+    <div class="demo-label">Concept G — Live</div>
+
+    <div class="srp-list g-srp" id="g-srp" style="overflow-y:auto;">
+
+      <!-- Card 1 — Hilton Chicago -->
+      <div style="position:relative;">
+        <div class="preferred-float">★ Egencia preferred</div>
+        <div class="mini-card highlighted" id="g-card-1">
+          <div class="mini-card__img">🏨</div>
+          <div class="mini-card__info">
+            <div class="mini-card__name">Hilton Chicago</div>
+            <div class="mini-card__meta">★★★★ · 0.3 mi · 4.3/5 Excellent</div>
+            <div class="mini-card__loyalty">
+              <span class="loyalty-chip-mini" id="g-chip-1" onclick="gOpenSheet(1)">🎖 Hilton Honors — 3,400 pts · Enroll</span>
+            </div>
+          </div>
+          <div class="mini-card__price"><div class="mini-price">$289</div><div class="mini-fees">+$194 fees</div></div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="mini-card" id="g-card-2">
+        <div class="mini-card__img">🏨</div>
+        <div class="mini-card__info">
+          <div class="mini-card__name">Westin Michigan Avenue</div>
+          <div class="mini-card__meta">★★★★ · 0.5 mi · 4.1/5 Very Good</div>
+        </div>
+        <div class="mini-card__price"><div class="mini-price">$242</div><div class="mini-fees">+$161 fees</div></div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="mini-card" id="g-card-3">
+        <div class="mini-card__img">🏨</div>
+        <div class="mini-card__info">
+          <div class="mini-card__name">Hyatt Regency Chicago</div>
+          <div class="mini-card__meta">★★★★ · 0.8 mi · 3.9/5 Good</div>
+          <div class="mini-card__loyalty">
+            <span class="loyalty-chip-mini enrolled" id="g-chip-3">✓ World of Hyatt — Enrolled</span>
+          </div>
+        </div>
+        <div class="mini-card__price"><div class="mini-price">$197</div><div class="mini-fees">+$131 fees</div></div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="mini-card" id="g-card-4">
+        <div class="mini-card__img">🏨</div>
+        <div class="mini-card__info">
+          <div class="mini-card__name">InterContinental Chicago</div>
+          <div class="mini-card__meta">★★★★★ · 0.4 mi · 4.4/5 Excellent</div>
+        </div>
+        <div class="mini-card__price"><div class="mini-price">$315</div><div class="mini-fees">+$210 fees</div></div>
+      </div>
+
+    </div>
+
+    <!-- Side sheet A -->
+    <div class="side-sheet" id="g-sheet">
+      <div class="sheet-header">
+        <div class="sheet-hotel-context">
+          <div class="sheet-hotel-img"></div>
+          <div>
+            <div class="sheet-hotel-name" id="g-hotel-name">Hilton Chicago</div>
+            <div class="sheet-hotel-sub" id="g-hotel-sub">Jun 9 – Jun 12 · 3 nights</div>
+          </div>
+        </div>
+        <button class="sheet-close" onclick="gCloseSheet()">✕</button>
+      </div>
+
+      <div class="sheet-body">
+        <div class="sheet-section-label">Loyalty program</div>
+
+        <div class="program-block">
+          <div class="program-header">
+            <div class="program-icon">🎖</div>
+            <div>
+              <div class="program-name" id="g-program-name">Hilton Honors</div>
+              <div class="program-status">Not enrolled</div>
+            </div>
+            <div class="program-pts">
+              <div class="program-pts-value" id="g-pts-value">3,400</div>
+              <div class="program-pts-label">pts on this stay</div>
+            </div>
+          </div>
+
+          <!-- Default state -->
+          <div class="program-body" id="g-form-state">
+            <div class="program-pitch" id="g-program-pitch">We found a Hilton Honors account linked to your profile. Confirm to start earning points on every Hilton stay — no redirect needed.</div>
+            <label style="font-size:11px;font-weight:700;color:var(--gray-700);display:block;margin-bottom:5px;">Your loyalty number</label>
+            <input class="sheet-input" id="g-input" type="text" value="1234567890" />
+            <button class="btn-sheet-primary" onclick="gConfirm()">✓ &nbsp;Confirm &amp; apply to booking</button>
+            <button class="btn-sheet-ghost" onclick="gCloseSheet()">Cancel</button>
+          </div>
+
+          <!-- Enrolled state -->
+          <div class="program-body" id="g-enrolled-state" style="display:none;">
+            <div class="enrolled-block">
+              <div class="enrolled-check">✓</div>
+              <div>
+                <div class="enrolled-headline" id="g-enrolled-headline">You'll earn 3,400 points when booking this hotel</div>
+                <div class="enrolled-sub" id="g-enrolled-sub">#1234567890 saved to your profile</div>
+              </div>
+            </div>
+            <div style="margin-top:10px;">
+              <button class="btn-sheet-ghost" onclick="gCloseSheet()">Done — back to results</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider-line"></div>
+        <div class="sheet-section-label">About this stay</div>
+        <div style="font-size:11px;color:var(--gray-600);line-height:1.6;">
+          Chicago, Illinois &nbsp;·&nbsp; 3 nights<br>
+          Check-in Mon Jun 9 &nbsp;·&nbsp; Check-out Thu Jun 12<br>
+          Policy rate: $198/night
+        </div>
+      </div>
+
+      <div class="sheet-footer">
+        <div class="sheet-footer-note">Enrolling won't redirect you. Your loyalty number is saved to your profile and applied automatically to all matching future bookings.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="annotation-row">
+    <div class="annotation"><div class="annotation-title">Trigger</div><div class="annotation-body">Loyalty chip on the card. Available on any result that has an unenrolled program.</div></div>
+    <div class="annotation"><div class="annotation-title">Behavior</div><div class="annotation-body">Sheet pushes the results list left. No overlay. Both panes remain interactive simultaneously.</div></div>
+    <div class="annotation"><div class="annotation-title">After enroll</div><div class="annotation-body">Enrolled state shows in the sheet. Chip on the card updates to green. Sheet stays open until dismissed.</div></div>
+    <div class="annotation"><div class="annotation-title">Tradeoffs</div><div class="annotation-body">Cards compress when sheet opens. Good for wide viewports. Feels like a master-detail layout — familiar pattern.</div></div>
+  </div>
+</div>
+
+<div class="section-divider"><hr></div>
+
+
+<div class="concept-block">
+  <div class="concept-label">
+    <div class="concept-num">H</div>
+    <div class="concept-title">Overlay Sheet</div>
+  </div>
+  <div class="concept-desc">Sheet slides in over the results list with a soft dim behind it. The highlighted hotel card is partially visible through the dim. Clicking the dim area closes the sheet. Sheet includes multi-step micro-flow: program info → number entry → confirmation.</div>
+  <div class="interaction-note"><div class="note-dot"></div>Click any loyalty chip to open · Click the dim or × to close</div>
+
+  <div class="demo-viewport demo-viewport--tall">
+    <div class="demo-label">Concept H — Live</div>
+
+    <div class="dim-overlay" id="h-dim" onclick="hCloseSheet()"></div>
+
+    <div class="srp-list" id="h-srp" style="width:100%;">
+      <div style="position:relative;">
+        <div class="preferred-float">★ Egencia preferred</div>
+        <div class="mini-card" id="h-card-1">
+          <div class="mini-card__img">🏨</div>
+          <div class="mini-card__info">
+            <div class="mini-card__name">Hilton Chicago</div>
+            <div class="mini-card__meta">★★★★ · 0.3 mi · 4.3/5 Excellent</div>
+            <div class="mini-card__loyalty">
+              <span class="loyalty-chip-mini" onclick="hOpenSheet('Hilton Chicago','Hilton Honors','3,400')">🎖 Hilton Honors — 3,400 pts · Enroll</span>
+            </div>
+          </div>
+          <div class="mini-card__price"><div class="mini-price">$289</div><div class="mini-fees">+$194 fees</div></div>
+        </div>
+      </div>
+
+      <div class="mini-card" id="h-card-2">
+        <div class="mini-card__img">🏨</div>
+        <div class="mini-card__info">
+          <div class="mini-card__name">Westin Michigan Avenue</div>
+          <div class="mini-card__meta">★★★★ · 0.5 mi · 4.1/5 Very Good</div>
+          <div class="mini-card__loyalty">
+            <span class="loyalty-chip-mini" onclick="hOpenSheet('Westin Michigan Avenue','Marriott Bonvoy','2,800')">🎖 Marriott Bonvoy — 2,800 pts · Enroll</span>
+          </div>
+        </div>
+        <div class="mini-card__price"><div class="mini-price">$242</div><div class="mini-fees">+$161 fees</div></div>
+      </div>
+
+      <div class="mini-card" id="h-card-3">
+        <div class="mini-card__img">🏨</div>
+        <div class="mini-card__info">
+          <div class="mini-card__name">Hyatt Regency Chicago</div>
+          <div class="mini-card__meta">★★★★ · 0.8 mi · 3.9/5 Good</div>
+          <div class="mini-card__loyalty">
+            <span class="loyalty-chip-mini enrolled">✓ World of Hyatt — Enrolled</span>
+          </div>
+        </div>
+        <div class="mini-card__price"><div class="mini-price">$197</div><div class="mini-fees">+$131 fees</div></div>
+      </div>
+
+      <div class="mini-card" id="h-card-4">
+        <div class="mini-card__img">🏨</div>
+        <div class="mini-card__info">
+          <div class="mini-card__name">InterContinental Chicago</div>
+          <div class="mini-card__meta">★★★★★ · 0.4 mi · 4.4/5 Excellent</div>
+          <div class="mini-card__loyalty">
+            <span class="loyalty-chip-mini" onclick="hOpenSheet('InterContinental Chicago','IHG One Rewards','4,100')">🎖 IHG One — 4,100 pts · Enroll</span>
+          </div>
+        </div>
+        <div class="mini-card__price"><div class="mini-price">$315</div><div class="mini-fees">+$210 fees</div></div>
+      </div>
+    </div>
+
+    <!-- Side sheet B (overlay) -->
+    <div class="side-sheet" id="h-sheet">
+      <div class="sheet-header">
+        <div class="sheet-hotel-context">
+          <div class="sheet-hotel-img"></div>
+          <div>
+            <div class="sheet-hotel-name" id="h-hotel-name">Hilton Chicago</div>
+            <div class="sheet-hotel-sub">Jun 9 – Jun 12 · 3 nights</div>
+          </div>
+        </div>
+        <button class="sheet-close" onclick="hCloseSheet()">✕</button>
+      </div>
+
+      <div class="sheet-body">
+
+        <!-- Step 1: Program info -->
+        <div id="h-step-1">
+          <div class="sheet-section-label" style="margin-bottom:10px;">Loyalty opportunity</div>
+          <div style="background:var(--gray-50);border:var(--border);border-radius:var(--radius-sm);padding:14px;margin-bottom:14px;">
+            <div style="font-size:22px;font-weight:800;color:var(--gray-900);letter-spacing:-1px;line-height:1;" id="h-pts-display">3,400</div>
+            <div style="font-size:11px;color:var(--gray-500);margin-top:2px;" id="h-prog-display">Hilton Honors points available on this stay</div>
+            <div style="margin-top:10px;font-size:11px;color:var(--gray-600);line-height:1.5;">You're not currently enrolled. Enrolling takes one tap and your number is saved permanently to your profile.</div>
+          </div>
+          <button class="btn-sheet-primary" onclick="hGoStep2()" style="margin-bottom:6px;">Enroll in 1 tap →</button>
+          <button class="btn-sheet-ghost" onclick="hCloseSheet()">Skip for now</button>
+        </div>
+
+        <!-- Step 2: Form -->
+        <div id="h-step-2" style="display:none;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+            <button onclick="hGoStep1()" style="background:none;border:none;font-size:13px;color:var(--gray-500);cursor:pointer;padding:0;">← Back</button>
+            <div class="sheet-section-label" style="margin:0;">Add your number</div>
+          </div>
+          <div style="font-size:11px;color:var(--gray-500);margin-bottom:10px;line-height:1.5;">Enter your <span id="h-prog-name-form">Hilton Honors</span> number. It will be saved to your profile and applied to all future bookings with this program.</div>
+          <label style="font-size:11px;font-weight:700;color:var(--gray-700);display:block;margin-bottom:5px;" id="h-input-label">Hilton Honors number</label>
+          <input class="sheet-input" id="h-input" type="text" placeholder="e.g. 1234567" />
+          <button class="btn-sheet-primary" onclick="hGoStep3()">✓ &nbsp;Confirm &amp; apply</button>
+          <button class="btn-sheet-ghost" style="margin-top:6px;" onclick="hCloseSheet()">Cancel</button>
+        </div>
+
+        <!-- Step 3: Confirmed -->
+        <div id="h-step-3" style="display:none;">
+          <div style="text-align:center;padding:16px 0 20px;">
+            <div style="width:44px;height:44px;border-radius:50%;background:var(--green);color:#fff;font-size:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;">✓</div>
+            <div style="font-size:16px;font-weight:700;color:var(--gray-900);margin-bottom:4px;" id="h-confirmed-pts">3,400 points</div>
+            <div style="font-size:12px;color:var(--gray-600);margin-bottom:4px;">confirmed on this booking</div>
+            <div style="font-size:11px;color:var(--gray-400);" id="h-confirmed-num">#1234567 saved to profile</div>
+          </div>
+          <div style="background:var(--green-bg);border:1px solid var(--green-border);border-radius:var(--radius-sm);padding:10px 12px;font-size:11px;color:var(--green);line-height:1.5;margin-bottom:12px;">
+            Your loyalty number is saved. It will auto-apply to future Hilton stays — you won't need to do this again.
+          </div>
+          <button class="btn-sheet-primary" onclick="hCloseSheet()" style="background:var(--gray-700);">← Back to results</button>
+        </div>
+
+        <!-- Step indicators -->
+        <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:8px;" id="b-steps">
+          <div class="b-step-dot active" id="h-dot-1" style="width:6px;height:6px;border-radius:50%;background:var(--gray-800);"></div>
+          <div class="b-step-dot" id="h-dot-2" style="width:6px;height:6px;border-radius:50%;background:var(--gray-300);"></div>
+          <div class="b-step-dot" id="h-dot-3" style="width:6px;height:6px;border-radius:50%;background:var(--gray-300);"></div>
+        </div>
+
+      </div>
+
+      <div class="sheet-footer">
+        <div class="sheet-footer-note">Your booking won't be affected. No redirect, no re-search required.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="annotation-row">
+    <div class="annotation"><div class="annotation-title">Trigger</div><div class="annotation-body">Loyalty chip opens an overlay sheet with a soft dim. Any other card chip replaces the sheet content in place.</div></div>
+    <div class="annotation"><div class="annotation-title">Behavior</div><div class="annotation-body">3-step micro-flow: info → form → confirmation. Back nav between steps. Step dots communicate progress.</div></div>
+    <div class="annotation"><div class="annotation-title">After enroll</div><div class="annotation-body">Step 3 shows a centered success state with CTA back to results. Chip on originating card updates to green enrolled state.</div></div>
+    <div class="annotation"><div class="annotation-title">Tradeoffs</div><div class="annotation-body">Overlay dims the list — focused flow, slightly more interruptive. Good when the enrollment pitch deserves dedicated attention.</div></div>
+  </div>
+</div>
+
+<div class="section-divider"><hr></div>
+
+
+<div class="concept-block">
+  <div class="concept-label">
+    <div class="concept-num">I</div>
+    <div class="concept-title">Persistent Loyalty Panel</div>
+  </div>
+  <div class="concept-desc">A fixed right panel is always present alongside the results list — similar to where the map usually lives. It shows all loyalty programs available across the visible results. Each program row is collapsible. Clicking a card highlights it and scrolls its programs to the top. Zero-trigger UX — no chip click needed.</div>
+  <div class="interaction-note"><div class="note-dot"></div>Click any program row to expand · Click a hotel card to highlight it</div>
+
+  <div class="demo-viewport demo-viewport--tall">
+    <div class="demo-label">Concept I — Live</div>
+
+    <div class="srp-list i-srp" id="i-srp" style="padding-right:8px;">
+
+      <div style="position:relative;">
+        <div class="preferred-float">★ Egencia preferred</div>
+        <div class="mini-card highlighted" id="i-card-1" onclick="iSelectCard(1)">
+          <div class="mini-card__img">🏨</div>
+          <div class="mini-card__info">
+            <div class="mini-card__name">Hilton Chicago</div>
+            <div class="mini-card__meta">★★★★ · 0.3 mi · 4.3/5</div>
+            <div class="mini-card__loyalty">
+              <span class="status-tag status-tag--not-enrolled">🎖 Not enrolled</span>
+            </div>
+          </div>
+          <div class="mini-card__price"><div class="mini-price">$289</div></div>
+        </div>
+      </div>
+
+      <div class="mini-card" id="i-card-2" onclick="iSelectCard(2)">
+        <div class="mini-card__img">🏨</div>
+        <div class="mini-card__info">
+          <div class="mini-card__name">Westin Michigan Ave</div>
+          <div class="mini-card__meta">★★★★ · 0.5 mi · 4.1/5</div>
+          <div class="mini-card__loyalty">
+            <span class="status-tag status-tag--not-enrolled">🎖 Not enrolled</span>
+          </div>
+        </div>
+        <div class="mini-card__price"><div class="mini-price">$242</div></div>
+      </div>
+
+      <div class="mini-card" id="i-card-3" onclick="iSelectCard(3)">
+        <div class="mini-card__img">🏨</div>
+        <div class="mini-card__info">
+          <div class="mini-card__name">Hyatt Regency Chicago</div>
+          <div class="mini-card__meta">★★★★ · 0.8 mi · 3.9/5</div>
+          <div class="mini-card__loyalty">
+            <span class="status-tag status-tag--enrolled">✓ Enrolled</span>
+          </div>
+        </div>
+        <div class="mini-card__price"><div class="mini-price">$197</div></div>
+      </div>
+
+      <div class="mini-card" id="i-card-4" onclick="iSelectCard(4)">
+        <div class="mini-card__img">🏨</div>
+        <div class="mini-card__info">
+          <div class="mini-card__name">InterContinental</div>
+          <div class="mini-card__meta">★★★★★ · 0.4 mi · 4.4/5</div>
+          <div class="mini-card__loyalty">
+            <span class="status-tag status-tag--not-enrolled">🎖 Not enrolled</span>
+          </div>
+        </div>
+        <div class="mini-card__price"><div class="mini-price">$315</div></div>
+      </div>
+
+    </div>
+
+    <!-- Persistent panel C -->
+    <div class="c-panel" id="i-panel">
+      <div class="c-panel-header">
+        <div class="c-panel-title" id="i-panel-title">Hilton Chicago</div>
+        <div class="c-panel-sub">Loyalty programs available</div>
+      </div>
+      <div class="c-panel-body" id="i-panel-body">
+
+        <!-- Hilton Honors row -->
+        <div class="c-program-row expanded" id="i-row-1">
+          <div class="c-program-row-header" onclick="iToggleRow(1)">
+            <div class="c-prog-icon">🎖</div>
+            <div>
+              <div class="c-prog-name">Hilton Honors</div>
+              <div class="c-prog-sub">Not enrolled</div>
+            </div>
+            <div class="c-prog-pts">
+              <div class="c-prog-pts-val">3,400</div>
+              <div class="c-prog-pts-lbl">pts</div>
+            </div>
+            <svg class="c-prog-chevron open" id="i-chev-1" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6l4 4 4-4"/></svg>
+          </div>
+          <div class="c-program-expand open" id="i-expand-1">
+            <div class="c-program-expand-inner">
+              <div style="font-size:11px;color:var(--gray-600);line-height:1.5;margin-bottom:8px;">Earn 3,400 points on this 3-night stay. Enroll once and it applies to all future Hilton bookings.</div>
+              <input class="sheet-input" id="i-input-1" type="text" placeholder="Hilton Honors # (e.g. 1234567)" style="margin-bottom:6px;" />
+              <button class="btn-sheet-primary" onclick="iEnroll(1,'Hilton Honors','3,400')">✓ &nbsp;Enroll &amp; apply</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Enrolled state (hidden) -->
+        <div style="display:none;" id="i-enrolled-1">
+          <div class="c-program-row">
+            <div class="c-program-row-header" style="cursor:default;background:var(--green-bg);border-radius:var(--radius-sm);">
+              <div class="c-prog-icon" style="background:var(--green-bg);">✓</div>
+              <div>
+                <div class="c-prog-name" style="color:var(--green);">Hilton Honors</div>
+                <div class="c-prog-sub" style="color:var(--green);opacity:.7;" id="i-enrolled-sub-1">Enrolled · #1234567 saved</div>
+              </div>
+              <div class="c-prog-pts">
+                <div class="c-prog-pts-val" style="color:var(--green);">3,400</div>
+                <div class="c-prog-pts-lbl" style="color:var(--green);">pts earned</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Panel for card 2 (hidden) -->
+    <!-- Panel for card 3 (hidden) -->
+  </div>
+
+  <div class="annotation-row">
+    <div class="annotation"><div class="annotation-title">Trigger</div><div class="annotation-body">No explicit trigger needed. Panel is always present. Clicking a hotel card refreshes the panel content for that property.</div></div>
+    <div class="annotation"><div class="annotation-title">Behavior</div><div class="annotation-body">Accordion rows per program. Expand to enroll inline. Panel content transitions as the user selects different cards.</div></div>
+    <div class="annotation"><div class="annotation-title">After enroll</div><div class="annotation-body">Row converts to green enrolled state. Card's status tag updates. Panel remains open — user can continue browsing.</div></div>
+    <div class="annotation"><div class="annotation-title">Tradeoffs</div><div class="annotation-body">Most always-on, lowest friction to discover. Compresses the results list permanently. Works best as a replacement for the map column on loyalty-filtered results.</div></div>
+  </div>
+</div>
+
+
+<script>
+  // ─── CONCEPT A ───
+  function aTransitionToEnroll() {
+    document.getElementById('a-strip-default').style.display = 'none';
+    document.getElementById('a-strip-enrolling').style.display = 'flex';
+    setTimeout(() => document.getElementById('a-input').focus(), 50);
+  }
+  function aTransitionToEnrolled() {
+    const val = document.getElementById('a-input').value || '1234567';
+    document.getElementById('a-strip-enrolling').style.display = 'none';
+    document.getElementById('a-strip-enrolled').style.display = 'flex';
+    document.querySelector('#a-strip-enrolled .enrolled-sub').textContent =
+      'Loyalty number saved to your profile · #' + val;
+  }
+  function aReset() {
+    document.getElementById('a-strip-enrolling').style.display = 'none';
+    document.getElementById('a-strip-default').style.display = 'flex';
+  }
+
+  // ─── CONCEPT B ───
+  let bOpen = false;
+  function bToggleDrawer() {
+    bOpen = !bOpen;
+    document.getElementById('b-drawer').classList.toggle('open', bOpen);
+    document.getElementById('b-chevron').classList.toggle('open', bOpen);
+    if (bOpen) setTimeout(() => document.getElementById('b-input').focus(), 260);
+  }
+  function bConfirm() {
+    const val = document.getElementById('b-input').value || '1234567';
+    document.getElementById('b-row-default').style.display = 'none';
+    document.getElementById('b-drawer').style.display = 'none';
+    document.getElementById('b-row-enrolled').style.display = 'flex';
+    document.querySelector('#b-row-enrolled .loyalty-row-text').innerHTML =
+      'Earning <strong>3,400 points</strong> · #' + val + ' saved';
+  }
+
+  // ─── CONCEPT C ───
+  let cTooltipTimer = null;
+  let cTooltipLocked = false;
+
+  function cShowTooltip() {
+    clearTimeout(cTooltipTimer);
+    document.getElementById('c-tooltip').classList.add('visible');
+  }
+  function cKeepTooltip() {
+    clearTimeout(cTooltipTimer);
+  }
+  function cHideTooltipDelay() {
+    cTooltipTimer = setTimeout(() => {
+      if (!cTooltipLocked) document.getElementById('c-tooltip').classList.remove('visible');
+    }, 250);
+  }
+  function cHideTooltip() {
+    document.getElementById('c-tooltip').classList.remove('visible');
+    cTooltipLocked = false;
+  }
+  function cStartEnroll() {
+    cTooltipLocked = true;
+    document.getElementById('c-tooltip').classList.remove('visible');
+    document.getElementById('c-chip-group').style.display = 'none';
+    document.getElementById('c-form').style.display = 'flex';
+    setTimeout(() => document.getElementById('c-input').focus(), 50);
+  }
+  function cConfirm() {
+    const val = document.getElementById('c-input').value || '1234567';
+    document.getElementById('c-form').style.display = 'none';
+    document.getElementById('c-enrolled-group').style.display = 'flex';
+    document.querySelector('#c-enrolled-group span:last-child').textContent = '#' + val + ' saved to profile';
+    cTooltipLocked = false;
+  }
+  function cReset() {
+    document.getElementById('c-form').style.display = 'none';
+    document.getElementById('c-chip-group').style.display = 'flex';
+    cTooltipLocked = false;
+  }
+
+  // ─── CONCEPT D ───
+  function dStartEnroll() {
+    document.getElementById('d-panel-default').style.display = 'none';
+    document.getElementById('d-panel-form').style.display = 'flex';
+    setTimeout(() => document.getElementById('d-input').focus(), 50);
+  }
+  function dConfirm() {
+    const val = document.getElementById('d-input').value || '1234567';
+    document.getElementById('d-panel-form').style.display = 'none';
+    document.getElementById('d-panel-enrolled').style.display = 'flex';
+    document.querySelector('#d-panel-enrolled .d-enrolled-num').textContent = '#' + val + ' saved to profile';
+  }
+  function dReset() {
+    document.getElementById('d-panel-form').style.display = 'none';
+    document.getElementById('d-panel-default').style.display = 'flex';
+  }
+
+  // ─── CONCEPT E ───
+  function eDismissBanner() {
+    document.getElementById('e-banner').style.display = 'none';
+  }
+  function eStartEnroll() {
+    document.getElementById('e-banner-content').style.display = 'none';
+    document.getElementById('e-banner-form').style.display = 'flex';
+    setTimeout(() => document.getElementById('e-input').focus(), 50);
+  }
+  function eConfirm() {
+    const val = document.getElementById('e-input').value || '1234567';
+    document.getElementById('e-banner').classList.remove('e-banner-amber');
+    document.getElementById('e-banner').classList.add('e-banner-green');
+    document.getElementById('e-banner-form').style.display = 'none';
+    document.getElementById('e-banner-enrolled').style.display = 'flex';
+    document.querySelector('#e-banner-enrolled .e-enrolled-num').textContent = '· #' + val + ' saved to profile';
+  }
+  function eReset() {
+    document.getElementById('e-banner-form').style.display = 'none';
+    document.getElementById('e-banner-content').style.display = 'flex';
+  }
+
+  // ─── CONCEPT F ───
+  let fSlideOpen = false;
+  function fToggleSlide() {
+    fSlideOpen = !fSlideOpen;
+    document.getElementById('f-slide-panel').classList.toggle('f-slide-open', fSlideOpen);
+    document.getElementById('f-badge').classList.toggle('f-badge-active', fSlideOpen);
+    if (fSlideOpen) setTimeout(() => document.getElementById('f-input').focus(), 280);
+  }
+  function fConfirm() {
+    const val = document.getElementById('f-input').value || '1234567';
+    document.getElementById('f-slide-panel').classList.remove('f-slide-open');
+    fSlideOpen = false;
+    const badge = document.getElementById('f-badge');
+    badge.classList.remove('f-badge-active');
+    badge.classList.add('f-badge-enrolled');
+    badge.innerHTML = '✓ 3,400 pts';
+    document.getElementById('f-enrolled-strip').style.display = 'flex';
+    document.querySelector('#f-enrolled-strip .f-enrolled-num').textContent = 'Hilton Honors #' + val + ' saved to your profile';
+  }
+  function fReset() {
+    document.getElementById('f-slide-panel').classList.remove('f-slide-open');
+    fSlideOpen = false;
+    document.getElementById('f-badge').classList.remove('f-badge-active');
+  }
+
+  // ── SIDE SHEET CONCEPTS (G, H, I) ──────────────────────────────
+// ── CONCEPT A ── Push sheet ─────────────────────────────────────
+const gPrograms = {
+  1: { hotel: 'Hilton Chicago',        program: 'Hilton Honors',     pts: '3,400' },
+  2: { hotel: 'Westin Michigan Avenue',program: 'Marriott Bonvoy',   pts: '2,800' },
+  4: { hotel: 'InterContinental',      program: 'IHG One Rewards',   pts: '4,100' },
+};
+let gActiveCard = null;
+
+function gOpenSheet(cardId) {
+  const d = gPrograms[cardId];
+  gActiveCard = cardId;
+  document.getElementById('g-hotel-name').textContent = d.hotel;
+  document.getElementById('g-program-name').textContent = d.program;
+  document.getElementById('g-pts-value').textContent = d.pts;
+  document.getElementById('g-program-pitch').textContent =
+    `We found a ${d.program} account linked to your profile. Confirm to start earning points on every qualifying stay — no redirect needed.`;
+  document.getElementById('g-form-state').style.display = '';
+  document.getElementById('g-enrolled-state').style.display = 'none';
+  document.getElementById('g-input').value = '1234567890';
+  document.getElementById('g-sheet').classList.add('open');
+  // Highlight card
+  document.querySelectorAll('#a-srp .mini-card').forEach(c => c.classList.remove('highlighted'));
+  document.getElementById('g-card-' + cardId)?.classList.add('highlighted');
+}
+function gCloseSheet() {
+  document.getElementById('g-sheet').classList.remove('open');
+  document.querySelectorAll('#a-srp .mini-card').forEach(c => c.classList.remove('highlighted'));
+}
+function gConfirm() {
+  const val = document.getElementById('g-input').value.trim() || '1234567890';
+  const d = gPrograms[gActiveCard];
+  document.getElementById('g-enrolled-headline').textContent = `You'll earn ${d.pts} points when booking this hotel`;
+  document.getElementById('g-enrolled-sub').textContent = `#${val} saved to your profile`;
+  document.getElementById('g-form-state').style.display = 'none';
+  document.getElementById('g-enrolled-state').style.display = '';
+  // Update chip
+  const chip = document.getElementById('g-chip-' + gActiveCard);
+  if (chip) { chip.textContent = `✓ ${d.program} — Enrolled`; chip.classList.add('enrolled'); chip.onclick = null; }
+}
+
+// ── CONCEPT B ── Overlay sheet / 3-step ────────────────────────
+let hCurrentProgram = '', hCurrentPts = '', hCurrentHotel = '';
+
+function hOpenSheet(hotel, program, pts) {
+  hCurrentProgram = program; hCurrentPts = pts; hCurrentHotel = hotel;
+  document.getElementById('h-hotel-name').textContent = hotel;
+  document.getElementById('h-pts-display').textContent = pts;
+  document.getElementById('h-prog-display').textContent = `${program} points available on this stay`;
+  document.getElementById('h-prog-name-form').textContent = program;
+  document.getElementById('h-input-label').textContent = `${program} number`;
+  document.getElementById('h-input').value = '';
+  hGoStep1();
+  document.getElementById('h-sheet').classList.add('open');
+  document.getElementById('h-dim').classList.add('active');
+}
+function hCloseSheet() {
+  document.getElementById('h-sheet').classList.remove('open');
+  document.getElementById('h-dim').classList.remove('active');
+}
+function hGoStep1() {
+  document.getElementById('h-step-1').style.display = '';
+  document.getElementById('h-step-2').style.display = 'none';
+  document.getElementById('h-step-3').style.display = 'none';
+  hSetDot(1);
+}
+function hGoStep2() {
+  document.getElementById('h-step-1').style.display = 'none';
+  document.getElementById('h-step-2').style.display = '';
+  document.getElementById('h-step-3').style.display = 'none';
+  hSetDot(2);
+  setTimeout(() => document.getElementById('h-input').focus(), 50);
+}
+function hGoStep3() {
+  const val = document.getElementById('h-input').value.trim() || '1234567';
+  document.getElementById('h-confirmed-pts').textContent = `${hCurrentPts} points`;
+  document.getElementById('h-confirmed-num').textContent = `#${val} saved to profile`;
+  document.getElementById('h-step-1').style.display = 'none';
+  document.getElementById('h-step-2').style.display = 'none';
+  document.getElementById('h-step-3').style.display = '';
+  hSetDot(3);
+}
+function hSetDot(n) {
+  [1,2,3].forEach(i => {
+    document.getElementById('h-dot-'+i).style.background = i === n ? 'var(--gray-800)' : 'var(--gray-300)';
+    document.getElementById('h-dot-'+i).style.transform = i === n ? 'scale(1.4)' : 'scale(1)';
+  });
+}
+
+// ── CONCEPT C ── Persistent panel ──────────────────────────────
+let iSelectedCard = 1;
+const iCardData = {
+  1: { name: 'Hilton Chicago',         programs: 1 },
+  2: { name: 'Westin Michigan Ave',    programs: 2 },
+  3: { name: 'Hyatt Regency Chicago',  programs: 3 },
+  4: { name: 'InterContinental',       programs: 4 },
+};
+
+function iSelectCard(n) {
+  iSelectedCard = n;
+  document.querySelectorAll('#c-srp .mini-card').forEach(c => c.classList.remove('highlighted'));
+  document.getElementById('i-card-' + n).classList.add('highlighted');
+  const d = iCardData[n];
+  document.getElementById('i-panel-title').textContent = d.name;
+
+  const body = document.getElementById('i-panel-body');
+  // Show relevant content per card
+  if (n === 1) {
+    body.style.opacity = '0';
+    setTimeout(() => {
+      document.getElementById('i-row-1').style.display = '';
+      document.getElementById('i-enrolled-1').style.display = 'none';
+      body.style.opacity = '1';
+    }, 120);
+  } else if (n === 2) {
+    body.innerHTML = cRenderProgram('Marriott Bonvoy', 'Not enrolled', '2,800', 'Earn 2,800 points on this 3-night stay.', 'm');
+  } else if (n === 3) {
+    body.innerHTML = cRenderEnrolled('World of Hyatt', '#WH-887654');
+  } else if (n === 4) {
+    body.innerHTML = cRenderProgram('IHG One Rewards', 'Not enrolled', '4,100', 'Earn 4,100 IHG points on this stay.', 'ihg');
+  }
+}
+
+function iRenderProgram(name, status, pts, pitch, id) {
+  return `
+    <div class="c-program-row expanded">
+      <div class="c-program-row-header" onclick="this.parentElement.querySelector('.c-program-expand').classList.toggle('open')">
+        <div class="c-prog-icon">🎖</div>
+        <div><div class="c-prog-name">${name}</div><div class="c-prog-sub">${status}</div></div>
+        <div class="c-prog-pts"><div class="c-prog-pts-val">${pts}</div><div class="c-prog-pts-lbl">pts</div></div>
+        <svg class="c-prog-chevron open" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6l4 4 4-4"/></svg>
+      </div>
+      <div class="c-program-expand open">
+        <div class="c-program-expand-inner">
+          <div style="font-size:11px;color:var(--gray-600);line-height:1.5;margin-bottom:8px;">${pitch}</div>
+          <input class="sheet-input" id="c-dyn-input" type="text" placeholder="${name} # (e.g. 1234567)" style="margin-bottom:6px;" />
+          <button class="btn-sheet-primary" onclick="cEnrollDynamic('${name}','${pts}')">✓ &nbsp;Enroll &amp; apply</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function iRenderEnrolled(name, num) {
+  return `
+    <div class="c-program-row">
+      <div class="c-program-row-header" style="cursor:default;background:var(--green-bg);border-radius:var(--radius-sm);">
+        <div class="c-prog-icon" style="background:var(--green-bg);">✓</div>
+        <div><div class="c-prog-name" style="color:var(--green);">${name}</div><div class="c-prog-sub" style="color:var(--green);opacity:.7;">Enrolled · ${num}</div></div>
+        <div class="c-prog-pts"><div class="c-prog-pts-val" style="color:var(--green);">—</div><div class="c-prog-pts-lbl" style="color:var(--green);">earning</div></div>
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--gray-500);padding:8px 4px;line-height:1.5;">You're already earning World of Hyatt points on every stay. Your number is applied automatically.</div>`;
+}
+
+function iEnroll(rowId, name, pts) {
+  const val = document.getElementById('i-input-1').value.trim() || '1234567';
+  document.getElementById('i-row-1').style.display = 'none';
+  document.getElementById('i-enrolled-1').style.display = '';
+  document.getElementById('i-enrolled-sub-1').textContent = `Enrolled · #${val} saved`;
+  // Update card status tag
+  const tag = document.querySelector('#i-card-1 .status-tag');
+  if (tag) { tag.className = 'status-tag status-tag--enrolled'; tag.textContent = '✓ Enrolled'; }
+}
+
+function iEnrollDynamic(name, pts) {
+  const val = document.getElementById('i-dyn-input')?.value.trim() || '1234567';
+  const body = document.getElementById('i-panel-body');
+  body.innerHTML = cRenderEnrolled(name, `#${val}`);
+  // Update card tag
+  const tag = document.querySelector(`#c-card-${iSelectedCard} .status-tag`);
+  if (tag) { tag.className = 'status-tag status-tag--enrolled'; tag.textContent = '✓ Enrolled'; }
+}
+
+function iToggleRow(n) {
+  const expand = document.getElementById('i-expand-' + n);
+  const chev = document.getElementById('i-chev-' + n);
+  const row = document.getElementById('i-row-' + n);
+  const isOpen = expand.classList.contains('open');
+  expand.classList.toggle('open', !isOpen);
+  chev.classList.toggle('open', !isOpen);
+  row.classList.toggle('expanded', !isOpen);
+}
+</script>
+
+</body>
+</html>
