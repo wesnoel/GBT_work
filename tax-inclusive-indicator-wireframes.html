@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tax-Inclusive Pricing Indicator — Flow Wireframes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+/* ─── Reset ──────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg:      #F4F5F7;
+  --surface: #FFFFFF;
+  --border:  #E0E2E6;
+  --border2: #C8CBD2;
+  --skel:    #E6E8EC;
+  --t1:      #1A1C22;
+  --t2:      #52566A;
+  --t3:      #9599AB;
+  --t4:      #C4C7D2;
+  --inv:     #1A1C22;
+  --focus:   #1A1C22;
+  font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+}
+body, button, input, select, textarea { font-family: inherit; }
+body { background: var(--bg); color: var(--t1); min-height: 100vh; -webkit-font-smoothing: antialiased; }
+button { cursor: pointer; font-family: inherit; border: none; background: none; }
+a { color: inherit; text-decoration: none; }
+
+/* ─── Page wrapper ───────────────────────────────────────── */
+.page-wrap { max-width: 1200px; margin: 0 auto; }
+
+/* ─── Badges ─────────────────────────────────────────────── */
+.badge {
+  display: inline-flex; align-items: center;
+  padding: 2px 7px; border-radius: 3px;
+  font-size: 10px; font-weight: 600; line-height: 16px;
+  white-space: nowrap; letter-spacing: 0.01em;
+}
+.bd  { background: #1A1C22; color: #fff; }
+.bo  { background: transparent; border: 1px solid #9599AB; color: #52566A; }
+.bl  { background: #E6E8EC; color: #52566A; }
+
+/* ─── Hub ────────────────────────────────────────────────── */
+#hub { min-height: 100vh; }
+.hub-masthead { background: var(--inv); color: #fff; padding: 40px 0 34px; }
+.hub-masthead-inner { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+.hub-masthead h1 { font-size: 21px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 6px; }
+.hub-masthead p  { font-size: 12px; color: #9599AB; max-width: 640px; line-height: 1.6; }
+.hub-masthead-meta { display: flex; gap: 0; margin-top: 18px; flex-wrap: wrap; }
+.hub-masthead-meta span {
+  font-size: 11px; color: #666B80; padding: 2px 16px; margin: 2px 0;
+  border-left: 1px solid #2E3144;
+}
+.hub-masthead-meta span:first-child { padding-left: 0; border: none; }
+
+.hub-note {
+  max-width: 1200px; margin: 24px auto 0; padding: 0 40px;
+}
+.hub-note-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-left: 3px solid var(--t2); border-radius: 6px;
+  padding: 14px 18px; font-size: 11.5px; color: var(--t2); line-height: 1.65;
+}
+.hub-note-card strong { color: var(--t1); }
+
+.hub-grid {
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 16px; padding: 28px 40px 56px;
+}
+.c-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; overflow: hidden; cursor: pointer;
+  transition: box-shadow .15s, transform .15s, border-color .15s;
+  display: flex; flex-direction: column;
+}
+.c-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,.10); border-color: #AAB; transform: translateY(-2px); }
+.c-thumb {
+  height: 132px; background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  padding: 12px; position: relative; overflow: hidden;
+}
+.c-num { position: absolute; top: 8px; right: 10px; font-size: 9px; font-weight: 700; color: var(--t4); letter-spacing: .06em; }
+.c-info { padding: 15px; flex: 1; display: flex; flex-direction: column; }
+.c-tag { font-size: 9px; font-weight: 700; letter-spacing: .07em; color: var(--t3); text-transform: uppercase; margin-bottom: 7px; }
+.c-info h3 { font-size: 13px; font-weight: 700; color: var(--t1); margin-bottom: 6px; letter-spacing: -.01em; }
+.c-info p  { font-size: 11px; color: var(--t2); line-height: 1.6; flex: 1; }
+.c-btn {
+  display: block; width: 100%; margin-top: 14px;
+  padding: 8px 0; background: var(--inv); color: #fff;
+  font-size: 10px; font-weight: 700; text-align: center;
+  border-radius: 5px; letter-spacing: .04em;
+}
+
+/* Thumbnail mini-wires */
+.th-nav  { height: 10px; background: #1A1C22; border-radius: 2px; margin-bottom: 6px; }
+.th-banner { height: 14px; background: #D4D6DC; border: 1px dashed #9599AB; border-radius: 3px; margin-bottom: 6px; }
+.th-list { display: flex; flex-direction: column; gap: 6px; }
+.th-card { height: 20px; background: #fff; border: 1px solid #E0E2E6; border-radius: 3px; position: relative; }
+.th-price { position: absolute; right: 6px; top: 5px; width: 26px; height: 6px; background: #C8CBD2; border-radius: 2px; }
+.th-lbl { position: absolute; right: 6px; top: 12px; width: 20px; height: 3px; background: #9599AB; border-radius: 1px; }
+.th-fail { background: repeating-linear-gradient(45deg,#EDEEF1,#EDEEF1 4px,#E2E4E8 4px,#E2E4E8 8px); }
+.th-pop { position: absolute; left: 40px; top: 22px; width: 46px; height: 22px; background: #1A1C22; border-radius: 3px; }
+
+/* ─── Concept page ───────────────────────────────────────── */
+.cpage { display: none; min-height: 100vh; background: var(--bg); }
+.cpage.active { display: block; }
+
+/* Sticky controls bar */
+.ctrl-bar {
+  position: sticky; top: 0; z-index: 40;
+  background: var(--inv); color: #fff;
+  border-bottom: 1px solid #2E3144;
+}
+.ctrl-inner {
+  max-width: 1200px; margin: 0 auto; padding: 12px 40px;
+  display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+}
+.ctrl-back {
+  font-size: 11px; font-weight: 600; color: #C4C7D2;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 10px; border: 1px solid #2E3144; border-radius: 5px;
+}
+.ctrl-back:hover { color: #fff; border-color: #52566A; }
+.ctrl-title { font-size: 12px; font-weight: 700; letter-spacing: -.01em; }
+.ctrl-title small { display:block; font-size: 10px; font-weight: 500; color: #9599AB; letter-spacing: 0; margin-top: 2px; }
+.ctrl-group { display: flex; align-items: center; gap: 8px; margin-left: auto; flex-wrap: wrap; }
+.ctrl-lbl { font-size: 10px; font-weight: 600; letter-spacing: .05em; color: #9599AB; text-transform: uppercase; }
+.seg { display: inline-flex; border: 1px solid #2E3144; border-radius: 6px; overflow: hidden; }
+.seg button {
+  padding: 6px 12px; font-size: 11px; font-weight: 600; color: #C4C7D2; background: transparent;
+  border-right: 1px solid #2E3144;
+}
+.seg button:last-child { border-right: none; }
+.seg button.on { background: #fff; color: #1A1C22; }
+.toggle {
+  display: inline-flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 600; color: #C4C7D2;
+  padding: 6px 12px; border: 1px solid #2E3144; border-radius: 6px;
+}
+.toggle .dot { width: 30px; height: 16px; border-radius: 999px; background: #52566A; position: relative; transition: background .15s; }
+.toggle .dot::after { content:''; position:absolute; top:2px; left:2px; width:12px; height:12px; border-radius:50%; background:#fff; transition: transform .15s; }
+.toggle.on .dot { background: #fff; }
+.toggle.on .dot::after { transform: translateX(14px); background:#1A1C22; }
+
+/* Concept body */
+.cbody { max-width: 1200px; margin: 0 auto; padding: 28px 40px 64px; }
+.cbody-head { margin-bottom: 20px; }
+.cbody-head h2 { font-size: 17px; font-weight: 700; letter-spacing: -.02em; margin-bottom: 6px; }
+.cbody-head p  { font-size: 12px; color: var(--t2); line-height: 1.65; max-width: 720px; }
+
+.frame-label { font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--t3); margin: 26px 0 10px; display:flex; align-items:center; gap:8px; }
+.frame-label::before { content:''; width: 14px; height: 1px; background: var(--border2); }
+
+/* ─── SRP mock ───────────────────────────────────────────── */
+.srp { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.srp-nav { background: var(--inv); height: 46px; display: flex; align-items: center; padding: 0 20px; gap: 18px; }
+.srp-logo { width: 74px; height: 12px; background: #fff; border-radius: 2px; opacity: .92; }
+.srp-navlink { width: 46px; height: 8px; background: #52566A; border-radius: 2px; }
+.srp-navlink.sm { width: 34px; }
+.srp-navr { margin-left: auto; width: 26px; height: 26px; border-radius: 50%; background: #52566A; }
+.srp-summary { padding: 14px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 14px; }
+.srp-search-pill { flex: 1; height: 40px; border: 1px solid var(--border2); border-radius: 8px; display:flex; align-items:center; padding: 0 14px; gap: 10px; }
+.srp-search-pill .mag { width: 14px; height: 14px; border: 2px solid var(--t3); border-radius: 50%; position: relative; }
+.srp-search-pill .mag::after { content:''; position:absolute; right:-4px; bottom:-4px; width:6px; height:2px; background: var(--t3); transform: rotate(45deg); }
+.srp-search-txt strong { font-size: 12.5px; color: var(--t1); font-weight: 700; }
+.srp-search-txt span { font-size: 11px; color: var(--t2); }
+.srp-search-txt { line-height: 1.5; }
+.srp-modify { font-size: 11px; font-weight: 700; color: var(--t1); padding: 8px 14px; border: 1px solid var(--border2); border-radius: 7px; }
+.srp-filters { padding: 10px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+.srp-chip { font-size: 11px; font-weight: 600; color: var(--t2); padding: 6px 12px; border: 1px solid var(--border2); border-radius: 999px; }
+.srp-chip.on { background: var(--inv); color: #fff; border-color: var(--inv); }
+.srp-sort { margin-left: auto; font-size: 11px; color: var(--t2); display:flex; align-items:center; gap:6px; }
+.srp-sort b { color: var(--t1); font-weight: 700; }
+
+/* Banner (Candidate A) */
+.tax-banner {
+  display: flex; align-items: center; gap: 10px;
+  margin: 16px 20px 4px; padding: 10px 14px;
+  background: #F0F1F4; border: 1px solid var(--border); border-radius: 8px;
+}
+.tax-banner .ic {
+  flex: none; width: 18px; height: 18px; border-radius: 50%;
+  border: 1.5px solid var(--t2); color: var(--t2);
+  font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+  font-family: 'Open Sans', sans-serif;
+}
+.tax-banner .txt { font-size: 12px; color: var(--t2); font-weight: 500; }
+.tax-banner .info-wrap { margin-left: auto; flex: none; position: relative; }
+.tax-banner .info-btn {
+  width: 26px; height: 26px; min-width: 24px; min-height: 24px;
+  border-radius: 50%; border: 1px solid var(--border2);
+  color: var(--t2); font-size: 13px; font-weight: 700; font-family: 'Open Sans', sans-serif; font-style: italic;
+  display: flex; align-items: center; justify-content: center; background: var(--surface);
+}
+.tax-banner .info-btn:hover { border-color: var(--t2); color: var(--t1); }
+.tax-banner .info-btn:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+/* Info popover */
+.info-pop {
+  position: absolute; top: 36px; right: 0; z-index: 20;
+  width: 260px; max-width: 78vw; box-sizing: border-box;
+  background: var(--inv); color: #fff;
+  border-radius: 8px; padding: 12px 30px 12px 14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.28);
+  font-family: 'Open Sans', sans-serif;
+  font-size: 11px; font-weight: 400; line-height: 1.5; white-space: normal; text-align: left; letter-spacing: 0;
+}
+.info-pop::before { content:''; position: absolute; top: -6px; right: 9px; width: 12px; height: 12px; background: var(--inv); transform: rotate(45deg); }
+.info-pop h5 { font-size: 11px; font-weight: 700; margin-bottom: 4px; letter-spacing: .01em; }
+.info-pop p { font-size: 11px; font-weight: 400; color: #C4C7D2; }
+.info-pop .close { position: absolute; top: 7px; right: 9px; width: 18px; height: 18px; display:flex; align-items:center; justify-content:center; font-size: 11px; color: #9599AB; }
+.info-pop .close:hover { color: #fff; }
+
+/* Results list */
+.srp-list { padding: 8px 20px 20px; display: flex; flex-direction: column; gap: 12px; }
+.hcard { display: flex; gap: 14px; padding: 14px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); }
+.hcard-img { width: 132px; height: 108px; border-radius: 8px; background: linear-gradient(135deg,#E6E8EC,#D4D6DC); flex: none; position: relative; overflow:hidden; }
+.hcard-img::after { content:''; position:absolute; inset:0; background-image: radial-gradient(circle at 30% 35%, rgba(255,255,255,.5) 0 8px, transparent 9px); }
+.hcard-body { flex: 1; min-width: 0; }
+.hcard-badges { display: flex; gap: 6px; margin-bottom: 7px; }
+.hcard h4 { font-size: 14px; font-weight: 700; color: var(--t1); letter-spacing: -.01em; margin-bottom: 4px; }
+.hcard-meta { font-size: 11px; color: var(--t2); margin-bottom: 6px; }
+.hcard-rating { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--t2); }
+.hcard-rating b { background: var(--inv); color: #fff; font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 4px; }
+.hcard-amen { display: flex; gap: 6px; margin-top: 9px; flex-wrap: wrap; }
+.hcard-amen span { font-size: 10px; color: var(--t2); border: 1px solid var(--border); border-radius: 4px; padding: 2px 7px; }
+
+/* Price rail */
+.hcard-price { width: 168px; flex: none; border-left: 1px solid var(--border); padding-left: 16px; display: flex; flex-direction: column; align-items: flex-end; justify-content: space-between; }
+.price-top { text-align: right; width: 100%; }
+.price-night { font-size: 10px; color: var(--t3); margin-bottom: 2px; }
+.price-amt { font-size: 22px; font-weight: 800; color: var(--t1); letter-spacing: -.02em; }
+.price-total { font-size: 10px; color: var(--t3); margin-top: 2px; }
+/* Micro-label (Candidate B) */
+.tax-label { display: inline-flex; align-items: center; gap: 4px; margin-top: 5px; font-size: 10.5px; font-weight: 600; color: var(--t2); }
+.tax-label .tick { width: 11px; height: 11px; border-radius: 50%; background: var(--t2); color: #fff; font-size: 8px; display:flex; align-items:center; justify-content:center; }
+.price-unavail { font-size: 13px; font-weight: 600; color: var(--t3); text-align: right; }
+.price-unavail small { display:block; font-size: 10px; font-weight: 500; color: var(--t4); margin-top:2px; }
+.reserve-btn { width: 100%; margin-top: 12px; padding: 10px 0; background: var(--inv); color: #fff; font-size: 12px; font-weight: 700; border-radius: 7px; letter-spacing: .02em; }
+.reserve-btn:hover { background: #2E3038; }
+
+.callout {
+  margin-top: 14px; padding: 11px 14px; border: 1px dashed var(--border2); border-radius: 8px;
+  background: #FAFAFB; font-size: 11px; color: var(--t2); line-height: 1.6;
+}
+.callout b { color: var(--t1); }
+
+/* Breakdown grid */
+.bd-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.bd-cell { border: 1px solid var(--border); border-radius: 10px; background: var(--surface); padding: 16px; }
+.bd-cell h6 { font-size: 11px; font-weight: 700; color: var(--t1); margin-bottom: 3px; }
+.bd-cell .desc { font-size: 10.5px; color: var(--t3); margin-bottom: 14px; line-height: 1.5; }
+.bd-stage { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
+
+/* Mini price block for breakdowns */
+.mini-price { display: flex; flex-direction: column; align-items: flex-end; }
+.mini-reserve { width: 130px; margin-top: 10px; padding: 8px 0; background: var(--inv); color:#fff; font-size:11px; font-weight:700; border-radius:6px; text-align:center; }
+.mini-banner { display:flex; align-items:center; gap:8px; padding: 8px 11px; background:#F0F1F4; border:1px solid var(--border); border-radius:7px; font-size:11px; color:var(--t2); }
+.mini-banner .ic { width:15px;height:15px;border-radius:50%;border:1.5px solid var(--t2);color:var(--t2);font-size:9px;font-family:'Open Sans', sans-serif;display:flex;align-items:center;justify-content:center;flex:none; }
+
+/* Mobile frame */
+.mobile-frame { width: 340px; border: 1px solid var(--border2); border-radius: 20px; overflow: hidden; background: var(--surface); box-shadow: 0 8px 30px rgba(0,0,0,.08); }
+.mobile-notch { height: 26px; background: var(--inv); display:flex; align-items:center; justify-content:center; }
+.mobile-notch::after { content:''; width: 90px; height: 6px; background:#52566A; border-radius: 999px; }
+.m-card { padding: 12px; }
+.m-img { height: 120px; border-radius: 8px; background: linear-gradient(135deg,#E6E8EC,#D4D6DC); margin-bottom: 10px; }
+.m-h4 { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+.m-meta { font-size: 10.5px; color: var(--t2); margin-bottom: 10px; }
+.m-pricerow { display:flex; align-items: flex-end; justify-content: space-between; }
+.m-reserve { margin-top: 12px; padding: 10px 0; background: var(--inv); color:#fff; font-size:12px; font-weight:700; border-radius:7px; text-align:center; }
+
+.assump { margin-top: 30px; border-top: 1px solid var(--border); padding-top: 18px; }
+.assump h6 { font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--t3); margin-bottom: 8px; }
+.assump ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.assump li { font-size: 11px; color: var(--t2); line-height: 1.55; padding-left: 16px; position: relative; }
+.assump li::before { content:''; position: absolute; left: 0; top: 7px; width: 5px; height: 5px; background: var(--border2); border-radius: 50%; }
+
+@media (max-width: 720px) {
+  .hub-grid { grid-template-columns: 1fr; }
+  .bd-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════ HUB ══════════════════════ -->
+<div id="hub">
+  <div class="hub-masthead">
+    <div class="hub-masthead-inner">
+      <h1>Tax-Inclusive Pricing Indicator</h1>
+      <p>Grayscale flow wireframes for the EMEA/APAC hotel search results page. Two candidate treatments and two copy variants, explored across the five UX spec flows before moving to higher-fidelity Figma.</p>
+      <div class="hub-masthead-meta">
+        <span>GBTPLAN-1715</span>
+        <span>EMEA/APAC · Desktop + Mobile Web</span>
+        <span>Candidate A: Banner</span>
+        <span>Candidate B: Micro-label</span>
+        <span>8 flows · both copy variants</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hub-note">
+    <div class="hub-note-card">
+      <strong>How to use:</strong> Each card opens an interactive flow. The two happy-path treatments and the info affordance are split into separate flows per copy variant (Plain and Reassuring) so you can review all wording side by side. Error-path flows keep a copy toggle. Everything is grayscale and self-contained. This is concept-level structure and behavior, not final visual design.
+    </div>
+  </div>
+
+  <div class="hub-grid" id="hubGrid"></div>
+</div>
+
+<!-- Concept pages injected here -->
+<div id="pages"></div>
+
+<script>
+/* ─────────────────────────────────────────────────────────
+   Data model
+   ───────────────────────────────────────────────────────── */
+const COPY = {
+  plain:      { banner: "All prices include taxes and fees",                          label: "Incl. taxes & fees" },
+  reassuring: { banner: "Prices include all taxes and fees, no surprises at checkout", label: "All-in price" }
+};
+
+const HOTELS = [
+  { name: "The Nadler Soho",            area: "Soho, London",          rating: "4.6", reviews: "1,204", night: 189, total: 567, badge: "Preferred", amen: ["Free Wi-Fi","Breakfast","City centre"] },
+  { name: "citizenM Tower of London",   area: "Tower Hill, London",    rating: "4.4", reviews: "3,880", night: 176, total: 528, badge: "Eco-certified", amen: ["Free Wi-Fi","24h check-in"] },
+  { name: "Park Plaza Westminster",     area: "Westminster, London",   rating: "4.2", reviews: "6,150", night: 214, total: 642, badge: null, amen: ["Gym","Breakfast","Business centre"] },
+  { name: "Premier Inn County Hall",    area: "South Bank, London",    rating: "4.6", reviews: "9,410", night: 158, total: 474, badge: null, amen: ["Free Wi-Fi","Family rooms"] }
+];
+
+/* ─────────────────────────────────────────────────────────
+   Flow definitions
+   ───────────────────────────────────────────────────────── */
+const TH = {
+  banner: `<div class="th-nav"></div><div class="th-banner"></div><div class="th-list"><div class="th-card"><div class="th-price"></div></div><div class="th-card"><div class="th-price"></div></div><div class="th-card"><div class="th-price"></div></div></div>`,
+  label:  `<div class="th-nav"></div><div class="th-list"><div class="th-card"><div class="th-price"></div><div class="th-lbl"></div></div><div class="th-card"><div class="th-price"></div><div class="th-lbl"></div></div><div class="th-card"><div class="th-price"></div><div class="th-lbl"></div></div><div class="th-card"><div class="th-price"></div><div class="th-lbl"></div></div></div>`,
+  info:   `<div class="th-nav"></div><div class="th-banner"></div><div class="th-list"><div class="th-card"><div class="th-price"></div></div><div class="th-card"><div class="th-price"></div></div></div><div class="th-pop"></div>`,
+  fail:   `<div class="th-nav"></div><div class="th-banner"></div><div class="th-list"><div class="th-card"><div class="th-price"></div></div><div class="th-card th-fail"></div><div class="th-card"><div class="th-price"></div></div></div>`,
+  service:`<div class="th-nav"></div><div class="th-list"><div class="th-card"><div class="th-price"></div></div><div class="th-card"><div class="th-price"></div></div><div class="th-card"><div class="th-price"></div></div></div>`
+};
+
+const FLOWS = [
+  // ── Candidate A: banner, one flow per copy variant ──
+  {
+    id: "f1p", bd: "banner", tag: "Flow 1a · Banner · Plain copy", title: "Candidate A — Banner (Plain)",
+    desc: "Persistent, low-emphasis banner above the results list. Plain copy: “All prices include taxes and fees.”",
+    thumb: TH.banner, treatment: "banner", copy: "plain", controls: ["compare"]
+  },
+  {
+    id: "f1r", bd: "banner", tag: "Flow 1b · Banner · Reassuring copy", title: "Candidate A — Banner (Reassuring)",
+    desc: "Same banner, reassuring copy: “Prices include all taxes and fees, no surprises at checkout.”",
+    thumb: TH.banner, treatment: "banner", copy: "reassuring", controls: ["compare"]
+  },
+  // ── Candidate B: micro-label, one flow per copy variant ──
+  {
+    id: "f2p", bd: "label", tag: "Flow 2a · Label · Plain copy", title: "Candidate B — Micro-label (Plain)",
+    desc: "Static label beneath each price. Plain copy: “Incl. taxes & fees.”",
+    thumb: TH.label, treatment: "label", copy: "plain", controls: []
+  },
+  {
+    id: "f2r", bd: "label", tag: "Flow 2b · Label · Reassuring copy", title: "Candidate B — Micro-label (Reassuring)",
+    desc: "Same per-price label, reassuring copy: “All-in price.”",
+    thumb: TH.label, treatment: "label", copy: "reassuring", controls: []
+  },
+  // ── Info affordance, one flow per copy variant ──
+  {
+    id: "f3p", bd: "info", tag: "Flow 3a · Info · Plain copy", title: "Info affordance (Plain)",
+    desc: "Banner with optional info affordance, plain copy. Activate the “i” to reveal a single confirming line. No itemized breakdown, which is out of scope.",
+    thumb: TH.info, treatment: "banner", copy: "plain", info: true, controls: []
+  },
+  {
+    id: "f3r", bd: "info", tag: "Flow 3b · Info · Reassuring copy", title: "Info affordance (Reassuring)",
+    desc: "Same info affordance with reassuring banner copy.",
+    thumb: TH.info, treatment: "banner", copy: "reassuring", info: true, controls: []
+  },
+  // ── Error paths: copy toggle retained so both variants are viewable here too ──
+  {
+    id: "f4", bd: "fail", tag: "Flow 4 · Error path", title: "Pricing fails for a listing",
+    desc: "When a listing has no price, the indicator does not render for that listing. No orphaned or misleading claim. Other listings are unaffected.",
+    thumb: TH.fail, treatment: "banner", copy: "plain", fail: true, controls: ["copy","treatment","fail"]
+  },
+  {
+    id: "f5", bd: "service", tag: "Flow 5 · Error path", title: "Indicator service unavailable",
+    desc: "If the indicator's content service is down, the page degrades gracefully by hiding the indicator entirely. Pricing and the Reserve flow are untouched.",
+    thumb: TH.service, treatment: "banner", copy: "plain", service: true, controls: ["copy","treatment","service"]
+  }
+];
+
+/* Per-flow live state */
+const state = {};
+FLOWS.forEach(f => state[f.id] = {
+  id: f.id,
+  copy: f.copy || "plain",
+  treatment: f.treatment,
+  compare: false,     // f1: show without-banner comparison
+  info: false,        // f3: popover open
+  failed: f.fail || false,     // f4
+  serviceDown: f.service || false  // f5
+});
+
+/* ─────────────────────────────────────────────────────────
+   Render helpers
+   ───────────────────────────────────────────────────────── */
+function priceRail(h, s, opts={}) {
+  const showLabel = opts.treatment === "label" && !opts.serviceDown && !opts.failed;
+  const lbl = COPY[opts.copy].label;
+  if (opts.failed) {
+    return `<div class="hcard-price">
+      <div class="price-top">
+        <div class="price-unavail">Price unavailable<small>Try again in a moment</small></div>
+      </div>
+      <button class="reserve-btn" style="background:#C8CBD2;color:#fff;cursor:not-allowed;">Reserve</button>
+    </div>`;
+  }
+  return `<div class="hcard-price">
+    <div class="price-top">
+      <div class="price-night">per night</div>
+      <div class="price-amt">£${h.night}</div>
+      <div class="price-total">£${h.total} total · 3 nights</div>
+      ${showLabel ? `<div class="tax-label"><span class="tick">✓</span>${lbl}</div>` : ``}
+    </div>
+    <button class="reserve-btn">Reserve</button>
+  </div>`;
+}
+
+function hotelCard(h, s, opts, idx) {
+  const failed = opts.failed && idx === 2; // Park Plaza fails
+  const badges = [];
+  if (h.badge === "Preferred") badges.push(`<span class="badge bd">Preferred</span>`);
+  if (h.badge === "Eco-certified") badges.push(`<span class="badge bo">Eco-certified</span>`);
+  return `<div class="hcard">
+    <div class="hcard-img"></div>
+    <div class="hcard-body">
+      ${badges.length ? `<div class="hcard-badges">${badges.join("")}</div>` : ``}
+      <h4>${h.name}</h4>
+      <div class="hcard-meta">${h.area} · 0.4 mi from centre</div>
+      <div class="hcard-rating"><b>${h.rating}</b> Excellent · ${h.reviews} reviews</div>
+      <div class="hcard-amen">${h.amen.map(a=>`<span>${a}</span>`).join("")}</div>
+    </div>
+    ${priceRail(h, s, {...opts, failed})}
+  </div>`;
+}
+
+function bannerHTML(opts) {
+  if (opts.treatment !== "banner" || opts.serviceDown) return ``;
+  const txt = COPY[opts.copy].banner;
+  const infoWrap = opts.info
+    ? `<div class="info-wrap">
+        <button class="info-btn" data-info="${opts.id}" aria-label="More about tax-inclusive pricing" aria-expanded="${opts.infoOpen ? "true":"false"}">i</button>
+        ${opts.infoOpen ? `<div class="info-pop" role="dialog" aria-label="Tax-inclusive pricing">
+            <button class="close" data-info-close="${opts.id}" aria-label="Close">✕</button>
+            <h5>Tax-inclusive pricing</h5>
+            <p>The price shown already includes all taxes and fees. Nothing extra is added at checkout.</p>
+          </div>` : ``}
+      </div>`
+    : ``;
+  return `<div class="tax-banner">
+    <span class="ic" aria-hidden="true">✓</span>
+    <span class="txt">${txt}</span>
+    ${infoWrap}
+  </div>`;
+}
+
+function srpHTML(s) {
+  const flow = FLOWS.find(f=>f.id===s.id) || {};
+  const opts = { id: s.id, copy: s.copy, treatment: s.treatment, info: !!flow.info,
+                 infoOpen: s.info, failed: s.failed, serviceDown: s.serviceDown };
+  const cards = HOTELS.map((h,i)=>hotelCard(h, s, opts, i)).join("");
+  return `<div class="srp">
+    <div class="srp-nav">
+      <div class="srp-logo"></div>
+      <div class="srp-navlink"></div><div class="srp-navlink sm"></div><div class="srp-navlink sm"></div>
+      <div class="srp-navr"></div>
+    </div>
+    <div class="srp-summary">
+      <div class="srp-search-pill">
+        <div class="mag"></div>
+        <div class="srp-search-txt"><strong>London, United Kingdom</strong> &nbsp;<span>15–18 Sep · 1 room, 1 guest</span></div>
+      </div>
+      <div class="srp-modify">Modify</div>
+    </div>
+    <div class="srp-filters">
+      <div class="srp-chip on">All</div>
+      <div class="srp-chip">Preferred</div>
+      <div class="srp-chip">Free breakfast</div>
+      <div class="srp-chip">Under £200</div>
+      <div class="srp-sort">Sort: <b>Recommended</b> ▾</div>
+    </div>
+    ${bannerHTML(opts)}
+    <div class="srp-list">${cards}</div>
+  </div>`;
+}
+
+/* ─────────────────────────────────────────────────────────
+   Breakdown frames (static, full-size components)
+   ───────────────────────────────────────────────────────── */
+function breakdown(f) {
+  const s = state[f.id];
+  const c = COPY[s.copy];
+  if (f.bd === "banner") {
+    return `<div class="bd-grid">
+      <div class="bd-cell"><h6>Banner — default</h6><div class="desc">Persistent, low-emphasis, non-dismissible.</div>
+        <div class="bd-stage"><div class="mini-banner"><span class="ic">✓</span>${c.banner}</div></div></div>
+      <div class="bd-cell"><h6>Price rail (unchanged)</h6><div class="desc">Banner carries the message, so the price block stays clean.</div>
+        <div class="bd-stage" style="display:flex;justify-content:flex-end;"><div class="mini-price"><div class="price-night">per night</div><div class="price-amt">£189</div><div class="price-total">£567 total · 3 nights</div><div class="mini-reserve">Reserve</div></div></div></div>
+    </div>`;
+  }
+  if (f.bd === "label") {
+    return `<div class="bd-grid">
+      <div class="bd-cell"><h6>Price rail with micro-label</h6><div class="desc">Static label on its own line beneath the amount, clear of the CTA.</div>
+        <div class="bd-stage" style="display:flex;justify-content:flex-end;"><div class="mini-price"><div class="price-night">per night</div><div class="price-amt">£189</div><div class="price-total">£567 total · 3 nights</div><div class="tax-label"><span class="tick">✓</span>${c.label}</div><div class="mini-reserve">Reserve</div></div></div></div>
+      <div class="bd-cell"><h6>No price → no label</h6><div class="desc">When a listing has no price, the label is absent (see Flow 4).</div>
+        <div class="bd-stage" style="display:flex;justify-content:flex-end;"><div class="mini-price"><div class="price-unavail">Price unavailable<small>Try again in a moment</small></div><div class="mini-reserve" style="background:#C8CBD2;">Reserve</div></div></div></div>
+    </div>`;
+  }
+  if (f.bd === "info") {
+    return `<div class="bd-grid">
+      <div class="bd-cell"><h6>Info affordance — closed</h6><div class="desc">24×24 min target, keyboard focusable.</div>
+        <div class="bd-stage"><div class="mini-banner"><span class="ic">✓</span>${c.banner}<span style="margin-left:auto;width:22px;height:22px;border:1px solid var(--border2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Open Sans', sans-serif;background:#fff;">i</span></div></div></div>
+      <div class="bd-cell"><h6>Info affordance — open</h6><div class="desc">One confirming line. Dismiss on blur, Escape, or outside click.</div>
+        <div class="bd-stage"><div style="background:var(--inv);color:#fff;border-radius:8px;padding:12px 14px;font-size:11.5px;line-height:1.6;"><b>Tax-inclusive pricing</b><br><span style="color:#C4C7D2;">The price shown already includes all taxes and fees. Nothing extra at checkout.</span></div></div></div>
+    </div>`;
+  }
+  if (f.bd === "fail") {
+    return `<div class="bd-grid">
+      <div class="bd-cell"><h6>Listing with price → indicator shows</h6><div class="desc">Normal behavior for a priced listing.</div>
+        <div class="bd-stage" style="display:flex;justify-content:flex-end;"><div class="mini-price"><div class="price-amt">£176</div><div class="tax-label"><span class="tick">✓</span>${c.label}</div><div class="mini-reserve">Reserve</div></div></div></div>
+      <div class="bd-cell"><h6>Listing without price → no indicator</h6><div class="desc">No orphaned claim where there is no price to qualify.</div>
+        <div class="bd-stage" style="display:flex;justify-content:flex-end;"><div class="mini-price"><div class="price-unavail">Price unavailable<small>Try again in a moment</small></div><div class="mini-reserve" style="background:#C8CBD2;">Reserve</div></div></div></div>
+    </div>`;
+  }
+  if (f.bd === "service") {
+    return `<div class="bd-grid">
+      <div class="bd-cell"><h6>Service available</h6><div class="desc">Indicator renders normally.</div>
+        <div class="bd-stage"><div class="mini-banner"><span class="ic">✓</span>${c.banner}</div></div></div>
+      <div class="bd-cell"><h6>Service unavailable → graceful degrade</h6><div class="desc">Indicator hidden entirely. Pricing intact, no broken element.</div>
+        <div class="bd-stage" style="display:flex;justify-content:flex-end;"><div class="mini-price"><div class="price-night">per night</div><div class="price-amt">£189</div><div class="price-total">£567 total · 3 nights</div><div class="mini-reserve">Reserve</div></div></div></div>
+    </div>`;
+  }
+  return ``;
+}
+
+/* Mobile preview */
+function mobileHTML(f) {
+  const s = state[f.id];
+  const c = COPY[s.copy];
+  const banner = (s.treatment === "banner" && !s.serviceDown)
+    ? `<div class="mini-banner" style="margin:10px 12px 0;font-size:10.5px;"><span class="ic">✓</span>${c.banner}</div>` : ``;
+  const label = (s.treatment === "label" && !s.serviceDown)
+    ? `<div class="tax-label" style="margin-top:4px;"><span class="tick">✓</span>${c.label}</div>` : ``;
+  return `<div class="mobile-frame">
+    <div class="mobile-notch"></div>
+    ${banner}
+    <div class="m-card">
+      <div class="m-img"></div>
+      <div class="m-h4">The Nadler Soho</div>
+      <div class="m-meta">Soho, London · 4.6 Excellent</div>
+      <div class="m-pricerow">
+        <div style="font-size:10px;color:var(--t3);">per night</div>
+        <div style="text-align:right;"><div style="font-size:20px;font-weight:800;">£189</div>${label}</div>
+      </div>
+      <div class="m-reserve">Reserve</div>
+    </div>
+  </div>`;
+}
+
+/* ─────────────────────────────────────────────────────────
+   Controls
+   ───────────────────────────────────────────────────────── */
+function controlsHTML(f) {
+  const s = state[f.id];
+  let html = `<div class="ctrl-group">`;
+  if (f.controls.includes("copy")) {
+    html += `<span class="ctrl-lbl">Copy</span><div class="seg">
+      <button data-copy="${f.id}|plain" class="${s.copy==='plain'?'on':''}">Plain</button>
+      <button data-copy="${f.id}|reassuring" class="${s.copy==='reassuring'?'on':''}">Reassuring</button>
+    </div>`;
+  }
+  if (f.controls.includes("treatment")) {
+    html += `<span class="ctrl-lbl">Treatment</span><div class="seg">
+      <button data-treat="${f.id}|banner" class="${s.treatment==='banner'?'on':''}">Banner</button>
+      <button data-treat="${f.id}|label" class="${s.treatment==='label'?'on':''}">Label</button>
+    </div>`;
+  }
+  if (f.controls.includes("compare")) {
+    html += `<button class="toggle ${s.treatment==='none'?'on':''}" data-compare="${f.id}"><span>Hide banner (compare)</span><span class="dot"></span></button>`;
+  }
+  if (f.controls.includes("fail")) {
+    html += `<button class="toggle ${s.failed?'on':''}" data-fail="${f.id}"><span>Simulate pricing failure</span><span class="dot"></span></button>`;
+  }
+  if (f.controls.includes("service")) {
+    html += `<button class="toggle ${s.serviceDown?'on':''}" data-service="${f.id}"><span>Indicator service down</span><span class="dot"></span></button>`;
+  }
+  html += `</div>`;
+  return html;
+}
+
+/* ─────────────────────────────────────────────────────────
+   Build pages
+   ───────────────────────────────────────────────────────── */
+function buildHub() {
+  document.getElementById("hubGrid").innerHTML = FLOWS.map(f => `
+    <div class="c-card" data-goto="${f.id}">
+      <div class="c-thumb"><div class="c-num">${f.id.toUpperCase()}</div>${f.thumb}</div>
+      <div class="c-info">
+        <div class="c-tag">${f.tag}</div>
+        <h3>${f.title}</h3>
+        <p>${f.desc}</p>
+        <div class="c-btn">Open flow →</div>
+      </div>
+    </div>`).join("");
+}
+
+function pageHTML(f) {
+  return `<div class="cpage" id="page-${f.id}">
+    <div class="ctrl-bar"><div class="ctrl-inner">
+      <a class="ctrl-back" data-home="1">← All flows</a>
+      <div class="ctrl-title">${f.title}<small>${f.tag}</small></div>
+      ${controlsHTML(f)}
+    </div></div>
+    <div class="cbody">
+      <div class="cbody-head"><h2>${f.title}</h2><p>${f.desc}</p></div>
+      <div class="frame-label">Interactive · Hotel search results (desktop web)</div>
+      <div id="srp-${f.id}">${srpHTML(state[f.id])}</div>
+      <div id="callout-${f.id}"></div>
+      <div class="frame-label">Component breakdown</div>
+      <div id="bd-${f.id}">${breakdown(f)}</div>
+      <div class="frame-label">Mobile web (≈360px)</div>
+      <div id="mob-${f.id}">${mobileHTML(f)}</div>
+      ${assumptionsHTML(f)}
+    </div>
+  </div>`;
+}
+
+function calloutText(f) {
+  const s = state[f.id];
+  if (f.bd==="fail") return s.failed
+    ? `<b>Pricing failure active.</b> Park Plaza Westminster returns no price, so its tax indicator is suppressed. The other three listings keep theirs. Switch treatment to see the same rule for banner and label.`
+    : `Toggle <b>Simulate pricing failure</b> to drop the price on one listing and watch its indicator disappear while the rest are unaffected.`;
+  if (f.bd==="service") return s.serviceDown
+    ? `<b>Indicator service is down.</b> No banner and no labels render, but every price and Reserve button is intact. The page never shows a broken or blank indicator.`
+    : `Toggle <b>Indicator service down</b> to see graceful degradation. Pricing stays, the indicator simply vanishes.`;
+  if (f.bd==="info") return `Click the <b>i</b> in the banner, or Tab to it and press Enter. Press Escape or click away to dismiss. Content restates inclusion only, since the itemized breakdown is out of scope.`;
+  if (f.bd==="banner") return s.treatment==="none"
+    ? `<b>Comparison view.</b> Banner hidden. This is the current experience travelers see today, with no cue that prices are tax-inclusive.`
+    : `Banner sits above the first listing so it is seen before price scanning. Toggle <b>Hide banner</b> to compare against today's experience.`;
+  return `Micro-label sits beneath each price at the point of comparison. This flow is fixed to its copy variant so you can compare wording across flows.`;
+}
+
+function assumptionsHTML(f) {
+  return `<div class="assump"><h6>Assumptions in this frame</h6><ul>
+    <li>Grayscale concept only. Final surface, type, spacing, and icon tokens are set in Figma at higher fidelity.</li>
+    <li>Sample London search, GBP pricing, tax-inclusive totals per EMEA norms. Content is placeholder.</li>
+    <li>Info affordance content is limited to restating inclusion. Itemized breakdown is out of scope (possible v2).</li>
+    <li>Candidates A and B are mutually exclusive. They are separated here only so both can be reviewed.</li>
+  </ul></div>`;
+}
+
+function buildPages() {
+  document.getElementById("pages").innerHTML = FLOWS.map(pageHTML).join("");
+  FLOWS.forEach(refreshCallout);
+}
+
+function refreshSRP(id) {
+  document.getElementById("srp-"+id).innerHTML = srpHTML(state[id]);
+  const f = FLOWS.find(x=>x.id===id);
+  document.getElementById("bd-"+id).innerHTML = breakdown(f);
+  document.getElementById("mob-"+id).innerHTML = mobileHTML(f);
+  refreshCallout(f);
+}
+function refreshCallout(f) {
+  document.getElementById("callout-"+f.id).innerHTML = `<div class="callout">${calloutText(f)}</div>`;
+}
+
+/* ─────────────────────────────────────────────────────────
+   Navigation + interaction
+   ───────────────────────────────────────────────────────── */
+function goTo(id) {
+  document.getElementById("hub").style.display = "none";
+  document.querySelectorAll(".cpage").forEach(p=>p.classList.remove("active"));
+  document.getElementById("page-"+id).classList.add("active");
+  window.scrollTo(0,0);
+}
+function goHome() {
+  document.querySelectorAll(".cpage").forEach(p=>p.classList.remove("active"));
+  document.getElementById("hub").style.display = "block";
+  window.scrollTo(0,0);
+}
+
+function rebuildControls(id) {
+  const f = FLOWS.find(x=>x.id===id);
+  const bar = document.querySelector("#page-"+id+" .ctrl-inner .ctrl-group");
+  bar.outerHTML = controlsHTML(f);
+}
+
+document.addEventListener("click", (e) => {
+  const goto = e.target.closest("[data-goto]");
+  if (goto) { goTo(goto.dataset.goto); return; }
+  if (e.target.closest("[data-home]")) { goHome(); return; }
+
+  const copy = e.target.closest("[data-copy]");
+  if (copy) { const [id,v]=copy.dataset.copy.split("|"); state[id].copy=v; rebuildControls(id); refreshSRP(id); return; }
+
+  const treat = e.target.closest("[data-treat]");
+  if (treat) { const [id,v]=treat.dataset.treat.split("|"); state[id].treatment=v; rebuildControls(id); refreshSRP(id); return; }
+
+  const comp = e.target.closest("[data-compare]");
+  if (comp) { const id=comp.dataset.compare; state[id].treatment = state[id].treatment==="none" ? "banner" : "none"; rebuildControls(id); refreshSRP(id); return; }
+
+  const fail = e.target.closest("[data-fail]");
+  if (fail) { const id=fail.dataset.fail; state[id].failed=!state[id].failed; rebuildControls(id); refreshSRP(id); return; }
+
+  const svc = e.target.closest("[data-service]");
+  if (svc) { const id=svc.dataset.service; state[id].serviceDown=!state[id].serviceDown; rebuildControls(id); refreshSRP(id); return; }
+
+  const closeInfo = e.target.closest("[data-info-close]");
+  if (closeInfo) { const id=closeInfo.dataset.infoClose; state[id].info=false; refreshSRP(id); return; }
+
+  const info = e.target.closest("[data-info]");
+  if (info) { const id=info.dataset.info; state[id].info=!state[id].info; refreshSRP(id);
+    setTimeout(()=>{ const b=document.querySelector('#srp-'+id+' [data-info]'); if(b) b.focus(); },0); return; }
+
+  // outside click closes any open popover
+  FLOWS.forEach(f => { if (state[f.id].info && !e.target.closest(".info-pop") && !e.target.closest("[data-info]")) { state[f.id].info=false; refreshSRP(f.id); } });
+});
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    FLOWS.forEach(f => { if (state[f.id].info) { state[f.id].info=false; refreshSRP(f.id); } });
+    if (document.querySelector(".cpage.active")) { /* keep page */ }
+  }
+});
+
+/* Init */
+buildHub();
+buildPages();
+</script>
+</body>
+</html>
