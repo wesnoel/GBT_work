@@ -1707,7 +1707,7 @@ function initV2Stars(){
       if(!el) return;
       const lbl=el.previousElementSibling;
       if(lbl){
-        lbl.textContent=label+': '+r[key];
+        lbl.textContent=label+': '+r[key]+'/5';
         lbl.style.cssText='font-size:12px;font-weight:500;color:var(--text-2);min-width:0;flex:1';
       }
       el.style.cssText='display:flex;gap:2px;align-items:center;flex-shrink:0';
@@ -2288,20 +2288,20 @@ function initV2Stars(){
       <!-- Summary row -->
       <div style="display:flex;align-items:center;gap:0;margin-bottom:16px;background:var(--bg);border-radius:var(--r8);padding:12px 14px">
         <div style="text-align:center;padding-right:16px;border-right:1px solid var(--border)">
-          <div style="font-size:24px;font-weight:700;letter-spacing:-.03em;line-height:1">4.3</div>
+          <div style="font-size:24px;font-weight:700;letter-spacing:-.03em;line-height:1">4.3<span style="font-size:13px;font-weight:400;color:var(--text-3)">/5</span></div>
           <div style="font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:.05em;margin-top:2px">Overall</div>
         </div>
         <div style="display:flex;gap:0;flex:1;padding-left:16px">
           <div style="flex:1;text-align:center">
-            <div style="font-size:13px;font-weight:700">4.5</div>
+            <div style="font-size:13px;font-weight:700">4.5<span style="font-size:10px;font-weight:400;color:var(--text-3)">/5</span></div>
             <div style="font-size:10px;color:var(--text-3);margin-top:1px">Cleanliness</div>
           </div>
           <div style="flex:1;text-align:center">
-            <div style="font-size:13px;font-weight:700">4.2</div>
+            <div style="font-size:13px;font-weight:700">4.2<span style="font-size:10px;font-weight:400;color:var(--text-3)">/5</span></div>
             <div style="font-size:10px;color:var(--text-3);margin-top:1px">Service</div>
           </div>
           <div style="flex:1;text-align:center">
-            <div style="font-size:13px;font-weight:700">4.1</div>
+            <div style="font-size:13px;font-weight:700">4.1<span style="font-size:10px;font-weight:400;color:var(--text-3)">/5</span></div>
             <div style="font-size:10px;color:var(--text-3);margin-top:1px">Convenience</div>
           </div>
           <div style="flex:1;text-align:center">
@@ -2349,6 +2349,7 @@ function initV2Stars(){
           <div style="text-align:center"><div style="font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px">Conv.</div><div style="font-size:15px;font-weight:700;line-height:1">4<span style="font-size:10px;font-weight:400;color:var(--text-3)">/5</span></div></div>
         </div>
         <div style="font-size:13px;color:var(--text-2);line-height:1.65">Service was outstanding — the front desk team went above and beyond. Would absolutely recommend for Capgemini team travel to Boston.</div>
+        <div style="display:flex;align-items:center;gap:5px;margin-top:7px"><svg width="13" height="13" viewBox="0 0 24 24" fill="var(--text-3)"><path d="M12.87 15.07l-2.54-2.51.03-.03A17.52 17.52 0 0014.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/></svg><a href="#" onclick="return false" style="font-size:11px;color:var(--text-3);text-decoration:underline;text-underline-offset:2px">Translate review</a></div>
       </div>
 
       <!-- Review 3 -->
@@ -2385,6 +2386,7 @@ function initV2Stars(){
           <div style="text-align:center"><div style="font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px">Conv.</div><div style="font-size:15px;font-weight:700;line-height:1">2<span style="font-size:10px;font-weight:400;color:var(--text-3)">/5</span></div></div>
         </div>
         <div style="font-size:13px;color:var(--text-2);line-height:1.65">Average experience. Rooms were clean but check-in was slow and the location wasn't ideal for daily commutes to the Capgemini site.</div>
+        <div style="display:flex;align-items:center;gap:5px;margin-top:7px"><svg width="13" height="13" viewBox="0 0 24 24" fill="var(--text-3)"><path d="M12.87 15.07l-2.54-2.51.03-.03A17.52 17.52 0 0014.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/></svg><a href="#" onclick="return false" style="font-size:11px;color:var(--text-3);text-decoration:underline;text-underline-offset:2px">Translate review</a></div>
       </div>
 
       <!-- Review 5 -->
@@ -2429,20 +2431,20 @@ function initV2Stars(){
       <!-- Summary row -->
       <div style="display:flex;align-items:center;gap:0;margin-bottom:16px;background:var(--bg);border-radius:var(--r8);padding:12px 14px">
         <div style="text-align:center;padding-right:16px;border-right:1px solid var(--border)">
-          <div style="font-size:24px;font-weight:700;letter-spacing:-.03em;line-height:1">4.3</div>
+          <div style="font-size:24px;font-weight:700;letter-spacing:-.03em;line-height:1">4.3<span style="font-size:13px;font-weight:400;color:var(--text-3)">/5</span></div>
           <div style="font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:.05em;margin-top:2px">Overall</div>
         </div>
         <div style="display:flex;gap:0;flex:1;padding-left:16px">
           <div style="flex:1;text-align:center">
-            <div style="font-size:13px;font-weight:700">4.5</div>
+            <div style="font-size:13px;font-weight:700">4.5<span style="font-size:10px;font-weight:400;color:var(--text-3)">/5</span></div>
             <div style="font-size:10px;color:var(--text-3);margin-top:1px">Cleanliness</div>
           </div>
           <div style="flex:1;text-align:center">
-            <div style="font-size:13px;font-weight:700">4.2</div>
+            <div style="font-size:13px;font-weight:700">4.2<span style="font-size:10px;font-weight:400;color:var(--text-3)">/5</span></div>
             <div style="font-size:10px;color:var(--text-3);margin-top:1px">Service</div>
           </div>
           <div style="flex:1;text-align:center">
-            <div style="font-size:13px;font-weight:700">4.1</div>
+            <div style="font-size:13px;font-weight:700">4.1<span style="font-size:10px;font-weight:400;color:var(--text-3)">/5</span></div>
             <div style="font-size:10px;color:var(--text-3);margin-top:1px">Convenience</div>
           </div>
           <div style="flex:1;text-align:center">
@@ -2490,6 +2492,7 @@ function initV2Stars(){
           <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:11px;font-weight:500;color:var(--text-3);text-transform:uppercase;letter-spacing:.05em;min-width:88px">Convenience</span><div style="display:flex;gap:2px" id="v2-r2-conv"></div></div>
         </div>
         <div style="font-size:13px;color:var(--text-2);line-height:1.65">Service was outstanding — the front desk team went above and beyond. Would absolutely recommend for Capgemini team travel to Boston.</div>
+        <div style="display:flex;align-items:center;gap:5px;margin-top:7px"><svg width="13" height="13" viewBox="0 0 24 24" fill="var(--text-3)"><path d="M12.87 15.07l-2.54-2.51.03-.03A17.52 17.52 0 0014.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/></svg><a href="#" onclick="return false" style="font-size:11px;color:var(--text-3);text-decoration:underline;text-underline-offset:2px">Translate review</a></div>
       </div>
 
       <!-- Review 3 -->
@@ -2526,6 +2529,7 @@ function initV2Stars(){
           <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:11px;font-weight:500;color:var(--text-3);text-transform:uppercase;letter-spacing:.05em;min-width:88px">Convenience</span><div style="display:flex;gap:2px" id="v2-r4-conv"></div></div>
         </div>
         <div style="font-size:13px;color:var(--text-2);line-height:1.65">Average experience. Rooms were clean but check-in was slow and the location wasn't ideal for daily commutes to the Capgemini site.</div>
+        <div style="display:flex;align-items:center;gap:5px;margin-top:7px"><svg width="13" height="13" viewBox="0 0 24 24" fill="var(--text-3)"><path d="M12.87 15.07l-2.54-2.51.03-.03A17.52 17.52 0 0014.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/></svg><a href="#" onclick="return false" style="font-size:11px;color:var(--text-3);text-decoration:underline;text-underline-offset:2px">Translate review</a></div>
       </div>
 
       <!-- Review 5 -->
