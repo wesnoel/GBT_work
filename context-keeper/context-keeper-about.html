@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Context Keeper</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --n-50:#F9FAFF;--n-100:#F2F3F7;--n-200:#E0E2E9;--n-300:#CFD2DA;--n-400:#B9BDC7;
+  --n-500:#777B8A;--n-600:#5E6476;--n-700:#444B61;--n-800:#2A2F3D;--n-900:#1B1D25;
+  --bg:var(--n-50);--surface:#FFFFFF;--border:var(--n-200);--border-strong:var(--n-300);
+  --text-1:var(--n-900);--text-2:var(--n-600);--text-3:var(--n-500);--text-4:var(--n-400);
+  --hover:var(--n-100);
+
+  --brand-gold:#FFB900;--brand-gold-dark:#B57B00;
+  --brand-blue:#006FCF;--brand-blue-100:#D4EBFF;--brand-blue-800:#1E2C5D;
+
+  --st-progress:#006FCF;--st-progress-bg:#D4EBFF;--st-progress-text:#1E2C5D;
+  --st-waiting:#E16304;--st-waiting-bg:#FADBB3;--st-waiting-text:#6F2408;
+  --st-done:#178143;--st-done-bg:#C3F2D7;--st-done-text:#0E3E23;
+
+  --r-sm:4px;--r-md:8px;--r-lg:12px;--r-xl:16px;--r-2xl:24px;
+  --sp-1:4px;--sp-2:8px;--sp-3:12px;--sp-4:16px;--sp-5:20px;--sp-6:24px;--sp-8:32px;
+
+  --sh-1:0 1px 1px rgba(27,29,37,.08),0 0 1px rgba(27,29,37,.12);
+  --sh-4:0 4px 4px rgba(27,29,37,.08),0 0 2px rgba(27,29,37,.12);
+  --sh-24:0 24px 32px rgba(27,29,37,.14),0 0 4px rgba(27,29,37,.12);
+
+  --font:'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  --fs-100:11px;--fs-200:13px;--fs-300:15px;--fs-400:17px;--fs-500:22px;--fs-600:32px;--fs-700:48px;
+  --fw-reg:400;--fw-med:500;--fw-sb:600;--fw-bold:700;--fw-xb:800;
+  --ease:cubic-bezier(.4,0,.2,1);
+}
+html{font-family:var(--font);background:var(--bg);color:var(--text-1);-webkit-font-smoothing:antialiased}
+body{min-height:100vh;font-size:var(--fs-300);line-height:1.6}
+a{color:inherit}
+
+/* header */
+.topbar{position:sticky;top:0;z-index:40;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:var(--sp-4);padding:0 var(--sp-6);height:60px}
+.tb-home{display:flex;align-items:center;gap:var(--sp-3);text-decoration:none;color:var(--text-1)}
+.logo-mark{width:30px;height:30px;border-radius:var(--r-md);background:var(--brand-gold);display:flex;align-items:center;justify-content:center;font-weight:var(--fw-bold);font-size:var(--fs-200);color:var(--n-900);flex-shrink:0}
+.tb-title{font-size:var(--fs-400);font-weight:var(--fw-bold);letter-spacing:-.01em}
+.tb-right{margin-left:auto;display:flex;gap:var(--sp-3)}
+.btn-p{background:var(--brand-gold);color:var(--n-900);border:none;border-radius:var(--r-lg);padding:10px 18px;font-size:var(--fs-300);font-weight:var(--fw-sb);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:background .15s}
+.btn-p:hover{background:#FFC72E}
+.btn-s{background:none;color:var(--brand-blue);border:1.5px solid var(--border-strong);border-radius:var(--r-lg);padding:9px 16px;font-size:var(--fs-300);font-weight:var(--fw-sb);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;transition:border-color .15s,background .15s}
+.btn-s:hover{border-color:var(--brand-blue);background:var(--hover)}
+
+/* hero */
+.hero{max-width:820px;margin:0 auto;padding:var(--sp-8) var(--sp-6) var(--sp-6);text-align:center}
+.eyebrow{font-size:var(--fs-100);font-weight:var(--fw-bold);letter-spacing:.1em;text-transform:uppercase;color:var(--brand-gold-dark);margin-bottom:16px}
+.h1{font-size:var(--fs-700);font-weight:var(--fw-xb);letter-spacing:-.03em;line-height:1.08;margin-bottom:18px}
+.lede{font-size:var(--fs-500);color:var(--text-2);line-height:1.5;max-width:600px;margin:0 auto 32px;font-weight:var(--fw-med)}
+.cta-row{display:flex;gap:var(--sp-3);justify-content:center;margin-bottom:8px;flex-wrap:wrap}
+.cta-row .btn-p, .cta-row .btn-s{padding:12px 24px;font-size:var(--fs-300)}
+
+.wrap{max-width:820px;margin:0 auto;padding:0 var(--sp-6) 100px}
+
+/* who / friction band */
+.band{background:var(--n-900);color:#fff;border-radius:var(--r-2xl);padding:var(--sp-8) var(--sp-6);margin:var(--sp-8) 0;text-align:center}
+.band-label{font-size:var(--fs-100);font-weight:var(--fw-bold);letter-spacing:.08em;text-transform:uppercase;color:var(--brand-gold);margin-bottom:14px}
+.band-line{font-size:var(--fs-500);font-weight:var(--fw-sb);letter-spacing:-.01em;line-height:1.5;max-width:600px;margin:0 auto;color:#EDEEF3}
+
+.section-label{font-size:var(--fs-100);font-weight:var(--fw-bold);letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);text-align:center;margin:var(--sp-8) 0 var(--sp-6)}
+
+/* feature grid */
+.feat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--sp-5)}
+.feat{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:var(--sp-6);box-shadow:var(--sh-1)}
+.feat-icon{width:40px;height:40px;border-radius:var(--r-md);background:var(--brand-blue-100);display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:var(--sp-4)}
+.feat-title{font-size:var(--fs-400);font-weight:var(--fw-bold);letter-spacing:-.01em;margin-bottom:6px}
+.feat-desc{color:var(--text-2);line-height:1.6;font-size:var(--fs-200)}
+
+/* bet / hypothesis card */
+.bet{background:linear-gradient(155deg,#FFF8E1,var(--surface));border:1px solid var(--brand-gold);border-radius:var(--r-2xl);padding:var(--sp-6) var(--sp-8);margin-top:var(--sp-8);text-align:center}
+.bet-label{font-size:var(--fs-100);font-weight:var(--fw-bold);letter-spacing:.08em;text-transform:uppercase;color:var(--brand-gold-dark);margin-bottom:14px}
+.bet-line{font-size:var(--fs-500);font-weight:var(--fw-sb);letter-spacing:-.01em;line-height:1.5;color:var(--text-1)}
+
+/* status strip mockup */
+.status-row{display:flex;gap:8px;justify-content:center;margin:var(--sp-6) 0}
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:var(--fs-100);font-weight:var(--fw-sb);letter-spacing:.02em;text-transform:uppercase;border-radius:var(--r-md);padding:4px 9px}
+.badge::before{content:'';width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.badge-progress{background:var(--st-progress-bg);color:var(--st-progress-text)}
+.badge-progress::before{background:var(--st-progress)}
+.badge-waiting{background:var(--st-waiting-bg);color:var(--st-waiting-text)}
+.badge-waiting::before{background:var(--st-waiting)}
+.badge-done{background:var(--st-done-bg);color:var(--st-done-text)}
+.badge-done::before{background:var(--st-done)}
+
+/* footer scope note */
+.scope{border-top:1px solid var(--border);padding-top:var(--sp-6);margin-top:var(--sp-8);text-align:center}
+.scope-label{font-size:var(--fs-100);font-weight:var(--fw-bold);letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin-bottom:10px}
+.scope p{color:var(--text-2);line-height:1.7;max-width:540px;margin:0 auto}
+
+@media (max-width:600px){ .feat-grid{grid-template-columns:1fr} .h1{font-size:var(--fs-600)} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="tb-home" href="context-keeper-about.html">
+    <div class="logo-mark">CK</div>
+    <div class="tb-title">Context Keeper</div>
+  </a>
+  <div class="tb-right">
+    <a class="btn-s" href="context-keeper-how-to.html">How it works</a>
+    <a class="btn-p" href="context-keeper-prototype.html">Try the prototype →</a>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="eyebrow">UX Day Hackathon</div>
+  <div class="h1">Stay on top of everything.<br>Track your wins without trying.</div>
+  <div class="lede">A personal workspace that holds your place when you switch between tasks — and quietly builds a record of what you've gotten done.</div>
+  <div class="cta-row">
+    <a class="btn-p" href="context-keeper-prototype.html">Try the prototype →</a>
+    <a class="btn-s" href="context-keeper-how-to.html">See how it works</a>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="band">
+    <div class="band-label">The problem</div>
+    <div class="band-line">Constant task-switching means constantly re-orienting — piecing things back together from memory, Slack, and scattered notes, every single time.</div>
+  </div>
+
+  <div class="section-label">What it does</div>
+
+  <div class="feat-grid">
+    <div class="feat">
+      <div class="feat-icon">⚡</div>
+      <div class="feat-title">Capture in seconds</div>
+      <div class="feat-desc">Every task gets a card. Starting one takes two fields — a title and a note. If it takes longer than that, it won't stick, so it doesn't.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">↩︎</div>
+      <div class="feat-title">Pick back up instantly</div>
+      <div class="feat-desc">Where things stand, open questions, links, next step — all sitting there waiting, so switching back costs seconds instead of minutes.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">⠿</div>
+      <div class="feat-title">Organized your way</div>
+      <div class="feat-desc">Drag cards to reorder them. Put whatever you're actually focused on at the top — it doesn't have to match whatever changed most recently.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">★</div>
+      <div class="feat-title">A self-review log, for free</div>
+      <div class="feat-desc">Mark a card done, tag it as a win if it's worth remembering. By review time, it's already written — you're just reading it back.</div>
+    </div>
+  </div>
+
+  <div class="status-row">
+    <span class="badge badge-progress">In Progress</span>
+    <span class="badge badge-waiting">Waiting</span>
+    <span class="badge badge-done">Done</span>
+  </div>
+
+  <div class="bet">
+    <div class="bet-label">The bet</div>
+    <div class="bet-line">If capturing context takes seconds, not minutes, it becomes a natural part of the workflow — not one more thing to maintain.</div>
+  </div>
+
+  <div class="scope">
+    <div class="scope-label">Where this stands today</div>
+    <p>A hackathon prototype, built for one person's workflow first. Manual entry, no live Slack/Jira sync, no team view yet — all deliberate, so the core habit gets proven before anything else gets built on top of it.</p>
+  </div>
+
+</div>
+
+</body>
+</html>

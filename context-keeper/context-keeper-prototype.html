@@ -60,7 +60,7 @@ button,input,textarea{font-family:var(--font)}
 /* ── app shell ── */
 .app{min-height:100vh;display:flex;flex-direction:column}
 .topbar{position:sticky;top:0;z-index:40;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:var(--sp-6);padding:0 var(--sp-6);height:60px}
-.tb-left{display:flex;align-items:center;gap:var(--sp-3)}
+.tb-left{display:flex;align-items:center;gap:var(--sp-3);text-decoration:none;color:inherit}
 .logo-mark{width:30px;height:30px;border-radius:var(--r-md);background:var(--brand-gold);display:flex;align-items:center;justify-content:center;font-weight:var(--fw-bold);font-size:var(--fs-200);color:var(--n-900);flex-shrink:0}
 .tb-title{font-size:var(--fs-400);font-weight:var(--fw-bold);letter-spacing:-.01em;color:var(--text-1)}
 .tb-nav{display:flex;gap:var(--sp-1);background:var(--hover);border-radius:100px;padding:3px;margin-left:var(--sp-4)}
@@ -212,10 +212,10 @@ button,input,textarea{font-family:var(--font)}
 
 <div class="app">
   <header class="topbar">
-    <div class="tb-left">
+    <a class="tb-left" href="context-keeper-about.html">
       <div class="logo-mark">CK</div>
       <div class="tb-title">Context Keeper</div>
-    </div>
+    </a>
     <nav class="tb-nav">
       <button class="tb-tab on" id="tab-list" onclick="goPage('list')">My Cards</button>
       <button class="tb-tab" id="tab-log" onclick="goPage('log')">Accomplishment Log</button>

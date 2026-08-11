@@ -41,6 +41,7 @@ body{min-height:100vh;font-size:var(--fs-300);line-height:1.6}
 .topbar{position:sticky;top:0;z-index:40;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:var(--sp-4);padding:0 var(--sp-6);height:60px}
 .logo-mark{width:30px;height:30px;border-radius:var(--r-md);background:var(--brand-gold);display:flex;align-items:center;justify-content:center;font-weight:var(--fw-bold);font-size:var(--fs-200);color:var(--n-900);flex-shrink:0}
 .tb-title{font-size:var(--fs-400);font-weight:var(--fw-bold);letter-spacing:-.01em}
+.tb-home{display:flex;align-items:center;gap:var(--sp-3);text-decoration:none;color:inherit}
 .tb-sub{font-size:var(--fs-200);color:var(--text-3);margin-left:2px}
 .tb-right{margin-left:auto}
 .btn-s{background:none;color:var(--brand-blue);border:1.5px solid var(--border-strong);border-radius:var(--r-lg);padding:9px 16px;font-size:var(--fs-200);font-weight:var(--fw-sb);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;transition:border-color .15s,background .15s}
@@ -105,8 +106,10 @@ body{min-height:100vh;font-size:var(--fs-300);line-height:1.6}
 <body>
 
 <div class="topbar">
-  <div class="logo-mark">CK</div>
-  <div class="tb-title">Context Keeper</div>
+  <a class="tb-home" href="context-keeper-about.html">
+    <div class="logo-mark">CK</div>
+    <div class="tb-title">Context Keeper</div>
+  </a>
   <div class="tb-sub">— How to Use</div>
   <div class="tb-right">
     <a class="btn-s" href="context-keeper-prototype.html">Open the prototype →</a>
@@ -158,6 +161,7 @@ body{min-height:100vh;font-size:var(--fs-300);line-height:1.6}
         <span class="badge badge-done">Done</span>
       </div>
       <div class="step-desc">Get pulled into a Slack question or a meeting? No problem — when you come back, open the card and your next step is already sitting there waiting for you.</div>
+      <div class="step-tip">💡 <span>You can also <b>drag cards to reorder</b> them — put whatever you're actually focused on at the top, regardless of when it was last updated.</span></div>
     </div>
   </div>
 
