@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Context Keeper — How to Use</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --n-50:#F9FAFF;--n-100:#F2F3F7;--n-200:#E0E2E9;--n-300:#CFD2DA;--n-400:#B9BDC7;
+  --n-500:#777B8A;--n-600:#5E6476;--n-700:#444B61;--n-800:#2A2F3D;--n-900:#1B1D25;
+  --bg:var(--n-50);--surface:#FFFFFF;--border:var(--n-200);--border-strong:var(--n-300);
+  --text-1:var(--n-900);--text-2:var(--n-600);--text-3:var(--n-500);--text-4:var(--n-400);
+  --hover:var(--n-100);
+
+  --brand-gold:#FFB900;--brand-gold-dark:#B57B00;
+  --brand-blue:#006FCF;--brand-blue-100:#D4EBFF;--brand-blue-800:#1E2C5D;
+
+  --st-progress:#006FCF;--st-progress-bg:#D4EBFF;--st-progress-text:#1E2C5D;
+  --st-waiting:#E16304;--st-waiting-bg:#FADBB3;--st-waiting-text:#6F2408;
+  --st-done:#178143;--st-done-bg:#C3F2D7;--st-done-text:#0E3E23;
+
+  --r-sm:4px;--r-md:8px;--r-lg:12px;--r-xl:16px;--r-2xl:24px;
+  --sp-1:4px;--sp-2:8px;--sp-3:12px;--sp-4:16px;--sp-5:20px;--sp-6:24px;--sp-8:32px;
+
+  --sh-1:0 1px 1px rgba(27,29,37,.08),0 0 1px rgba(27,29,37,.12);
+  --sh-4:0 4px 4px rgba(27,29,37,.08),0 0 2px rgba(27,29,37,.12);
+
+  --font:'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  --fs-100:11px;--fs-200:13px;--fs-300:15px;--fs-400:17px;--fs-500:22px;--fs-600:30px;--fs-700:40px;
+  --fw-reg:400;--fw-med:500;--fw-sb:600;--fw-bold:700;
+  --ease:cubic-bezier(.4,0,.2,1);
+}
+html{font-family:var(--font);background:var(--bg);color:var(--text-1);-webkit-font-smoothing:antialiased}
+body{min-height:100vh;font-size:var(--fs-300);line-height:1.6}
+
+/* header */
+.topbar{position:sticky;top:0;z-index:40;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:var(--sp-4);padding:0 var(--sp-6);height:60px}
+.logo-mark{width:30px;height:30px;border-radius:var(--r-md);background:var(--brand-gold);display:flex;align-items:center;justify-content:center;font-weight:var(--fw-bold);font-size:var(--fs-200);color:var(--n-900);flex-shrink:0}
+.tb-title{font-size:var(--fs-400);font-weight:var(--fw-bold);letter-spacing:-.01em}
+.tb-sub{font-size:var(--fs-200);color:var(--text-3);margin-left:2px}
+.tb-right{margin-left:auto}
+.btn-s{background:none;color:var(--brand-blue);border:1.5px solid var(--border-strong);border-radius:var(--r-lg);padding:9px 16px;font-size:var(--fs-200);font-weight:var(--fw-sb);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;transition:border-color .15s,background .15s}
+.btn-s:hover{border-color:var(--brand-blue);background:var(--hover)}
+
+/* hero */
+.hero{max-width:760px;margin:0 auto;padding:var(--sp-8) var(--sp-6) var(--sp-6)}
+.eyebrow{font-size:var(--fs-100);font-weight:var(--fw-bold);letter-spacing:.08em;text-transform:uppercase;color:var(--brand-gold-dark);margin-bottom:10px}
+.h1{font-size:var(--fs-700);font-weight:var(--fw-bold);letter-spacing:-.02em;margin-bottom:14px}
+.lede{font-size:var(--fs-400);color:var(--text-2);line-height:1.6;max-width:620px}
+
+/* content shell */
+.wrap{max-width:760px;margin:0 auto;padding:0 var(--sp-6) 100px}
+
+.pitch{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-2xl);padding:var(--sp-6);margin:var(--sp-6) 0 var(--sp-8);box-shadow:var(--sh-1)}
+.pitch-label{font-size:var(--fs-100);font-weight:var(--fw-bold);letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);margin-bottom:8px}
+.pitch-line{font-size:var(--fs-500);font-weight:var(--fw-sb);letter-spacing:-.01em;color:var(--text-1);line-height:1.35}
+
+/* steps */
+.section-label{font-size:var(--fs-100);font-weight:var(--fw-bold);letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin:var(--sp-8) 0 var(--sp-4);padding-bottom:var(--sp-3);border-bottom:1px solid var(--border)}
+
+.step{display:flex;gap:var(--sp-5);margin-bottom:var(--sp-6);align-items:flex-start}
+.step-num{flex-shrink:0;width:36px;height:36px;border-radius:50%;background:var(--n-900);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:var(--fw-bold);font-size:var(--fs-300)}
+.step-body{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:var(--sp-5) var(--sp-6);box-shadow:var(--sh-1)}
+.step-title{font-size:var(--fs-400);font-weight:var(--fw-bold);letter-spacing:-.01em;margin-bottom:6px}
+.step-desc{color:var(--text-2);line-height:1.65;margin-bottom:var(--sp-3)}
+.step-desc:last-child{margin-bottom:0}
+.step-tip{display:flex;gap:8px;align-items:flex-start;background:var(--hover);border-radius:var(--r-md);padding:10px 12px;font-size:var(--fs-200);color:var(--text-2);margin-top:var(--sp-3)}
+.step-tip b{color:var(--text-1)}
+
+/* mini visual chips reused from the prototype's badge language */
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:var(--fs-100);font-weight:var(--fw-sb);letter-spacing:.02em;text-transform:uppercase;border-radius:var(--r-md);padding:4px 9px}
+.badge::before{content:'';width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.badge-progress{background:var(--st-progress-bg);color:var(--st-progress-text)}
+.badge-progress::before{background:var(--st-progress)}
+.badge-waiting{background:var(--st-waiting-bg);color:var(--st-waiting-text)}
+.badge-waiting::before{background:var(--st-waiting)}
+.badge-done{background:var(--st-done-bg);color:var(--st-done-text)}
+.badge-done::before{background:var(--st-done)}
+.status-row{display:flex;gap:8px;margin:10px 0}
+
+.win-chip{display:inline-flex;align-items:center;gap:6px;background:#FFF8E1;border:1px solid var(--brand-gold);border-radius:var(--r-lg);padding:8px 14px;font-size:var(--fs-200);font-weight:var(--fw-sb);color:var(--n-900);margin-top:8px}
+
+/* field mock */
+.field-mock{border:1.5px solid var(--border);border-radius:var(--r-md);padding:10px 12px;font-size:var(--fs-200);color:var(--text-3);background:var(--n-50);margin-top:8px}
+.field-label-mock{font-size:var(--fs-100);font-weight:var(--fw-sb);color:var(--text-2);margin-bottom:4px;display:block}
+
+/* faq */
+.faq-item{border-bottom:1px solid var(--border);padding:var(--sp-4) 0}
+.faq-item:last-child{border-bottom:none}
+.faq-q{font-weight:var(--fw-sb);margin-bottom:4px}
+.faq-a{color:var(--text-2);line-height:1.6}
+
+/* scope callout */
+.scope{background:var(--n-900);color:#fff;border-radius:var(--r-2xl);padding:var(--sp-6);margin-top:var(--sp-8)}
+.scope-label{font-size:var(--fs-100);font-weight:var(--fw-bold);letter-spacing:.08em;text-transform:uppercase;color:var(--brand-gold);margin-bottom:10px}
+.scope p{color:#D6D8E0;line-height:1.7;margin-bottom:8px}
+.scope p:last-child{margin-bottom:0}
+.scope b{color:#fff}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo-mark">CK</div>
+  <div class="tb-title">Context Keeper</div>
+  <div class="tb-sub">— How to Use</div>
+  <div class="tb-right">
+    <a class="btn-s" href="context-keeper-prototype.html">Open the prototype →</a>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="eyebrow">UX Day Hackathon · Prototype Walkthrough</div>
+  <div class="h1">Stay on top of everything.<br>Track your wins without trying.</div>
+  <div class="lede">Context Keeper is a lightweight personal workspace that holds your place for you when you switch between tasks — and quietly builds a record of what you've accomplished along the way. Here's exactly how it works.</div>
+</div>
+
+<div class="wrap">
+
+  <div class="pitch">
+    <div class="pitch-label">The idea in one line</div>
+    <div class="pitch-line">Every task gets a "context card." Capture where things stand before you switch away — and pick back up in seconds instead of piecing it together from memory, Slack, and old notes.</div>
+  </div>
+
+  <div class="section-label">Using the tool — step by step</div>
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <div class="step-title">Start a card in seconds</div>
+      <div class="step-desc">Click <b>+ New card</b> from the home view. It only asks for two things: a title and a quick note about what's going on. That's deliberate — if capturing context takes more than a few seconds, it stops happening.</div>
+      <div class="field-mock"><span class="field-label-mock">Title</span>EGE-4021: Hotel review stars</div>
+      <div class="field-mock" style="margin-top:6px"><span class="field-label-mock">Note</span>Star rating renders on desktop, working through partial-star rounding…</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-body">
+      <div class="step-title">Capture where things stand</div>
+      <div class="step-desc">Open any card to fill in the details as you go — not all at once. Update <b>"Where things stand"</b> before you step away, jot down <b>open questions</b>, drop in <b>links</b> (a Slack thread, a Jira ticket, a Figma file), and leave yourself a one-line <b>next step</b> for when you come back.</div>
+      <div class="step-tip">💡 <span>Think of it as a note to your future self, not documentation for anyone else. It only has to make sense to you.</span></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-body">
+      <div class="step-title">Switch away, and come back without losing your place</div>
+      <div class="step-desc">Every card carries a status, so the home view always shows exactly where things stand across everything you're juggling.</div>
+      <div class="status-row">
+        <span class="badge badge-progress">In Progress</span>
+        <span class="badge badge-waiting">Waiting</span>
+        <span class="badge badge-done">Done</span>
+      </div>
+      <div class="step-desc">Get pulled into a Slack question or a meeting? No problem — when you come back, open the card and your next step is already sitting there waiting for you.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">4</div>
+    <div class="step-body">
+      <div class="step-title">Mark it done — and tag a win if it's worth remembering</div>
+      <div class="step-desc">Move a card to <b>Done</b> and you'll get a quick, optional prompt: tag this as a win? Add a short note if something's worth remembering — praise from a teammate, a tricky bug you caught, a fast turnaround.</div>
+      <div class="win-chip">★ Shipped the fix same day — Priya said it looked great in review.</div>
+      <div class="step-tip">💡 <span>This step is optional and takes ten seconds. Skip it freely — nothing breaks if you don't tag every card.</span></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">5</div>
+    <div class="step-body">
+      <div class="step-title">Pull up your Accomplishment Log before a review</div>
+      <div class="step-desc">Every card you've marked done lives in one place, with your tagged wins highlighted. By the time a self-review conversation comes around, you're not reconstructing your quarter from memory — you're reading it back.</div>
+    </div>
+  </div>
+
+  <div class="section-label">Quick answers</div>
+
+  <div class="faq-item">
+    <div class="faq-q">Do I need to fill in every field on a card?</div>
+    <div class="faq-a">No. Title and a quick note are all it takes to start. Open questions, links, and next step are there when they're useful — never required.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">Does this connect to Slack or Jira automatically?</div>
+    <div class="faq-a">Not yet. Right now you paste in links by hand. That's intentional for this prototype — automatic syncing is a natural next step once the core habit proves out.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">What happens to my data?</div>
+    <div class="faq-a">Everything stays in your own browser for this prototype — nothing is sent anywhere. It's built to feel private, the same way you'd treat a personal notebook.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">What if I don't get around to updating a card right away?</div>
+    <div class="faq-a">Nothing breaks — a card just sits at whatever status you last left it. The tool is meant to lower effort, not add a new obligation to track.</div>
+  </div>
+
+  <div class="scope">
+    <div class="scope-label">Where this stands today</div>
+    <p>This is a <b>hackathon prototype</b>, built for one person's workflow — not a finished product. Entry is manual by design, there's no team view, and nothing syncs live with Slack or Jira yet.</p>
+    <p>If the core idea proves out — that capturing context in seconds actually sticks as a habit — the natural next steps are lightweight integrations and, eventually, opening it up beyond a single person.</p>
+  </div>
+
+</div>
+
+</body>
+</html>
