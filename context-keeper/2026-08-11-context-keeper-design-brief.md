@@ -51,6 +51,57 @@ Somiya, a front-end developer, wants to be more on top of her work when she swit
 **Business intent:** Faster ticket turnaround, general team efficiency, better-documented performance reviews.
 **Commercial anti-goal:** None identified — explicitly considered; if Somiya wins, the team wins.
 
+### Measurement Plan *(via `/sdlc-design-metrics`)*
+
+**Design Intent → Metric Mapping**
+
+| Intent | Expected behavior change | Metric | Direction | Method | Baseline | Target | Timeframe |
+|---|---|---|---|---|---|---|---|
+| Cut the cost of task-switching | Somiya re-orients to a task faster after a switch | Time-to-resume after a switch | ↓ | Self-timed spot checks (a handful of switches/week) | Unmeasured — today it's self-reported as "minutes to a larger derailment" | Consistently under ~30 seconds to re-orient using a card, vs. today's variable minutes-to-hours | 2 weeks of personal use |
+| Faster ticket turnaround | Less time lost during discovery/switching shows up in real ticket data | Ticket cycle time / discovery-phase duration | ↓ | Pull from existing Jira timestamps — no new instrumentation needed | Her current average cycle time (last 4-6 tickets) | Modest, credible reduction (~10-15%), not a dramatic swing | 4-8 weeks (~1-2 sprints) |
+| Effortless self-review prep | The log already contains what she'd otherwise write from scratch | Self-review prep time/effort | ↓ | Self-rated (time spent compiling notes before a review) | Whatever she currently spends before a review cycle | Near-zero *additional* time — prep becomes "read the log," not "reconstruct the quarter" | Next self-review cycle |
+
+**Primary Success Metrics**
+
+1. **Time-to-resume after a switch** — Direct causal link to the core hypothesis. Tracked via manual self-timed samples. Caveat: self-timing is approximate; Somiya is both subject and instrument, which is fine for a personal tool.
+2. **Ticket cycle time / discovery-phase duration** — Indirect but real; the metric a business stakeholder would ask about. Tracked via Jira (already instrumented). Caveat: many confounds (ticket complexity, designer availability) — directional, not proof.
+3. **Self-review prep effort** — Direct link to the accomplishment-log half of the hypothesis. Self-rated, one data point per review cycle. Caveat: low sample rate — reviews are infrequent, so this is a slow-feedback metric.
+
+**Secondary Metrics to Watch**
+
+| Metric | Watch for | Why |
+|---|---|---|
+| Daily tool usage | Whether she opens/updates it without being reminded | Directly tests the hypothesis's own falsifier (missed/skipped updates) |
+| Cards created/updated per day | Volume trending down after week 1 | Early warning sign before the evaluation window closes |
+| Win/praise entries logged over time | Whether tagging wins happens passively, or gets skipped | Tests whether the "accomplishment log" bonus is really passive |
+
+**Guardrail metrics (should NOT move):**
+- **Logging overhead** — time spent maintaining the tool itself should stay negligible.
+- **Informal Slack knowledge-sharing** — should not decline (the one anti-goal candidate raised above, even though none was identified as likely).
+
+**Instrumentation Plan**
+
+Single-user hackathon prototype, no analytics pipeline — instrumentation stays cheap and self-contained, no backend required.
+- **New events** (addable directly in the existing prototype's JS, logged to a JSON array in `localStorage`): `card_created`, `card_status_changed` (from/to + timestamp), `win_tagged`, `card_opened`. Would let time-to-resume move from spot checks toward a real open→first-edit delta.
+- **Existing data to reuse:** Jira ticket timestamps — already exist, already give ticket cycle time for free.
+- **Qual touchpoint:** a lightweight weekly self-rating ("how much did switching cost bug you today, 1-5") — could live as one extra field in the tool itself.
+
+**Evaluation Plan**
+- **Early signal (weeks 1-2):** Is she opening/updating cards daily without a reminder? Dropping usage or logging-as-overhead is the falsifier from § 3 — revisit the interaction model, not the concept, if this trips.
+- **Primary evaluation (weeks 4-8):** Compare ticket cycle time against baseline, review resume-time samples, check both guardrails.
+- **Long-term (next self-review cycle):** Does the log measurably cut prep time and improve what she brings to the conversation?
+
+**Measurement Gaps**
+
+| Valuable metric | Why untrackable now | How to close |
+|---|---|---|
+| Precise time-to-resume (not just spot checks) | No event logging yet | Add the `card_opened`/first-edit-delta events above if this moves past hackathon stage |
+| True cost of *not* having this (counterfactual) | No baseline data existed before today | Can't be closed retroactively |
+| Slack response disruption cost | No access to Slack analytics | Stays self-reported unless this becomes a sanctioned team tool with proper access |
+| Cross-user comparison | n=1 (Somiya only) | Only closes if/when this expands to the team-wide phase (§ 6) |
+
+**Dual-customer check:** No tension identified between Somiya's win and the business's, consistent with the anti-goal answer above. The one place a regression could hide is the Slack guardrail, called out explicitly rather than assumed away.
+
 ## § 6 — Constraints & Challenges
 - **Target date:** Rough working prototype needed today — this is for a UX Day hackathon.
 - **Scope:** Single-user (Somiya only) for now, framed as a personal project — not a funded team-wide initiative yet, though team-wide rollout is a plausible future phase.
