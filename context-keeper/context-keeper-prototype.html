@@ -99,6 +99,8 @@ button,input,textarea{font-family:var(--font)}
 .card-tile{background:var(--surface);border:1px solid var(--border);border-radius:var(--card-radius);padding:var(--sp-5);cursor:pointer;transition:box-shadow var(--dur-3) var(--ease),border-color var(--dur-3) var(--ease),transform var(--dur-2) var(--ease);box-shadow:var(--sh-1)}
 .card-tile:hover{box-shadow:var(--sh-4);border-color:var(--border-strong);transform:translateY(-2px)}
 .card-tile:active{transform:translateY(0)}
+.card-tile.dragging{opacity:.4}
+.card-tile.drag-over{border-color:var(--brand-blue);box-shadow:0 0 0 2px var(--brand-blue-100)}
 .tile-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-3)}
 .tile-time{font-size:var(--fs-100);color:var(--text-3);font-weight:var(--fw-med)}
 .tile-title{font-size:var(--fs-400);font-weight:var(--fw-sb);letter-spacing:-.01em;margin-bottom:6px;color:var(--text-1)}
@@ -351,12 +353,16 @@ let idSeq = 1;
 
 function newId(){ return 'card-' + (idSeq++) + '-' + Date.now().toString(36); }
 
+let orderSeq = 0;
+function nextTopOrder(){ return --orderSeq; }
+
 function mkCard(o){
   return {
     id: newId(),
     title: o.title || 'Untitled card',
     status: o.status || 'In Progress',
     updatedAt: o.updatedAt || Date.now(),
+    order: o.order != null ? o.order : nextTopOrder(),
     stand: o.stand || '',
     questions: o.questions ? o.questions.slice() : [],
     links: o.links ? o.links.map(l => ({label:l.label,url:l.url})) : [],
@@ -372,6 +378,7 @@ function seedData(){
     mkCard({
       title: 'EGE-4021: Hotel review stars',
       status: 'In Progress',
+      order: 1,
       updatedAt: now - 2*3600*1000,
       stand: "Star rating component renders correctly on desktop. Working through how partial stars (e.g. 4.3) should round for display — checking with design on the exact threshold.",
       questions: ["Round half-stars up or down at the .5 boundary?", "Do we show the numeric average alongside the stars, or just the stars?"],
@@ -384,6 +391,7 @@ function seedData(){
     mkCard({
       title: 'Design sync w/ Priya',
       status: 'Waiting',
+      order: 2,
       updatedAt: now - 26*3600*1000,
       stand: "Walked through the new onboarding flow together. Priya's making a few spacing tweaks to the empty state before it's ready for build.",
       questions: ["Will the updated spec land before sprint planning on Thursday?"],
@@ -393,6 +401,7 @@ function seedData(){
     mkCard({
       title: 'Slack: onboarding question follow-up',
       status: 'In Progress',
+      order: 0,
       updatedAt: now - 35*60*1000,
       stand: "Someone on the growth team asked why new users aren't seeing the welcome tooltip. Traced it to a feature flag that's off in staging — confirming with the platform team before replying.",
       questions: ["Is the flag off in staging intentionally, or is this config drift?"],
@@ -402,6 +411,7 @@ function seedData(){
     mkCard({
       title: 'EGE-3958: Room normalizer edge case',
       status: 'Done',
+      order: 3,
       updatedAt: now - 3*24*3600*1000,
       stand: "Fixed the double-booking edge case where two near-identical room names were being merged incorrectly. Shipped and verified in staging.",
       questions: [],
@@ -424,10 +434,20 @@ function load(){
     const raw = localStorage.getItem(STORAGE_KEY);
     if(raw){
       const d = JSON.parse(raw);
-      if(d && Array.isArray(d.cards) && d.cards.length){ cards = d.cards; return true; }
+      if(d && Array.isArray(d.cards) && d.cards.length){
+        cards = d.cards;
+        migrateOrder();
+        return true;
+      }
     }
   }catch(e){}
   return false;
+}
+function migrateOrder(){
+  if(cards.some(c => c.order == null)){
+    cards.slice().sort((a,b) => b.updatedAt - a.updatedAt).forEach((c, i) => { if(c.order == null) c.order = i; });
+  }
+  orderSeq = Math.min(0, ...cards.map(c => c.order)) - 1;
 }
 function getCard(id){ return cards.find(c => c.id === id); }
 
@@ -470,7 +490,7 @@ function renderList(){
   const grid = document.getElementById('cardGrid');
   const empty = document.getElementById('listEmpty');
   const stat = document.getElementById('listStat');
-  const sorted = cards.slice().sort((a,b) => b.updatedAt - a.updatedAt);
+  const sorted = cards.slice().sort((a,b) => a.order - b.order);
 
   if(sorted.length === 0){
     grid.classList.add('hidden');
@@ -480,10 +500,13 @@ function renderList(){
   }
   grid.classList.remove('hidden');
   empty.classList.remove('show');
-  stat.textContent = sorted.length + (sorted.length === 1 ? ' card' : ' cards');
+  stat.textContent = sorted.length + (sorted.length === 1 ? ' card' : ' cards') + ' · drag to reorder';
 
   grid.innerHTML = sorted.map(c => `
-    <div class="card-tile" data-id="${c.id}" onclick="openDetail('${c.id}')">
+    <div class="card-tile" data-id="${c.id}" draggable="true"
+      ondragstart="onCardDragStart(event,'${c.id}')" ondragend="onCardDragEnd(event)"
+      ondragover="onCardDragOver(event)" ondrop="onCardDrop(event,'${c.id}')"
+      onclick="openDetail('${c.id}')">
       <div class="tile-top">
         <span class="badge badge-${statusClass(c.status)}">${esc(c.status)}</span>
         <span class="tile-time">${timeAgo(c.updatedAt)}</span>
@@ -493,6 +516,38 @@ function renderList(){
       ${c.winTagged ? '<div class="tile-win">★ Win tagged</div>' : ''}
     </div>
   `).join('');
+}
+
+/* ── drag to reorder ── */
+let dragCardId = null;
+function onCardDragStart(e, id){
+  dragCardId = id;
+  e.dataTransfer.effectAllowed = 'move';
+  e.currentTarget.classList.add('dragging');
+}
+function onCardDragEnd(e){
+  e.currentTarget.classList.remove('dragging');
+  document.querySelectorAll('.card-tile.drag-over').forEach(el => el.classList.remove('drag-over'));
+  dragCardId = null;
+}
+function onCardDragOver(e){
+  e.preventDefault();
+  const tile = e.currentTarget;
+  if(tile.dataset.id !== dragCardId) tile.classList.add('drag-over');
+}
+function onCardDrop(e, targetId){
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  if(!dragCardId || dragCardId === targetId) return;
+  const sorted = cards.slice().sort((a,b) => a.order - b.order);
+  const fromIdx = sorted.findIndex(c => c.id === dragCardId);
+  const toIdx = sorted.findIndex(c => c.id === targetId);
+  if(fromIdx === -1 || toIdx === -1) return;
+  const [moved] = sorted.splice(fromIdx, 1);
+  sorted.splice(toIdx, 0, moved);
+  sorted.forEach((c, i) => { c.order = i; });
+  save();
+  renderList();
 }
 
 /* ══════════════════════ quick capture ══════════════════════ */
