@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Context Keeper — Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  /* ── neutrals — color-tokens.json color__neutral__1__* ── */
+  --n-50:#F9FAFF;--n-100:#F2F3F7;--n-200:#E0E2E9;--n-300:#CFD2DA;--n-400:#B9BDC7;
+  --n-500:#777B8A;--n-600:#5E6476;--n-700:#444B61;--n-800:#2A2F3D;--n-900:#1B1D25;
+  --bg:var(--n-50);--surface:#FFFFFF;--border:var(--n-200);--border-strong:var(--n-300);
+  --text-1:var(--n-900);--text-2:var(--n-600);--text-3:var(--n-500);--text-4:var(--n-400);
+  --hover:var(--n-100);--active:var(--n-200);
+
+  /* ── brand — color-tokens.json color__brand__* / accent__1 (informative) ── */
+  --brand-gold:#FFB900;--brand-gold-dark:#B57B00;
+  --brand-blue:#006FCF;--brand-blue-100:#D4EBFF;--brand-blue-300:#81B1FF;--brand-blue-600:#003D92;--brand-blue-800:#1E2C5D;
+
+  /* ── status semantics — badge-tokens.json badge__{positive,warning,informative}__* mapped to accent__4/6/1 ── */
+  --st-progress:#006FCF;--st-progress-bg:#D4EBFF;--st-progress-text:#1E2C5D;--st-progress-border:#81B1FF;
+  --st-waiting:#E16304;--st-waiting-bg:#FADBB3;--st-waiting-text:#6F2408;--st-waiting-border:#EF9450;
+  --st-done:#178143;--st-done-bg:#C3F2D7;--st-done-text:#0E3E23;--st-done-border:#28CD6E;
+
+  /* ── corner radius — corner-radius-tokens.json ── */
+  --r-sm:4px;--r-md:8px;--r-lg:12px;--r-xl:16px;--r-2xl:24px;
+
+  /* ── spacing — spacing-tokens.json / sizing-tokens.json ── */
+  --sp-1:4px;--sp-2:8px;--sp-3:12px;--sp-4:16px;--sp-5:20px;--sp-6:24px;--sp-8:32px;
+
+  /* ── elevation — elevation-tokens.json (base color__neutral__1__900) ── */
+  --sh-1:0 1px 1px rgba(27,29,37,.08),0 0 1px rgba(27,29,37,.12);
+  --sh-2:0 2px 2px rgba(27,29,37,.08),0 0 2px rgba(27,29,37,.12);
+  --sh-4:0 4px 4px rgba(27,29,37,.08),0 0 2px rgba(27,29,37,.12);
+  --sh-8:0 8px 8px rgba(27,29,37,.08),0 0 2px rgba(27,29,37,.12);
+  --sh-24:0 24px 32px rgba(27,29,37,.14),0 0 4px rgba(27,29,37,.12);
+
+  /* ── type — font-tokens-new.json (font_family__default:"Open Sans") + font-tokens.json font__size / font__line_height ── */
+  --font:'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  --fs-100:10px;--fs-200:12px;--fs-300:14px;--fs-400:16px;--fs-500:20px;--fs-600:24px;--fs-700:32px;
+  --lh-200:16px;--lh-300:18px;--lh-400:20px;--lh-500:28px;--lh-600:32px;
+  --fw-reg:400;--fw-med:500;--fw-sb:600;--fw-bold:700;
+
+  /* ── motion — motion-tokens.json motion__duration__* / motion__easing__* ── */
+  --ease:cubic-bezier(.4,0,.2,1);--dur-1:100ms;--dur-2:150ms;--dur-3:200ms;--dur-4:275ms;--dur-5:350ms;
+
+  /* ── component tokens — button-tokens.json / badge-tokens.json / card-tokens.json ── */
+  --btn-radius:var(--r-lg);      /* button__corner_radius -> corner_radius__3x = 12 */
+  --badge-radius:var(--r-md);    /* badge__corner_radius -> corner_radius__2x = 8 */
+  --card-radius:var(--r-xl);     /* derived from card/card_container radius range (12–24) */
+}
+html{font-family:var(--font);background:var(--bg);color:var(--text-1);-webkit-font-smoothing:antialiased}
+body{min-height:100vh;font-size:var(--fs-300);line-height:1.5}
+button,input,textarea{font-family:var(--font)}
+
+/* ── app shell ── */
+.app{min-height:100vh;display:flex;flex-direction:column}
+.topbar{position:sticky;top:0;z-index:40;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:var(--sp-6);padding:0 var(--sp-6);height:60px}
+.tb-left{display:flex;align-items:center;gap:var(--sp-3)}
+.logo-mark{width:30px;height:30px;border-radius:var(--r-md);background:var(--brand-gold);display:flex;align-items:center;justify-content:center;font-weight:var(--fw-bold);font-size:var(--fs-200);color:var(--n-900);flex-shrink:0}
+.tb-title{font-size:var(--fs-400);font-weight:var(--fw-bold);letter-spacing:-.01em;color:var(--text-1)}
+.tb-nav{display:flex;gap:var(--sp-1);background:var(--hover);border-radius:100px;padding:3px;margin-left:var(--sp-4)}
+.tb-tab{border:none;background:none;font-family:var(--font);font-size:var(--fs-200);font-weight:var(--fw-sb);color:var(--text-2);padding:7px 16px;border-radius:100px;cursor:pointer;transition:background var(--dur-2) var(--ease),color var(--dur-2) var(--ease)}
+.tb-tab:hover{color:var(--text-1)}
+.tb-tab.on{background:var(--surface);color:var(--text-1);box-shadow:var(--sh-1)}
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:var(--sp-3)}
+
+/* ── buttons ── */
+.btn-p{background:var(--brand-gold);color:var(--n-900);border:none;border-radius:var(--btn-radius);padding:10px 18px;font-size:var(--fs-300);font-weight:var(--fw-sb);cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:background var(--dur-2) var(--ease),transform var(--dur-1) var(--ease)}
+.btn-p:hover{background:#FFC72E}
+.btn-p:active{transform:translateY(1px)}
+.btn-p:disabled{opacity:.4;cursor:not-allowed}
+.btn-s{background:none;color:var(--brand-blue);border:1.5px solid var(--border-strong);border-radius:var(--btn-radius);padding:9px 16px;font-size:var(--fs-300);font-weight:var(--fw-sb);cursor:pointer;transition:border-color var(--dur-2) var(--ease),background var(--dur-2) var(--ease)}
+.btn-s:hover{border-color:var(--brand-blue);background:var(--hover)}
+.ghost-btn{background:none;border:1.5px dashed var(--border-strong);color:var(--text-2);border-radius:var(--r-lg);padding:9px 14px;font-size:var(--fs-200);font-weight:var(--fw-sb);cursor:pointer;transition:all var(--dur-2) var(--ease)}
+.ghost-btn:hover{border-color:var(--brand-gold-dark);color:var(--text-1);background:#FFF8E1}
+.link-btn{background:none;border:none;color:var(--brand-blue);font-size:var(--fs-200);font-weight:var(--fw-sb);cursor:pointer;padding:2px 0}
+.link-btn:hover{text-decoration:underline}
+.rm-btn{background:none;border:none;color:var(--text-3);cursor:pointer;font-size:var(--fs-300);line-height:1;padding:4px 6px;border-radius:var(--r-sm);transition:background var(--dur-1) var(--ease),color var(--dur-1) var(--ease)}
+.rm-btn:hover{background:var(--hover);color:var(--st-waiting)}
+
+/* ── pages ── */
+.pages{flex:1;position:relative}
+.page{display:none;max-width:1040px;margin:0 auto;padding:var(--sp-8) var(--sp-6) 80px}
+.page.active{display:block;animation:fadeIn var(--dur-4) var(--ease)}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:var(--sp-6);gap:var(--sp-4)}
+.page-h1{font-size:var(--fs-600);font-weight:var(--fw-bold);letter-spacing:-.02em;margin-bottom:4px}
+.page-sub{font-size:var(--fs-300);color:var(--text-2);max-width:520px;line-height:1.6}
+.page-stat{font-size:var(--fs-200);color:var(--text-3);font-weight:var(--fw-med);white-space:nowrap}
+
+/* ── card grid (home) ── */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:var(--sp-5)}
+.card-tile{background:var(--surface);border:1px solid var(--border);border-radius:var(--card-radius);padding:var(--sp-5);cursor:pointer;transition:box-shadow var(--dur-3) var(--ease),border-color var(--dur-3) var(--ease),transform var(--dur-2) var(--ease);box-shadow:var(--sh-1)}
+.card-tile:hover{box-shadow:var(--sh-4);border-color:var(--border-strong);transform:translateY(-2px)}
+.card-tile:active{transform:translateY(0)}
+.tile-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-3)}
+.tile-time{font-size:var(--fs-100);color:var(--text-3);font-weight:var(--fw-med)}
+.tile-title{font-size:var(--fs-400);font-weight:var(--fw-sb);letter-spacing:-.01em;margin-bottom:6px;color:var(--text-1)}
+.tile-snippet{font-size:var(--fs-200);color:var(--text-2);line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.tile-win{margin-top:var(--sp-3);font-size:var(--fs-100);font-weight:var(--fw-sb);color:var(--brand-gold-dark);display:flex;align-items:center;gap:4px}
+
+@keyframes flashHighlight{0%{box-shadow:0 0 0 4px var(--brand-blue-100),var(--sh-4);border-color:var(--brand-blue-300)}100%{box-shadow:var(--sh-1);border-color:var(--border)}}
+.card-tile.flash{animation:flashHighlight 1.4s var(--ease)}
+
+/* ── badges ── */
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:var(--fs-100);font-weight:var(--fw-sb);letter-spacing:.02em;text-transform:uppercase;border-radius:var(--badge-radius);padding:4px 9px}
+.badge::before{content:'';width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.badge-progress{background:var(--st-progress-bg);color:var(--st-progress-text)}
+.badge-progress::before{background:var(--st-progress)}
+.badge-waiting{background:var(--st-waiting-bg);color:var(--st-waiting-text)}
+.badge-waiting::before{background:var(--st-waiting)}
+.badge-done{background:var(--st-done-bg);color:var(--st-done-text)}
+.badge-done::before{background:var(--st-done)}
+
+/* ── empty states ── */
+.empty-state{border:1.5px dashed var(--border-strong);border-radius:var(--card-radius);padding:64px var(--sp-6);text-align:center;display:none}
+.empty-state.show{display:block}
+.empty-icon{width:44px;height:44px;border-radius:50%;background:var(--hover);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:18px}
+.empty-h{font-size:var(--fs-400);font-weight:var(--fw-sb);margin-bottom:6px}
+.empty-p{font-size:var(--fs-300);color:var(--text-2);max-width:380px;margin:0 auto 20px;line-height:1.6}
+.card-grid.hidden{display:none}
+
+/* ── detail page ── */
+.detail-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-6)}
+.back-btn{background:none;border:none;color:var(--text-2);font-size:var(--fs-300);font-weight:var(--fw-sb);cursor:pointer;display:flex;align-items:center;gap:6px;padding:6px 8px;border-radius:var(--r-md);transition:background var(--dur-2) var(--ease),color var(--dur-2) var(--ease)}
+.back-btn:hover{background:var(--hover);color:var(--text-1)}
+.detail-meta{font-size:var(--fs-200);color:var(--text-3);font-weight:var(--fw-med)}
+.detail-body{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-2xl);padding:var(--sp-8);box-shadow:var(--sh-1)}
+.detail-title{width:100%;border:none;background:none;font-size:var(--fs-600);font-weight:var(--fw-bold);letter-spacing:-.02em;color:var(--text-1);padding:6px 0;margin-bottom:var(--sp-5);border-bottom:2px solid transparent;transition:border-color var(--dur-2) var(--ease)}
+.detail-title:focus{outline:none;border-color:var(--brand-blue-300)}
+
+.status-row{display:flex;align-items:center;gap:var(--sp-4);margin-bottom:var(--sp-5);flex-wrap:wrap}
+.status-pills{display:flex;gap:var(--sp-2)}
+.spill{border:1.5px solid var(--border);background:var(--surface);color:var(--text-2);font-family:var(--font);font-size:var(--fs-200);font-weight:var(--fw-sb);padding:8px 14px;border-radius:100px;cursor:pointer;transition:all var(--dur-2) var(--ease)}
+.spill:hover{border-color:var(--border-strong);color:var(--text-1)}
+.spill.on.s-progress{background:var(--st-progress);border-color:var(--st-progress);color:#fff}
+.spill.on.s-waiting{background:var(--st-waiting);border-color:var(--st-waiting);color:#fff}
+.spill.on.s-done{background:var(--st-done);border-color:var(--st-done);color:#fff}
+
+.flabel{font-size:var(--fs-200);font-weight:var(--fw-sb);color:var(--text-2);letter-spacing:.01em;display:block;margin-bottom:8px}
+.fopt{font-weight:var(--fw-reg);color:var(--text-3)}
+.fsec{margin-bottom:var(--sp-6)}
+.finput{width:100%;border:1.5px solid var(--border);border-radius:var(--r-md);padding:10px 12px;font-size:var(--fs-300);color:var(--text-1);background:var(--surface);transition:border-color var(--dur-2) var(--ease)}
+.finput:focus{outline:none;border-color:var(--brand-blue)}
+.finput::placeholder{color:var(--text-4)}
+.ftextarea{width:100%;border:1.5px solid var(--border);border-radius:var(--r-md);padding:12px;font-size:var(--fs-300);color:var(--text-1);background:var(--surface);resize:vertical;line-height:1.6;transition:border-color var(--dur-2) var(--ease)}
+.ftextarea:focus{outline:none;border-color:var(--brand-blue)}
+.ftextarea::placeholder{color:var(--text-4)}
+
+.add-row{display:flex;gap:8px;margin-top:10px}
+.add-row .finput{flex:1}
+.link-add-row .finput:first-child{flex:0 0 34%}
+
+.qrow{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.qdot{width:6px;height:6px;border-radius:50%;background:var(--border-strong);flex-shrink:0}
+.qrow .finput{flex:1}
+
+.link-row{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--hover);border-radius:var(--r-md);margin-bottom:8px}
+.link-info{flex:1;min-width:0}
+.link-label{font-size:var(--fs-300);font-weight:var(--fw-sb);color:var(--text-1);margin-bottom:1px}
+.link-url{font-size:var(--fs-100);color:var(--brand-blue);text-decoration:none;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.link-url:hover{text-decoration:underline}
+.empty-hint{font-size:var(--fs-200);color:var(--text-3);font-style:italic;padding:6px 0}
+
+/* ── win / praise ── */
+.win-prompt{background:#FFF8E1;border:1.5px solid var(--brand-gold);border-radius:var(--r-lg);padding:var(--sp-5);margin-bottom:var(--sp-6)}
+.win-prompt-head{font-size:var(--fs-300);font-weight:var(--fw-bold);color:var(--n-900);margin-bottom:2px}
+.win-prompt-sub{font-size:var(--fs-200);color:var(--text-2);margin-bottom:12px;line-height:1.5}
+.win-prompt-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}
+.win-callout{display:flex;align-items:flex-start;gap:10px;background:#FFF8E1;border:1px solid var(--brand-gold);border-radius:var(--r-lg);padding:var(--sp-4) var(--sp-5);margin-bottom:var(--sp-6)}
+.win-callout-star{font-size:16px;color:var(--brand-gold-dark);flex-shrink:0;line-height:1.4}
+.win-callout-body{flex:1}
+.win-callout-head{font-size:var(--fs-200);font-weight:var(--fw-bold);color:var(--n-900);margin-bottom:2px}
+.win-callout-note{font-size:var(--fs-200);color:var(--text-2);line-height:1.5;margin-bottom:6px}
+
+/* ── modal (quick capture) ── */
+.overlay{position:fixed;inset:0;background:rgba(27,29,37,.45);display:flex;align-items:center;justify-content:center;z-index:200;opacity:0;pointer-events:none;transition:opacity var(--dur-3) var(--ease);backdrop-filter:blur(2px)}
+.overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--surface);border-radius:var(--r-2xl);box-shadow:var(--sh-24);width:440px;max-width:90vw;transform:scale(.96) translateY(8px);transition:transform var(--dur-3) var(--ease)}
+.overlay.open .modal{transform:scale(1) translateY(0)}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:var(--sp-5) var(--sp-6);border-bottom:1px solid var(--border)}
+.modal-head-title{font-size:var(--fs-400);font-weight:var(--fw-bold);letter-spacing:-.01em}
+.modal-close{background:none;border:none;color:var(--text-3);font-size:16px;cursor:pointer;padding:4px;border-radius:var(--r-sm);line-height:1;transition:background var(--dur-1) var(--ease),color var(--dur-1) var(--ease)}
+.modal-close:hover{background:var(--hover);color:var(--text-1)}
+.modal-body{padding:var(--sp-6)}
+.modal-body .fsec:last-child{margin-bottom:0}
+.modal-foot{display:flex;justify-content:flex-end;gap:10px;padding:var(--sp-4) var(--sp-6);border-top:1px solid var(--border)}
+.modal-hint{font-size:var(--fs-100);color:var(--text-3);margin-top:8px}
+
+/* ── accomplishment log ── */
+.log-list{display:flex;flex-direction:column;gap:var(--sp-3)}
+.log-entry{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--border);border-radius:var(--r-lg);padding:var(--sp-4) var(--sp-5);transition:box-shadow var(--dur-3) var(--ease)}
+.log-entry:hover{box-shadow:var(--sh-2)}
+.log-entry.is-win{border-left-color:var(--brand-gold);background:linear-gradient(180deg,#FFFDF6,#FFFFFF)}
+.log-entry-top{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-4);margin-bottom:4px}
+.log-title{font-size:var(--fs-300);font-weight:var(--fw-sb);color:var(--text-1)}
+.log-date{font-size:var(--fs-100);color:var(--text-3);font-weight:var(--fw-med);white-space:nowrap}
+.log-sub{font-size:var(--fs-200);color:var(--text-2);line-height:1.55}
+.log-win{font-size:var(--fs-200);color:var(--n-900);line-height:1.55;display:flex;gap:7px;align-items:flex-start}
+.log-win .star{color:var(--brand-gold-dark);flex-shrink:0}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <header class="topbar">
+    <div class="tb-left">
+      <div class="logo-mark">CK</div>
+      <div class="tb-title">Context Keeper</div>
+    </div>
+    <nav class="tb-nav">
+      <button class="tb-tab on" id="tab-list" onclick="goPage('list')">My Cards</button>
+      <button class="tb-tab" id="tab-log" onclick="goPage('log')">Accomplishment Log</button>
+    </nav>
+    <div class="tb-right">
+      <button class="btn-p" onclick="openCapture()"><span>+</span> New card</button>
+    </div>
+  </header>
+
+  <main class="pages">
+
+    <!-- ═══ HOME — Context Card list ═══ -->
+    <section class="page active" id="pg-list">
+      <div class="page-head">
+        <div>
+          <div class="page-h1">My Cards</div>
+          <div class="page-sub">Everything you're currently holding in your head — one place to pick back up right where you left off.</div>
+        </div>
+        <div class="page-stat" id="listStat"></div>
+      </div>
+      <div class="card-grid" id="cardGrid"></div>
+      <div class="empty-state" id="listEmpty">
+        <div class="empty-icon">＋</div>
+        <div class="empty-h">Nothing here yet</div>
+        <div class="empty-p">Start a card for whatever you're working on. It only takes two fields, and you'll thank yourself the next time you switch away and back.</div>
+        <button class="btn-p" onclick="openCapture()">+ New card</button>
+      </div>
+    </section>
+
+    <!-- ═══ DETAIL — Context Card detail ═══ -->
+    <section class="page" id="pg-detail">
+      <div class="detail-top">
+        <button class="back-btn" onclick="backToList()">← Back to list</button>
+        <div class="detail-meta" id="detailMeta"></div>
+      </div>
+      <div class="detail-body">
+        <input class="detail-title" id="detTitle" oninput="onTitleInput()" placeholder="Untitled card">
+
+        <div class="status-row">
+          <span class="flabel" style="margin-bottom:0">Status</span>
+          <div class="status-pills" id="statusPills">
+            <button class="spill s-progress" data-s="In Progress" onclick="setStatus('In Progress')">In Progress</button>
+            <button class="spill s-waiting" data-s="Waiting" onclick="setStatus('Waiting')">Waiting</button>
+            <button class="spill s-done" data-s="Done" onclick="setStatus('Done')">Done</button>
+          </div>
+        </div>
+
+        <div id="winSection"></div>
+
+        <div class="fsec">
+          <label class="flabel">Where things stand</label>
+          <textarea id="detStand" class="ftextarea" rows="5" oninput="onStandInput()" placeholder="What's the current state? What have you tried, what's blocking, what someone else needs to know if they picked this up today..."></textarea>
+        </div>
+
+        <div class="fsec">
+          <label class="flabel">Open questions</label>
+          <div id="questionsList"></div>
+          <div class="add-row">
+            <input id="newQuestion" class="finput" placeholder="Add an open question..." onkeydown="if(event.key==='Enter'){event.preventDefault();addQuestion();}">
+            <button class="btn-s" onclick="addQuestion()">Add</button>
+          </div>
+        </div>
+
+        <div class="fsec">
+          <label class="flabel">Links <span class="fopt">(Slack thread, Jira ticket, Figma file...)</span></label>
+          <div id="linksList"></div>
+          <div class="add-row link-add-row">
+            <input id="newLinkLabel" class="finput" placeholder="Label" onkeydown="if(event.key==='Enter'){event.preventDefault();document.getElementById('newLinkUrl').focus();}">
+            <input id="newLinkUrl" class="finput" placeholder="https://..." onkeydown="if(event.key==='Enter'){event.preventDefault();addLink();}">
+            <button class="btn-s" onclick="addLink()">Add</button>
+          </div>
+        </div>
+
+        <div class="fsec" style="margin-bottom:0">
+          <label class="flabel">Next step <span class="fopt">(what to do when you come back)</span></label>
+          <input id="detNext" class="finput" oninput="onNextInput()" placeholder="e.g. Confirm rounding rule with Priya, then update the threshold logic.">
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ ACCOMPLISHMENT LOG ═══ -->
+    <section class="page" id="pg-log">
+      <div class="page-head">
+        <div>
+          <div class="page-h1">Accomplishment Log</div>
+          <div class="page-sub">Every card you've marked done, in one place — ready to read from during a review conversation.</div>
+        </div>
+        <div class="page-stat" id="logStat"></div>
+      </div>
+      <div class="log-list" id="logList"></div>
+      <div class="empty-state" id="logEmpty">
+        <div class="empty-icon">★</div>
+        <div class="empty-h">Your wins will show up here</div>
+        <div class="empty-p">Mark a card done from its detail view and, if you want, tag it as a win. This becomes your running record for review time — no extra writing required.</div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ═══ Quick capture modal ═══ -->
+<div class="overlay" id="captureOverlay" onclick="if(event.target===this)closeCapture()">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-head-title">New card</div>
+      <button class="modal-close" onclick="closeCapture()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="fsec">
+        <label class="flabel">Title</label>
+        <input id="capTitle" class="finput" placeholder="e.g. EGE-4102: Fix date picker overlap" onkeydown="if(event.key==='Enter'){event.preventDefault();document.getElementById('capNote').focus();}">
+      </div>
+      <div class="fsec">
+        <label class="flabel">Note <span class="fopt">(what's going on)</span></label>
+        <textarea id="capNote" class="ftextarea" rows="3" placeholder="Quick note on where this stands right now..."></textarea>
+        <div class="modal-hint">That's it — just these two fields. You can fill in the rest later if it's useful.</div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-s" onclick="closeCapture()">Cancel</button>
+      <button class="btn-p" id="capSubmit" onclick="submitCapture()">Add card</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════ state ══════════════════════ */
+const STORAGE_KEY = 'contextKeeperState_v1';
+let cards = [];
+let currentId = null;
+let highlightId = null;
+const winFormOpen = new Set();
+let idSeq = 1;
+
+function newId(){ return 'card-' + (idSeq++) + '-' + Date.now().toString(36); }
+
+function mkCard(o){
+  return {
+    id: newId(),
+    title: o.title || 'Untitled card',
+    status: o.status || 'In Progress',
+    updatedAt: o.updatedAt || Date.now(),
+    stand: o.stand || '',
+    questions: o.questions ? o.questions.slice() : [],
+    links: o.links ? o.links.map(l => ({label:l.label,url:l.url})) : [],
+    nextStep: o.nextStep || '',
+    winTagged: !!o.winTagged,
+    winNote: o.winNote || ''
+  };
+}
+
+function seedData(){
+  const now = Date.now();
+  cards = [
+    mkCard({
+      title: 'EGE-4021: Hotel review stars',
+      status: 'In Progress',
+      updatedAt: now - 2*3600*1000,
+      stand: "Star rating component renders correctly on desktop. Working through how partial stars (e.g. 4.3) should round for display — checking with design on the exact threshold.",
+      questions: ["Round half-stars up or down at the .5 boundary?", "Do we show the numeric average alongside the stars, or just the stars?"],
+      links: [
+        {label:'Jira: EGE-4021', url:'https://jira.amexgbt.com/browse/EGE-4021'},
+        {label:'Slack thread w/ design', url:'https://amexgbt.slack.com/archives/C0123/p1699999999'}
+      ],
+      nextStep: "Confirm rounding rule with Priya, then update the component's threshold logic."
+    }),
+    mkCard({
+      title: 'Design sync w/ Priya',
+      status: 'Waiting',
+      updatedAt: now - 26*3600*1000,
+      stand: "Walked through the new onboarding flow together. Priya's making a few spacing tweaks to the empty state before it's ready for build.",
+      questions: ["Will the updated spec land before sprint planning on Thursday?"],
+      links: [{label:'Figma: Onboarding v3', url:'https://figma.com/file/onboarding-v3'}],
+      nextStep: "Check back with Priya Wednesday if the updated spec hasn't shown up."
+    }),
+    mkCard({
+      title: 'Slack: onboarding question follow-up',
+      status: 'In Progress',
+      updatedAt: now - 35*60*1000,
+      stand: "Someone on the growth team asked why new users aren't seeing the welcome tooltip. Traced it to a feature flag that's off in staging — confirming with the platform team before replying.",
+      questions: ["Is the flag off in staging intentionally, or is this config drift?"],
+      links: [{label:'Slack thread', url:'https://amexgbt.slack.com/archives/C0456/p1700000000'}],
+      nextStep: "Reply once platform confirms whether the flag should be on in staging."
+    }),
+    mkCard({
+      title: 'EGE-3958: Room normalizer edge case',
+      status: 'Done',
+      updatedAt: now - 3*24*3600*1000,
+      stand: "Fixed the double-booking edge case where two near-identical room names were being merged incorrectly. Shipped and verified in staging.",
+      questions: [],
+      links: [
+        {label:'Jira: EGE-3958', url:'https://jira.amexgbt.com/browse/EGE-3958'},
+        {label:'PR #482', url:'https://github.com/amexgbt/room-normalizer/pull/482'}
+      ],
+      nextStep: "",
+      winTagged: true,
+      winNote: "Caught and fixed before it hit prod — Priya called it out by name in standup as a nice catch."
+    })
+  ];
+}
+
+function save(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify({cards})); }catch(e){}
+}
+function load(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw){
+      const d = JSON.parse(raw);
+      if(d && Array.isArray(d.cards) && d.cards.length){ cards = d.cards; return true; }
+    }
+  }catch(e){}
+  return false;
+}
+function getCard(id){ return cards.find(c => c.id === id); }
+
+/* ══════════════════════ helpers ══════════════════════ */
+function esc(s){
+  return String(s == null ? '' : s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+function truncate(s, n){
+  s = String(s || '');
+  return s.length > n ? s.slice(0, n-1) + '…' : s;
+}
+function timeAgo(ts){
+  const diff = Date.now() - ts;
+  const m = Math.floor(diff / 60000);
+  if(m < 1) return 'Just now';
+  if(m < 60) return m + 'm ago';
+  const h = Math.floor(m / 60);
+  if(h < 24) return h + 'h ago';
+  const d = Math.floor(h / 24);
+  if(d < 7) return d + 'd ago';
+  const w = Math.floor(d / 7);
+  return w + 'w ago';
+}
+function statusClass(s){
+  return s === 'In Progress' ? 'progress' : s === 'Waiting' ? 'waiting' : 'done';
+}
+
+/* ══════════════════════ page navigation ══════════════════════ */
+function goPage(name){
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('pg-' + name).classList.add('active');
+  document.getElementById('tab-list').classList.toggle('on', name === 'list');
+  document.getElementById('tab-log').classList.toggle('on', name === 'log');
+  if(name === 'list') renderList();
+  if(name === 'log') renderLog();
+}
+
+/* ══════════════════════ home / list ══════════════════════ */
+function renderList(){
+  const grid = document.getElementById('cardGrid');
+  const empty = document.getElementById('listEmpty');
+  const stat = document.getElementById('listStat');
+  const sorted = cards.slice().sort((a,b) => b.updatedAt - a.updatedAt);
+
+  if(sorted.length === 0){
+    grid.classList.add('hidden');
+    empty.classList.add('show');
+    stat.textContent = '';
+    return;
+  }
+  grid.classList.remove('hidden');
+  empty.classList.remove('show');
+  stat.textContent = sorted.length + (sorted.length === 1 ? ' card' : ' cards');
+
+  grid.innerHTML = sorted.map(c => `
+    <div class="card-tile" data-id="${c.id}" onclick="openDetail('${c.id}')">
+      <div class="tile-top">
+        <span class="badge badge-${statusClass(c.status)}">${esc(c.status)}</span>
+        <span class="tile-time">${timeAgo(c.updatedAt)}</span>
+      </div>
+      <div class="tile-title">${esc(c.title)}</div>
+      <div class="tile-snippet">${esc(truncate(c.stand || c.nextStep || 'No notes yet — open the card to add where things stand.', 120))}</div>
+      ${c.winTagged ? '<div class="tile-win">★ Win tagged</div>' : ''}
+    </div>
+  `).join('');
+}
+
+/* ══════════════════════ quick capture ══════════════════════ */
+function openCapture(){
+  document.getElementById('capTitle').value = '';
+  document.getElementById('capNote').value = '';
+  document.getElementById('captureOverlay').classList.add('open');
+  setTimeout(() => document.getElementById('capTitle').focus(), 50);
+}
+function closeCapture(){
+  document.getElementById('captureOverlay').classList.remove('open');
+}
+function submitCapture(){
+  const title = document.getElementById('capTitle').value.trim();
+  const note = document.getElementById('capNote').value.trim();
+  if(!title){
+    const el = document.getElementById('capTitle');
+    el.focus();
+    el.style.borderColor = 'var(--st-waiting)';
+    setTimeout(() => { el.style.borderColor = ''; }, 900);
+    return;
+  }
+  const card = mkCard({ title: title, stand: note, status: 'In Progress', updatedAt: Date.now() });
+  cards.unshift(card);
+  save();
+  closeCapture();
+  highlightId = card.id;
+  if(!document.getElementById('pg-list').classList.contains('active')){
+    goPage('list');
+  } else {
+    renderList();
+  }
+  flashCard(highlightId);
+}
+
+function flashCard(id){
+  requestAnimationFrame(() => {
+    const el = document.querySelector('.card-tile[data-id="' + id + '"]');
+    if(el){
+      el.scrollIntoView({behavior:'smooth', block:'center'});
+      el.classList.add('flash');
+      setTimeout(() => el.classList.remove('flash'), 1400);
+    }
+    highlightId = null;
+  });
+}
+
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape' && document.getElementById('captureOverlay').classList.contains('open')) closeCapture();
+});
+
+/* ══════════════════════ detail ══════════════════════ */
+function openDetail(id){
+  currentId = id;
+  renderDetail(id);
+  goPage('detail');
+}
+function backToList(){
+  highlightId = currentId;
+  currentId = null;
+  goPage('list');
+  flashCard(highlightId);
+}
+function renderDetail(id){
+  const c = getCard(id);
+  if(!c) return;
+  document.getElementById('detTitle').value = c.title;
+  document.getElementById('detailMeta').textContent = 'Updated ' + timeAgo(c.updatedAt);
+  document.getElementById('detStand').value = c.stand;
+  document.getElementById('detNext').value = c.nextStep;
+
+  document.querySelectorAll('#statusPills .spill').forEach(btn => {
+    btn.classList.toggle('on', btn.dataset.s === c.status);
+  });
+
+  renderQuestions(c);
+  renderLinks(c);
+  renderWinSection(c);
+}
+function touchCard(c){
+  c.updatedAt = Date.now();
+  save();
+}
+function onTitleInput(){
+  const c = getCard(currentId); if(!c) return;
+  c.title = document.getElementById('detTitle').value;
+  touchCard(c);
+}
+function onStandInput(){
+  const c = getCard(currentId); if(!c) return;
+  c.stand = document.getElementById('detStand').value;
+  touchCard(c);
+}
+function onNextInput(){
+  const c = getCard(currentId); if(!c) return;
+  c.nextStep = document.getElementById('detNext').value;
+  touchCard(c);
+}
+function setStatus(status){
+  const c = getCard(currentId); if(!c) return;
+  const prev = c.status;
+  c.status = status;
+  touchCard(c);
+  document.getElementById('detailMeta').textContent = 'Updated ' + timeAgo(c.updatedAt);
+  document.querySelectorAll('#statusPills .spill').forEach(btn => {
+    btn.classList.toggle('on', btn.dataset.s === status);
+  });
+  if(status === 'Done' && prev !== 'Done' && !c.winTagged){
+    winFormOpen.add(c.id);
+  }
+  renderWinSection(c);
+}
+
+/* ── open questions ── */
+function renderQuestions(c){
+  const el = document.getElementById('questionsList');
+  if(!c.questions.length){
+    el.innerHTML = '<div class="empty-hint">No open questions right now.</div>';
+    return;
+  }
+  el.innerHTML = c.questions.map((q, i) => `
+    <div class="qrow">
+      <span class="qdot"></span>
+      <input class="finput" value="${esc(q)}" oninput="updateQuestion(${i}, this.value)">
+      <button class="rm-btn" onclick="removeQuestion(${i})" title="Remove">✕</button>
+    </div>
+  `).join('');
+}
+function addQuestion(){
+  const c = getCard(currentId); if(!c) return;
+  const input = document.getElementById('newQuestion');
+  const val = input.value.trim();
+  if(!val) return;
+  c.questions.push(val);
+  input.value = '';
+  touchCard(c);
+  renderQuestions(c);
+}
+function updateQuestion(i, val){
+  const c = getCard(currentId); if(!c) return;
+  c.questions[i] = val;
+  touchCard(c);
+}
+function removeQuestion(i){
+  const c = getCard(currentId); if(!c) return;
+  c.questions.splice(i, 1);
+  touchCard(c);
+  renderQuestions(c);
+}
+
+/* ── links ── */
+function renderLinks(c){
+  const el = document.getElementById('linksList');
+  if(!c.links.length){
+    el.innerHTML = '<div class="empty-hint">No links added yet.</div>';
+    return;
+  }
+  el.innerHTML = c.links.map((l, i) => `
+    <div class="link-row">
+      <div class="link-info">
+        <div class="link-label">${esc(l.label || 'Link')}</div>
+        <a class="link-url" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.url)}</a>
+      </div>
+      <button class="rm-btn" onclick="removeLink(${i})" title="Remove">✕</button>
+    </div>
+  `).join('');
+}
+function addLink(){
+  const c = getCard(currentId); if(!c) return;
+  const labelInput = document.getElementById('newLinkLabel');
+  const urlInput = document.getElementById('newLinkUrl');
+  const label = labelInput.value.trim();
+  let url = urlInput.value.trim();
+  if(!url) return;
+  if(!/^https?:\/\//i.test(url)) url = 'https://' + url;
+  c.links.push({ label: label || 'Link', url: url });
+  labelInput.value = '';
+  urlInput.value = '';
+  touchCard(c);
+  renderLinks(c);
+}
+function removeLink(i){
+  const c = getCard(currentId); if(!c) return;
+  c.links.splice(i, 1);
+  touchCard(c);
+  renderLinks(c);
+}
+
+/* ── win / praise tagging ── */
+function renderWinSection(c){
+  const el = document.getElementById('winSection');
+  if(c.status !== 'Done'){
+    el.innerHTML = '';
+    return;
+  }
+  if(winFormOpen.has(c.id)){
+    el.innerHTML = `
+      <div class="win-prompt">
+        <div class="win-prompt-head">Tag this as a win?</div>
+        <div class="win-prompt-sub">Optional — capture what happened so it's ready for your next review conversation.</div>
+        <textarea id="winNoteInput" class="ftextarea" rows="2" placeholder="e.g. Shipped ahead of schedule — Priya called it out in standup.">${esc(c.winNote)}</textarea>
+        <div class="win-prompt-actions">
+          <button class="btn-s" onclick="skipWin()">Not now</button>
+          <button class="btn-p" onclick="saveWin()">Save as win</button>
+        </div>
+      </div>
+    `;
+  } else if(c.winTagged){
+    el.innerHTML = `
+      <div class="win-callout">
+        <div class="win-callout-star">★</div>
+        <div class="win-callout-body">
+          <div class="win-callout-head">Tagged as a win</div>
+          <div class="win-callout-note">${esc(c.winNote) || '<span class="fopt">No note added.</span>'}</div>
+          <button class="link-btn" onclick="openWinForm()">Edit</button>
+        </div>
+      </div>
+    `;
+  } else {
+    el.innerHTML = `<div class="fsec"><button class="ghost-btn" onclick="openWinForm()">★ Tag this as a win</button></div>`;
+  }
+}
+function openWinForm(){
+  const c = getCard(currentId); if(!c) return;
+  winFormOpen.add(c.id);
+  renderWinSection(c);
+  setTimeout(() => { const t = document.getElementById('winNoteInput'); if(t) t.focus(); }, 30);
+}
+function skipWin(){
+  const c = getCard(currentId); if(!c) return;
+  winFormOpen.delete(c.id);
+  renderWinSection(c);
+}
+function saveWin(){
+  const c = getCard(currentId); if(!c) return;
+  const note = document.getElementById('winNoteInput').value.trim();
+  c.winTagged = true;
+  c.winNote = note;
+  winFormOpen.delete(c.id);
+  touchCard(c);
+  renderWinSection(c);
+}
+
+/* ══════════════════════ accomplishment log ══════════════════════ */
+function renderLog(){
+  const list = document.getElementById('logList');
+  const empty = document.getElementById('logEmpty');
+  const stat = document.getElementById('logStat');
+  const done = cards.filter(c => c.status === 'Done').sort((a,b) => b.updatedAt - a.updatedAt);
+
+  if(done.length === 0){
+    list.style.display = 'none';
+    empty.classList.add('show');
+    stat.textContent = '';
+    return;
+  }
+  list.style.display = '';
+  empty.classList.remove('show');
+  const wins = done.filter(c => c.winTagged).length;
+  stat.textContent = done.length + ' completed · ' + wins + ' tagged as ' + (wins === 1 ? 'a win' : 'wins');
+
+  list.innerHTML = done.map(c => `
+    <div class="log-entry ${c.winTagged ? 'is-win' : ''}">
+      <div class="log-entry-top">
+        <span class="log-title">${esc(c.title)}</span>
+        <span class="log-date">${timeAgo(c.updatedAt)}</span>
+      </div>
+      ${c.winTagged
+        ? `<div class="log-win"><span class="star">★</span><span>${esc(c.winNote) || 'Tagged as a win.'}</span></div>`
+        : `<div class="log-sub">${esc(truncate(c.stand || 'Marked done.', 160))}</div>`}
+    </div>
+  `).join('');
+}
+
+/* ══════════════════════ init ══════════════════════ */
+(function init(){
+  if(!load()) seedData();
+  renderList();
+})();
+</script>
+</body>
+</html>
