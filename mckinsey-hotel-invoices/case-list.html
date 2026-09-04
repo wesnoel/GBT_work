@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Case List — McKinsey Hotel Invoices</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<div class="placeholder-chrome placeholder-header">Header placeholder — Compleat global nav</div>
+
+<div class="shell">
+
+  <div class="crumb">
+    <a href="index.html">McKinsey Hotel Invoices</a>
+    <span class="sep">/</span>
+    <span>Case List</span>
+  </div>
+
+  <div class="page-head">
+    <div>
+      <h1>Case List</h1>
+      <div class="sub">Agent console · McKinsey Direct Bill · all open and closed cases</div>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <div class="chip-row">
+      <button class="chip active" data-status="all">All</button>
+      <button class="chip" data-status="review">Needs Review</button>
+      <button class="chip" data-status="chase">Chase Needed</button>
+      <button class="chip" data-status="exception">Ingestion Exception</button>
+      <button class="chip" data-status="automated">Automated</button>
+    </div>
+    <div style="display:flex; gap:8px;">
+      <input class="search-input" id="caseSearch" type="text" placeholder="Search confirmation no., PNR, FMNO, traveller, hotel…" />
+      <div class="col-picker">
+        <button class="btn" id="colPickerToggle">Columns ▾</button>
+        <div class="col-picker-menu" id="colPickerMenu">
+          <label><input type="checkbox" data-col-toggle="pnr" /> Show PNR</label>
+          <label><input type="checkbox" data-col-toggle="fmno" /> Show FMNO</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <table id="caseTable">
+      <thead>
+        <tr>
+          <th>Confirmation No.</th>
+          <th class="col-optional col-pnr">PNR</th>
+          <th class="col-optional col-fmno">FMNO</th>
+          <th>Traveller</th>
+          <th>Hotel</th>
+          <th>Stay dates</th>
+          <th>Status</th>
+          <th>Case age</th>
+          <th>Agent</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="row-link" data-status="review" data-href="case-detail-review.html" data-search="cnf-88244 pnr7j2k4l r. okonkwo hyatt regency chicago">
+          <td class="mono">CNF-88244</td>
+          <td class="mono col-optional col-pnr">7J2K4L</td>
+          <td class="mono col-optional col-fmno">MCK-33291</td>
+          <td>R. Okonkwo</td>
+          <td>Hyatt Regency Chicago</td>
+          <td class="mono">Sep 12 – 14</td>
+          <td><span class="pill pill-review"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/></svg><span>Needs Review</span></span></td>
+          <td class="mono">3 days</td>
+          <td class="agent-cell">M. Reyes</td>
+          <td></td>
+        </tr>
+        <tr class="row-link" data-status="automated" data-href="case-detail-automated.html" data-search="cnf-88231 pnr9x1m2q j. whitfield marriott marquis dc">
+          <td class="mono">CNF-88231</td>
+          <td class="mono col-optional col-pnr">9X1M2Q</td>
+          <td class="mono col-optional col-fmno">MCK-30187</td>
+          <td>J. Whitfield</td>
+          <td>Marriott Marquis DC</td>
+          <td class="mono">Sep 8 – 10</td>
+          <td><span class="pill pill-automated"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"/></svg><span>Automated</span></span></td>
+          <td class="mono">1 day</td>
+          <td class="agent-cell">—</td>
+          <td></td>
+        </tr>
+        <tr class="row-link" data-status="chase" data-href="case-detail-chase.html" data-search="cnf-88259 pnr4h7d1s s. laurent le meridien paris">
+          <td class="mono">CNF-88259</td>
+          <td class="mono col-optional col-pnr">4H7D1S</td>
+          <td class="mono col-optional col-fmno">MCK-30542</td>
+          <td>S. Laurent</td>
+          <td>Le Méridien Paris</td>
+          <td class="mono">Sep 3 – 5</td>
+          <td><span class="pill pill-chase"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/></svg><span>Chase Needed</span></span></td>
+          <td class="mono">9 days</td>
+          <td class="agent-cell">Unassigned</td>
+          <td><button class="btn" data-assign-row>Assign to me</button></td>
+        </tr>
+        <tr data-status="exception" data-search="cnf-88301 pnr2p8y6z t. adeyemi conrad singapore">
+          <td class="mono">CNF-88301</td>
+          <td class="mono col-optional col-pnr">2P8Y6Z</td>
+          <td class="mono col-optional col-fmno">—</td>
+          <td>T. Adeyemi</td>
+          <td>Conrad Singapore</td>
+          <td class="mono">Sep 15 – 17</td>
+          <td>
+            <span class="pill pill-exception"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v18"/><path d="M5 4h11l-2 4 2 4H5"/></svg><span>Ingestion Exception</span></span>
+            <span class="status-note">Missing check-in date on intake email</span>
+          </td>
+          <td class="mono">2 days</td>
+          <td class="agent-cell">Unassigned</td>
+          <td><button class="btn" data-assign-row>Assign to me</button></td>
+        </tr>
+        <tr data-status="automated" data-search="cnf-88198 pnr5k3n9v a. brandt the langham chicago">
+          <td class="mono">CNF-88198</td>
+          <td class="mono col-optional col-pnr">5K3N9V</td>
+          <td class="mono col-optional col-fmno">MCK-30840</td>
+          <td>A. Brandt</td>
+          <td>The Langham Chicago</td>
+          <td class="mono">Aug 29 – 31</td>
+          <td><span class="pill pill-automated"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"/></svg><span>Automated</span></span></td>
+          <td class="mono">5 days</td>
+          <td class="agent-cell">—</td>
+          <td></td>
+        </tr>
+        <tr data-status="review" data-search="cnf-88276 pnr6q2w8j d. moreau intercontinental boston">
+          <td class="mono">CNF-88276</td>
+          <td class="mono col-optional col-pnr">6Q2W8J</td>
+          <td class="mono col-optional col-fmno">MCK-31005</td>
+          <td>D. Moreau</td>
+          <td>InterContinental Boston</td>
+          <td class="mono">Sep 10 – 11</td>
+          <td><span class="pill pill-review"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/></svg><span>Needs Review</span></span></td>
+          <td class="mono">1 day</td>
+          <td class="agent-cell">M. Reyes</td>
+          <td></td>
+        </tr>
+        <tr data-status="chase" data-search="cnf-88250 pnr1a9c3f k. nilsson grand hyatt tokyo">
+          <td class="mono">CNF-88250</td>
+          <td class="mono col-optional col-pnr">1A9C3F</td>
+          <td class="mono col-optional col-fmno">MCK-29981</td>
+          <td>K. Nilsson</td>
+          <td>Grand Hyatt Tokyo</td>
+          <td class="mono">Aug 27 – 29</td>
+          <td>
+            <span class="pill pill-chase-escalated"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 21 19H3Z"/><path d="M12 9v4"/><circle cx="12" cy="16.3" r="0.6" fill="currentColor" stroke="none"/></svg><span>Chase Needed</span></span>
+            <span class="status-note">Past 10-day escalation threshold</span>
+          </td>
+          <td class="mono">12 days</td>
+          <td class="agent-cell">Unassigned</td>
+          <td><button class="btn" data-assign-row>Assign to me</button></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="empty-state" id="emptyState" style="display:none;">
+      <strong>No matching cases</strong>
+      Try a different status filter or search term.
+    </div>
+  </div>
+
+  <div class="notes-box">
+    <h4>Decisions applied here</h4>
+    Case age counts from checkout date, not intake — it doubles as the countdown to Chase Needed · search covers confirmation no., PNR, FMNO, traveller and hotel · row click opens the case detail view · "Assign to me" appears inline on unassigned Chase Needed / Ingestion Exception rows.
+    <div class="decision-note"><strong>Column density:</strong> the seven core columns stay fixed; PNR and FMNO are lookup fields hidden behind the "Columns" picker. Exception reason shows as secondary text under the status pill rather than its own always-on column, since it's only meaningful on rows that already have a problem.</div>
+    <div class="decision-note"><strong>Status escalation:</strong> Chase Needed ages from amber to red at a threshold (10 days, shown on CNF-88250) rather than becoming a new status — same pill, same label, escalated color + icon.</div>
+    <div class="decision-note"><strong>Empty / live state:</strong> filtering is instant and client-side here; in the real build, filter results must reflect live case status, never a stale page load, per the PRD.</div>
+  </div>
+
+</div>
+
+<div class="placeholder-chrome placeholder-footer">Footer placeholder — Compleat global footer</div>
+
+<div class="toast" id="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>

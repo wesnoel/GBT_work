@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>McKinsey Hotel Invoices — Wireframes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<div class="placeholder-chrome placeholder-header">Header placeholder — Compleat global nav</div>
+
+<div class="shell">
+
+  <div class="hub-hero">
+    <span class="tag-compleat">Compleat project</span>
+    <h1>McKinsey Hotel Invoices</h1>
+    <p>Clickable, low-fidelity wireframes for the agent console that runs the McKinsey direct-bill pilot — the tool GBT's Account/Servicing team uses to review hotel folio cases that don't pass automatic validation. Medium interactive: click through the major decision points (assign, approve, reopen, mark as chased) to see how state changes.</p>
+    <div class="hub-meta">
+      <span><strong>Source:</strong> PRD — McKinsey Hotel Folio Automation</span>
+      <span><strong>Reference:</strong> Solution Proposal (Bowie Brotosumpeno, v4)</span>
+      <span><strong>Fidelity:</strong> Low-fi, medium interactive</span>
+      <span><strong>Status:</strong> Draft for review</span>
+    </div>
+  </div>
+
+  <p class="hub-section-label">Solution pages</p>
+
+  <div class="card-grid">
+
+    <a class="screen-card" href="case-list.html">
+      <span class="num">01 — Case List</span>
+      <h3>Case List</h3>
+      <p>All open and closed cases with status filters, search, and row actions. Case age counts from checkout date and doubles as the countdown to Chase Needed.</p>
+      <span class="open-link">Open wireframe →</span>
+    </a>
+
+    <a class="screen-card" href="case-detail-review.html">
+      <span class="num">02 — Case Detail</span>
+      <h3>Needs Review</h3>
+      <p>Booking vs. folio comparison with a mismatch highlighted, per-rule validation results, folio attachment, and Approve / Reassign actions.</p>
+      <span class="open-link">Open wireframe →</span>
+    </a>
+
+    <a class="screen-card" href="case-detail-automated.html">
+      <span class="num">03 — Case Detail</span>
+      <h3>Automated</h3>
+      <p>Same layout as Needs Review, but every comparison row and validation rule passes. No agent assigned — Reopen is the only available action.</p>
+      <span class="open-link">Open wireframe →</span>
+    </a>
+
+    <a class="screen-card" href="case-detail-chase.html">
+      <span class="num">04 — Case Detail</span>
+      <h3>Chase Needed</h3>
+      <p>Booking-only detail — no folio to compare yet. A flagged Folio Status panel explains the chase threshold. Mark as Chased and Assign to me actions.</p>
+      <span class="open-link">Open wireframe →</span>
+    </a>
+
+  </div>
+
+  <div class="notes-box">
+    <h4>Design decisions (resolved from the UX spec / PM open questions)</h4>
+    Status visual language uses severity tiers + icons, not 10 unique colors · self-assign is view-freely, confirm-before-acting · attachment viewer targets inline preview, with a download fallback · "Mark as Chased" is fixed reasons with an optional note · case list keeps 7 core columns fixed, PNR/FMNO behind a column picker · filtering is live with a clear empty state. Each decision is called out inline on the page where it applies. Full write-up: <a href="design-decisions.md" style="color: var(--accent); font-weight: 700;">design-decisions.md</a>.
+  </div>
+
+</div>
+
+<div class="placeholder-chrome placeholder-footer">Footer placeholder — Compleat global footer</div>
+
+</body>
+</html>

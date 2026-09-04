@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Case CNF-88244 — Needs Review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body data-assigned-to="M. Reyes">
+
+<div class="placeholder-chrome placeholder-header">Header placeholder — Compleat global nav</div>
+
+<div class="shell">
+
+  <div class="crumb">
+    <a href="index.html">McKinsey Hotel Invoices</a>
+    <span class="sep">/</span>
+    <a href="case-list.html">Case List</a>
+    <span class="sep">/</span>
+    <span>CNF-88244</span>
+  </div>
+
+  <div class="case-header">
+    <div class="case-title">
+      <h1>CNF-88244 · R. Okonkwo</h1>
+      <div class="meta">Hyatt Regency Chicago · Sep 12–14 · <span id="statusPill" class="pill pill-review"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/></svg><span>Needs Review</span></span> · assigned to M. Reyes</div>
+    </div>
+    <div class="case-actions">
+      <button class="btn" id="reassignBtn">Reassign</button>
+      <button class="btn btn-primary" id="approveBtn">Approve</button>
+    </div>
+  </div>
+
+  <div class="detail-grid">
+    <div>
+      <div class="panel">
+        <h2>Booking vs. folio</h2>
+        <div class="compare-row col-head">
+          <span></span><span>Booking</span><span>Folio</span>
+        </div>
+        <div class="compare-row">
+          <span class="label">Confirmation</span><span>CNF-88244</span><span>CNF-88244</span>
+        </div>
+        <div class="compare-row">
+          <span class="label">Hotel</span><span>Hyatt Regency Chicago</span><span>Hyatt Regency Chicago</span>
+        </div>
+        <div class="compare-row">
+          <span class="label">Stay dates</span><span>Sep 12–14</span><span>Sep 12–14</span>
+        </div>
+        <div class="compare-row">
+          <span class="label">Room &amp; tax</span><span>$418.00</span><span>$418.00</span>
+        </div>
+        <div class="compare-row mismatch">
+          <span class="label">FMNO</span><span>MCK-33291</span><span class="folio-val">Missing</span>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Validation results</h2>
+        <div class="rule-row">
+          <span class="rule-icon pass">✓</span>
+          <div class="rule-body"><strong>Room &amp; tax</strong><span>Matches folio within tolerance</span></div>
+        </div>
+        <div class="rule-row">
+          <span class="rule-icon pass">✓</span>
+          <div class="rule-body"><strong>Rate</strong><span>Matches negotiated rate on file</span></div>
+        </div>
+        <div class="rule-row">
+          <span class="rule-icon pass">✓</span>
+          <div class="rule-body"><strong>VAT</strong><span>Within expected range for jurisdiction</span></div>
+        </div>
+        <div class="rule-row">
+          <span class="rule-icon fail">✕</span>
+          <div class="rule-body"><strong>Entity check</strong><span>FMNO not present on the folio — cannot confirm billing entity</span></div>
+        </div>
+        <div class="rule-row">
+          <span class="rule-icon pass">✓</span>
+          <div class="rule-body"><strong>Legal entity</strong><span>Matches contracted legal entity</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="panel">
+        <h2>Folio attachment</h2>
+        <div class="attachment-preview">
+          <div class="doc-mock">Folio-CNF-88244.pdf</div>
+          <div class="toolbar-mini">
+            <span>Page 1 of 1</span>
+            <a href="#" onclick="return false;">Download original</a>
+          </div>
+        </div>
+        <div class="decision-note"><strong>Decision:</strong> inline preview is the target so agents can compare fields without leaving the page. This mock shows the intended layout — ship download-only for launch if OCR output isn't reliably renderable yet, without reshaping this panel later.</div>
+      </div>
+
+      <div class="panel">
+        <h2>Activity log</h2>
+        <div class="activity-item">
+          <span class="dot"></span>
+          <div><span class="when">Sep 15, 9:02 AM</span>Case routed to agent queue — entity check failed</div>
+        </div>
+        <div class="activity-item">
+          <span class="dot"></span>
+          <div><span class="when">Sep 15, 9:04 AM</span>Assigned to M. Reyes</div>
+        </div>
+        <div class="activity-item">
+          <span class="dot"></span>
+          <div><span class="when">Sep 14, 6:40 PM</span>Folio received via Compleat email</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="notes-box">
+    <h4>Decisions applied here</h4>
+    <div class="decision-note"><strong>Ownership:</strong> viewing a case owned by someone else is always allowed silently — the "assigned to M. Reyes" note above is visible the moment the page loads. Approve or Reassign on this case triggers an explicit confirm step instead, since those actions change state or ownership. Try it below.</div>
+  </div>
+
+</div>
+
+<div class="placeholder-chrome placeholder-footer">Footer placeholder — Compleat global footer</div>
+
+<div class="modal-overlay" id="ownershipModal">
+  <div class="modal-card">
+    <h3>Case assigned to another agent</h3>
+    <p>This case is assigned to <strong id="ownershipModalOwner">M. Reyes</strong>. Continue anyway?</p>
+    <div class="modal-actions">
+      <button class="btn" id="ownershipModalCancel">Cancel</button>
+      <button class="btn btn-primary" id="ownershipModalConfirm">Continue</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Case CNF-88231 — Automated</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<div class="placeholder-chrome placeholder-header">Header placeholder — Compleat global nav</div>
+
+<div class="shell">
+
+  <div class="crumb">
+    <a href="index.html">McKinsey Hotel Invoices</a>
+    <span class="sep">/</span>
+    <a href="case-list.html">Case List</a>
+    <span class="sep">/</span>
+    <span>CNF-88231</span>
+  </div>
+
+  <div class="case-header">
+    <div class="case-title">
+      <h1>CNF-88231 · J. Whitfield</h1>
+      <div class="meta" id="automatedBanner">Marriott Marquis DC · Sep 8–10 · <span id="statusPill" class="pill pill-automated"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"/></svg><span>Automated</span></span> · no agent involved</div>
+    </div>
+    <div class="case-actions">
+      <button class="btn" id="reopenBtn">Reopen</button>
+    </div>
+  </div>
+
+  <div class="detail-grid">
+    <div>
+      <div class="panel">
+        <h2>Booking vs. folio</h2>
+        <div class="compare-row col-head">
+          <span></span><span>Booking</span><span>Folio</span>
+        </div>
+        <div class="compare-row">
+          <span class="label">Confirmation</span><span>CNF-88231</span><span>CNF-88231</span>
+        </div>
+        <div class="compare-row">
+          <span class="label">Hotel</span><span>Marriott Marquis DC</span><span>Marriott Marquis DC</span>
+        </div>
+        <div class="compare-row">
+          <span class="label">Stay dates</span><span>Sep 8–10</span><span>Sep 8–10</span>
+        </div>
+        <div class="compare-row">
+          <span class="label">Room &amp; tax</span><span>$612.40</span><span>$612.40</span>
+        </div>
+        <div class="compare-row">
+          <span class="label">FMNO</span><span>MCK-30187</span><span>MCK-30187</span>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Validation results</h2>
+        <div class="rule-row">
+          <span class="rule-icon pass">✓</span>
+          <div class="rule-body"><strong>Room &amp; tax</strong><span>Matches folio within tolerance</span></div>
+        </div>
+        <div class="rule-row">
+          <span class="rule-icon pass">✓</span>
+          <div class="rule-body"><strong>Rate</strong><span>Matches negotiated rate on file</span></div>
+        </div>
+        <div class="rule-row">
+          <span class="rule-icon pass">✓</span>
+          <div class="rule-body"><strong>VAT</strong><span>Within expected range for jurisdiction</span></div>
+        </div>
+        <div class="rule-row">
+          <span class="rule-icon pass">✓</span>
+          <div class="rule-body"><strong>Entity check</strong><span>FMNO present and matches booking</span></div>
+        </div>
+        <div class="rule-row">
+          <span class="rule-icon pass">✓</span>
+          <div class="rule-body"><strong>Legal entity</strong><span>Matches contracted legal entity</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="panel">
+        <h2>Folio attachment</h2>
+        <div class="attachment-box">Folio-CNF-88231.pdf<br>Attachment preview placeholder</div>
+      </div>
+
+      <div class="panel">
+        <h2>Activity log</h2>
+        <div class="activity-item">
+          <span class="dot"></span>
+          <div><span class="when">Sep 11, 7:15 AM</span>All rules passed — case marked Automated</div>
+        </div>
+        <div class="activity-item">
+          <span class="dot"></span>
+          <div><span class="when">Sep 10, 8:52 PM</span>Folio received via Compleat email</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="notes-box">
+    <h4>Decisions applied here</h4>
+    <div class="decision-note"><strong>Status visual language:</strong> Automated and Approved by Agent are both "good" states, so they share the same green, but never rely on color alone. Automated carries a bolt icon (no human involved); Approved by Agent (see the Needs Review case after approving) carries a check icon — color + icon + label together, per WCAG 2.2 AA.</div>
+  </div>
+
+</div>
+
+<div class="placeholder-chrome placeholder-footer">Footer placeholder — Compleat global footer</div>
+
+<div class="toast" id="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>

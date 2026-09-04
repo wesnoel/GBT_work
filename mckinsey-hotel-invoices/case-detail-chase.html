@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Case CNF-88259 — Chase Needed</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<div class="placeholder-chrome placeholder-header">Header placeholder — Compleat global nav</div>
+
+<div class="shell">
+
+  <div class="crumb">
+    <a href="index.html">McKinsey Hotel Invoices</a>
+    <span class="sep">/</span>
+    <a href="case-list.html">Case List</a>
+    <span class="sep">/</span>
+    <span>CNF-88259</span>
+  </div>
+
+  <div class="case-header">
+    <div class="case-title">
+      <h1>CNF-88259 · S. Laurent</h1>
+      <div class="meta">Le Méridien Paris · Sep 3–5 · <span id="statusPill" class="pill pill-chase"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/></svg><span>Chase Needed</span></span> · agent: <span id="agentValue">Unassigned</span></div>
+    </div>
+    <div class="case-actions">
+      <button class="btn" id="assignChaseBtn">Assign to me</button>
+      <button class="btn btn-primary" id="markChasedBtn">Mark as Chased</button>
+    </div>
+  </div>
+
+  <div class="detail-grid">
+    <div>
+      <div class="flag-panel">
+        <h2>Folio status</h2>
+        <p>No folio received — 9 days past checkout, which is past the agreed chase threshold. No automated email has been sent to the hotel; this is a manual follow-up only.</p>
+      </div>
+
+      <div class="panel">
+        <h2>Booking details</h2>
+        <div class="compare-row col-head">
+          <span></span><span>Booking</span><span></span>
+        </div>
+        <div class="compare-row">
+          <span class="label">Confirmation</span><span>CNF-88259</span><span></span>
+        </div>
+        <div class="compare-row">
+          <span class="label">Hotel</span><span>Le Méridien Paris</span><span></span>
+        </div>
+        <div class="compare-row">
+          <span class="label">Stay dates</span><span>Sep 3–5</span><span></span>
+        </div>
+        <div class="compare-row">
+          <span class="label">FMNO</span><span>MCK-30542</span><span></span>
+        </div>
+        <div class="compare-row">
+          <span class="label">Room &amp; tax</span><span>Expected ~$540.00 (rate on file)</span><span></span>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Mark as chased</h2>
+        <div class="field-row">
+          <label for="chaseReason">Reason</label>
+          <select id="chaseReason">
+            <option>No response from hotel</option>
+            <option>Hotel promised folio by a specific date</option>
+            <option>Hotel disputes the booking</option>
+            <option>Other — see note</option>
+          </select>
+        </div>
+        <div class="field-row">
+          <label for="chaseNote">Note (optional)</label>
+          <textarea id="chaseNote" rows="3" placeholder="Add context for the next agent…"></textarea>
+        </div>
+        <div class="decision-note"><strong>Decision:</strong> fixed reasons are the primary field, since this feeds the PRD's exception-reason trend monitoring and free text alone can't be analyzed at scale. The note stays as an optional secondary detail for the next agent, not the record of why.</div>
+      </div>
+    </div>
+
+    <div>
+      <div class="panel">
+        <h2>Folio attachment</h2>
+        <div class="attachment-box">No folio received yet</div>
+      </div>
+
+      <div class="panel">
+        <h2>Activity log</h2>
+        <div class="activity-item">
+          <span class="dot"></span>
+          <div><span class="when">Sep 14, 6:00 AM</span>Case flagged Chase Needed — past chase threshold</div>
+        </div>
+        <div class="activity-item">
+          <span class="dot"></span>
+          <div><span class="when">Sep 5, 12:00 AM</span>Checkout date passed with no folio received</div>
+        </div>
+        <div class="activity-item">
+          <span class="dot"></span>
+          <div><span class="when">Aug 30, 2:14 PM</span>Booking ingested via Compleat email</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="notes-box">
+    <h4>Decisions applied here</h4>
+    <div class="decision-note"><strong>Status escalation:</strong> this case is 9 days past checkout, one day under the 10-day escalation threshold shown on the Case List, so the pill stays amber. Cross the threshold and it turns red with a triangle icon, same status, same label, no new enum value.</div>
+  </div>
+
+</div>
+
+<div class="placeholder-chrome placeholder-footer">Footer placeholder — Compleat global footer</div>
+
+<div class="toast" id="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>
