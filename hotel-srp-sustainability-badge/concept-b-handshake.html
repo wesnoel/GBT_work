@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Concept B — Handshake — Sustainability Certified Badge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<div class="placeholder-chrome placeholder-header">Header placeholder — global nav</div>
+
+<div class="shell">
+
+  <div class="crumb">
+    <a href="index.html">Sustainability Certified Badge</a>
+    <span class="sep">/</span>
+    <span>Concept B — Handshake</span>
+  </div>
+
+  <div class="page-head">
+    <div>
+      <h1>Hotels in New York, NY</h1>
+      <div class="sub">12–14 Oct · 1 room, 1 guest · 18 results</div>
+    </div>
+    <button class="btn">Modify search</button>
+  </div>
+
+  <div class="toolbar">
+    <div class="chip-row">
+      <button class="chip">Egencia preferred</button>
+      <button class="chip">Free breakfast</button>
+      <button class="chip">Under $250</button>
+      <button class="chip" data-filter="certified">Sustainability certified</button>
+    </div>
+    <div class="sort-note">Sort: Recommended</div>
+  </div>
+
+  <div class="hotel-list" id="hotelList">
+
+    <div class="hotel-card" data-certified="true" data-hotel-name="New York Hilton Midtown" data-certs="Green Key">
+      <div class="hotel-img placeholder-chrome">Photo</div>
+      <div class="hotel-body">
+        <div class="pill-row">
+          <span class="pill pill-preferred"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v18"/><path d="M5 4h11l-2 4 2 4H5"/></svg>Egencia preferred</span>
+          <span class="pill pill-neutral"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 12 21.99 2 12 3 3h9z"/><circle cx="15.5" cy="7.5" r="1"/></svg>Negotiated</span>
+        </div>
+        <h3 class="hotel-name">New York Hilton Midtown</h3>
+        <div class="hotel-subrow">
+          <span class="stars">★★★</span>
+          <span class="muted">0.06 miles away</span>
+        </div>
+        <button class="cert-badge" data-cert-trigger>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13l4-4c1-1 2-1 3 0l2 2"/><path d="M21 13l-4-4c-1-1-2-1-3 0l-2 2"/><path d="M8 9l3 3-1.5 1.5c-1 1-2 1-3 0L5 12"/><path d="M16 9l-3 3 1.5 1.5c1 1 2 1 3 0l1.5-1.5"/></svg>
+          Sustainability certified
+          <span class="cert-tooltip">Green Key</span>
+        </button>
+        <div class="coworker">58% of coworker bookings</div>
+        <div class="muted">4.2/5 Very Good (1,001 reviews)</div>
+      </div>
+      <div class="hotel-price">
+        <div class="price-caption">From</div>
+        <div class="price-value">$332</div>
+        <div class="price-sub">$193 w taxes and fees</div>
+        <div class="price-sub">Pay online</div>
+        <button class="btn btn-primary select-btn">Select</button>
+      </div>
+    </div>
+
+    <div class="hotel-card" data-certified="true" data-hotel-name="citizenM New York Times Square" data-certs="Green Key, EarthCheck Silver, LEED Certified">
+      <div class="hotel-img placeholder-chrome">Photo</div>
+      <div class="hotel-body">
+        <div class="pill-row"></div>
+        <h3 class="hotel-name">citizenM New York Times Square</h3>
+        <div class="hotel-subrow">
+          <span class="stars">★★★★</span>
+          <span class="muted">0.3 miles away</span>
+        </div>
+        <button class="cert-badge" data-cert-trigger>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13l4-4c1-1 2-1 3 0l2 2"/><path d="M21 13l-4-4c-1-1-2-1-3 0l-2 2"/><path d="M8 9l3 3-1.5 1.5c-1 1-2 1-3 0L5 12"/><path d="M16 9l-3 3 1.5 1.5c1 1 2 1 3 0l1.5-1.5"/></svg>
+          Sustainability certified
+          <span class="cert-tooltip">Green Key<span class="cert-tooltip-more">+2 more — click to view all</span></span>
+        </button>
+        <div class="coworker">44% of coworker bookings</div>
+        <div class="muted">4.5/5 Excellent (3,214 reviews)</div>
+      </div>
+      <div class="hotel-price">
+        <div class="price-caption">From</div>
+        <div class="price-value">$289</div>
+        <div class="price-sub">$261 w taxes and fees</div>
+        <div class="price-sub">Pay online</div>
+        <button class="btn btn-primary select-btn">Select</button>
+      </div>
+    </div>
+
+    <div class="hotel-card" data-certified="false" data-hotel-name="Park Central Hotel New York" data-certs="">
+      <div class="hotel-img placeholder-chrome">Photo</div>
+      <div class="hotel-body">
+        <div class="pill-row">
+          <span class="pill pill-neutral"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 12 21.99 2 12 3 3h9z"/><circle cx="15.5" cy="7.5" r="1"/></svg>Negotiated</span>
+        </div>
+        <h3 class="hotel-name">Park Central Hotel New York</h3>
+        <div class="hotel-subrow">
+          <span class="stars">★★★</span>
+          <span class="muted">0.5 miles away</span>
+        </div>
+        <div class="muted">4.0/5 Very Good (6,732 reviews)</div>
+      </div>
+      <div class="hotel-price">
+        <div class="price-caption">From</div>
+        <div class="price-value">$245</div>
+        <div class="price-sub">$212 w taxes and fees</div>
+        <div class="price-sub">Pay online</div>
+        <button class="btn btn-primary select-btn">Select</button>
+      </div>
+    </div>
+
+    <div class="hotel-card" data-certified="false" data-hotel-name="The Manhattan Club" data-certs="">
+      <div class="hotel-img placeholder-chrome">Photo</div>
+      <div class="hotel-body">
+        <div class="pill-row"></div>
+        <h3 class="hotel-name">The Manhattan Club</h3>
+        <div class="hotel-subrow">
+          <span class="stars">★★★★</span>
+          <span class="muted">0.4 miles away</span>
+        </div>
+        <div class="coworker">21% of coworker bookings</div>
+        <div class="muted">4.3/5 Very Good (2,088 reviews)</div>
+      </div>
+      <div class="hotel-price">
+        <div class="price-caption">From</div>
+        <div class="price-value">$301</div>
+        <div class="price-sub">$268 w taxes and fees</div>
+        <div class="price-sub">Pay online</div>
+        <button class="btn btn-primary select-btn">Select</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="empty-state" id="emptyState" style="display:none;">
+    <strong>No certified hotels match your search</strong>
+    Try removing the sustainability certified filter to see more results.
+    <div style="margin-top:14px;"><button class="btn btn-primary" id="clearCertFilter">Clear this filter</button></div>
+  </div>
+
+  <div class="notes-box">
+    <h4>Decisions applied here</h4>
+    Badge shows only when the feed flags a hotel certified — Park Central and The Manhattan Club show no badge (fail closed) · hovering/focusing the badge previews the certification name; clicking it always opens the full list · the "Sustainability certified" chip here actually filters the list, standing in for its real placement nested under Amenities/Property in the filter panel · zero-result state reuses the standard empty-state pattern with a one-click clear.
+    <div class="decision-note"><strong>Multi-certification hotels:</strong> citizenM New York Times Square carries three certifications — the tooltip shows the primary one plus a "+2 more" hint, and clicking opens the side sheet with the full list.</div>
+    <div class="decision-note"><strong>Icon:</strong> the handshake glyph is already available in the icon token set, unlike Concept A's ribbon/seal stand-in.</div>
+    Full write-up: <a href="design-decisions.md" style="color: var(--accent); font-weight: 700;">design-decisions.md</a>.
+  </div>
+
+</div>
+
+<div class="placeholder-chrome placeholder-footer">Footer placeholder — global footer</div>
+
+<div class="sheet-overlay" id="certSheetOverlay">
+  <div class="sheet-panel" role="dialog" aria-modal="true" aria-labelledby="certSheetTitle">
+    <div class="sheet-header">
+      <span id="certSheetTitle">Certifications</span>
+      <button class="sheet-close" id="certSheetClose" aria-label="Close">&times;</button>
+    </div>
+    <div class="sheet-body" id="certSheetBody"></div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

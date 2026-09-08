@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sustainability Certified Badge — Wireframes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<div class="placeholder-chrome placeholder-header">Header placeholder — global nav</div>
+
+<div class="shell">
+
+  <div class="hub-hero">
+    <h1>Sustainability Certified Badge</h1>
+    <p>Relabels the self-asserted "Eco-friendly" badge to "Sustainability certified," tied to the existing GDS/supplier certification feed. Two testable icon concepts, a hover tooltip naming the certification, and a click-to-open side sheet for multi-certification hotels. Card rebuilt from a reference hotel-card screenshot.</p>
+    <div class="hub-meta">
+      <span><strong>Source:</strong> <a href="https://confluence.amexgbt.com/pages/viewpage.action?pageId=691805451" target="_blank" rel="noopener">PRD — Hotel Search Results Page</a></span>
+      <span><strong>UX spec:</strong> <a href="https://confluence.amexgbt.com/pages/viewpage.action?pageId=705497684" target="_blank" rel="noopener">Confluence</a></span>
+      <span><strong>Fidelity:</strong> Low-fi, interactive</span>
+      <span><strong>Status:</strong> Exploration — icon pending usability testing</span>
+    </div>
+  </div>
+
+  <p class="hub-section-label">Icon concepts</p>
+
+  <div class="card-grid">
+
+    <a class="screen-card" href="concept-a-seal.html">
+      <span class="num">A — Seal / checkmark</span>
+      <h3>Concept A</h3>
+      <p>A checkmark-in-circle glyph, standing in for a future ribbon/award/seal icon — reads as "verified" at badge size. No literal ribbon/seal glyph exists yet in the icon token set.</p>
+      <span class="open-link">Open wireframe →</span>
+    </a>
+
+    <a class="screen-card" href="concept-b-handshake.html">
+      <span class="num">B — Handshake</span>
+      <h3>Concept B</h3>
+      <p>A handshake glyph, evoking trust/partnership — already available in the icon token set.</p>
+      <span class="open-link">Open wireframe →</span>
+    </a>
+
+  </div>
+
+  <div class="notes-box">
+    <h4>Design decisions (resolved from the UX spec interview)</h4>
+    Icon direction: both concepts spec'd for testing, no single pick yet · tooltip opens on hover/focus (desktop) and tap (mobile) · sustainability filter nested under Amenities/Property in the real filter panel (a flat chip stands in here) · multi-certification hotels show the primary cert in the tooltip plus a "View all" affordance that opens a side sheet · zero-result state reuses the standard empty-state pattern. Full write-up: <a href="design-decisions.md" style="color: var(--accent); font-weight: 700;">design-decisions.md</a>.
+  </div>
+
+</div>
+
+<div class="placeholder-chrome placeholder-footer">Footer placeholder — global footer</div>
+
+</body>
+</html>
