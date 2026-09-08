@@ -28,7 +28,7 @@ html, body {
   padding: 0;
   background: var(--canvas);
   color: var(--ink);
-  font-family: "Manrope", "Lexend", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  font-family: "Open Sans", sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -56,6 +56,115 @@ a { color: inherit; text-decoration: none; }
   height: 88px;
   border-top: 1px solid var(--line);
   margin-top: 48px;
+}
+
+/* ---- Egencia global header (real chrome, per the Egencia UITK header) ---- */
+
+.eg-header {
+  height: 64px;
+  background: #ffffff;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  font-family: "Open Sans", sans-serif;
+}
+
+.eg-header-left {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.eg-logo {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.eg-logo-word {
+  font-size: 20px;
+  font-weight: 800;
+  color: #1a4fb4;
+  letter-spacing: -0.01em;
+}
+
+.eg-logo-sub {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #8b8f98;
+}
+
+.eg-travel-icons {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.eg-travel-icons svg {
+  width: 19px;
+  height: 19px;
+  color: #52565f;
+}
+
+.eg-header-nav {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.eg-header-nav a {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #33363d;
+}
+
+.eg-header-nav a:hover { color: #1a4fb4; }
+
+.eg-avatar {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding-left: 14px;
+  border-left: 1px solid var(--line);
+}
+
+.eg-avatar-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #eaf0ff;
+  color: #1a4fb4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11.5px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.eg-avatar-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.eg-avatar-name {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.eg-avatar-org {
+  font-size: 11px;
+  color: var(--ink-soft);
+}
+
+@media (max-width: 860px) {
+  .eg-header-nav a:not(:last-of-type) { display: none; }
+  .eg-travel-icons { display: none; }
 }
 
 .shell {
