@@ -4,13 +4,13 @@ Resolves the open UX questions from the PRD (section 16) and the UX-spec intervi
 
 ## 1. Icon concept
 
-**Decision:** Don't pick one direction yet. Ship both candidates — Concept A (seal/checkmark, standing in for a future ribbon/award icon) and Concept B (handshake) — and resolve via usability testing before build. The PRD's own risk note flags icon redesign as a launch-timeline risk if not scoped early, so both concepts are built out fully rather than left as static mockups.
+**Decision:** Don't pick one direction yet. Concept A and Concept B both use the same checkmark-in-circle icon (standing in for a future ribbon/award icon) — the open question here isn't icon shape, it's interaction pattern (see decision 2). Resolve via usability testing before build; the PRD's own risk note flags icon redesign as a launch-timeline risk if not scoped early, so this is built out fully rather than left as a static mockup.
 
-A real ribbon/seal glyph doesn't exist yet in the icon token set — Concept A substitutes the closest available checkmark-in-circle glyph. Adding the literal ribbon/seal icon is a named PRD dependency owned by the UX design team, not something to invent here.
+A real ribbon/seal glyph doesn't exist yet in the icon token set — both concepts substitute the closest available checkmark-in-circle glyph. Adding the literal ribbon/seal icon is a named PRD dependency owned by the UX design team, not something to invent here. Concept B originally used a handshake glyph to test a second icon direction alongside the interaction difference; simplified to share Concept A's icon so the two concepts isolate interaction pattern as the only variable.
 
 ## 2. Tooltip trigger
 
-**Decision:** Concept A and B are click/tap only — no hover preview, straight to the side sheet on click. Concept C is the exception: it's the established text-link + info-icon pattern ("this is how we do it"), where hovering or focusing either the link text or the circle-i icon reveals a tooltip. Keyboard focus reveals it the same way on desktop; on touch, tapping the link or icon focuses it, which triggers the same reveal (no separate hover-only path that touch can't replicate).
+**Decision:** Concept A is click/tap only — no hover preview, straight to the side sheet on click. Concept B previews the certification name on hover/focus before the same click-to-open-side-sheet behavior. Concept C is a different pattern entirely: the established text-link + info-icon pattern ("this is how we do it"), where hovering or focusing either the link text or the circle-i icon reveals a tooltip, with no side sheet at all. Keyboard focus reveals it the same way on desktop; on touch, tapping the link or icon focuses it, which triggers the same reveal (no separate hover-only path that touch can't replicate).
 
 ## 2a. Concept C — info link, no side sheet
 
