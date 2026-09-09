@@ -61,6 +61,7 @@ function initCaseList() {
   var emptyState = document.getElementById("emptyState");
   var table = document.getElementById("caseTable");
   var activeStatus = "all";
+  var activeHotel = "";
 
   function applyFilters() {
     var query = (searchInput && searchInput.value || "").trim().toLowerCase();
@@ -68,12 +69,19 @@ function initCaseList() {
     rows.forEach(function (row) {
       var matchesStatus = activeStatus === "all" || row.dataset.status === activeStatus;
       var matchesSearch = !query || row.dataset.search.indexOf(query) !== -1;
-      var visible = matchesStatus && matchesSearch;
+      var matchesHotel = !activeHotel || row.dataset.hotel === activeHotel;
+      var visible = matchesStatus && matchesSearch && matchesHotel;
       row.style.display = visible ? "" : "none";
-      if (visible) visibleCount++;
+      if (visible) {
+        visibleCount++;
+      } else {
+        var check = row.querySelector(".row-check");
+        if (check && check.checked) { check.checked = false; }
+      }
     });
     if (emptyState) emptyState.style.display = visibleCount === 0 ? "block" : "none";
     if (table) table.style.display = visibleCount === 0 ? "none" : "table";
+    updateBulkBar();
   }
 
   chips.forEach(function (chip) {
@@ -95,11 +103,193 @@ function initCaseList() {
   });
 
   document.querySelectorAll("tr.row-link").forEach(function (row) {
-    row.addEventListener("click", function () {
+    row.addEventListener("click", function (e) {
+      if (e.target.closest(".row-check") || e.target.closest("button")) return;
       var href = row.dataset.href;
       if (href) window.location.href = href;
     });
   });
+
+  initHotelFilter(rows, function (hotel) {
+    activeHotel = hotel;
+    applyFilters();
+  });
+
+  initSort();
+  initBulkActions();
+}
+
+/* Hotel filter — typeahead combobox over the distinct hotel names in the list. */
+function initHotelFilter(rows, onSelect) {
+  var wrap = document.getElementById("hotelFilter");
+  var input = document.getElementById("hotelFilterInput");
+  var menu = document.getElementById("hotelFilterMenu");
+  var clearBtn = document.getElementById("hotelFilterClear");
+  if (!wrap || !input || !menu) return;
+
+  var hotels = [];
+  var seen = {};
+  rows.forEach(function (row) {
+    var name = row.dataset.hotelLabel;
+    if (name && !seen[name]) { seen[name] = true; hotels.push(name); }
+  });
+  hotels.sort();
+
+  function renderMenu(filterText) {
+    var query = (filterText || "").trim().toLowerCase();
+    var matches = hotels.filter(function (h) { return h.toLowerCase().indexOf(query) !== -1; });
+    menu.innerHTML = "";
+    if (matches.length === 0) {
+      var empty = document.createElement("div");
+      empty.className = "hotel-option-empty";
+      empty.textContent = "No hotels match";
+      menu.appendChild(empty);
+    } else {
+      matches.forEach(function (name) {
+        var opt = document.createElement("div");
+        opt.className = "hotel-option";
+        opt.textContent = name;
+        opt.addEventListener("click", function () {
+          input.value = name;
+          wrap.classList.add("has-value");
+          menu.classList.remove("open");
+          onSelect(name.toLowerCase());
+        });
+        menu.appendChild(opt);
+      });
+    }
+    menu.classList.add("open");
+  }
+
+  input.addEventListener("focus", function () { renderMenu(input.value); });
+  input.addEventListener("input", function () {
+    if (input.value === "") {
+      wrap.classList.remove("has-value");
+      onSelect("");
+    }
+    renderMenu(input.value);
+  });
+
+  document.addEventListener("click", function (e) {
+    if (!wrap.contains(e.target)) menu.classList.remove("open");
+  });
+
+  if (clearBtn) {
+    clearBtn.addEventListener("click", function () {
+      input.value = "";
+      wrap.classList.remove("has-value");
+      menu.classList.remove("open");
+      onSelect("");
+      input.focus();
+    });
+  }
+}
+
+/* Sortable column headers — reorders the actual rows, so it composes with
+   whatever the status/search/hotel filters currently show or hide. */
+function initSort() {
+  var table = document.getElementById("caseTable");
+  var tbody = table && table.querySelector("tbody");
+  var headers = document.querySelectorAll("th.sortable");
+  if (!table || !tbody || !headers.length) return;
+
+  var current = { key: null, dir: 1 };
+
+  function valueFor(row, key, type) {
+    var cell = row.querySelector('[data-col="' + key + '"]');
+    if (!cell) return "";
+    var raw = cell.dataset.sortValue !== undefined ? cell.dataset.sortValue : cell.textContent.trim();
+    return type === "numeric" ? parseFloat(raw) || 0 : raw.toLowerCase();
+  }
+
+  headers.forEach(function (th) {
+    th.addEventListener("click", function () {
+      var key = th.dataset.sort;
+      var type = th.dataset.sortType || "text";
+      var dir = current.key === key ? current.dir * -1 : 1;
+      current = { key: key, dir: dir };
+
+      headers.forEach(function (h) { h.removeAttribute("aria-sort"); h.querySelector(".sort-caret").textContent = "⇕"; });
+      th.setAttribute("aria-sort", dir === 1 ? "ascending" : "descending");
+      th.querySelector(".sort-caret").textContent = dir === 1 ? "▲" : "▼";
+
+      var rows = Array.prototype.slice.call(tbody.querySelectorAll("tr"));
+      rows.sort(function (a, b) {
+        var va = valueFor(a, key, type);
+        var vb = valueFor(b, key, type);
+        if (va < vb) return -1 * dir;
+        if (va > vb) return 1 * dir;
+        return 0;
+      });
+      rows.forEach(function (row) { tbody.appendChild(row); });
+    });
+  });
+}
+
+/* Bulk select → Export CSV. The export itself is a backend job; this only
+   shows the interaction point (selection, count, and the triggering action). */
+function initBulkActions() {
+  var selectAll = document.getElementById("selectAllRows");
+  var bar = document.getElementById("bulkBar");
+  var countLabel = document.getElementById("bulkCount");
+  var exportBtn = document.getElementById("exportCsvBtn");
+  var table = document.getElementById("caseTable");
+  if (!table) return;
+
+  function rowChecks() {
+    return Array.prototype.slice.call(table.querySelectorAll("tbody .row-check"));
+  }
+  function visibleChecks() {
+    return rowChecks().filter(function (c) { return c.closest("tr").style.display !== "none"; });
+  }
+
+  window.updateBulkBar = function () {
+    var checked = rowChecks().filter(function (c) { return c.checked; });
+    if (!bar) return;
+    if (checked.length > 0) {
+      bar.hidden = false;
+      if (countLabel) countLabel.textContent = checked.length + " selected";
+    } else {
+      bar.hidden = true;
+    }
+    if (selectAll) {
+      var visible = visibleChecks();
+      var visibleChecked = visible.filter(function (c) { return c.checked; });
+      selectAll.checked = visible.length > 0 && visibleChecked.length === visible.length;
+      selectAll.indeterminate = visibleChecked.length > 0 && visibleChecked.length < visible.length;
+    }
+  };
+
+  rowChecks().forEach(function (check) {
+    check.addEventListener("click", function (e) { e.stopPropagation(); });
+    check.addEventListener("change", window.updateBulkBar);
+  });
+
+  if (selectAll) {
+    selectAll.addEventListener("click", function (e) { e.stopPropagation(); });
+    selectAll.addEventListener("change", function () {
+      visibleChecks().forEach(function (c) { c.checked = selectAll.checked; });
+      window.updateBulkBar();
+    });
+  }
+
+  if (exportBtn) {
+    exportBtn.addEventListener("click", function () {
+      var count = rowChecks().filter(function (c) { return c.checked; }).length;
+      if (count === 0) return;
+      exportBtn.disabled = true;
+      exportBtn.textContent = "Exporting…";
+      showToast("Exporting " + count + " selected case" + (count === 1 ? "" : "s") + " to CSV");
+      setTimeout(function () {
+        rowChecks().forEach(function (c) { c.checked = false; });
+        exportBtn.disabled = false;
+        exportBtn.textContent = "Export CSV";
+        window.updateBulkBar();
+      }, 1100);
+    });
+  }
+
+  window.updateBulkBar();
 }
 
 /* Decision #5 — case list column picker. Core columns (confirmation,
@@ -125,14 +315,33 @@ function initColumnPicker() {
   });
 }
 
+/* Approval always collects an optional comment first (decision: popover,
+   not a side sheet — it's one field, not worth a heavier pattern). The
+   ownership-confirmation gate, if it applies, still fires before this. */
 function initApprove() {
   var btn = document.getElementById("approveBtn");
   var pill = document.getElementById("statusPill");
   var reassignBtn = document.getElementById("reassignBtn");
   var ownerName = document.body.dataset.assignedTo;
+  var popover = document.getElementById("approvePopover");
+  var commentField = document.getElementById("approveComment");
+  var popoverCancel = document.getElementById("approveCancelBtn");
+  var popoverConfirm = document.getElementById("approveConfirmBtn");
+  var activityLog = document.getElementById("activityLog");
   if (!btn) return;
 
-  function doApprove() {
+  function openPopover() {
+    if (!popover) { finishApprove(""); return; }
+    popover.hidden = false;
+    if (commentField) commentField.focus();
+  }
+
+  function closePopover() {
+    if (popover) popover.hidden = true;
+    if (commentField) commentField.value = "";
+  }
+
+  function finishApprove(comment) {
     if (pill) {
       pill.className = "pill pill-approved";
       pill.innerHTML = pillHTML("check", "Approved by Agent");
@@ -140,16 +349,39 @@ function initApprove() {
     btn.disabled = true;
     btn.textContent = "Approved";
     if (reassignBtn) reassignBtn.disabled = true;
+    if (activityLog) {
+      var item = document.createElement("div");
+      item.className = "activity-item";
+      var text = comment
+        ? "Approved by You — “" + comment + "”"
+        : "Approved by You — no comment added";
+      item.innerHTML = '<span class="dot"></span><div><span class="when">Just now</span>' + text + "</div>";
+      activityLog.insertBefore(item, activityLog.firstChild);
+    }
     showToast("Case approved and marked resolved");
   }
 
   btn.addEventListener("click", function () {
     if (ownerName && ownerName !== "You") {
-      confirmOwnership(ownerName, doApprove);
+      confirmOwnership(ownerName, openPopover);
     } else {
-      doApprove();
+      openPopover();
     }
   });
+
+  if (popoverCancel) {
+    popoverCancel.addEventListener("click", function () {
+      closePopover();
+    });
+  }
+
+  if (popoverConfirm) {
+    popoverConfirm.addEventListener("click", function () {
+      var comment = commentField ? commentField.value.trim() : "";
+      closePopover();
+      finishApprove(comment);
+    });
+  }
 
   if (reassignBtn) {
     reassignBtn.addEventListener("click", function () {
@@ -180,23 +412,41 @@ function initReopen() {
   });
 }
 
+/* The header "Mark as Chased" button no longer submits directly — it jumps
+   to the form at the bottom of the page. Submission now happens from the
+   form's own Save button, so the reason/note are reviewed before they're
+   logged. */
 function initChase() {
-  var chaseBtn = document.getElementById("markChasedBtn");
+  var jumpBtn = document.getElementById("markChasedBtn");
+  var saveBtn = document.getElementById("chaseSaveBtn");
   var assignBtn = document.getElementById("assignChaseBtn");
   var pill = document.getElementById("statusPill");
-  if (chaseBtn) {
-    chaseBtn.addEventListener("click", function () {
-      var reasonSelect = document.getElementById("chaseReason");
+  var formPanel = document.getElementById("chaseFormPanel");
+  var reasonSelect = document.getElementById("chaseReason");
+
+  if (jumpBtn && formPanel) {
+    jumpBtn.addEventListener("click", function () {
+      formPanel.scrollIntoView({ behavior: "smooth", block: "center" });
+      formPanel.classList.remove("panel-highlight");
+      requestAnimationFrame(function () { formPanel.classList.add("panel-highlight"); });
+      if (reasonSelect) reasonSelect.focus();
+    });
+  }
+
+  if (saveBtn) {
+    saveBtn.addEventListener("click", function () {
       var reason = reasonSelect ? reasonSelect.options[reasonSelect.selectedIndex].text : "";
       if (pill) {
         pill.className = "pill pill-review";
         pill.innerHTML = pillHTML("clock", "Chased — Awaiting Response");
       }
-      chaseBtn.disabled = true;
-      chaseBtn.textContent = "Marked as Chased";
+      saveBtn.disabled = true;
+      saveBtn.textContent = "Saved";
+      if (jumpBtn) jumpBtn.disabled = true;
       showToast("Logged: " + reason);
     });
   }
+
   if (assignBtn) {
     assignBtn.addEventListener("click", function () {
       assignToMe(assignBtn, "#agentValue");

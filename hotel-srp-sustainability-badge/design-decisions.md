@@ -10,7 +10,11 @@ A real ribbon/seal glyph doesn't exist yet in the icon token set — Concept A s
 
 ## 2. Tooltip trigger
 
-**Decision:** Hover and keyboard focus reveal the tooltip on desktop; touch devices skip straight to tap, which opens the side sheet directly (there's no hover state to preview on mobile, so the tooltip step is a desktop-only enhancement). This avoids a hover-only pattern that mobile can't replicate.
+**Decision:** Concept A and B are click/tap only — no hover preview, straight to the side sheet on click. Concept C is the exception: it's the established text-link + info-icon pattern ("this is how we do it"), where hovering or focusing either the link text or the circle-i icon reveals a tooltip. Keyboard focus reveals it the same way on desktop; on touch, tapping the link or icon focuses it, which triggers the same reveal (no separate hover-only path that touch can't replicate).
+
+## 2a. Concept C — info link, no side sheet
+
+**Decision:** A third concept: a plain text link ("Sustainability certified") with a circle-i info icon to its right, both inside one hoverable/focusable group. This concept has no side sheet at all, so for multi-certification hotels the tooltip lists every certification directly (stacked, one per line) rather than a primary name plus a "view all" hint — there's nowhere else for "view all" to go.
 
 ## 3. Multi-certification display
 

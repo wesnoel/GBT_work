@@ -59,6 +59,14 @@
     <div class="case-actions">
       <button class="btn" id="reassignBtn">Reassign</button>
       <button class="btn btn-primary" id="approveBtn">Approve</button>
+      <div class="popover" id="approvePopover" hidden>
+        <label for="approveComment">Add a comment (optional)</label>
+        <textarea id="approveComment" rows="3" placeholder="Add context for the record…"></textarea>
+        <div class="popover-actions">
+          <button class="btn" id="approveCancelBtn">Cancel</button>
+          <button class="btn btn-primary" id="approveConfirmBtn">Approve</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -67,7 +75,7 @@
       <div class="panel">
         <h2>Booking vs. folio</h2>
         <div class="compare-row col-head">
-          <span></span><span>Booking</span><span>Folio</span>
+          <span></span><span class="col-title">Booking</span><span class="col-title">Folio</span>
         </div>
         <div class="compare-row">
           <span class="label">Confirmation</span><span>CNF-88244</span><span>CNF-88244</span>
@@ -126,17 +134,19 @@
 
       <div class="panel">
         <h2>Activity log</h2>
-        <div class="activity-item">
-          <span class="dot"></span>
-          <div><span class="when">Sep 15, 9:02 AM</span>Case routed to agent queue — entity check failed</div>
-        </div>
-        <div class="activity-item">
-          <span class="dot"></span>
-          <div><span class="when">Sep 15, 9:04 AM</span>Assigned to M. Reyes</div>
-        </div>
-        <div class="activity-item">
-          <span class="dot"></span>
-          <div><span class="when">Sep 14, 6:40 PM</span>Folio received via Compleat email</div>
+        <div id="activityLog">
+          <div class="activity-item">
+            <span class="dot"></span>
+            <div><span class="when">Sep 15, 9:02 AM</span>Case routed to agent queue — entity check failed</div>
+          </div>
+          <div class="activity-item">
+            <span class="dot"></span>
+            <div><span class="when">Sep 15, 9:04 AM</span>Assigned to M. Reyes</div>
+          </div>
+          <div class="activity-item">
+            <span class="dot"></span>
+            <div><span class="when">Sep 14, 6:40 PM</span>Folio received via Compleat email</div>
+          </div>
         </div>
       </div>
     </div>

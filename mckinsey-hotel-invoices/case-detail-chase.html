@@ -72,7 +72,7 @@
       <div class="panel">
         <h2>Booking details</h2>
         <div class="compare-row col-head">
-          <span></span><span>Booking</span><span></span>
+          <span></span><span class="col-title">Booking</span><span></span>
         </div>
         <div class="compare-row">
           <span class="label">Confirmation</span><span>CNF-88259</span><span></span>
@@ -91,7 +91,7 @@
         </div>
       </div>
 
-      <div class="panel">
+      <div class="panel" id="chaseFormPanel">
         <h2>Mark as chased</h2>
         <div class="field-row">
           <label for="chaseReason">Reason</label>
@@ -106,6 +106,7 @@
           <label for="chaseNote">Note (optional)</label>
           <textarea id="chaseNote" rows="3" placeholder="Add context for the next agent…"></textarea>
         </div>
+        <button class="btn btn-primary" id="chaseSaveBtn">Save</button>
         <div class="decision-note"><strong>Decision:</strong> fixed reasons are the primary field, since this feeds the PRD's exception-reason trend monitoring and free text alone can't be analyzed at scale. The note stays as an optional secondary detail for the next agent, not the record of why.</div>
       </div>
     </div>
@@ -114,6 +115,12 @@
       <div class="panel">
         <h2>Folio attachment</h2>
         <div class="attachment-box">No folio received yet</div>
+        <div class="upload-dropzone">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4"/><path d="M7 9l5-5 5 5"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
+          <div>Drag and drop a folio here, or</div>
+          <button class="btn" type="button" onclick="return false;">Browse files</button>
+          <p class="upload-hint">Accepts PDF, JPG, PNG. If a folio arrives late, upload it here to close this case manually.</p>
+        </div>
       </div>
 
       <div class="panel">
@@ -137,6 +144,8 @@
   <div class="notes-box">
     <h4>Decisions applied here</h4>
     <div class="decision-note"><strong>Status escalation:</strong> this case is 9 days past checkout, one day under the 10-day escalation threshold shown on the Case List, so the pill stays amber. Cross the threshold and it turns red with a triangle icon, same status, same label, no new enum value.</div>
+    <div class="decision-note"><strong>Mark as Chased flow:</strong> the header button no longer submits directly, it scrolls down to this form so the reason and note get a look before anything is logged. The actual submission happens from the Save button in the form itself.</div>
+    <div class="decision-note"><strong>No-folio upload:</strong> "No folio received yet" stays as the status message, with an upload option added below it so an agent can close the case manually if a folio arrives outside the normal Compleat intake.</div>
   </div>
 
 </div>

@@ -401,6 +401,90 @@ a { color: inherit; text-decoration: none; }
 
 .search-input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
 
+/* ---- Hotel filter (typeahead combobox) ---- */
+
+.hotel-filter { position: relative; }
+
+.hotel-filter input {
+  width: 220px;
+}
+
+.hotel-filter-clear {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--ink-soft);
+  cursor: pointer;
+  font-size: 15px;
+  line-height: 1;
+  padding: 2px;
+  display: none;
+}
+
+.hotel-filter.has-value .hotel-filter-clear { display: block; }
+.hotel-filter.has-value input { padding-right: 26px; }
+
+.hotel-filter-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 8px 20px rgba(20, 22, 26, 0.10);
+  max-height: 220px;
+  overflow-y: auto;
+  z-index: 20;
+  display: none;
+}
+
+.hotel-filter-menu.open { display: block; }
+
+.hotel-filter-menu .hotel-option {
+  padding: 8px 12px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.hotel-filter-menu .hotel-option:hover,
+.hotel-filter-menu .hotel-option.active { background: var(--canvas); }
+
+.hotel-filter-menu .hotel-option-empty {
+  padding: 10px 12px;
+  font-size: 12.5px;
+  color: var(--ink-soft);
+}
+
+/* ---- Bulk selection + CSV export ---- */
+
+.bulk-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--ink);
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 10px 16px;
+  margin-bottom: 12px;
+  font-size: 13.5px;
+}
+
+.bulk-bar[hidden] { display: none; }
+
+.bulk-bar .bulk-actions { display: flex; align-items: center; gap: 10px; }
+
+.bulk-bar .btn {
+  background: #fff;
+  color: var(--ink);
+  border-color: #fff;
+}
+
+.bulk-bar .btn:hover { background: #eceef1; }
+
 /* ---- Table ---- */
 
 .table-card {
@@ -422,6 +506,27 @@ thead th {
   border-bottom: 1px solid var(--line);
   background: var(--canvas);
 }
+
+.col-check { width: 36px; text-align: center !important; }
+.col-check input { width: 15px; height: 15px; cursor: pointer; }
+
+th.sortable {
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+th.sortable:hover { color: var(--ink); }
+
+.sort-caret {
+  display: inline-block;
+  margin-left: 4px;
+  font-size: 10px;
+  color: #c2c5cb;
+}
+
+th.sortable[aria-sort="ascending"] .sort-caret,
+th.sortable[aria-sort="descending"] .sort-caret { color: var(--ink); }
 
 tbody td {
   padding: 13px 16px;
@@ -552,7 +657,10 @@ tbody tr.row-link:hover { background: var(--canvas); }
 .compare-row:last-child { border-bottom: none; }
 .compare-row .label { color: var(--ink-soft); font-size: 12px; text-transform: uppercase; letter-spacing: 0.03em; }
 .compare-row.mismatch .folio-val { color: var(--red); font-weight: 700; }
-.compare-row .col-head { font-size: 11px; color: #9296a0; text-transform: uppercase; letter-spacing: 0.04em; }
+
+/* "Booking" / "Folio" column titles read bolder than the field rows below them. */
+.compare-row.col-head { padding-top: 0; padding-bottom: 6px; }
+.col-title { font-size: 13.5px; font-weight: 800; color: var(--ink); }
 
 .rule-row {
   display: flex;
@@ -763,9 +871,88 @@ body.show-col-fmno .col-optional.col-fmno { display: table-cell; }
 .modal-card p { margin: 0 0 18px; font-size: 13.5px; color: var(--ink-soft); line-height: 1.55; }
 .modal-actions { display: flex; justify-content: flex-end; gap: 8px; }
 
+/* ---- Upload dropzone (no-folio state) ---- */
+
+.upload-dropzone {
+  border: 1.5px dashed #c7cad0;
+  border-radius: var(--radius-sm);
+  padding: 26px 16px;
+  text-align: center;
+  background: var(--canvas);
+  margin-top: 12px;
+}
+
+.upload-dropzone svg {
+  width: 24px;
+  height: 24px;
+  color: var(--ink-soft);
+  margin-bottom: 8px;
+}
+
+.upload-dropzone .upload-hint {
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  margin: 8px 0 0;
+}
+
+/* ---- Approval comment popover (decision: popover, not side sheet) ---- */
+
+.case-actions { position: relative; }
+
+.popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 16px 36px rgba(20, 22, 26, 0.16);
+  padding: 16px 18px;
+  width: 300px;
+  z-index: 30;
+}
+
+.popover[hidden] { display: none; }
+
+.popover label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  margin-bottom: 6px;
+}
+
+.popover textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  font-size: 13.5px;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.popover-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+/* Brief highlight when a control scrolls the page to an anchored form. */
+.panel-highlight {
+  animation: panel-highlight-flash 1.6s ease-out;
+}
+
+@keyframes panel-highlight-flash {
+  0% { box-shadow: 0 0 0 3px var(--accent-soft); border-color: var(--accent); }
+  100% { box-shadow: none; }
+}
+
 @media (max-width: 860px) {
   .card-grid { grid-template-columns: 1fr; }
   .detail-grid { grid-template-columns: 1fr; }
   .compare-row { grid-template-columns: 1fr; gap: 2px; }
   .search-input { min-width: 0; width: 100%; }
+  .hotel-filter input { width: 160px; }
 }
