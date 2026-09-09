@@ -61,7 +61,7 @@ function initCaseList() {
   var emptyState = document.getElementById("emptyState");
   var table = document.getElementById("caseTable");
   var activeStatus = "all";
-  var activeHotel = "";
+  var activeHotel = { value: "", mode: "exact" };
 
   function applyFilters() {
     var query = (searchInput && searchInput.value || "").trim().toLowerCase();
@@ -69,7 +69,9 @@ function initCaseList() {
     rows.forEach(function (row) {
       var matchesStatus = activeStatus === "all" || row.dataset.status === activeStatus;
       var matchesSearch = !query || row.dataset.search.indexOf(query) !== -1;
-      var matchesHotel = !activeHotel || row.dataset.hotel === activeHotel;
+      var matchesHotel = !activeHotel.value || (activeHotel.mode === "contains"
+        ? row.dataset.hotel.indexOf(activeHotel.value) !== -1
+        : row.dataset.hotel === activeHotel.value);
       var visible = matchesStatus && matchesSearch && matchesHotel;
       row.style.display = visible ? "" : "none";
       if (visible) {
@@ -111,8 +113,8 @@ function initCaseList() {
   });
 
   initFilterPillToggles();
-  initHotelFilter(rows, function (hotel) {
-    activeHotel = hotel;
+  initHotelFilter(rows, function (hotel, mode) {
+    activeHotel = { value: hotel, mode: mode || "exact" };
     applyFilters();
   });
   initConfirmationLabel();
@@ -212,16 +214,20 @@ function initHotelFilter(rows, onSelect) {
   });
   hotels.sort();
 
-  function setLabel(name) {
-    if (label) label.textContent = name ? "Hotel name · " + name : "Hotel name";
-    wrap.classList.toggle("filled", !!name);
+  function setLabel(name, mode) {
+    if (!label) return;
+    if (!name) { label.textContent = "Hotel name"; wrap.classList.remove("filled"); return; }
+    label.textContent = mode === "contains" ? 'Hotel name · "' + name + '"' : "Hotel name · " + name;
+    wrap.classList.add("filled");
   }
 
   var hotelIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6"/><path d="M3 18h18"/><path d="M7 10V7a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v3"/></svg>';
+  var filterIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M8 12h8M11 18h2"/></svg>';
 
   function renderMenu(filterText) {
-    var query = (filterText || "").trim().toLowerCase();
-    var matches = hotels.filter(function (h) { return h.toLowerCase().indexOf(query) !== -1; });
+    var query = (filterText || "").trim();
+    var queryLower = query.toLowerCase();
+    var matches = hotels.filter(function (h) { return h.toLowerCase().indexOf(queryLower) !== -1; });
     menu.innerHTML = "";
     if (matches.length === 0) {
       var empty = document.createElement("div");
@@ -235,12 +241,27 @@ function initHotelFilter(rows, onSelect) {
         opt.innerHTML = hotelIcon + "<span>" + name + "</span>";
         opt.addEventListener("click", function () {
           input.value = name;
-          setLabel(name);
+          setLabel(name, "exact");
           wrap.classList.remove("open");
-          onSelect(name.toLowerCase());
+          onSelect(name.toLowerCase(), "exact");
         });
         menu.appendChild(opt);
       });
+    }
+
+    // Typing "Marriott" matches several properties, but a single selection
+    // above can only pick one. This option keeps every match in view —
+    // it filters by the typed text itself rather than one exact hotel.
+    if (query) {
+      var broad = document.createElement("div");
+      broad.className = "filter-option filter-option-broad";
+      broad.innerHTML = filterIcon + "<span>Filter by: <strong>" + query + "</strong></span>";
+      broad.addEventListener("click", function () {
+        setLabel(query, "contains");
+        wrap.classList.remove("open");
+        onSelect(queryLower, "contains");
+      });
+      menu.appendChild(broad);
     }
   }
 

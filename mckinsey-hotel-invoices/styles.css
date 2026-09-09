@@ -506,6 +506,19 @@ a { color: inherit; text-decoration: none; }
 .filter-option-list .filter-option svg { width: 16px; height: 16px; color: var(--ink-soft); flex-shrink: 0; }
 .filter-option-list .filter-option:hover { background: var(--canvas); }
 
+/* "Filter by: <text>" — keeps every matching property in view (e.g. all
+   Marriott hotels) instead of forcing a single exact selection. */
+.filter-option-broad {
+  border-top: 1px solid var(--line);
+  margin-top: 4px;
+  padding-top: 12px !important;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.filter-option-broad svg { color: var(--accent) !important; }
+.filter-option-broad strong { font-weight: 700; }
+
 .filter-option-empty {
   padding: 10px 6px;
   font-size: 12.5px;
