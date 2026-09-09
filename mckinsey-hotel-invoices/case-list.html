@@ -57,26 +57,57 @@
   </div>
 
   <div class="toolbar">
-    <div class="chip-row">
-      <button class="chip active" data-status="all">All</button>
-      <button class="chip" data-status="review">Needs Review</button>
-      <button class="chip" data-status="chase">Chase Needed</button>
-      <button class="chip" data-status="exception">Ingestion Exception</button>
-      <button class="chip" data-status="automated">Automated</button>
-    </div>
-    <div style="display:flex; gap:8px;">
-      <input class="search-input" id="caseSearch" type="text" placeholder="Search confirmation no., PNR, FMNO, traveller, hotel…" />
-      <div class="hotel-filter" id="hotelFilter">
-        <input type="text" id="hotelFilterInput" class="search-input" placeholder="Filter by hotel…" autocomplete="off" />
-        <button class="hotel-filter-clear" id="hotelFilterClear" aria-label="Clear hotel filter">&times;</button>
-        <div class="hotel-filter-menu" id="hotelFilterMenu"></div>
+    <div class="toolbar-left">
+      <div class="chip-row">
+        <button class="chip active" data-status="all">All</button>
+        <button class="chip" data-status="review">Needs Review</button>
+        <button class="chip" data-status="chase">Chase Needed</button>
+        <button class="chip" data-status="exception">Ingestion Exception</button>
+        <button class="chip" data-status="automated">Automated</button>
       </div>
-      <div class="col-picker">
-        <button class="btn" id="colPickerToggle">Columns ▾</button>
-        <div class="col-picker-menu" id="colPickerMenu">
-          <label><input type="checkbox" data-col-toggle="pnr" /> Show PNR</label>
-          <label><input type="checkbox" data-col-toggle="fmno" /> Show FMNO</label>
+
+      <div class="filter-pill-wrap" id="hotelPillWrap">
+        <button class="filter-pill" id="hotelPillBtn" type="button" aria-haspopup="true" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6"/><path d="M3 18h18"/><path d="M7 10V7a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v3"/></svg>
+          <span id="hotelPillLabel">Hotel name</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="filter-panel" id="hotelPanel">
+          <div class="filter-panel-header">
+            <span class="filter-panel-title">Search by hotel name</span>
+            <button class="filter-panel-clear" id="hotelPanelClear" type="button">Clear</button>
+          </div>
+          <div class="filter-panel-body">
+            <input type="text" id="hotelFilterInput" class="filter-panel-input" placeholder="Type a hotel name" autocomplete="off" />
+            <div class="filter-panel-label">Matching hotels</div>
+            <div class="filter-option-list" id="hotelFilterMenu"></div>
+          </div>
         </div>
+      </div>
+
+      <div class="filter-pill-wrap" id="confirmationPillWrap">
+        <button class="filter-pill" id="confirmationPillBtn" type="button" aria-haspopup="true" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h16M4 15h16M10 3 8 21M16 3l-2 18"/></svg>
+          <span id="confirmationPillLabel">Confirmation number</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="filter-panel" id="confirmationPanel">
+          <div class="filter-panel-header">
+            <span class="filter-panel-title">Search by confirmation number</span>
+            <button class="filter-panel-clear" id="confirmationPanelClear" type="button">Clear</button>
+          </div>
+          <div class="filter-panel-body">
+            <input type="text" id="caseSearch" class="filter-panel-input" placeholder="Confirmation no., PNR, FMNO, or traveller name" autocomplete="off" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-picker" id="colPicker">
+      <button class="btn" id="colPickerToggle" type="button">More Columns ▾</button>
+      <div class="col-picker-menu" id="colPickerMenu">
+        <label><input type="checkbox" data-col-toggle="pnr" /> Show PNR</label>
+        <label><input type="checkbox" data-col-toggle="fmno" /> Show FMNO</label>
       </div>
     </div>
   </div>
@@ -213,9 +244,10 @@
 
   <div class="notes-box">
     <h4>Decisions applied here</h4>
-    Case age counts from checkout date, not intake — it doubles as the countdown to Chase Needed · search covers confirmation no., PNR, FMNO, traveller and hotel · row click opens the case detail view · "Assign to me" appears inline on unassigned Chase Needed / Ingestion Exception rows · every column header is sortable · the Hotel field is a typeahead filter, separate from and additive with the search box and status chips.
+    Case age counts from checkout date, not intake — it doubles as the countdown to Chase Needed · row click opens the case detail view · "Assign to me" appears inline on unassigned Chase Needed / Ingestion Exception rows · every column header is sortable.
+    <div class="decision-note"><strong>Filter pills:</strong> Hotel name and Confirmation number follow the same filter-pill pattern as the hotel SRP — a pill reveals a combobox panel on click, and both stack additively with the status chips, on one line, left-aligned.</div>
     <div class="decision-note"><strong>Bulk export:</strong> selecting cases and clicking Export CSV only shows the interaction point — the toast simulates the action, no file is actually generated. The real export job runs on the backend.</div>
-    <div class="decision-note"><strong>Column density:</strong> the seven core columns stay fixed; PNR and FMNO are lookup fields hidden behind the "Columns" picker. Exception reason shows as secondary text under the status pill rather than its own always-on column, since it's only meaningful on rows that already have a problem.</div>
+    <div class="decision-note"><strong>Column density:</strong> the seven core columns stay fixed; PNR and FMNO are lookup fields hidden behind the "More Columns" picker. Exception reason shows as secondary text under the status pill rather than its own always-on column, since it's only meaningful on rows that already have a problem.</div>
     <div class="decision-note"><strong>Status escalation:</strong> Chase Needed ages from amber to red at a threshold (10 days, shown on CNF-88250) rather than becoming a new status — same pill, same label, escalated color + icon.</div>
     <div class="decision-note"><strong>Empty / live state:</strong> filtering is instant and client-side here; in the real build, filter results must reflect live case status, never a stale page load, per the PRD.</div>
   </div>

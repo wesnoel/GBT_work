@@ -110,21 +110,98 @@ function initCaseList() {
     });
   });
 
+  initFilterPillToggles();
   initHotelFilter(rows, function (hotel) {
     activeHotel = hotel;
     applyFilters();
   });
+  initConfirmationLabel();
 
   initSort();
   initBulkActions();
 }
 
+/* Filter pills (Hotel name, Confirmation number) reveal their panel on
+   click, same pattern as the hotel-SRP filter-by-hotel-name combobox.
+   Opening one closes the others, including the column picker. */
+function closeAllFilterPanels() {
+  ["hotelPillWrap", "confirmationPillWrap"].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (el) el.classList.remove("open");
+  });
+  ["hotelPillBtn", "confirmationPillBtn"].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (el) el.setAttribute("aria-expanded", "false");
+  });
+  var colMenu = document.getElementById("colPickerMenu");
+  if (colMenu) colMenu.classList.remove("open");
+}
+
+/* Popover positioning: the panel is `position: fixed`, so it floats above
+   everything and is never clipped by an ancestor's overflow. Its top/left
+   are computed from the trigger pill's own bounding rect, snapping it to
+   the pill regardless of where that pill sits (including after wrapping
+   to a second line on a narrow viewport). */
+function positionFilterPanel(btn, panel) {
+  var rect = btn.getBoundingClientRect();
+  var panelWidth = panel.offsetWidth || 320;
+  var left = rect.left;
+  if (left + panelWidth > window.innerWidth - 12) {
+    left = Math.max(12, window.innerWidth - panelWidth - 12);
+  }
+  panel.style.top = (rect.bottom + 8) + "px";
+  panel.style.left = left + "px";
+}
+
+function initFilterPillToggles() {
+  var groups = [
+    { btn: "hotelPillBtn", wrap: "hotelPillWrap" },
+    { btn: "confirmationPillBtn", wrap: "confirmationPillWrap" }
+  ];
+
+  groups.forEach(function (g) {
+    var btn = document.getElementById(g.btn);
+    var wrap = document.getElementById(g.wrap);
+    var panel = wrap && wrap.querySelector(".filter-panel");
+    if (!btn || !wrap || !panel) return;
+    btn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      var willOpen = !wrap.classList.contains("open");
+      closeAllFilterPanels();
+      if (willOpen) {
+        positionFilterPanel(btn, panel);
+        wrap.classList.add("open");
+        btn.setAttribute("aria-expanded", "true");
+        var input = wrap.querySelector("input");
+        if (input) input.focus();
+      }
+    });
+  });
+
+  document.addEventListener("click", function (e) {
+    groups.forEach(function (g) {
+      var wrap = document.getElementById(g.wrap);
+      if (wrap && wrap.classList.contains("open") && !wrap.contains(e.target)) {
+        wrap.classList.remove("open");
+        document.getElementById(g.btn).setAttribute("aria-expanded", "false");
+      }
+    });
+  });
+
+  // A fixed-position popover would drift out of place if the page scrolls
+  // or resizes while it's open — closing it is simpler than re-tracking it.
+  window.addEventListener("scroll", closeAllFilterPanels, true);
+  window.addEventListener("resize", closeAllFilterPanels);
+}
+
 /* Hotel filter — typeahead combobox over the distinct hotel names in the list. */
 function initHotelFilter(rows, onSelect) {
-  var wrap = document.getElementById("hotelFilter");
+  var wrap = document.getElementById("hotelPillWrap");
+  var btn = document.getElementById("hotelPillBtn");
   var input = document.getElementById("hotelFilterInput");
   var menu = document.getElementById("hotelFilterMenu");
-  var clearBtn = document.getElementById("hotelFilterClear");
+  var clearBtn = document.getElementById("hotelPanelClear");
+  var label = document.getElementById("hotelPillLabel");
   if (!wrap || !input || !menu) return;
 
   var hotels = [];
@@ -135,51 +212,82 @@ function initHotelFilter(rows, onSelect) {
   });
   hotels.sort();
 
+  function setLabel(name) {
+    if (label) label.textContent = name ? "Hotel name · " + name : "Hotel name";
+    wrap.classList.toggle("filled", !!name);
+  }
+
+  var hotelIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6"/><path d="M3 18h18"/><path d="M7 10V7a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v3"/></svg>';
+
   function renderMenu(filterText) {
     var query = (filterText || "").trim().toLowerCase();
     var matches = hotels.filter(function (h) { return h.toLowerCase().indexOf(query) !== -1; });
     menu.innerHTML = "";
     if (matches.length === 0) {
       var empty = document.createElement("div");
-      empty.className = "hotel-option-empty";
+      empty.className = "filter-option-empty";
       empty.textContent = "No hotels match";
       menu.appendChild(empty);
     } else {
       matches.forEach(function (name) {
         var opt = document.createElement("div");
-        opt.className = "hotel-option";
-        opt.textContent = name;
+        opt.className = "filter-option";
+        opt.innerHTML = hotelIcon + "<span>" + name + "</span>";
         opt.addEventListener("click", function () {
           input.value = name;
-          wrap.classList.add("has-value");
-          menu.classList.remove("open");
+          setLabel(name);
+          wrap.classList.remove("open");
           onSelect(name.toLowerCase());
         });
         menu.appendChild(opt);
       });
     }
-    menu.classList.add("open");
   }
 
-  input.addEventListener("focus", function () { renderMenu(input.value); });
+  if (btn) btn.addEventListener("click", function () { renderMenu(input.value); });
   input.addEventListener("input", function () {
-    if (input.value === "") {
-      wrap.classList.remove("has-value");
-      onSelect("");
-    }
+    if (input.value === "") { setLabel(""); onSelect(""); }
     renderMenu(input.value);
-  });
-
-  document.addEventListener("click", function (e) {
-    if (!wrap.contains(e.target)) menu.classList.remove("open");
   });
 
   if (clearBtn) {
     clearBtn.addEventListener("click", function () {
       input.value = "";
-      wrap.classList.remove("has-value");
-      menu.classList.remove("open");
+      setLabel("");
       onSelect("");
+      renderMenu("");
+      input.focus();
+    });
+  }
+}
+
+/* Confirmation-number pill mirrors its filled state (border/label) off the
+   same #caseSearch input that already drives the table filter. */
+function initConfirmationLabel() {
+  var input = document.getElementById("caseSearch");
+  var wrap = document.getElementById("confirmationPillWrap");
+  var label = document.getElementById("confirmationPillLabel");
+  var clearBtn = document.getElementById("confirmationPanelClear");
+  if (!input || !wrap || !label) return;
+
+  function updateLabel() {
+    var val = input.value.trim();
+    if (val) {
+      wrap.classList.add("filled");
+      label.textContent = "Confirmation number · " + (val.length > 18 ? val.slice(0, 18) + "…" : val);
+    } else {
+      wrap.classList.remove("filled");
+      label.textContent = "Confirmation number";
+    }
+  }
+
+  input.addEventListener("input", updateLabel);
+
+  if (clearBtn) {
+    clearBtn.addEventListener("click", function () {
+      input.value = "";
+      updateLabel();
+      input.dispatchEvent(new Event("input", { bubbles: true }));
       input.focus();
     });
   }
@@ -302,10 +410,12 @@ function initColumnPicker() {
 
   toggleBtn.addEventListener("click", function (e) {
     e.stopPropagation();
-    menu.classList.toggle("open");
+    var willOpen = !menu.classList.contains("open");
+    closeAllFilterPanels();
+    if (willOpen) menu.classList.add("open");
   });
-  document.addEventListener("click", function () {
-    menu.classList.remove("open");
+  document.addEventListener("click", function (e) {
+    if (!e.target.closest(".col-picker")) menu.classList.remove("open");
   });
 
   document.querySelectorAll("[data-col-toggle]").forEach(function (checkbox) {
