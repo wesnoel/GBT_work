@@ -618,16 +618,9 @@ tbody tr.row-link:hover { background: var(--canvas); }
   white-space: nowrap;
 }
 
-.pill svg {
-  width: 12px;
-  height: 12px;
-  flex-shrink: 0;
-}
-
-/* Status pills: color + icon + label together, never color alone.
-   Icon shape carries meaning (bolt = automated, check = human-approved,
-   clock = waiting/aging, triangle = escalated, flag = exception) so
-   colorblind/low-vision agents can still tell states apart. */
+/* Status pills are color-only by design request — no icon, label carries
+   the state. Flagged in the decisions notes as a WCAG 2.2 tradeoff versus
+   the earlier color+icon+label approach. */
 .pill-review { background: var(--amber-soft); color: var(--amber); border-color: var(--amber-line); }
 .pill-chase { background: var(--amber-soft); color: var(--amber); border-color: var(--amber-line); }
 .pill-chase-escalated { background: var(--red-soft); color: var(--red); border-color: var(--red-line); }

@@ -54,7 +54,7 @@
   <div class="case-header">
     <div class="case-title">
       <h1>CNF-88259 · S. Laurent</h1>
-      <div class="meta">Le Méridien Paris · Sep 3–5 · <span id="statusPill" class="pill pill-chase"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/></svg><span>Chase Needed</span></span> · agent: <span id="agentValue">Unassigned</span></div>
+      <div class="meta">Le Méridien Paris · Sep 3–5 · <span id="statusPill" class="pill pill-chase"><span>Chase Needed</span></span> · agent: <span id="agentValue">Unassigned</span></div>
     </div>
     <div class="case-actions">
       <button class="btn" id="assignChaseBtn">Assign to me</button>
@@ -143,7 +143,7 @@
 
   <div class="notes-box">
     <h4>Decisions applied here</h4>
-    <div class="decision-note"><strong>Status escalation:</strong> this case is 9 days past checkout, one day under the 10-day escalation threshold shown on the Case List, so the pill stays amber. Cross the threshold and it turns red with a triangle icon, same status, same label, no new enum value.</div>
+    <div class="decision-note"><strong>Status escalation:</strong> this case is 9 days past checkout, one day under the 10-day escalation threshold shown on the Case List, so the pill stays amber. Cross the threshold and it turns red, same status, same label, no new enum value.</div>
     <div class="decision-note"><strong>Mark as Chased flow:</strong> the header button no longer submits directly, it scrolls down to this form so the reason and note get a look before anything is logged. The actual submission happens from the Save button in the form itself.</div>
     <div class="decision-note"><strong>No-folio upload:</strong> "No folio received yet" stays as the status message, with an upload option added below it so an agent can close the case manually if a folio arrives outside the normal Compleat intake.</div>
   </div>

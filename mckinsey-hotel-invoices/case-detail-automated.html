@@ -54,7 +54,7 @@
   <div class="case-header">
     <div class="case-title">
       <h1>CNF-88231 · J. Whitfield</h1>
-      <div class="meta" id="automatedBanner">Marriott Marquis DC · Sep 8–10 · <span id="statusPill" class="pill pill-automated"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"/></svg><span>Automated</span></span> · no agent involved</div>
+      <div class="meta" id="automatedBanner">Marriott Marquis DC · Sep 8–10 · <span id="statusPill" class="pill pill-automated"><span>Automated</span></span> · no agent involved</div>
     </div>
     <div class="case-actions">
       <button class="btn" id="reopenBtn">Reopen</button>
@@ -132,7 +132,7 @@
 
   <div class="notes-box">
     <h4>Decisions applied here</h4>
-    <div class="decision-note"><strong>Status visual language:</strong> Automated and Approved by Agent are both "good" states, so they share the same green, but never rely on color alone. Automated carries a bolt icon (no human involved); Approved by Agent (see the Needs Review case after approving) carries a check icon — color + icon + label together, per WCAG 2.2 AA.</div>
+    <div class="decision-note"><strong>Status visual language:</strong> Automated and Approved by Agent are both "good" states and share the same green. Status pills are color-only now (icons removed per PM request) — this trades away the color+icon+label redundancy from the original WCAG 2.2 recommendation, so it's worth a follow-up accessibility check before launch.</div>
   </div>
 
 </div>

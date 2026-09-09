@@ -4,14 +4,18 @@ Resolves the six open questions from the UX spec and PM review. Each decision is
 
 ## 1. Status visual language
 
-**Decision:** Don't treat this as 10 unique colors. Use 3–4 severity tiers (neutral, success, warning, danger) with a stable icon vocabulary layered on top, so every status reads on color + icon + label together, never color alone.
+**Original decision:** Don't treat this as 10 unique colors. Use 3–4 severity tiers (neutral, success, warning, danger), with a stable icon vocabulary layered on top so every status reads on color + icon + label together, never color alone.
+
+**Update:** icons were removed from every status pill per PM request — status now reads on color + label only. The severity-tier logic still holds (Automated and Approved by Agent share green, Needs Review and early Chase Needed share amber, Ingestion Exception and escalated Chase Needed share red), just without the icon layer that used to distinguish states sharing a color.
 
 - Neutral (gray) — default states with no action needed.
-- Success (green) — Automated and Approved by Agent. Both are "good," so they share green, but carry different icons: a bolt for Automated (no human involved), a check for Approved by Agent (a human acted). The label always stays visible too.
+- Success (green) — Automated and Approved by Agent. Both are "good," so they share green; the label is what distinguishes them now.
 - Warning (amber) — Needs Review, and Chase Needed before it ages out.
-- Danger (red) — Ingestion Exception (flag icon), and Chase Needed once it crosses the aging threshold (triangle icon).
+- Danger (red) — Ingestion Exception, and Chase Needed once it crosses the aging threshold.
 
-Chase Needed aging from amber to red is a computed severity, not a new status value. Same pill, same label, escalated color and icon once case age crosses a threshold (10 days in the wireframe, to be confirmed with ops). This keeps the actual status enum small and keeps the aging logic out of the data model.
+Chase Needed aging from amber to red is a computed severity, not a new status value. Same pill, same label, escalated color once case age crosses a threshold (10 days in the wireframe, to be confirmed with ops). This keeps the actual status enum small and keeps the aging logic out of the data model.
+
+**Flag for accessibility review:** removing the icon reopens the original WCAG 2.2 concern — color alone can be hard to distinguish for colorblind or low-vision agents, especially between two amber states (Needs Review vs. early Chase Needed) or two red states (Ingestion Exception vs. escalated Chase Needed) that now only differ by label text. Worth a follow-up pass with accessibility before this locks for engineering.
 
 ## 2. Self-assign confirmation
 
