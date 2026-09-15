@@ -31,7 +31,9 @@ Chase Needed aging from amber to red is a computed severity, not a new status va
 
 ## 5. Case list density
 
-**Decision:** Keep the seven core columns fixed (confirmation, traveller, hotel, stay dates, status, case age, agent) — agents rely on all of them to triage. PNR and FMNO are lookup fields, not decision fields, so they move behind a column picker. Exception reason gets a different treatment entirely: it shows as secondary text under the status pill on rows that have one, rather than a dedicated always-on column that's empty for most rows.
+**Decision:** Keep the eight core columns fixed (confirmation, traveller, hotel, check-in, check-out, status, case age, agent) — agents rely on all of them to triage. PNR and FMNO are lookup fields, not decision fields, so they move behind a column picker. Exception reason gets a different treatment entirely: it shows as secondary text under the status pill on rows that have one, rather than a dedicated always-on column that's empty for most rows.
+
+Check-in and check-out were later split from a single "Stay dates" column into two, so each can be sorted independently — check-out date is what agents actually need to sort by for aging and chase timing.
 
 ## 6. Empty / stale states
 

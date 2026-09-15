@@ -120,6 +120,7 @@
   </div>
 
   <div class="table-card">
+    <div class="table-scroll">
     <table id="caseTable">
       <thead>
         <tr>
@@ -129,7 +130,8 @@
           <th class="sortable col-optional col-fmno" data-sort="fmno">FMNO<span class="sort-caret">⇕</span></th>
           <th class="sortable" data-sort="traveller">Traveller<span class="sort-caret">⇕</span></th>
           <th class="sortable" data-sort="hotel">Hotel<span class="sort-caret">⇕</span></th>
-          <th class="sortable" data-sort="staydates">Stay dates<span class="sort-caret">⇕</span></th>
+          <th class="sortable" data-sort="checkin">Check-in<span class="sort-caret">⇕</span></th>
+          <th class="sortable" data-sort="checkout">Check-out<span class="sort-caret">⇕</span></th>
           <th class="sortable" data-sort="status">Status<span class="sort-caret">⇕</span></th>
           <th class="sortable" data-sort="caseage" data-sort-type="numeric">Case age<span class="sort-caret">⇕</span></th>
           <th class="sortable" data-sort="agent">Agent<span class="sort-caret">⇕</span></th>
@@ -144,7 +146,8 @@
           <td class="mono col-optional col-fmno" data-col="fmno">MCK-33291</td>
           <td data-col="traveller">R. Okonkwo</td>
           <td data-col="hotel">Hyatt Regency Chicago</td>
-          <td class="mono" data-col="staydates" data-sort-value="09-12">Sep 12 – 14</td>
+          <td class="mono" data-col="checkin" data-sort-value="09-12">Sep 12</td>
+          <td class="mono" data-col="checkout" data-sort-value="09-14">Sep 14</td>
           <td data-col="status" data-sort-value="Needs Review"><span class="pill pill-review"><span>Needs Review</span></span></td>
           <td class="mono" data-col="caseage" data-sort-value="3">3 days</td>
           <td class="agent-cell" data-col="agent">M. Reyes</td>
@@ -157,7 +160,8 @@
           <td class="mono col-optional col-fmno" data-col="fmno">MCK-30187</td>
           <td data-col="traveller">J. Whitfield</td>
           <td data-col="hotel">Marriott Marquis DC</td>
-          <td class="mono" data-col="staydates" data-sort-value="09-08">Sep 8 – 10</td>
+          <td class="mono" data-col="checkin" data-sort-value="09-08">Sep 8</td>
+          <td class="mono" data-col="checkout" data-sort-value="09-10">Sep 10</td>
           <td data-col="status" data-sort-value="Automated"><span class="pill pill-automated"><span>Automated</span></span></td>
           <td class="mono" data-col="caseage" data-sort-value="1">1 day</td>
           <td class="agent-cell" data-col="agent">—</td>
@@ -170,7 +174,8 @@
           <td class="mono col-optional col-fmno" data-col="fmno">MCK-30542</td>
           <td data-col="traveller">S. Laurent</td>
           <td data-col="hotel">Le Méridien Paris</td>
-          <td class="mono" data-col="staydates" data-sort-value="09-03">Sep 3 – 5</td>
+          <td class="mono" data-col="checkin" data-sort-value="09-03">Sep 3</td>
+          <td class="mono" data-col="checkout" data-sort-value="09-05">Sep 5</td>
           <td data-col="status" data-sort-value="Chase Needed"><span class="pill pill-chase"><span>Chase Needed</span></span></td>
           <td class="mono" data-col="caseage" data-sort-value="9">9 days</td>
           <td class="agent-cell" data-col="agent">Unassigned</td>
@@ -183,7 +188,8 @@
           <td class="mono col-optional col-fmno" data-col="fmno">—</td>
           <td data-col="traveller">T. Adeyemi</td>
           <td data-col="hotel">Conrad Singapore</td>
-          <td class="mono" data-col="staydates" data-sort-value="09-15">Sep 15 – 17</td>
+          <td class="mono" data-col="checkin" data-sort-value="09-15">Sep 15</td>
+          <td class="mono" data-col="checkout" data-sort-value="09-17">Sep 17</td>
           <td data-col="status" data-sort-value="Ingestion Exception">
             <span class="pill pill-exception"><span>Ingestion Exception</span></span>
             <span class="status-note">Missing check-in date on intake email</span>
@@ -199,7 +205,8 @@
           <td class="mono col-optional col-fmno" data-col="fmno">MCK-30840</td>
           <td data-col="traveller">A. Brandt</td>
           <td data-col="hotel">The Langham Chicago</td>
-          <td class="mono" data-col="staydates" data-sort-value="08-29">Aug 29 – 31</td>
+          <td class="mono" data-col="checkin" data-sort-value="08-29">Aug 29</td>
+          <td class="mono" data-col="checkout" data-sort-value="08-31">Aug 31</td>
           <td data-col="status" data-sort-value="Automated"><span class="pill pill-automated"><span>Automated</span></span></td>
           <td class="mono" data-col="caseage" data-sort-value="5">5 days</td>
           <td class="agent-cell" data-col="agent">—</td>
@@ -212,7 +219,8 @@
           <td class="mono col-optional col-fmno" data-col="fmno">MCK-31005</td>
           <td data-col="traveller">D. Moreau</td>
           <td data-col="hotel">InterContinental Boston</td>
-          <td class="mono" data-col="staydates" data-sort-value="09-10">Sep 10 – 11</td>
+          <td class="mono" data-col="checkin" data-sort-value="09-10">Sep 10</td>
+          <td class="mono" data-col="checkout" data-sort-value="09-11">Sep 11</td>
           <td data-col="status" data-sort-value="Needs Review"><span class="pill pill-review"><span>Needs Review</span></span></td>
           <td class="mono" data-col="caseage" data-sort-value="1">1 day</td>
           <td class="agent-cell" data-col="agent">M. Reyes</td>
@@ -225,7 +233,8 @@
           <td class="mono col-optional col-fmno" data-col="fmno">MCK-29981</td>
           <td data-col="traveller">K. Nilsson</td>
           <td data-col="hotel">Grand Hyatt Tokyo</td>
-          <td class="mono" data-col="staydates" data-sort-value="08-27">Aug 27 – 29</td>
+          <td class="mono" data-col="checkin" data-sort-value="08-27">Aug 27</td>
+          <td class="mono" data-col="checkout" data-sort-value="08-29">Aug 29</td>
           <td data-col="status" data-sort-value="Chase Needed">
             <span class="pill pill-chase-escalated"><span>Chase Needed</span></span>
             <span class="status-note">Past 10-day escalation threshold</span>
@@ -241,7 +250,8 @@
           <td class="mono col-optional col-fmno" data-col="fmno">—</td>
           <td data-col="traveller">P. Song</td>
           <td data-col="hotel">Chicago Marriott Suites O'Hare</td>
-          <td class="mono" data-col="staydates" data-sort-value="09-18">Sep 18 – 20</td>
+          <td class="mono" data-col="checkin" data-sort-value="09-18">Sep 18</td>
+          <td class="mono" data-col="checkout" data-sort-value="09-20">Sep 20</td>
           <td data-col="status" data-sort-value="Ingestion Exception">
             <span class="pill pill-exception"><span>Ingestion Exception</span></span>
             <span class="status-note">Missing FMNO on intake email</span>
@@ -257,7 +267,8 @@
           <td class="mono col-optional col-fmno" data-col="fmno">MCK-31220</td>
           <td data-col="traveller">N. Alvarez</td>
           <td data-col="hotel">JW Marriott Chicago</td>
-          <td class="mono" data-col="staydates" data-sort-value="09-16">Sep 16 – 18</td>
+          <td class="mono" data-col="checkin" data-sort-value="09-16">Sep 16</td>
+          <td class="mono" data-col="checkout" data-sort-value="09-18">Sep 18</td>
           <td data-col="status" data-sort-value="Automated"><span class="pill pill-automated"><span>Automated</span></span></td>
           <td class="mono" data-col="caseage" data-sort-value="3">3 days</td>
           <td class="agent-cell" data-col="agent">—</td>
@@ -270,7 +281,8 @@
           <td class="mono col-optional col-fmno" data-col="fmno">MCK-31355</td>
           <td data-col="traveller">E. Whitcombe</td>
           <td data-col="hotel">SpringHill Suites Lincoln Marriott</td>
-          <td class="mono" data-col="staydates" data-sort-value="09-14">Sep 14 – 16</td>
+          <td class="mono" data-col="checkin" data-sort-value="09-14">Sep 14</td>
+          <td class="mono" data-col="checkout" data-sort-value="09-16">Sep 16</td>
           <td data-col="status" data-sort-value="Chase Needed"><span class="pill pill-chase"><span>Chase Needed</span></span></td>
           <td class="mono" data-col="caseage" data-sort-value="4">4 days</td>
           <td class="agent-cell" data-col="agent">Unassigned</td>
@@ -283,7 +295,8 @@
           <td class="mono col-optional col-fmno" data-col="fmno">MCK-31402</td>
           <td data-col="traveller">L. Kim</td>
           <td data-col="hotel">Marriott Marquis DC</td>
-          <td class="mono" data-col="staydates" data-sort-value="09-20">Sep 20 – 22</td>
+          <td class="mono" data-col="checkin" data-sort-value="09-20">Sep 20</td>
+          <td class="mono" data-col="checkout" data-sort-value="09-22">Sep 22</td>
           <td data-col="status" data-sort-value="Needs Review"><span class="pill pill-review"><span>Needs Review</span></span></td>
           <td class="mono" data-col="caseage" data-sort-value="1">1 day</td>
           <td class="agent-cell" data-col="agent">M. Reyes</td>
@@ -296,7 +309,8 @@
           <td class="mono col-optional col-fmno" data-col="fmno">MCK-31488</td>
           <td data-col="traveller">R. Duarte</td>
           <td data-col="hotel">Marriott Marquis DC</td>
-          <td class="mono" data-col="staydates" data-sort-value="09-05">Sep 5 – 7</td>
+          <td class="mono" data-col="checkin" data-sort-value="09-05">Sep 5</td>
+          <td class="mono" data-col="checkout" data-sort-value="09-07">Sep 7</td>
           <td data-col="status" data-sort-value="Chase Needed">
             <span class="pill pill-chase-escalated"><span>Chase Needed</span></span>
             <span class="status-note">Past 10-day escalation threshold</span>
@@ -307,6 +321,7 @@
         </tr>
       </tbody>
     </table>
+    </div>
     <div class="empty-state" id="emptyState" style="display:none;">
       <strong>No matching cases</strong>
       Try a different status filter or search term.
@@ -318,7 +333,8 @@
     Case age counts from checkout date, not intake — it doubles as the countdown to Chase Needed · row click opens the case detail view · "Assign to me" appears inline on unassigned Chase Needed / Ingestion Exception rows · every column header is sortable.
     <div class="decision-note"><strong>Filter pills:</strong> Hotel name and Confirmation number follow the same filter-pill pattern as the hotel SRP — a pill reveals a combobox panel on click, and both stack additively with the status chips, on one line, left-aligned.</div>
     <div class="decision-note"><strong>Bulk export:</strong> selecting cases and clicking Export CSV only shows the interaction point — the toast simulates the action, no file is actually generated. The real export job runs on the backend.</div>
-    <div class="decision-note"><strong>Column density:</strong> the seven core columns stay fixed; PNR and FMNO are lookup fields hidden behind the "More Columns" picker. Exception reason shows as secondary text under the status pill rather than its own always-on column, since it's only meaningful on rows that already have a problem.</div>
+    <div class="decision-note"><strong>Column density:</strong> the eight core columns stay fixed; PNR and FMNO are lookup fields hidden behind the "More Columns" picker. Exception reason shows as secondary text under the status pill rather than its own always-on column, since it's only meaningful on rows that already have a problem.</div>
+    <div class="decision-note"><strong>Check-in / Check-out:</strong> split from a single "Stay dates" column into two, so each can be sorted independently — check-out date in particular, since that's what agents care about for aging and chase timing.</div>
     <div class="decision-note"><strong>Status escalation:</strong> Chase Needed ages from amber to red at a threshold (10 days, shown on CNF-88250) rather than becoming a new status — same pill, same label, escalated color only.</div>
     <div class="decision-note"><strong>Status pills are color-only:</strong> icons were removed from every status badge per PM request. This reopens the WCAG 2.2 concern from the original open question (color alone can be hard to distinguish for colorblind/low-vision agents) — flag this back to accessibility review before launch.</div>
     <div class="decision-note"><strong>Empty / live state:</strong> filtering is instant and client-side here; in the real build, filter results must reflect live case status, never a stale page load, per the PRD.</div>
