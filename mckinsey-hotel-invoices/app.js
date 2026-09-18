@@ -579,10 +579,62 @@ function initChase() {
   }
 }
 
+/* A case can have more than one folio attached (e.g. a corrected or
+   supplemental copy). Each panel seeds its own doc list via a JSON
+   data-doc-switcher attribute; prev/next page between them and "Add another
+   document" stays available even when one is already attached. */
+function initDocSwitchers() {
+  document.querySelectorAll("[data-doc-switcher]").forEach(function (panel) {
+    var docs;
+    try { docs = JSON.parse(panel.dataset.docSwitcher); } catch (e) { docs = []; }
+    if (!docs.length) return;
+
+    var index = 0;
+    var countEl = panel.querySelector(".doc-count");
+    var nameEl = panel.querySelector(".doc-filename");
+    var mockEl = panel.querySelector(".doc-mock");
+    var prevBtn = panel.querySelector(".doc-nav-btn.prev");
+    var nextBtn = panel.querySelector(".doc-nav-btn.next");
+    var addBtn = panel.querySelector(".upload-more-btn");
+
+    function render() {
+      var total = docs.length;
+      if (countEl) countEl.textContent = "Document " + (index + 1) + " of " + total;
+      if (nameEl) nameEl.textContent = docs[index];
+      if (mockEl) mockEl.textContent = docs[index];
+      if (prevBtn) prevBtn.disabled = index === 0;
+      if (nextBtn) nextBtn.disabled = index === total - 1;
+    }
+
+    if (prevBtn) {
+      prevBtn.addEventListener("click", function () {
+        if (index > 0) { index--; render(); }
+      });
+    }
+    if (nextBtn) {
+      nextBtn.addEventListener("click", function () {
+        if (index < docs.length - 1) { index++; render(); }
+      });
+    }
+    if (addBtn) {
+      addBtn.addEventListener("click", function () {
+        var base = docs[0].replace(/\.pdf$/i, "");
+        docs.push(base + "-" + docs.length + ".pdf");
+        index = docs.length - 1;
+        render();
+        showToast("Additional folio added to this case");
+      });
+    }
+
+    render();
+  });
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   initCaseList();
   initColumnPicker();
   initApprove();
   initReopen();
   initChase();
+  initDocSwitchers();
 });

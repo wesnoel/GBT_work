@@ -39,6 +39,16 @@ Check-in and check-out were later split from a single "Stay dates" column into t
 
 **Decision:** This is mostly an engineering correctness bar, not an open design question. A clear "no matching cases" state per filter/search combination, and filter results that reflect live status rather than a stale page load, both per the PRD's hard requirement. One addition worth adding to the spec: a lightweight signal (subtle highlight or "updated" marker) when a case's status changes while an agent has the list open, so "live" doesn't just mean correct-but-invisible.
 
+## 7. Client-specific vs. standard fields
+
+**Decision:** Confirmation, Hotel, Stay dates, and Room & tax are grouped separately from FMNO and Charge Code on every case detail page (Needs Review, Automated, Chase Needed). The first group is standard — present for any client on this platform. FMNO and Charge Code are client-configured MI fields (McKinsey's, in this pilot) that won't look the same, or exist at all, for the next client onboarded. Keeping them visually distinct now (a labeled subsection within the same panel, not a separate card) avoids the panel implying all five fields are equally universal, and keeps the door open for a client-specific field set without redesigning the panel.
+
+## 8. Multiple folios per case
+
+**Decision:** A case can have more than one folio attached — a corrected copy, a supplemental page, a hotel resending after a dispute. The Folio attachment panel (Needs Review, Automated) now has a document switcher above the preview (Document X of Y, with prev/next) separate from the "Page 1 of 1" mini-toolbar, which still pages within whichever document is currently shown. "Add another document" sits below the preview and stays available at all times, not just when no folio exists yet — that's a different action from the Chase Needed page's upload dropzone, which only covers the zero-to-one case.
+
+**Open question:** once an agent uploads a folio from the Chase Needed empty state, does that case's attachment panel need the same switcher immediately, or only once a second document actually shows up? Not modeled as a separate page here — worth confirming with engineering whether the switcher UI should always render (disabled at 1 document, as done on the Automated page) or only appear once count > 1.
+
 ---
 
 *Source: PRD — McKinsey Hotel Folio Automation (Confluence, pageId 704875274) · Solution Proposal (Bowie Brotosumpeno, v4) · wireframes in this folder.*

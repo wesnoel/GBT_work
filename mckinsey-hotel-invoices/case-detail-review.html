@@ -89,8 +89,13 @@
         <div class="compare-row">
           <span class="label">Room &amp; tax</span><span>$418.00</span><span>$418.00</span>
         </div>
+
+        <div class="subsection-label">Finance Fields</div>
         <div class="compare-row mismatch">
           <span class="label">FMNO</span><span>MCK-33291</span><span class="folio-val">Missing</span>
+        </div>
+        <div class="compare-row">
+          <span class="label">Charge Code</span><span>CC-4471</span><span>CC-4471</span>
         </div>
       </div>
 
@@ -120,8 +125,16 @@
     </div>
 
     <div>
-      <div class="panel">
+      <div class="panel" data-doc-switcher='["Folio-CNF-88244.pdf","Folio-CNF-88244-addendum.pdf"]'>
         <h2>Folio attachment</h2>
+        <div class="doc-switcher">
+          <button class="doc-nav-btn prev" type="button" aria-label="Previous document">‹</button>
+          <div class="doc-switcher-label">
+            <span class="doc-count">Document 1 of 2</span>
+            <span class="doc-filename">Folio-CNF-88244.pdf</span>
+          </div>
+          <button class="doc-nav-btn next" type="button" aria-label="Next document">›</button>
+        </div>
         <div class="attachment-preview">
           <div class="doc-mock">Folio-CNF-88244.pdf</div>
           <div class="toolbar-mini">
@@ -129,6 +142,7 @@
             <a href="#" onclick="return false;">Download original</a>
           </div>
         </div>
+        <button class="btn upload-more-btn" type="button">+ Add another document</button>
         <div class="decision-note"><strong>Decision:</strong> inline preview is the target so agents can compare fields without leaving the page. This mock shows the intended layout — ship download-only for launch if OCR output isn't reliably renderable yet, without reshaping this panel later.</div>
       </div>
 
@@ -155,6 +169,8 @@
   <div class="notes-box">
     <h4>Decisions applied here</h4>
     <div class="decision-note"><strong>Ownership:</strong> viewing a case owned by someone else is always allowed silently — the "assigned to M. Reyes" note above is visible the moment the page loads. Approve or Reassign on this case triggers an explicit confirm step instead, since those actions change state or ownership. Try it below.</div>
+    <div class="decision-note"><strong>Client-specific fields:</strong> FMNO and Charge Code are grouped separately from Confirmation/Hotel/Stay dates/Room &amp; tax because they're client-configured MI fields (McKinsey's, in this pilot) rather than defaults every client will have. Splitting them out now keeps that distinction obvious as more clients get added.</div>
+    <div class="decision-note"><strong>Multiple folios per case:</strong> a case can have more than one folio attached — e.g. a corrected or supplemental copy. The document switcher above the preview pages between them, and "Add another document" stays available even when one is already attached, not just on first upload.</div>
   </div>
 
 </div>
