@@ -102,6 +102,83 @@
 
   </div>
 
+  <p class="hub-section-label">Placement — where the popover opens relative to the flag</p>
+  <div class="size-rail" style="padding: 90px 8px 40px;">
+
+    <div class="size-sample">
+      <span class="oop-anchor">
+        <button class="flag-trigger flag-trigger--md" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-place-below" aria-label="Out of policy">
+          <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+        </button>
+        <div class="policy-popover" id="pv-place-below" role="dialog" aria-label="Out of policy" data-oop-panel>
+          <div class="policy-popover__header">
+            <div class="policy-popover__heading">
+              <span class="policy-popover__icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg></span>
+              <p class="policy-popover__title">Out of Policy</p>
+            </div>
+            <button class="policy-popover__close" data-oop-close aria-label="Close">&times;</button>
+          </div>
+          <div class="policy-popover__body">
+            <p class="policy-popover__message">Wes, this room does not comply with your company's maximum nightly rate of USD 420 for this region.</p>
+          </div>
+          <div class="policy-popover__footer">
+            <a class="policy-popover__link" href="#" onclick="return false;">View travel policy</a>
+          </div>
+        </div>
+      </span>
+      <span class="size-sample-label">Below (default)</span>
+    </div>
+
+    <div class="size-sample">
+      <span class="oop-anchor">
+        <button class="flag-trigger flag-trigger--md" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-place-above" aria-label="Out of policy">
+          <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+        </button>
+        <div class="policy-popover policy-popover--above" id="pv-place-above" role="dialog" aria-label="Out of policy" data-oop-panel>
+          <div class="policy-popover__header">
+            <div class="policy-popover__heading">
+              <span class="policy-popover__icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg></span>
+              <p class="policy-popover__title">Out of Policy</p>
+            </div>
+            <button class="policy-popover__close" data-oop-close aria-label="Close">&times;</button>
+          </div>
+          <div class="policy-popover__body">
+            <p class="policy-popover__message">Wes, this room does not comply with your company's maximum nightly rate of USD 420 for this region.</p>
+          </div>
+          <div class="policy-popover__footer">
+            <a class="policy-popover__link" href="#" onclick="return false;">View travel policy</a>
+          </div>
+        </div>
+      </span>
+      <span class="size-sample-label">Above</span>
+    </div>
+
+    <div class="size-sample">
+      <span class="oop-anchor">
+        <button class="flag-trigger flag-trigger--md" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-place-left" aria-label="Out of policy">
+          <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+        </button>
+        <div class="policy-popover policy-popover--left" id="pv-place-left" role="dialog" aria-label="Out of policy" data-oop-panel>
+          <div class="policy-popover__header">
+            <div class="policy-popover__heading">
+              <span class="policy-popover__icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg></span>
+              <p class="policy-popover__title">Out of Policy</p>
+            </div>
+            <button class="policy-popover__close" data-oop-close aria-label="Close">&times;</button>
+          </div>
+          <div class="policy-popover__body">
+            <p class="policy-popover__message">Wes, this room does not comply with your company's maximum nightly rate of USD 420 for this region.</p>
+          </div>
+          <div class="policy-popover__footer">
+            <a class="policy-popover__link" href="#" onclick="return false;">View travel policy</a>
+          </div>
+        </div>
+      </span>
+      <span class="size-sample-label">Left</span>
+    </div>
+
+  </div>
+
   <p class="hub-section-label">In context — hotel list card</p>
   <div class="hotel-card-demo">
 
@@ -280,7 +357,7 @@
 
   <div class="notes-box">
     <h4>Decisions applied here</h4>
-    Small/medium/large change only the flag icon's size (16/18/20px) — the popover itself (width, header, body, footer, type) is identical at every size · click/tap only — no hover-open, since a structured surface with a close button shouldn't appear from a stray mouse pass · has an explicit close (&times;) button, but still auto-dismisses 3s after the pointer leaves in case someone opens it and walks away without closing · keyboard focus reveals it via <code>:focus-visible</code>, and every close path (timeout, &times; button, outside click, Escape) calls <code>blur()</code> · hotel card shown with every optional data slot filled in (reviews + colleague reviews, sustainability certified, coworker bookings, perk strip) to match the real card's maximum-density state. Full write-up: <a href="design-decisions.md" style="color: var(--accent); font-weight: 700;">design-decisions.md</a>.
+    Small/medium/large change only the flag icon's size (16/18/20px) — the popover itself (width, header, body, footer, type) is identical at every size · click/tap only — no hover-open, since a structured surface with a close button shouldn't appear from a stray mouse pass · has an explicit close (&times;) button, but still auto-dismisses 3s after the pointer leaves in case someone opens it and walks away without closing · keyboard focus reveals it via <code>:focus-visible</code>, and every close path (timeout, &times; button, outside click, Escape) calls <code>blur()</code> · placement (below/above/left) is a CSS position variant on the same panel, useful when the default below-anchor would run off the edge of a dense list or a narrow viewport · hotel card shown with every optional data slot filled in (reviews + colleague reviews, sustainability certified, coworker bookings, perk strip) to match the real card's maximum-density state. Full write-up: <a href="design-decisions.md" style="color: var(--accent); font-weight: 700;">design-decisions.md</a>.
   </div>
 
 </div>

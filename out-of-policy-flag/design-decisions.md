@@ -66,7 +66,21 @@ Implemented in `app.js` as `OOP_DATA` (one entry per line of business, each with
 
 The hotel card itself was upgraded (2026-09-26) to show every optional data slot filled in at once — badges (Egencia preferred + Negotiated), the Reviews box with both the public score and Colleague Reviews, the Sustainability certified line, the coworker-booking-% line, and the perk/policy strip footer — matching a real reference screenshot of a fully-populated card (New York Hilton Midtown). This makes the out-of-policy flag's context realistic and maximally dense, rather than the stripped-down card used in the first pass.
 
-## 8. Figma handoff notes
+## 8. Bug fix — clipped card content
+
+**Found and fixed (2026-09-26):** the hotel card had `overflow: hidden` on `.hotel-card` combined with a negative-margin trick on `.hotel-perk-strip` (used to make the strip span edge-to-edge, canceling the card's own padding). Negative margins on the last child of a flex column don't extend the container to cover the visual overflow they create — so `overflow: hidden` was clipping that overflow, cutting content off at the bottom of the card. Fixed by restructuring: `.hotel-card` no longer has padding or `overflow: hidden` at all; `.hotel-card-main` (the thumbnail/body/price row) carries the padding instead, and `.hotel-perk-strip` sits naturally below it at full card width with its own bottom-corner radius, no negative margins needed. General lesson: don't reach for `overflow: hidden` to fix a visual edge-case without checking whether something else in the same container relies on overflowing on purpose.
+
+## 9. Bug fix — out-of-policy messaging inheriting right alignment
+
+**Found and fixed (2026-09-26):** the hotel card's price column (`.hotel-price`) is intentionally right-aligned (`text-align: right`), matching the real SRP price block. But `text-align` is inherited, and the tooltip/popover panels are DOM descendants of `.hotel-price` (they're nested inside the flag trigger's wrapper, which sits inside the price column) even though they're positioned absolutely elsewhere on screen. With no `text-align` of their own, the "Out of Policy" title and message were inheriting `right` from their ancestor and rendering right-aligned whenever triggered from within a hotel card — while the same panels looked correctly left-aligned in the standalone/placement sections, which sit outside any right-aligned container. Fixed by setting `text-align: left` directly on `.policy-tooltip`, `.policy-popover`, and `.policy-modal` themselves, so the messaging is always left-aligned regardless of what alignment its container happens to use. The price column's own right alignment is unchanged.
+
+## 10. Placement variants — tooltip and popover
+
+**Decision (2026-09-26):** added explicit placement variants for Concept A (tooltip) and Concept B (popover) — **below** (the default), **above**, and **left** — as CSS position modifiers (`--above`, `--left`) on the same panel, demonstrated in a new "Placement" section on each concept page. This matters in practice: the default below-anchor placement can run off the bottom of a dense, scrollable list or the right edge of a narrow viewport, and a real implementation would need to pick a placement (or flip automatically) based on available space. Modal (Concept C) has no placement variant — it's centered/fixed by definition, not anchored to the trigger.
+
+**Flag for follow-up:** a production implementation would likely want this to flip automatically based on available viewport space (collision detection), rather than being a fixed per-instance choice — that's a real interaction detail worth prototyping in code, not fully resolvable in a static wireframe.
+
+## 11. Figma handoff notes
 
 - **Tooltip (A)** is the closest match to an existing Sticker Sheet Tooltip component, if one exists — check before rebuilding from scratch.
 - **Popover dialog (B)** is likely net-new — no obvious existing Sticker Sheet equivalent for an anchored, structured popover with its own header/close chrome. Flag as net-new work for whoever rebuilds this in Figma.

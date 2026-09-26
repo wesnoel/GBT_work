@@ -69,6 +69,50 @@
 
   </div>
 
+  <p class="hub-section-label">Placement — where the tooltip opens relative to the flag</p>
+  <div class="size-rail" style="padding: 70px 8px 40px;">
+
+    <div class="size-sample">
+      <span class="oop-anchor oop-anchor--hoverable">
+        <button class="flag-trigger flag-trigger--md" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="tt-place-below" aria-label="Out of policy">
+          <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+        </button>
+        <div class="policy-tooltip" id="tt-place-below" role="tooltip" data-oop-panel>
+          <p class="policy-tooltip__title">Out of Policy</p>
+          <p class="policy-tooltip__message">Wes, this room does not comply with your company's maximum nightly rate of USD 420 for this region.</p>
+        </div>
+      </span>
+      <span class="size-sample-label">Below (default)</span>
+    </div>
+
+    <div class="size-sample">
+      <span class="oop-anchor oop-anchor--hoverable">
+        <button class="flag-trigger flag-trigger--md" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="tt-place-above" aria-label="Out of policy">
+          <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+        </button>
+        <div class="policy-tooltip policy-tooltip--above" id="tt-place-above" role="tooltip" data-oop-panel>
+          <p class="policy-tooltip__title">Out of Policy</p>
+          <p class="policy-tooltip__message">Wes, this room does not comply with your company's maximum nightly rate of USD 420 for this region.</p>
+        </div>
+      </span>
+      <span class="size-sample-label">Above</span>
+    </div>
+
+    <div class="size-sample">
+      <span class="oop-anchor oop-anchor--hoverable">
+        <button class="flag-trigger flag-trigger--md" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="tt-place-left" aria-label="Out of policy">
+          <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+        </button>
+        <div class="policy-tooltip policy-tooltip--left" id="tt-place-left" role="tooltip" data-oop-panel>
+          <p class="policy-tooltip__title">Out of Policy</p>
+          <p class="policy-tooltip__message">Wes, this room does not comply with your company's maximum nightly rate of USD 420 for this region.</p>
+        </div>
+      </span>
+      <span class="size-sample-label">Left</span>
+    </div>
+
+  </div>
+
   <p class="hub-section-label">In context — hotel list card</p>
   <div class="hotel-card-demo">
 
@@ -214,7 +258,7 @@
 
   <div class="notes-box">
     <h4>Decisions applied here</h4>
-    Small/medium/large change only the flag icon's size (16/18/20px) — the tooltip itself (width, padding, "Out of Policy" title, message copy) is identical at every size · hover, click, and tap all open it, matching today's live pattern · no close button, so it auto-dismisses 3s after the pointer leaves the trigger (not 3s from the click) · keyboard focus reveals it via <code>:focus-visible</code>, and every close path calls <code>blur()</code> so a lingering keyboard focus ring can't keep it visually stuck open · hotel card shown with every optional data slot filled in (reviews + colleague reviews, sustainability certified, coworker bookings, perk strip) to match the real card's maximum-density state. Full write-up: <a href="design-decisions.md" style="color: var(--accent); font-weight: 700;">design-decisions.md</a>.
+    Small/medium/large change only the flag icon's size (16/18/20px) — the tooltip itself (width, padding, "Out of Policy" title, message copy) is identical at every size · hover, click, and tap all open it, matching today's live pattern · no close button, so it auto-dismisses 3s after the pointer leaves the trigger (not 3s from the click) · keyboard focus reveals it via <code>:focus-visible</code>, and every close path calls <code>blur()</code> so a lingering keyboard focus ring can't keep it visually stuck open · placement (below/above/left) is a CSS position variant on the same panel, useful when the default below-anchor would run off the edge of a dense list or a narrow viewport · hotel card shown with every optional data slot filled in (reviews + colleague reviews, sustainability certified, coworker bookings, perk strip) to match the real card's maximum-density state. Full write-up: <a href="design-decisions.md" style="color: var(--accent); font-weight: 700;">design-decisions.md</a>.
   </div>
 
 </div>
