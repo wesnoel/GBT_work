@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Concept C — Modal — Out of Policy Flag</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<div class="placeholder-chrome placeholder-header">Header placeholder — global nav</div>
+
+<div class="shell">
+
+  <div class="crumb">
+    <a href="index.html">Out of Policy Flag</a>
+    <span class="sep">/</span>
+    <span>Concept C — Modal</span>
+  </div>
+
+  <div class="hub-hero" style="padding: 0 0 28px;">
+    <h1 style="font-size: 26px; line-height: 34px;">Concept C — Modal</h1>
+    <p>A full dialog takeover for maximum clarity and emphasis. Click or tap only — a modal should never appear from hover or keyboard focus alone. No idle auto-dismiss either: once it takes over the screen, it stays open until the traveler explicitly closes it, clicks the backdrop, or presses Escape.</p>
+  </div>
+
+  <p class="hub-section-label">Standalone — sizes</p>
+  <div class="size-rail">
+
+    <div class="size-sample">
+      <button class="flag-trigger flag-trigger--sm" data-oop-modal-trigger data-size="sm" aria-label="Out of policy — open details">
+        <svg class="flag-icon" viewBox="0 0 24 24" width="16" height="16"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+      </button>
+      <span class="size-sample-label">Small</span>
+    </div>
+
+    <div class="size-sample">
+      <button class="flag-trigger flag-trigger--md" data-oop-modal-trigger data-size="md" aria-label="Out of policy — open details">
+        <svg class="flag-icon" viewBox="0 0 24 24" width="20" height="20"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+      </button>
+      <span class="size-sample-label">Medium</span>
+    </div>
+
+    <div class="size-sample">
+      <button class="flag-trigger flag-trigger--lg" data-oop-modal-trigger data-size="lg" aria-label="Out of policy — open details">
+        <svg class="flag-icon" viewBox="0 0 24 24" width="24" height="24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+      </button>
+      <span class="size-sample-label">Large</span>
+    </div>
+
+  </div>
+
+  <p class="hub-section-label">In context — hotel list card</p>
+  <div class="hotel-card-demo">
+
+    <div>
+      <div class="hotel-card-size-label">Small</div>
+      <div class="hotel-card">
+        <div class="hotel-badge-row"><span class="hotel-badge">Egencia preferred</span></div>
+        <div class="hotel-img placeholder-chrome">Photo</div>
+        <div class="hotel-body">
+          <h3 class="hotel-name">Hilton San Francisco Union Square</h3>
+          <div class="hotel-subrow"><span class="stars">★★★★</span><span class="muted">0.3 miles away</span></div>
+          <div class="muted">4.3/5 Very Good (2,441 reviews)</div>
+        </div>
+        <div class="hotel-price">
+          <div class="price-caption">From</div>
+          <div class="price-flag-row">
+            <button class="flag-trigger flag-trigger--sm" data-oop-modal-trigger data-size="sm" aria-label="Out of policy — open details">
+              <svg class="flag-icon" viewBox="0 0 24 24" width="16" height="16"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+            </button>
+            <div class="price-value">$459</div>
+          </div>
+          <div class="price-sub">$421 w taxes and fees</div>
+          <div class="price-sub">CVV required</div>
+          <button class="btn btn-primary select-btn">Select</button>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="hotel-card-size-label">Medium</div>
+      <div class="hotel-card">
+        <div class="hotel-badge-row"><span class="hotel-badge">Egencia preferred</span></div>
+        <div class="hotel-img placeholder-chrome">Photo</div>
+        <div class="hotel-body">
+          <h3 class="hotel-name">Hilton San Francisco Union Square</h3>
+          <div class="hotel-subrow"><span class="stars">★★★★</span><span class="muted">0.3 miles away</span></div>
+          <div class="muted">4.3/5 Very Good (2,441 reviews)</div>
+        </div>
+        <div class="hotel-price">
+          <div class="price-caption">From</div>
+          <div class="price-flag-row">
+            <button class="flag-trigger flag-trigger--md" data-oop-modal-trigger data-size="md" aria-label="Out of policy — open details">
+              <svg class="flag-icon" viewBox="0 0 24 24" width="20" height="20"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+            </button>
+            <div class="price-value">$459</div>
+          </div>
+          <div class="price-sub">$421 w taxes and fees</div>
+          <div class="price-sub">CVV required</div>
+          <button class="btn btn-primary select-btn">Select</button>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="hotel-card-size-label">Large</div>
+      <div class="hotel-card">
+        <div class="hotel-badge-row"><span class="hotel-badge">Egencia preferred</span></div>
+        <div class="hotel-img placeholder-chrome">Photo</div>
+        <div class="hotel-body">
+          <h3 class="hotel-name">Hilton San Francisco Union Square</h3>
+          <div class="hotel-subrow"><span class="stars">★★★★</span><span class="muted">0.3 miles away</span></div>
+          <div class="muted">4.3/5 Very Good (2,441 reviews)</div>
+        </div>
+        <div class="hotel-price">
+          <div class="price-caption">From</div>
+          <div class="price-flag-row">
+            <button class="flag-trigger flag-trigger--lg" data-oop-modal-trigger data-size="lg" aria-label="Out of policy — open details">
+              <svg class="flag-icon" viewBox="0 0 24 24" width="24" height="24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+            </button>
+            <div class="price-value">$459</div>
+          </div>
+          <div class="price-sub">$421 w taxes and fees</div>
+          <div class="price-sub">CVV required</div>
+          <button class="btn btn-primary select-btn">Select</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="notes-box">
+    <h4>Decisions applied here</h4>
+    Click/tap only, every trigger on this page (standalone and in-context) opens the same shared modal, sized to match whichever flag was clicked · no idle auto-dismiss — explicit close (&times;), backdrop click, or Escape only, and focus returns to the trigger that opened it on close · small stays to a single "Got it" acknowledgment; large adds a secondary "Request exception" action alongside the policy link, since a full takeover has the room to offer a real next step. Full write-up: <a href="design-decisions.md" style="color: var(--accent); font-weight: 700;">design-decisions.md</a>.
+  </div>
+
+</div>
+
+<div class="placeholder-chrome placeholder-footer">Footer placeholder — global footer</div>
+
+<div class="policy-modal-overlay" id="policyModalOverlay">
+
+  <div class="policy-modal policy-modal--sm" role="dialog" aria-modal="true" aria-labelledby="modal-title-sm">
+    <div class="policy-modal__header">
+      <div class="policy-modal__heading">
+        <span class="policy-modal__icon-badge"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg></span>
+        <p class="policy-modal__title" id="modal-title-sm">Out of Policy</p>
+      </div>
+      <button class="policy-modal__close" data-oop-close aria-label="Close">&times;</button>
+    </div>
+    <p class="policy-modal__message">Wes, this room does not comply with your company's maximum nightly rate of USD 420 for this region.</p>
+    <div class="policy-modal__footer">
+      <button class="btn btn-primary" data-oop-close>Got it</button>
+    </div>
+  </div>
+
+  <div class="policy-modal policy-modal--md" role="dialog" aria-modal="true" aria-labelledby="modal-title-md">
+    <div class="policy-modal__header">
+      <div class="policy-modal__heading">
+        <span class="policy-modal__icon-badge"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg></span>
+        <p class="policy-modal__title" id="modal-title-md">Out of Policy</p>
+      </div>
+      <button class="policy-modal__close" data-oop-close aria-label="Close">&times;</button>
+    </div>
+    <p class="policy-modal__message">Wes, this room does not comply with your company's maximum nightly rate of USD 420 for this region.</p>
+    <div class="policy-modal__footer">
+      <button class="btn btn-primary" data-oop-close>Got it</button>
+      <a class="policy-modal__link" href="#" onclick="return false;">View travel policy</a>
+    </div>
+  </div>
+
+  <div class="policy-modal policy-modal--lg" role="dialog" aria-modal="true" aria-labelledby="modal-title-lg">
+    <div class="policy-modal__header">
+      <div class="policy-modal__heading">
+        <span class="policy-modal__icon-badge"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg></span>
+        <p class="policy-modal__title" id="modal-title-lg">Out of Policy</p>
+      </div>
+      <button class="policy-modal__close" data-oop-close aria-label="Close">&times;</button>
+    </div>
+    <p class="policy-modal__message">Wes, this room does not comply with your company's maximum nightly rate of USD 420 for this region.</p>
+    <div class="policy-modal__footer">
+      <div class="btn-row">
+        <button class="btn btn-secondary" data-oop-close>Request exception</button>
+        <button class="btn btn-primary" data-oop-close>Got it</button>
+      </div>
+      <a class="policy-modal__link" href="#" onclick="return false;">View travel policy</a>
+    </div>
+  </div>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

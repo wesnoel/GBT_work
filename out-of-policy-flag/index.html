@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Out of Policy Flag — Component Concepts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<div class="placeholder-chrome placeholder-header">Header placeholder — global nav</div>
+
+<div class="shell">
+
+  <div class="hub-hero">
+    <h1>Out of policy flag — component concepts</h1>
+    <p>The filled flag icon that appears next to price on out-of-policy hotel cards is currently a simple hover tooltip. This explores three interaction directions for the same trigger — a lightweight tooltip, a heavier structured popover, and a full modal takeover — each in small, medium, and large variants. Built as one generic, reusable "Out of policy" component driven by data (line of business + violation reason), not hardcoded to hotel.</p>
+    <div class="hub-meta">
+      <span><strong>Source:</strong> Design exploration — hotel-card out-of-policy flag interaction</span>
+      <span><strong>Reference:</strong> Hotel SRP price-block flag pattern</span>
+      <span><strong>Fidelity:</strong> Egencia-branded, fully interactive</span>
+      <span><strong>Status:</strong> Exploration — 3 directions for review</span>
+    </div>
+  </div>
+
+  <p class="hub-section-label">Interaction concepts</p>
+
+  <div class="card-grid">
+
+    <a class="screen-card" href="concept-a-tooltip.html">
+      <span class="num">A — Tooltip</span>
+      <h3>Tooltip</h3>
+      <p>The current pattern. Lightweight, anchored, no close button. Opens on hover, click, or tap; auto-dismisses on idle.</p>
+      <span class="open-link">Open wireframe →</span>
+    </a>
+
+    <a class="screen-card" href="concept-b-popover.html">
+      <span class="num">B — Popover dialog</span>
+      <h3>Popover dialog</h3>
+      <p>A heavier, structured popover — still anchored to the flag. Real header, explicit close button. Click/tap only, no hover-open.</p>
+      <span class="open-link">Open wireframe →</span>
+    </a>
+
+    <a class="screen-card" href="concept-c-modal.html">
+      <span class="num">C — Modal</span>
+      <h3>Modal</h3>
+      <p>A full dialog takeover for maximum clarity. Click/tap only, no idle auto-dismiss — stays open until explicitly closed.</p>
+      <span class="open-link">Open wireframe →</span>
+    </a>
+
+  </div>
+
+  <p class="hub-section-label">Reusability — same component, different line of business</p>
+  <div class="reuse-demo">
+    <div class="reuse-demo-controls">
+      <label for="reuseLobSelect">Line of business</label>
+      <select id="reuseLobSelect">
+        <option value="hotel" selected>Hotel</option>
+        <option value="flight">Flight</option>
+        <option value="car">Car</option>
+        <option value="rail">Rail</option>
+      </select>
+    </div>
+    <div class="reuse-preview">
+      <p class="reuse-preview-title">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+        Out of Policy
+      </p>
+      <p class="reuse-preview-message" id="reusePreviewMessage"></p>
+    </div>
+    <p class="reuse-demo-caption">Same markup and same <code>buildOopMessage(lob, userName)</code> function in <code>app.js</code> — only the data fragment changes per line of business. Swapping copy is a data change, not a redesign. See <code>design-decisions.md</code> for the full data model.</p>
+  </div>
+
+  <div class="notes-box">
+    <h4>Design decisions (resolved from the working assumptions in this exploration)</h4>
+    Three directions isolate interaction weight as the variable, not content: tooltip (hover/click/tap, no close button, idle-dismiss), popover dialog (click/tap only, explicit close, idle-dismiss as a safety net), modal (click/tap only, explicit dismiss only, no idle timer) · sizing changes structure and density per size, not just scale — small drops secondary content, large adds a policy link and/or a second action · the message is assembled from a data fragment per line of business (item noun, rule label, limit, scope), demonstrated live above and documented for Flight/Car/Rail · every hover/focus-revealed panel is closed with <code>blur()</code> on every dismiss path, since <code>:focus-visible</code> alone can keep it visually open after the JS state changes. Full write-up: <a href="design-decisions.md" style="color: var(--accent); font-weight: 700;">design-decisions.md</a>.
+  </div>
+
+</div>
+
+<div class="placeholder-chrome placeholder-footer">Footer placeholder — global footer</div>
+
+<script src="app.js"></script>
+</body>
+</html>

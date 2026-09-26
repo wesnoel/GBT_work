@@ -99,11 +99,15 @@
   .reviews-box { background: var(--canvas-soft); border-radius: var(--radius-sm); padding: 10px 12px; font-size: 12px; color: var(--ink-soft); display: flex; flex-direction: column; gap: 2px; }
   .reviews-box strong { color: var(--ink); font-weight: 700; }
   .simple-rating { font-size: 13px; color: var(--ink-soft); }
-  .eco-line { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; }
+  .sustain-line { display: flex; align-items: center; gap: 6px; font-size: 12px; line-height: 16px; letter-spacing: 0; font-weight: 700; } /* tier 200_bold per typography-tokens.md */
   .coworkers-line { font-size: 13px; color: var(--ink-soft); }
   .price-block { flex: none; width: 130px; text-align: right; display: flex; flex-direction: column; gap: 4px; }
   .price-from { font-size: 12px; color: var(--ink-soft); }
   .price-amount { font-size: 24px; font-weight: 800; display: flex; align-items: center; justify-content: flex-end; gap: 4px; }
+  .flag-tooltip { position: relative; display: inline-flex; outline: none; cursor: default; }
+  .flag-tooltip .tooltip-bubble { position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); background: var(--ink); color: var(--surface); font-size: 12px; font-weight: 600; line-height: 16px; padding: 6px 10px; border-radius: 6px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity .12s ease; z-index: 40; }
+  .flag-tooltip .tooltip-bubble::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 5px solid transparent; border-top-color: var(--ink); }
+  .flag-tooltip:hover .tooltip-bubble, .flag-tooltip:focus .tooltip-bubble, .flag-tooltip.open .tooltip-bubble { opacity: 1; }
   .price-taxes { font-size: 11px; color: var(--ink-soft); }
   .price-cvv { font-size: 11px; color: var(--ink-soft); display: flex; align-items: center; justify-content: flex-end; gap: 4px; margin-top: 4px; }
   .perk-strip { margin-top: 12px; background: var(--canvas-soft); border-top: 1px solid var(--line-soft); border-radius: 0 0 var(--radius) var(--radius); padding: 8px 12px; font-size: 12px; color: var(--ink-soft); display: flex; align-items: center; gap: 6px; margin-left: -12px; margin-right: -12px; margin-bottom: -12px; }
@@ -291,52 +295,53 @@
       id: 'h1', name: 'New York Hilton Midtown', stars: 4, distance: '0.06 miles away',
       preferred: true, negotiated: true,
       reviews: { public: '4.2/5 Very Good (1,001 reviews)', colleague: '4.5 / 5 (10 reviews)' },
-      eco: true, coworkers: '58% of coworker bookings',
+      sustainabilityCertified: true, coworkers: '58% of coworker bookings',
       perk: 'Offers free breakfast, within company policy',
-      price: 332, taxes: 193, pin: { x: 62, y: 38, topPick: true }
+      price: 332, taxes: 193, outOfPolicy: false, pin: { x: 62, y: 38, topPick: true }
     },
     {
       id: 'h2', name: 'The Renwick Hotel Times Square', stars: 4, distance: '0.11 miles away',
       preferred: true, negotiated: false,
       reviews: { public: '4.0/5 Very Good (642 reviews)', colleague: '4.1 / 5 (6 reviews)' },
-      eco: false, coworkers: null,
+      sustainabilityCertified: false, coworkers: null,
       perk: null,
-      price: 289, taxes: 168, pin: { x: 48, y: 58 }
+      price: 289, taxes: 168, outOfPolicy: true, pin: { x: 48, y: 58 }
     },
     {
       id: 'h3', name: 'Element Times Square West', stars: 3, distance: '0.22 miles away',
       preferred: false, negotiated: true,
       reviews: null, simpleRating: '4.3/5 (318 reviews)',
-      eco: true, coworkers: '41% of coworker bookings',
+      sustainabilityCertified: true, coworkers: '41% of coworker bookings',
       perk: 'Free cancellation until 24 hours before check-in',
-      price: 245, taxes: 141, pin: { x: 75, y: 22 }
+      price: 245, taxes: 141, outOfPolicy: false, pin: { x: 75, y: 22 }
     },
     {
       id: 'h4', name: 'Pod Times Square', stars: 3, distance: '0.31 miles away',
       preferred: false, negotiated: false,
       reviews: null, simpleRating: '3.9/5 (204 reviews)',
-      eco: false, coworkers: null,
+      sustainabilityCertified: false, coworkers: null,
       perk: null,
-      price: 198, taxes: 112, pin: { x: 30, y: 44 }
+      price: 198, taxes: 112, outOfPolicy: false, pin: { x: 30, y: 44 }
     },
     {
       id: 'h5', name: 'Row NYC', stars: 3, distance: '0.35 miles away',
       preferred: true, negotiated: true,
       reviews: { public: '3.8/5 Good (890 reviews)', colleague: '4.0 / 5 (14 reviews)' },
-      eco: true, coworkers: '33% of coworker bookings',
+      sustainabilityCertified: true, coworkers: '33% of coworker bookings',
       perk: null,
-      price: 210, taxes: 121, pin: { x: 55, y: 72 }
+      price: 210, taxes: 121, outOfPolicy: false, pin: { x: 55, y: 72 }
     }
   ];
 
   const starSvg = () => '<svg class="icon filled" viewBox="0 0 24 24"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.8 1.7 7-6.3-3.9-6.3 3.9 1.7-7L2 9.5l7.1-.6z"/></svg>';
-  const flagSvg = () => '<svg class="icon" viewBox="0 0 24 24"><path d="M5 21V4m0 0h12l-2.5 3.5L17 11H5"/></svg>';
-  const leafSvg = () => '<svg class="icon filled" viewBox="0 0 24 24"><path d="M4 20c8 0 16-8 16-16-8 0-16 8-16 16z"/></svg>';
+  const flagSvg = () => '<svg class="icon filled" viewBox="0 0 24 24"><rect x="5" y="3" width="1.6" height="18" rx="0.8"/><path d="M6.6 4h11l-2.8 3.6L17.6 11H6.6z"/></svg>';
+  const badgeSvg = () => '<svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="9" r="5"/><path d="M9 13.5L7 21l5-3 5 3-2-7.5"/></svg>';
+  const checkCircleSvg = () => '<svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="currentColor" stroke="none"/><path d="M8 12.3l2.6 2.6L16.2 9" stroke="#fff" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   const cardSvg = () => '<svg class="icon" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>';
 
   function cardHtml(h) {
     const badges = [
-      h.preferred ? `<span class="badge">${flagSvg()} Egencia preferred</span>` : '',
+      h.preferred ? `<span class="badge">${badgeSvg()} Egencia preferred</span>` : '',
       h.negotiated ? `<span class="badge secondary">${cardSvg()} Negotiated</span>` : ''
     ].join('');
 
@@ -350,7 +355,7 @@
          </div>`
       : `<div class="simple-rating">${h.simpleRating}</div>`;
 
-    const ecoBlock = h.eco ? `<div class="eco-line">${leafSvg()} Eco-friendly</div>` : '';
+    const sustainBlock = h.sustainabilityCertified ? `<div class="sustain-line">${checkCircleSvg()} Sustainability certified</div>` : '';
     const coworkersBlock = h.coworkers ? `<div class="coworkers-line">${h.coworkers}</div>` : '';
     const perkBlock = h.perk ? `<div class="perk-strip">✨ ${h.perk}</div>` : '';
 
@@ -367,12 +372,12 @@
               </div>
             </div>
             ${ratingBlock}
-            ${ecoBlock}
+            ${sustainBlock}
             ${coworkersBlock}
           </div>
           <div class="price-block">
             <div class="price-from">From</div>
-            <div class="price-amount">${flagSvg()} $${h.price}</div>
+            <div class="price-amount">${h.outOfPolicy ? `<span class="flag-tooltip" tabindex="0">${flagSvg()}<span class="tooltip-bubble">This hotel is out of policy.</span></span>` : ''} $${h.price}</div>
             <div class="price-taxes">$${h.taxes} w taxes and fees</div>
             <div class="price-cvv">${cardSvg()} CVV required</div>
           </div>
@@ -402,8 +407,8 @@
   moreBtn.textContent = 'View more hotels';
   moreBtn.addEventListener('click', () => {
     const extra = [
-      { id: 'h6', name: 'Fairfield Inn & Suites Manhattan', stars: 3, distance: '0.42 miles away', preferred: false, negotiated: false, reviews: null, simpleRating: '3.7/5 (156 reviews)', eco: false, coworkers: null, perk: null, price: 179, taxes: 104, pin: { x: 20, y: 30 } },
-      { id: 'h7', name: 'Sheraton New York Times Square', stars: 4, distance: '0.28 miles away', preferred: true, negotiated: true, reviews: { public: '4.1/5 Very Good (2,140 reviews)', colleague: '4.3 / 5 (21 reviews)' }, eco: true, coworkers: '61% of coworker bookings', perk: 'Offers free breakfast, within company policy', price: 275, taxes: 158, pin: { x: 68, y: 65 } }
+      { id: 'h6', name: 'Fairfield Inn & Suites Manhattan', stars: 3, distance: '0.42 miles away', preferred: false, negotiated: false, reviews: null, simpleRating: '3.7/5 (156 reviews)', sustainabilityCertified: false, coworkers: null, perk: null, price: 179, taxes: 104, outOfPolicy: false, pin: { x: 20, y: 30 } },
+      { id: 'h7', name: 'Sheraton New York Times Square', stars: 4, distance: '0.28 miles away', preferred: true, negotiated: true, reviews: { public: '4.1/5 Very Good (2,140 reviews)', colleague: '4.3 / 5 (21 reviews)' }, sustainabilityCertified: true, coworkers: '61% of coworker bookings', perk: 'Offers free breakfast, within company policy', price: 275, taxes: 158, outOfPolicy: true, pin: { x: 68, y: 65 } }
     ];
     hotels.push(...extra);
     render(hotels);
@@ -435,6 +440,43 @@
         if (pin) pin.classList.remove('active');
       });
     });
+    // flag "out of policy" tooltip: hover/focus handled by CSS; click/tap toggles an
+    // explicit .open state (so touch devices get it too), which auto-closes 3s after
+    // the pointer actually leaves — not 3s from the click itself, so it stays open the
+    // whole time it's being looked at.
+    // Closing also has to blur() the element — clicking a tabindex="0"/focusable element
+    // gives it keyboard focus, and the CSS shows the tooltip on :focus too (for a11y), so
+    // just removing .open silently does nothing visually while focus lingers.
+    function closeFlagTooltip(el) {
+      el.classList.remove('open');
+      clearTimeout(el._closeTimer);
+      el.blur();
+    }
+    document.querySelectorAll('.flag-tooltip').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        el._hovering = true;
+        clearTimeout(el._closeTimer);
+      });
+      el.addEventListener('mouseleave', () => {
+        el._hovering = false;
+        if (el.classList.contains('open')) {
+          el._closeTimer = setTimeout(() => closeFlagTooltip(el), 3000);
+        }
+      });
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = el.classList.contains('open');
+        document.querySelectorAll('.flag-tooltip.open').forEach(o => { if (o !== el) closeFlagTooltip(o); });
+        clearTimeout(el._closeTimer);
+        if (isOpen) {
+          closeFlagTooltip(el);
+        } else {
+          el.classList.add('open');
+          // opened via tap with no real hover (touch) — schedule the same 3s close as a fallback
+          if (!el._hovering) el._closeTimer = setTimeout(() => closeFlagTooltip(el), 3000);
+        }
+      });
+    });
   }
 
   // ---- filter pill dropdowns ----
@@ -458,7 +500,14 @@
       if (panel) panel.classList.toggle('open', !isOpen);
     });
   });
-  document.addEventListener('click', () => closeAll(null));
+  document.addEventListener('click', () => {
+    closeAll(null);
+    document.querySelectorAll('.flag-tooltip.open').forEach(o => {
+      o.classList.remove('open');
+      clearTimeout(o._closeTimer);
+      o.blur();
+    });
+  });
 
   // ---- "Includes breakfast" toggle pill ----
   document.querySelector('.pill[data-toggle="breakfast"]').addEventListener('click', function () {
