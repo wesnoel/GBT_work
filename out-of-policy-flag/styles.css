@@ -116,10 +116,26 @@ a { color: inherit; text-decoration: none; }
   border: 1px solid var(--negative-line);
   border-radius: var(--radius-sm);
   padding: 14px 16px;
-  max-width: 420px;
+  max-width: 460px;
 }
 .reuse-preview-title { font-size: 14px; line-height: 18px; font-weight: 700; color: var(--negative); margin: 0 0 4px; display: flex; align-items: center; gap: 6px; }
 .reuse-preview-message { font-size: 14px; line-height: 18px; color: var(--ink); margin: 0; }
+.reuse-preview-list { margin: 0; padding-left: 20px; font-size: 14px; line-height: 20px; color: var(--ink); }
+.reuse-preview-list li { margin-bottom: 8px; }
+.reuse-preview-list li:last-child { margin-bottom: 0; }
+.reuse-preview-placeholder-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--gold);
+  background: var(--gold-soft);
+  border: 1px solid #F0D8AB;
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  margin: 10px 0 0;
+}
 .reuse-demo-caption { font-size: 12.5px; color: var(--ink-faint); margin-top: 12px; }
 .reuse-demo-caption code { background: var(--line-soft); padding: 1px 5px; border-radius: 4px; font-size: 12px; }
 

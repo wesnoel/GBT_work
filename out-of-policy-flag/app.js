@@ -1,19 +1,57 @@
 /* Out of Policy — shared interaction logic across all three concept directions.
-   Generic by design: OOP_COPY holds line-of-business copy fragments so the
-   message sentence is assembled from data, not hardcoded per line of business.
-   See design-decisions.md for the reusability write-up. */
+   Generic by design: OOP_DATA holds per-line-of-business content so the title
+   and reason copy are assembled from data, not hardcoded per line of business.
 
-var OOP_COPY = {
-  hotel: { itemNoun: "room", ruleLabel: "maximum nightly rate", limit: "USD 420", scope: "for this region" },
-  flight: { itemNoun: "flight", ruleLabel: "maximum fare", limit: "USD 650", scope: "for this route" },
-  car: { itemNoun: "car rental", ruleLabel: "preferred vendor policy", limit: "a non-preferred vendor", scope: "for this rental" },
-  rail: { itemNoun: "fare", ruleLabel: "maximum fare", limit: "USD 180", scope: "for this route" }
+   Decision: every line of business shows the same "Out of Policy" title,
+   full stop — a deliberate standardization, not a straight copy of what
+   today's live surfaces happen to do. Real screenshots (2026-09-26) showed
+   Air using "Policy violations:" and Rail showing no title at all; both are
+   overridden here so the component reads as one consistent pattern.
+
+   Format still varies by line of business:
+     - "sentence": one flowing paragraph (Hotel, Car, Rail).
+     - "list": a numbered list, 1-2 items depending on which rules the
+       booking actually breaks (Air/Flight — confirmed from a real
+       screenshot: usually just the price-ceiling reason, sometimes both
+       price and cabin-class).
+
+   Sentence-format reasons that carry {name} address the traveler directly
+   (Hotel, Car); Air and Rail's real copy does not. */
+
+var OOP_DATA = {
+  hotel: {
+    title: "Out of Policy",
+    format: "sentence",
+    reasons: ["{name}, This room does not comply with your company's maximum nightly rate of USD 420 for this region."]
+  },
+  flight: {
+    title: "Out of Policy",
+    format: "list",
+    reasons: [
+      "The reference price on this route is USD 650. To be compliant with your travel policy the price cannot exceed the reference price by more than USD 150.",
+      "This cabin class does not comply with your company's travel policy for this flight. Highest cabin class allowed : Economy"
+    ]
+  },
+  car: {
+    title: "Out of Policy",
+    format: "sentence",
+    reasons: ["{name}, This car rental does not comply with your company's maximum daily rate of USD 75 for this location."]
+  },
+  rail: {
+    title: "Out of Policy",
+    format: "sentence",
+    reasons: ["Highest class allowed on International journey: Second class"]
+  }
 };
 
-function buildOopMessage(lob, userName) {
-  var c = OOP_COPY[lob];
-  if (!c) return "";
-  return userName + ", This " + c.itemNoun + " does not comply with your company's " + c.ruleLabel + " of " + c.limit + " " + c.scope + ".";
+function buildOopContent(lob, userName) {
+  var c = OOP_DATA[lob];
+  if (!c) return null;
+  return {
+    title: c.title,
+    format: c.format,
+    reasons: c.reasons.map(function (r) { return r.replace("{name}", userName); })
+  };
 }
 
 /* ---- Concept A (tooltip) + Concept B (popover): shared anchor logic ----
@@ -131,14 +169,40 @@ function initOopModal() {
   });
 }
 
-/* ---- Hub reusability demo: swap line-of-business, re-render from data ---- */
+/* ---- Hub reusability demo: swap line-of-business, re-render from data ----
+   Car has no confirmed real copy (unlike Hotel, Air, and Rail, all sourced
+   from real screenshots) — it's adapted from the Hotel sentence pattern as
+   a placeholder, and the demo says so explicitly rather than presenting it
+   as confirmed content. */
+var OOP_PLACEHOLDER_LOBS = ["car"];
+
 function initReuseDemo() {
   var select = document.getElementById("reuseLobSelect");
-  var msgEl = document.getElementById("reusePreviewMessage");
-  if (!select || !msgEl) return;
+  var titleTextEl = document.getElementById("reusePreviewTitleText");
+  var bodyEl = document.getElementById("reusePreviewBody");
+  var placeholderNote = document.getElementById("reusePreviewPlaceholderNote");
+  if (!select || !titleTextEl || !bodyEl) return;
 
   function render() {
-    msgEl.textContent = buildOopMessage(select.value, "Wes");
+    var content = buildOopContent(select.value, "Wes");
+    if (!content) return;
+
+    titleTextEl.textContent = content.title;
+
+    if (content.format === "list") {
+      var listHtml = "<ol class=\"reuse-preview-list\">";
+      content.reasons.forEach(function (reason) {
+        listHtml += "<li>" + reason + "</li>";
+      });
+      listHtml += "</ol>";
+      bodyEl.innerHTML = listHtml;
+    } else {
+      bodyEl.innerHTML = "<p class=\"reuse-preview-message\">" + content.reasons[0] + "</p>";
+    }
+
+    if (placeholderNote) {
+      placeholderNote.hidden = OOP_PLACEHOLDER_LOBS.indexOf(select.value) === -1;
+    }
   }
 
   select.addEventListener("change", render);

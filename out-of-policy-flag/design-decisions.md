@@ -41,24 +41,24 @@ The popover (B) keeps this as a safety net even though it has an explicit close 
 
 Rationale: a small size is used where space is tightest (e.g. a dense list row) and should carry the minimum viable warning; a large size is used where the interaction is the focal point and can afford to offer a next step, not just a warning.
 
-## 6. Reusability — data-driven copy, not hardcoded to hotel
+## 6. Reusability — data-driven content, not hardcoded to hotel
 
-**Decision:** The component's message is assembled from a per-line-of-business data fragment, not a hardcoded sentence:
+**Decision (revised 2026-09-26 after reviewing real Air and Rail screenshots, then revised again same day):** the component's content varies by line of business along one structural axis — **format**: `sentence` (one flowing paragraph) vs. `list` (a numbered list, 1-2 items depending on which rules the booking actually breaks). The **title is standardized to "Out of Policy" for every line of business, always shown** — a deliberate consistency call, not a literal copy of what today's live surfaces happen to do.
 
-```
-{userName}, This {itemNoun} does not comply with your company's {ruleLabel} of {limit} {scope}.
-```
+Real screenshots (2026-09-26) showed two inconsistencies in the *current* product that this decision intentionally overrides: Air's live surface uses "Policy violations:" instead of "Out of Policy," and Rail's live tooltip shows no title at all. Both are unified under one title here so the reusable component reads as one consistent pattern rather than propagating three different conventions forward.
 
-Implemented in `app.js` as `OOP_COPY` (one fragment object per line of business) and `buildOopMessage(lob, userName)`. The hub page's "Reusability" section renders this live from a dropdown. Confirmed fragments used in this build:
+Implemented in `app.js` as `OOP_DATA` (one entry per line of business, each with `title`, `format`, and a `reasons` array) and `buildOopContent(lob, userName)`. The hub page's "Reusability" section renders this live from a dropdown, switching between a flowing paragraph and a numbered list as needed — title text is always rendered.
 
-| Line of business | itemNoun | ruleLabel | limit | scope | Rendered |
-|---|---|---|---|---|---|
-| Hotel | room | maximum nightly rate | USD 420 | for this region | "Wes, This room does not comply with your company's maximum nightly rate of USD 420 for this region." |
-| Flight | flight | maximum fare | USD 650 | for this route | "Wes, This flight does not comply with your company's maximum fare of USD 650 for this route." |
-| Car | car rental | preferred vendor policy | a non-preferred vendor | for this rental | "Wes, This car rental does not comply with your company's preferred vendor policy of a non-preferred vendor for this rental." |
-| Rail | fare | maximum fare | USD 180 | for this route | "Wes, This fare does not comply with your company's maximum fare of USD 180 for this route." |
+| Line of business | Source | Title | Format | Reasons |
+|---|---|---|---|---|
+| Hotel | This build's brief (real Hotel shopping copy) | "Out of Policy" | sentence | "Wes, This room does not comply with your company's maximum nightly rate of USD 420 for this region." |
+| Flight | Real screenshot (2026-09-26); title standardized from the live "Policy violations:" | "Out of Policy" | list, 1-2 items | 1) "The reference price on this route is USD 650. To be compliant with your travel policy the price cannot exceed the reference price by more than USD 150." 2) "This cabin class does not comply with your company's travel policy for this flight. Highest cabin class allowed : Economy" — item 2 only shows when the booking also breaks the cabin-class rule; usually it's just item 1. |
+| Rail | Real screenshot (2026-09-26); title standardized from the live surface, which shows none | "Out of Policy" | sentence | "Highest class allowed on International journey: Second class" — no traveler name, unlike Hotel. |
+| Car | **Placeholder — no real copy provided yet** | "Out of Policy" | sentence | "Wes, This car rental does not comply with your company's maximum daily rate of USD 75 for this location." — adapted from the Hotel template (numeric ceiling) since Car has no confirmed source yet. Flagged directly in the hub demo (an inline placeholder note + "(placeholder copy)" in the dropdown option label) so it's never mistaken for confirmed content. |
 
-**Flag for follow-up:** the Car row's sentence reads slightly awkwardly ("...policy of a non-preferred vendor for this rental") because the template's "of {limit}" slot assumes a numeric ceiling, which doesn't fit a vendor-preference violation cleanly. Worth a copy pass with content design before this ships for a second line of business — the data model holds up, the sentence template may need a second variant for non-numeric violation types.
+**Flag for follow-up:** standardizing Air's and Rail's title is a wireframe-stage recommendation, not yet validated with the teams that own those live surfaces — confirm they're fine converging on "Out of Policy" before this ships as the target pattern.
+
+**Flag for follow-up:** replace the Car placeholder with real copy once a source is available (PRD, content design, or a screenshot of the live product) — the data model (`format`, `showTitle`, `reasons`) already supports whatever shape it turns out to need, sentence or list.
 
 ## 7. Assumptions
 
