@@ -8,10 +8,10 @@ Resolves the open questions raised by exploring three interaction directions for
 
 ## 2. Open trigger behavior per concept
 
-**Decision:**
+**Decision (revised 2026-09-26):**
 - **Tooltip (A):** hover, click, and tap all open it — matches today's live pattern exactly. No close button, since a lightweight hint shouldn't need one.
-- **Popover dialog (B):** click/tap only, no hover-open. A heavier surface with a real header and an explicit close button appearing from a stray mouse pass would feel like a bug, not a feature.
-- **Modal (C):** click/tap only. A full-screen takeover must never appear from hover or from keyboard focus landing on the trigger — only a deliberate activation should interrupt the whole screen.
+- **Popover dialog (B):** hover, click, and tap all open it too — **this is a reversal of the original decision below, made the explicit standard going forward for both anchored disclosure concepts.** (Original reasoning, kept for the record: a heavier surface with a real header and an explicit close button appearing from a stray mouse pass could feel like a bug, not a feature — click/tap only felt safer. That's superseded now: hover/click/tap is the standard for every anchored trigger in this component, tooltip or popover, so the two concepts differ only in visual weight, not in how they open.)
+- **Modal (C):** click/tap only, unchanged. A full-screen takeover must never appear from hover or from keyboard focus landing on the trigger — only a deliberate activation should interrupt the whole screen. This reversal doesn't apply to Modal since it isn't an anchored disclosure pattern.
 
 ## 3. Idle-dismiss behavior
 
@@ -38,6 +38,8 @@ Concretely, the disclosure content per concept (constant across all three icon s
 - **Tooltip:** title + message, no link.
 - **Popover:** header (icon + title) + close button + message + footer with a "View travel policy" link.
 - **Modal:** header (icon badge + title) + close button + message + "Got it" primary button + "View travel policy" link.
+
+**In-context hotel card examples default to small (revised 2026-09-26):** since size only changes the icon now, three near-identical hotel cards side by side (differing by a 4px icon size difference) added length without adding information — the standalone icon-size rail already makes that comparison clearly. Removed the Small/Medium/Large hotel-card set from all three concept pages. Concept A and B's in-context demonstration is now the "placement variants" set (still small-icon, five cards); Concept C, which has no placement axis, keeps a single small-icon card.
 
 A single shared modal panel is reused by every trigger on Concept C's page regardless of icon size, since there's no longer any content variation to switch between.
 

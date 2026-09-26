@@ -39,7 +39,7 @@
     <a class="screen-card" href="concept-b-popover.html">
       <span class="num">B — Popover dialog</span>
       <h3>Popover dialog</h3>
-      <p>A heavier, structured popover — still anchored to the flag. Real header, explicit close button. Click/tap only, no hover-open.</p>
+      <p>A heavier, structured popover — still anchored to the flag. Real header, explicit close button. Opens on hover, click, or tap, same as the tooltip.</p>
       <span class="open-link">Open wireframe →</span>
     </a>
 
@@ -76,7 +76,7 @@
 
   <div class="notes-box">
     <h4>Design decisions (resolved from the working assumptions in this exploration)</h4>
-    Three directions isolate interaction weight as the variable, not content: tooltip (hover/click/tap, no close button, idle-dismiss), popover dialog (click/tap only, explicit close, idle-dismiss as a safety net), modal (click/tap only, explicit dismiss only, no idle timer) · small/medium/large change only the flag icon's size (16/18/20px) — panel width, padding, and copy (font_300: 14px, title bold, text regular) stay constant across sizes · content is data-driven by line of business: format (a flowing sentence vs. a numbered list, 1-2 items) varies, but the title is standardized to "Out of Policy" everywhere — a deliberate call, since real Air and Rail screenshots showed two different live conventions ("Policy violations:" and no title at all) that this unifies — demonstrated live above, Car shown as an explicitly flagged placeholder pending real copy · every hover/focus-revealed panel is closed with <code>blur()</code> on every dismiss path, since <code>:focus-visible</code> alone can keep it visually open after the JS state changes. Full write-up: <a href="design-decisions.md" style="color: var(--accent); font-weight: 700;">design-decisions.md</a>.
+    Three directions isolate interaction weight as the variable, not content: tooltip and popover dialog both open on hover, click, or tap (the standard interaction for anchored disclosure going forward), differing in weight — tooltip has no close button and relies on idle-dismiss, popover has an explicit close button plus idle-dismiss as a safety net; modal is click/tap only, explicit dismiss only, no idle timer, since a full takeover should never appear from a stray hover · small/medium/large change only the flag icon's size (16/18/20px) — panel width, padding, and copy (font_300: 14px, title bold, text regular) stay constant across sizes, and the hotel card examples default to the small size · content is data-driven by line of business: format (a flowing sentence vs. a numbered list, 1-2 items) varies, but the title is standardized to "Out of Policy" everywhere — a deliberate call, since real Air and Rail screenshots showed two different live conventions ("Policy violations:" and no title at all) that this unifies — demonstrated live above, Car shown as an explicitly flagged placeholder pending real copy · every hover/focus-revealed panel is closed with <code>blur()</code> on every dismiss path, since <code>:focus-visible</code> alone can keep it visually open after the JS state changes. Full write-up: <a href="design-decisions.md" style="color: var(--accent); font-weight: 700;">design-decisions.md</a>.
   </div>
 
 </div>
