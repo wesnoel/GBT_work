@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hotel List Card — Grayscale vs. Full Fidelity</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --page-ink: #14161a;
+    --page-ink-soft: #52565f;
+    --page-canvas: #f4f5f6;
+    font-size: 15px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--page-canvas); color: var(--page-ink); font-family: "Open Sans", sans-serif; -webkit-font-smoothing: antialiased; }
+  .shell { max-width: 800px; margin: 0 auto; padding: 48px 24px 96px; }
+  .shell > h1 { font-size: 28px; line-height: 36px; letter-spacing: -1px; font-weight: 700; margin: 0 0 8px; }
+  .shell > p.lede { font-size: 14px; color: var(--page-ink-soft); margin: 0 0 40px; max-width: 560px; }
+  section.demo { margin-bottom: 56px; }
+  section.demo h2 { font-size: 18px; font-weight: 700; margin: 0 0 4px; display: flex; align-items: center; gap: 10px; }
+  section.demo .tag { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; }
+  .tag.gray { background: #e0e4e6; color: #303f49; }
+  .tag.fidelity { background: #fbf9f5; color: #855500; border: 1px solid #ffdb9d; }
+  section.demo p.note { font-size: 13px; color: var(--page-ink-soft); margin: 0 0 20px; }
+
+  /* ===================================================================
+     Shared hotel-card structure — pattern-hotel-list-card.md, verbatim.
+     Appearance is entirely controlled by --card-* tokens, redefined once
+     per theme wrapper below. Same markup, same CSS rules, two skins.
+     =================================================================== */
+  .theme-grayscale {
+    --card-surface: #ffffff;
+    --card-border: #d8dade;
+    --card-ink: #14161a;
+    --card-ink-soft: #52565f;
+    --card-badge-border: #14161a;
+    --card-badge-text: #14161a;
+    --card-badge-neutral-border: #d8dade;
+    --card-badge-neutral-text: #52565f;
+    --card-reviews-bg: #f4f5f6;
+    --card-cert-color: #14161a;
+    --card-coworker-color: #52565f;
+    --card-perk-bg: #f4f5f6;
+    --card-perk-icon: #52565f;
+    --card-price-color: #14161a;
+    --card-star-color: #14161a;
+  }
+  .theme-fidelity {
+    --card-surface: #ffffff;
+    --card-border: #e0e4e6;
+    --card-ink: #14161a;
+    --card-ink-soft: #52565f;
+    --card-badge-border: #c48800;
+    --card-badge-text: #855500;
+    --card-badge-neutral-border: #c1c8cd;
+    --card-badge-neutral-text: #42525d;
+    --card-reviews-bg: #f6f8fa;
+    --card-cert-color: #178143;
+    --card-coworker-color: #178143;
+    --card-perk-bg: #ffecba;
+    --card-perk-icon: #9d6800;
+    --card-price-color: #14161a;
+    --card-star-color: #14161a;
+  }
+
+  .hotel-card {
+    width: 663px; max-width: 100%;
+    background: var(--card-surface);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 18px;
+    position: relative;
+    display: flex; flex-direction: column; gap: 14px;
+    transition: box-shadow .15s ease, border-color .15s ease;
+  }
+  .hotel-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
+
+  .hotel-badge-row { position: absolute; top: -10px; left: 18px; display: flex; gap: 8px; }
+  .hotel-badge, .hotel-badge--neutral {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 11px; font-weight: 700; line-height: 16px;
+    background: var(--card-surface); border-radius: 999px; padding: 3px 9px;
+  }
+  .hotel-badge { border: 1px solid var(--card-badge-border); color: var(--card-badge-text); }
+  .hotel-badge--neutral { border: 1px solid var(--card-badge-neutral-border); color: var(--card-badge-neutral-text); }
+  .hotel-badge svg, .hotel-badge--neutral svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+  .hotel-card-main { display: flex; gap: 18px; }
+  .hotel-img { width: 140px; height: 140px; flex: none; border-radius: 6px; background: repeating-linear-gradient(135deg, #eceef1, #eceef1 8px, #e2e4e7 8px, #e2e4e7 16px); border: 1px dashed var(--card-border); }
+
+  .hotel-body { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 0; color: var(--card-ink); }
+  .hotel-name { font-size: 18px; line-height: 24px; font-weight: 700; }
+  .hotel-subrow { display: flex; align-items: center; gap: 8px; font-size: 14px; line-height: 18px; color: var(--card-ink-soft); }
+  .hotel-subrow .stars { display: flex; gap: 1px; color: var(--card-star-color); }
+  .hotel-subrow .stars svg { width: 14px; height: 14px; fill: currentColor; }
+
+  .hotel-reviews-box { background: var(--card-reviews-bg); border-radius: 6px; padding: 10px 12px; font-size: 13px; line-height: 18px; color: var(--card-ink-soft); display: flex; flex-direction: column; gap: 2px; }
+  .hotel-reviews-box strong { color: var(--card-ink); font-weight: 700; }
+
+  .hotel-cert-line { display: flex; align-items: center; gap: 6px; font-size: 12px; line-height: 16px; letter-spacing: 0; font-weight: 700; color: var(--card-cert-color); }
+  .hotel-cert-line svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+  .coworker { font-size: 13px; line-height: 18px; font-weight: 600; color: var(--card-coworker-color); }
+
+  .hotel-price { width: 168px; flex: none; border-left: 1px solid var(--card-border); padding-left: 18px; display: flex; flex-direction: column; align-items: flex-end; text-align: right; color: var(--card-price-color); }
+  .price-caption { font-size: 12px; line-height: 16px; color: var(--card-ink-soft); }
+  .price-flag-row { display: flex; align-items: center; gap: 6px; }
+  .price-value { font-size: 28px; line-height: 36px; letter-spacing: -1px; font-weight: 800; }
+  .price-sub { font-size: 12px; line-height: 16px; color: var(--card-ink-soft); }
+
+  .hotel-perk-strip { background: var(--card-perk-bg); border-radius: 6px; padding: 8px 12px; display: flex; align-items: center; gap: 8px; font-size: 13px; line-height: 18px; color: var(--card-ink-soft); }
+  .hotel-perk-strip svg { width: 16px; height: 16px; flex: none; fill: none; stroke: var(--card-perk-icon); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <h1>Hotel list card</h1>
+  <p class="lede">Same component, same markup, same CSS rules — built to <code>pattern-hotel-list-card.md</code>. Only the token values change between the two renderings below.</p>
+
+  <section class="demo">
+    <h2>Grayscale wireframe <span class="tag gray">Low-fi</span></h2>
+    <p class="note">Fallback grayscale system — every slot present, no brand color.</p>
+
+    <div class="theme-grayscale">
+      <div class="hotel-card">
+        <div class="hotel-badge-row">
+          <span class="hotel-badge"><svg viewBox="0 0 24 24"><path d="M5 3v18"/><path d="M5 4h11l-2 4 2 4H5"/></svg>Egencia preferred</span>
+          <span class="hotel-badge--neutral"><svg viewBox="0 0 24 24"><path d="M20.59 13.41 12 21.99 2 12 3 3h9z"/><circle cx="15.5" cy="7.5" r="1"/></svg>Negotiated</span>
+        </div>
+        <div class="hotel-card-main">
+          <div class="hotel-img"></div>
+          <div class="hotel-body">
+            <div class="hotel-name">Hilton San Francisco Union Square</div>
+            <div class="hotel-subrow">
+              <span class="stars">
+                <svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.8 1.7 7-6.3-3.9-6.3 3.9 1.7-7L2 9.5l7.1-.6z"/></svg>
+                <svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.8 1.7 7-6.3-3.9-6.3 3.9 1.7-7L2 9.5l7.1-.6z"/></svg>
+                <svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.8 1.7 7-6.3-3.9-6.3 3.9 1.7-7L2 9.5l7.1-.6z"/></svg>
+                <svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.8 1.7 7-6.3-3.9-6.3 3.9 1.7-7L2 9.5l7.1-.6z"/></svg>
+              </span>
+              0.3 miles away
+            </div>
+            <div class="hotel-reviews-box">
+              <strong>Reviews</strong>
+              <span>4.3/5 Very Good (2,441 reviews)</span>
+              <span>Colleague Reviews: 4.5/5 (18 reviews)</span>
+            </div>
+            <div class="hotel-cert-line"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9"/></svg>Sustainability certified</div>
+            <div class="coworker">58% of coworker bookings</div>
+          </div>
+          <div class="hotel-price">
+            <div class="price-caption">From</div>
+            <div class="price-flag-row"><span class="price-value">$459</span></div>
+            <div class="price-sub">$421 w taxes and fees</div>
+            <div class="price-sub">CVV required</div>
+          </div>
+        </div>
+        <div class="hotel-perk-strip">
+          <svg viewBox="0 0 24 24"><path d="M4 4h16v4a4 4 0 01-4 4H8a4 4 0 01-4-4V4z"/><path d="M4 12v4a4 4 0 004 4h8a4 4 0 004-4v-4"/></svg>
+          Offers free breakfast, within company policy
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="demo">
+    <h2>Full fidelity <span class="tag fidelity">Egencia tokens</span></h2>
+    <p class="note">Same slots, same copy — real Egencia color tokens applied (gold badge, green sustainability/coworker signals, pale-gold perk strip).</p>
+
+    <div class="theme-fidelity">
+      <div class="hotel-card">
+        <div class="hotel-badge-row">
+          <span class="hotel-badge"><svg viewBox="0 0 24 24"><path d="M5 3v18"/><path d="M5 4h11l-2 4 2 4H5"/></svg>Egencia preferred</span>
+          <span class="hotel-badge--neutral"><svg viewBox="0 0 24 24"><path d="M20.59 13.41 12 21.99 2 12 3 3h9z"/><circle cx="15.5" cy="7.5" r="1"/></svg>Negotiated</span>
+        </div>
+        <div class="hotel-card-main">
+          <div class="hotel-img"></div>
+          <div class="hotel-body">
+            <div class="hotel-name">Hilton San Francisco Union Square</div>
+            <div class="hotel-subrow">
+              <span class="stars">
+                <svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.8 1.7 7-6.3-3.9-6.3 3.9 1.7-7L2 9.5l7.1-.6z"/></svg>
+                <svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.8 1.7 7-6.3-3.9-6.3 3.9 1.7-7L2 9.5l7.1-.6z"/></svg>
+                <svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.8 1.7 7-6.3-3.9-6.3 3.9 1.7-7L2 9.5l7.1-.6z"/></svg>
+                <svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.8 1.7 7-6.3-3.9-6.3 3.9 1.7-7L2 9.5l7.1-.6z"/></svg>
+              </span>
+              0.3 miles away
+            </div>
+            <div class="hotel-reviews-box">
+              <strong>Reviews</strong>
+              <span>4.3/5 Very Good (2,441 reviews)</span>
+              <span>Colleague Reviews: 4.5/5 (18 reviews)</span>
+            </div>
+            <div class="hotel-cert-line"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9"/></svg>Sustainability certified</div>
+            <div class="coworker">58% of coworker bookings</div>
+          </div>
+          <div class="hotel-price">
+            <div class="price-caption">From</div>
+            <div class="price-flag-row"><span class="price-value">$459</span></div>
+            <div class="price-sub">$421 w taxes and fees</div>
+            <div class="price-sub">CVV required</div>
+          </div>
+        </div>
+        <div class="hotel-perk-strip">
+          <svg viewBox="0 0 24 24"><path d="M4 4h16v4a4 4 0 01-4 4H8a4 4 0 01-4-4V4z"/><path d="M4 12v4a4 4 0 004 4h8a4 4 0 004-4v-4"/></svg>
+          Offers free breakfast, within company policy
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <p class="note" style="max-width:663px;">This example is rate-compliant, so the price block's out-of-policy flag trigger isn't shown — it's conditional per <code>pattern-hotel-list-card.md</code>. See the <code>out-of-policy-flag</code> component build for that trigger's tooltip/popover/modal behavior when it does apply.</p>
+</div>
+
+</body>
+</html>
