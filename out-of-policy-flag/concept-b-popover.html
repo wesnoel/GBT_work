@@ -22,7 +22,7 @@
 
   <div class="hub-hero" style="padding: 0 0 28px;">
     <h1 style="font-size: 26px; line-height: 34px;">Concept B — Popover dialog</h1>
-    <p>A heavier, structured popover — still anchored to the flag, not a full modal. Has a real header (icon + title) and an explicit close button, so it reads as a small dialog rather than a hint. Deliberate open only: click or tap, no hover-open, since a heavier surface shouldn't appear from a stray mouse pass. It still auto-dismisses on idle if the person just walks away without closing it.</p>
+    <p>A heavier, structured popover — still anchored to the flag, not a full modal. Has a real header (icon + title) and an explicit close button. Click or tap only, no hover-open. Small/medium/large only change the flag icon's size (16/18/20px) — the popover's content, width, padding, and type are the same at every size.</p>
   </div>
 
   <p class="hub-section-label">Standalone — sizes</p>
@@ -31,18 +31,21 @@
     <div class="size-sample">
       <span class="oop-anchor">
         <button class="flag-trigger flag-trigger--sm" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-sm" aria-label="Out of policy">
-          <svg class="flag-icon" viewBox="0 0 24 24" width="16" height="16"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+          <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
         </button>
-        <div class="policy-popover policy-popover--sm" id="pv-sm" role="dialog" aria-label="Out of policy" data-oop-panel>
+        <div class="policy-popover" id="pv-sm" role="dialog" aria-label="Out of policy" data-oop-panel>
           <div class="policy-popover__header">
             <div class="policy-popover__heading">
-              <span class="policy-popover__icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg></span>
+              <span class="policy-popover__icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg></span>
               <p class="policy-popover__title">Out of Policy</p>
             </div>
             <button class="policy-popover__close" data-oop-close aria-label="Close">&times;</button>
           </div>
           <div class="policy-popover__body">
-            <p class="policy-popover__message">Exceeds USD 420/night policy limit for this region.</p>
+            <p class="policy-popover__message">Wes, this room does not comply with your company's maximum nightly rate of USD 420 for this region.</p>
+          </div>
+          <div class="policy-popover__footer">
+            <a class="policy-popover__link" href="#" onclick="return false;">View travel policy</a>
           </div>
         </div>
       </span>
@@ -52,12 +55,12 @@
     <div class="size-sample">
       <span class="oop-anchor">
         <button class="flag-trigger flag-trigger--md" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-md" aria-label="Out of policy">
-          <svg class="flag-icon" viewBox="0 0 24 24" width="20" height="20"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+          <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
         </button>
-        <div class="policy-popover policy-popover--md" id="pv-md" role="dialog" aria-label="Out of policy" data-oop-panel>
+        <div class="policy-popover" id="pv-md" role="dialog" aria-label="Out of policy" data-oop-panel>
           <div class="policy-popover__header">
             <div class="policy-popover__heading">
-              <span class="policy-popover__icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg></span>
+              <span class="policy-popover__icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg></span>
               <p class="policy-popover__title">Out of Policy</p>
             </div>
             <button class="policy-popover__close" data-oop-close aria-label="Close">&times;</button>
@@ -76,12 +79,12 @@
     <div class="size-sample">
       <span class="oop-anchor">
         <button class="flag-trigger flag-trigger--lg" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-lg" aria-label="Out of policy">
-          <svg class="flag-icon" viewBox="0 0 24 24" width="24" height="24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+          <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
         </button>
-        <div class="policy-popover policy-popover--lg" id="pv-lg" role="dialog" aria-label="Out of policy" data-oop-panel>
+        <div class="policy-popover" id="pv-lg" role="dialog" aria-label="Out of policy" data-oop-panel>
           <div class="policy-popover__header">
             <div class="policy-popover__heading">
-              <span class="policy-popover__icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg></span>
+              <span class="policy-popover__icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg></span>
               <p class="policy-popover__title">Out of Policy</p>
             </div>
             <button class="policy-popover__close" data-oop-close aria-label="Close">&times;</button>
@@ -91,7 +94,6 @@
           </div>
           <div class="policy-popover__footer">
             <a class="policy-popover__link" href="#" onclick="return false;">View travel policy</a>
-            <button class="policy-popover__action">Request exception</button>
           </div>
         </div>
       </span>
@@ -106,38 +108,56 @@
     <div>
       <div class="hotel-card-size-label">Small</div>
       <div class="hotel-card">
-        <div class="hotel-badge-row"><span class="hotel-badge">Egencia preferred</span></div>
-        <div class="hotel-img placeholder-chrome">Photo</div>
-        <div class="hotel-body">
-          <h3 class="hotel-name">Hilton San Francisco Union Square</h3>
-          <div class="hotel-subrow"><span class="stars">★★★★</span><span class="muted">0.3 miles away</span></div>
-          <div class="muted">4.3/5 Very Good (2,441 reviews)</div>
+        <div class="hotel-badge-row">
+          <span class="hotel-badge"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v18"/><path d="M5 4h11l-2 4 2 4H5"/></svg>Egencia preferred</span>
+          <span class="hotel-badge hotel-badge--neutral"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 12 21.99 2 12 3 3h9z"/><circle cx="15.5" cy="7.5" r="1"/></svg>Negotiated</span>
         </div>
-        <div class="hotel-price">
-          <div class="price-caption">From</div>
-          <div class="price-flag-row">
-            <span class="oop-anchor">
-              <button class="flag-trigger flag-trigger--sm" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-card-sm" aria-label="Out of policy">
-                <svg class="flag-icon" viewBox="0 0 24 24" width="16" height="16"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
-              </button>
-              <div class="policy-popover policy-popover--sm" id="pv-card-sm" role="dialog" aria-label="Out of policy" data-oop-panel style="left:auto; right:0;">
-                <div class="policy-popover__header">
-                  <div class="policy-popover__heading">
-                    <span class="policy-popover__icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg></span>
-                    <p class="policy-popover__title">Out of Policy</p>
-                  </div>
-                  <button class="policy-popover__close" data-oop-close aria-label="Close">&times;</button>
-                </div>
-                <div class="policy-popover__body">
-                  <p class="policy-popover__message">Exceeds USD 420/night policy limit for this region.</p>
-                </div>
-              </div>
-            </span>
-            <div class="price-value">$459</div>
+        <div class="hotel-card-main">
+          <div class="hotel-img placeholder-chrome">Photo</div>
+          <div class="hotel-body">
+            <h3 class="hotel-name">Hilton San Francisco Union Square</h3>
+            <div class="hotel-subrow"><span class="stars">★★★★</span><span class="muted">0.3 miles away</span></div>
+            <div class="hotel-reviews-box">
+              <div class="hotel-reviews-label">Reviews</div>
+              <div class="muted">4.3/5 Very Good (2,441 reviews)</div>
+              <div class="muted">Colleague Reviews: 4.5/5 (18 reviews)</div>
+            </div>
+            <div class="hotel-cert-line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9"/></svg>Sustainability certified</div>
+            <div class="coworker">58% of coworker bookings</div>
           </div>
-          <div class="price-sub">$421 w taxes and fees</div>
-          <div class="price-sub">CVV required</div>
-          <button class="btn btn-primary select-btn">Select</button>
+          <div class="hotel-price">
+            <div class="price-caption">From</div>
+            <div class="price-flag-row">
+              <span class="oop-anchor">
+                <button class="flag-trigger flag-trigger--sm" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-card-sm" aria-label="Out of policy">
+                  <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+                </button>
+                <div class="policy-popover" id="pv-card-sm" role="dialog" aria-label="Out of policy" data-oop-panel style="left:auto; right:0;">
+                  <div class="policy-popover__header">
+                    <div class="policy-popover__heading">
+                      <span class="policy-popover__icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg></span>
+                      <p class="policy-popover__title">Out of Policy</p>
+                    </div>
+                    <button class="policy-popover__close" data-oop-close aria-label="Close">&times;</button>
+                  </div>
+                  <div class="policy-popover__body">
+                    <p class="policy-popover__message">Wes, this room does not comply with your company's maximum nightly rate of USD 420 for this region.</p>
+                  </div>
+                  <div class="policy-popover__footer">
+                    <a class="policy-popover__link" href="#" onclick="return false;">View travel policy</a>
+                  </div>
+                </div>
+              </span>
+              <div class="price-value">$459</div>
+            </div>
+            <div class="price-sub">$421 w taxes and fees</div>
+            <div class="price-sub">CVV required</div>
+            <button class="btn btn-primary select-btn">Select</button>
+          </div>
+        </div>
+        <div class="hotel-perk-strip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v4a4 4 0 01-4 4H8a4 4 0 01-4-4V4z"/><path d="M4 12v4a4 4 0 004 4h8a4 4 0 004-4v-4"/></svg>
+          Offers free breakfast, within company policy
         </div>
       </div>
     </div>
@@ -145,41 +165,56 @@
     <div>
       <div class="hotel-card-size-label">Medium</div>
       <div class="hotel-card">
-        <div class="hotel-badge-row"><span class="hotel-badge">Egencia preferred</span></div>
-        <div class="hotel-img placeholder-chrome">Photo</div>
-        <div class="hotel-body">
-          <h3 class="hotel-name">Hilton San Francisco Union Square</h3>
-          <div class="hotel-subrow"><span class="stars">★★★★</span><span class="muted">0.3 miles away</span></div>
-          <div class="muted">4.3/5 Very Good (2,441 reviews)</div>
+        <div class="hotel-badge-row">
+          <span class="hotel-badge"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v18"/><path d="M5 4h11l-2 4 2 4H5"/></svg>Egencia preferred</span>
+          <span class="hotel-badge hotel-badge--neutral"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 12 21.99 2 12 3 3h9z"/><circle cx="15.5" cy="7.5" r="1"/></svg>Negotiated</span>
         </div>
-        <div class="hotel-price">
-          <div class="price-caption">From</div>
-          <div class="price-flag-row">
-            <span class="oop-anchor">
-              <button class="flag-trigger flag-trigger--md" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-card-md" aria-label="Out of policy">
-                <svg class="flag-icon" viewBox="0 0 24 24" width="20" height="20"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
-              </button>
-              <div class="policy-popover policy-popover--md" id="pv-card-md" role="dialog" aria-label="Out of policy" data-oop-panel style="left:auto; right:0;">
-                <div class="policy-popover__header">
-                  <div class="policy-popover__heading">
-                    <span class="policy-popover__icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg></span>
-                    <p class="policy-popover__title">Out of Policy</p>
-                  </div>
-                  <button class="policy-popover__close" data-oop-close aria-label="Close">&times;</button>
-                </div>
-                <div class="policy-popover__body">
-                  <p class="policy-popover__message">Wes, this room does not comply with your company's maximum nightly rate of USD 420 for this region.</p>
-                </div>
-                <div class="policy-popover__footer">
-                  <a class="policy-popover__link" href="#" onclick="return false;">View travel policy</a>
-                </div>
-              </div>
-            </span>
-            <div class="price-value">$459</div>
+        <div class="hotel-card-main">
+          <div class="hotel-img placeholder-chrome">Photo</div>
+          <div class="hotel-body">
+            <h3 class="hotel-name">Hilton San Francisco Union Square</h3>
+            <div class="hotel-subrow"><span class="stars">★★★★</span><span class="muted">0.3 miles away</span></div>
+            <div class="hotel-reviews-box">
+              <div class="hotel-reviews-label">Reviews</div>
+              <div class="muted">4.3/5 Very Good (2,441 reviews)</div>
+              <div class="muted">Colleague Reviews: 4.5/5 (18 reviews)</div>
+            </div>
+            <div class="hotel-cert-line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9"/></svg>Sustainability certified</div>
+            <div class="coworker">58% of coworker bookings</div>
           </div>
-          <div class="price-sub">$421 w taxes and fees</div>
-          <div class="price-sub">CVV required</div>
-          <button class="btn btn-primary select-btn">Select</button>
+          <div class="hotel-price">
+            <div class="price-caption">From</div>
+            <div class="price-flag-row">
+              <span class="oop-anchor">
+                <button class="flag-trigger flag-trigger--md" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-card-md" aria-label="Out of policy">
+                  <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+                </button>
+                <div class="policy-popover" id="pv-card-md" role="dialog" aria-label="Out of policy" data-oop-panel style="left:auto; right:0;">
+                  <div class="policy-popover__header">
+                    <div class="policy-popover__heading">
+                      <span class="policy-popover__icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg></span>
+                      <p class="policy-popover__title">Out of Policy</p>
+                    </div>
+                    <button class="policy-popover__close" data-oop-close aria-label="Close">&times;</button>
+                  </div>
+                  <div class="policy-popover__body">
+                    <p class="policy-popover__message">Wes, this room does not comply with your company's maximum nightly rate of USD 420 for this region.</p>
+                  </div>
+                  <div class="policy-popover__footer">
+                    <a class="policy-popover__link" href="#" onclick="return false;">View travel policy</a>
+                  </div>
+                </div>
+              </span>
+              <div class="price-value">$459</div>
+            </div>
+            <div class="price-sub">$421 w taxes and fees</div>
+            <div class="price-sub">CVV required</div>
+            <button class="btn btn-primary select-btn">Select</button>
+          </div>
+        </div>
+        <div class="hotel-perk-strip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v4a4 4 0 01-4 4H8a4 4 0 01-4-4V4z"/><path d="M4 12v4a4 4 0 004 4h8a4 4 0 004-4v-4"/></svg>
+          Offers free breakfast, within company policy
         </div>
       </div>
     </div>
@@ -187,42 +222,56 @@
     <div>
       <div class="hotel-card-size-label">Large</div>
       <div class="hotel-card">
-        <div class="hotel-badge-row"><span class="hotel-badge">Egencia preferred</span></div>
-        <div class="hotel-img placeholder-chrome">Photo</div>
-        <div class="hotel-body">
-          <h3 class="hotel-name">Hilton San Francisco Union Square</h3>
-          <div class="hotel-subrow"><span class="stars">★★★★</span><span class="muted">0.3 miles away</span></div>
-          <div class="muted">4.3/5 Very Good (2,441 reviews)</div>
+        <div class="hotel-badge-row">
+          <span class="hotel-badge"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v18"/><path d="M5 4h11l-2 4 2 4H5"/></svg>Egencia preferred</span>
+          <span class="hotel-badge hotel-badge--neutral"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 12 21.99 2 12 3 3h9z"/><circle cx="15.5" cy="7.5" r="1"/></svg>Negotiated</span>
         </div>
-        <div class="hotel-price">
-          <div class="price-caption">From</div>
-          <div class="price-flag-row">
-            <span class="oop-anchor">
-              <button class="flag-trigger flag-trigger--lg" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-card-lg" aria-label="Out of policy">
-                <svg class="flag-icon" viewBox="0 0 24 24" width="24" height="24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
-              </button>
-              <div class="policy-popover policy-popover--lg" id="pv-card-lg" role="dialog" aria-label="Out of policy" data-oop-panel style="left:auto; right:0;">
-                <div class="policy-popover__header">
-                  <div class="policy-popover__heading">
-                    <span class="policy-popover__icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg></span>
-                    <p class="policy-popover__title">Out of Policy</p>
-                  </div>
-                  <button class="policy-popover__close" data-oop-close aria-label="Close">&times;</button>
-                </div>
-                <div class="policy-popover__body">
-                  <p class="policy-popover__message">Wes, this room does not comply with your company's maximum nightly rate of USD 420 for this region.</p>
-                </div>
-                <div class="policy-popover__footer">
-                  <a class="policy-popover__link" href="#" onclick="return false;">View travel policy</a>
-                  <button class="policy-popover__action">Request exception</button>
-                </div>
-              </div>
-            </span>
-            <div class="price-value">$459</div>
+        <div class="hotel-card-main">
+          <div class="hotel-img placeholder-chrome">Photo</div>
+          <div class="hotel-body">
+            <h3 class="hotel-name">Hilton San Francisco Union Square</h3>
+            <div class="hotel-subrow"><span class="stars">★★★★</span><span class="muted">0.3 miles away</span></div>
+            <div class="hotel-reviews-box">
+              <div class="hotel-reviews-label">Reviews</div>
+              <div class="muted">4.3/5 Very Good (2,441 reviews)</div>
+              <div class="muted">Colleague Reviews: 4.5/5 (18 reviews)</div>
+            </div>
+            <div class="hotel-cert-line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9"/></svg>Sustainability certified</div>
+            <div class="coworker">58% of coworker bookings</div>
           </div>
-          <div class="price-sub">$421 w taxes and fees</div>
-          <div class="price-sub">CVV required</div>
-          <button class="btn btn-primary select-btn">Select</button>
+          <div class="hotel-price">
+            <div class="price-caption">From</div>
+            <div class="price-flag-row">
+              <span class="oop-anchor">
+                <button class="flag-trigger flag-trigger--lg" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-card-lg" aria-label="Out of policy">
+                  <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+                </button>
+                <div class="policy-popover" id="pv-card-lg" role="dialog" aria-label="Out of policy" data-oop-panel style="left:auto; right:0;">
+                  <div class="policy-popover__header">
+                    <div class="policy-popover__heading">
+                      <span class="policy-popover__icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg></span>
+                      <p class="policy-popover__title">Out of Policy</p>
+                    </div>
+                    <button class="policy-popover__close" data-oop-close aria-label="Close">&times;</button>
+                  </div>
+                  <div class="policy-popover__body">
+                    <p class="policy-popover__message">Wes, this room does not comply with your company's maximum nightly rate of USD 420 for this region.</p>
+                  </div>
+                  <div class="policy-popover__footer">
+                    <a class="policy-popover__link" href="#" onclick="return false;">View travel policy</a>
+                  </div>
+                </div>
+              </span>
+              <div class="price-value">$459</div>
+            </div>
+            <div class="price-sub">$421 w taxes and fees</div>
+            <div class="price-sub">CVV required</div>
+            <button class="btn btn-primary select-btn">Select</button>
+          </div>
+        </div>
+        <div class="hotel-perk-strip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v4a4 4 0 01-4 4H8a4 4 0 01-4-4V4z"/><path d="M4 12v4a4 4 0 004 4h8a4 4 0 004-4v-4"/></svg>
+          Offers free breakfast, within company policy
         </div>
       </div>
     </div>
@@ -231,7 +280,7 @@
 
   <div class="notes-box">
     <h4>Decisions applied here</h4>
-    Click/tap only — no hover-open, since a structured surface with a close button shouldn't appear from a stray mouse pass · has an explicit close (&times;) button, but still auto-dismisses 3s after the pointer leaves in case someone opens it and walks away without closing · keyboard focus reveals it via <code>:focus-visible</code>, and every close path (timeout, &times; button, outside click, Escape) calls <code>blur()</code> · small drops the footer link entirely; large adds a second action ("Request exception") alongside the policy link. Full write-up: <a href="design-decisions.md" style="color: var(--accent); font-weight: 700;">design-decisions.md</a>.
+    Small/medium/large change only the flag icon's size (16/18/20px) — the popover itself (width, header, body, footer, type) is identical at every size · click/tap only — no hover-open, since a structured surface with a close button shouldn't appear from a stray mouse pass · has an explicit close (&times;) button, but still auto-dismisses 3s after the pointer leaves in case someone opens it and walks away without closing · keyboard focus reveals it via <code>:focus-visible</code>, and every close path (timeout, &times; button, outside click, Escape) calls <code>blur()</code> · hotel card shown with every optional data slot filled in (reviews + colleague reviews, sustainability certified, coworker bookings, perk strip) to match the real card's maximum-density state. Full write-up: <a href="design-decisions.md" style="color: var(--accent); font-weight: 700;">design-decisions.md</a>.
   </div>
 
 </div>

@@ -22,7 +22,7 @@
 
   <div class="hub-hero" style="padding: 0 0 28px;">
     <h1 style="font-size: 26px; line-height: 34px;">Concept A — Tooltip</h1>
-    <p>The current pattern. A lightweight popover anchored to the flag icon, no header chrome, no explicit close button. Opens on hover, click, or tap. Because it has no close affordance, it auto-dismisses 3 seconds after the pointer actually leaves it — not 3 seconds after it was opened.</p>
+    <p>The current pattern. A lightweight popover anchored to the flag icon, no header chrome, no explicit close button. Opens on hover, click, or tap; auto-dismisses 3 seconds after the pointer actually leaves it. Small/medium/large only change the flag icon's size (16/18/20px) — the tooltip's content, width, padding, and type are the same at every size.</p>
   </div>
 
   <p class="hub-section-label">Standalone — sizes</p>
@@ -31,10 +31,11 @@
     <div class="size-sample">
       <span class="oop-anchor oop-anchor--hoverable">
         <button class="flag-trigger flag-trigger--sm" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="tt-sm" aria-label="Out of policy">
-          <svg class="flag-icon" viewBox="0 0 24 24" width="16" height="16"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+          <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
         </button>
-        <div class="policy-tooltip policy-tooltip--sm" id="tt-sm" role="tooltip" data-oop-panel>
-          <p class="policy-tooltip__message">Exceeds company policy — USD 420/night max for this region.</p>
+        <div class="policy-tooltip" id="tt-sm" role="tooltip" data-oop-panel>
+          <p class="policy-tooltip__title">Out of Policy</p>
+          <p class="policy-tooltip__message">Wes, this room does not comply with your company's maximum nightly rate of USD 420 for this region.</p>
         </div>
       </span>
       <span class="size-sample-label">Small</span>
@@ -43,9 +44,9 @@
     <div class="size-sample">
       <span class="oop-anchor oop-anchor--hoverable">
         <button class="flag-trigger flag-trigger--md" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="tt-md" aria-label="Out of policy">
-          <svg class="flag-icon" viewBox="0 0 24 24" width="20" height="20"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+          <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
         </button>
-        <div class="policy-tooltip policy-tooltip--md" id="tt-md" role="tooltip" data-oop-panel>
+        <div class="policy-tooltip" id="tt-md" role="tooltip" data-oop-panel>
           <p class="policy-tooltip__title">Out of Policy</p>
           <p class="policy-tooltip__message">Wes, this room does not comply with your company's maximum nightly rate of USD 420 for this region.</p>
         </div>
@@ -56,12 +57,11 @@
     <div class="size-sample">
       <span class="oop-anchor oop-anchor--hoverable">
         <button class="flag-trigger flag-trigger--lg" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="tt-lg" aria-label="Out of policy">
-          <svg class="flag-icon" viewBox="0 0 24 24" width="24" height="24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+          <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
         </button>
-        <div class="policy-tooltip policy-tooltip--lg" id="tt-lg" role="tooltip" data-oop-panel>
+        <div class="policy-tooltip" id="tt-lg" role="tooltip" data-oop-panel>
           <p class="policy-tooltip__title">Out of Policy</p>
           <p class="policy-tooltip__message">Wes, this room does not comply with your company's maximum nightly rate of USD 420 for this region.</p>
-          <a class="policy-tooltip__link" href="#" onclick="return false;">View travel policy</a>
         </div>
       </span>
       <span class="size-sample-label">Large</span>
@@ -75,29 +75,45 @@
     <div>
       <div class="hotel-card-size-label">Small</div>
       <div class="hotel-card">
-        <div class="hotel-badge-row"><span class="hotel-badge">Egencia preferred</span></div>
-        <div class="hotel-img placeholder-chrome">Photo</div>
-        <div class="hotel-body">
-          <h3 class="hotel-name">Hilton San Francisco Union Square</h3>
-          <div class="hotel-subrow"><span class="stars">★★★★</span><span class="muted">0.3 miles away</span></div>
-          <div class="muted">4.3/5 Very Good (2,441 reviews)</div>
+        <div class="hotel-badge-row">
+          <span class="hotel-badge"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v18"/><path d="M5 4h11l-2 4 2 4H5"/></svg>Egencia preferred</span>
+          <span class="hotel-badge hotel-badge--neutral"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 12 21.99 2 12 3 3h9z"/><circle cx="15.5" cy="7.5" r="1"/></svg>Negotiated</span>
         </div>
-        <div class="hotel-price">
-          <div class="price-caption">From</div>
-          <div class="price-flag-row">
-            <span class="oop-anchor oop-anchor--hoverable">
-              <button class="flag-trigger flag-trigger--sm" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="tt-card-sm" aria-label="Out of policy">
-                <svg class="flag-icon" viewBox="0 0 24 24" width="16" height="16"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
-              </button>
-              <div class="policy-tooltip policy-tooltip--sm" id="tt-card-sm" role="tooltip" data-oop-panel style="left:auto; right:0;">
-                <p class="policy-tooltip__message">Exceeds company policy — USD 420/night max for this region.</p>
-              </div>
-            </span>
-            <div class="price-value">$459</div>
+        <div class="hotel-card-main">
+          <div class="hotel-img placeholder-chrome">Photo</div>
+          <div class="hotel-body">
+            <h3 class="hotel-name">Hilton San Francisco Union Square</h3>
+            <div class="hotel-subrow"><span class="stars">★★★★</span><span class="muted">0.3 miles away</span></div>
+            <div class="hotel-reviews-box">
+              <div class="hotel-reviews-label">Reviews</div>
+              <div class="muted">4.3/5 Very Good (2,441 reviews)</div>
+              <div class="muted">Colleague Reviews: 4.5/5 (18 reviews)</div>
+            </div>
+            <div class="hotel-cert-line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9"/></svg>Sustainability certified</div>
+            <div class="coworker">58% of coworker bookings</div>
           </div>
-          <div class="price-sub">$421 w taxes and fees</div>
-          <div class="price-sub">CVV required</div>
-          <button class="btn btn-primary select-btn">Select</button>
+          <div class="hotel-price">
+            <div class="price-caption">From</div>
+            <div class="price-flag-row">
+              <span class="oop-anchor oop-anchor--hoverable">
+                <button class="flag-trigger flag-trigger--sm" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="tt-card-sm" aria-label="Out of policy">
+                  <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+                </button>
+                <div class="policy-tooltip" id="tt-card-sm" role="tooltip" data-oop-panel style="left:auto; right:0;">
+                  <p class="policy-tooltip__title">Out of Policy</p>
+                  <p class="policy-tooltip__message">Wes, this room does not comply with your company's maximum nightly rate of USD 420 for this region.</p>
+                </div>
+              </span>
+              <div class="price-value">$459</div>
+            </div>
+            <div class="price-sub">$421 w taxes and fees</div>
+            <div class="price-sub">CVV required</div>
+            <button class="btn btn-primary select-btn">Select</button>
+          </div>
+        </div>
+        <div class="hotel-perk-strip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v4a4 4 0 01-4 4H8a4 4 0 01-4-4V4z"/><path d="M4 12v4a4 4 0 004 4h8a4 4 0 004-4v-4"/></svg>
+          Offers free breakfast, within company policy
         </div>
       </div>
     </div>
@@ -105,30 +121,45 @@
     <div>
       <div class="hotel-card-size-label">Medium</div>
       <div class="hotel-card">
-        <div class="hotel-badge-row"><span class="hotel-badge">Egencia preferred</span></div>
-        <div class="hotel-img placeholder-chrome">Photo</div>
-        <div class="hotel-body">
-          <h3 class="hotel-name">Hilton San Francisco Union Square</h3>
-          <div class="hotel-subrow"><span class="stars">★★★★</span><span class="muted">0.3 miles away</span></div>
-          <div class="muted">4.3/5 Very Good (2,441 reviews)</div>
+        <div class="hotel-badge-row">
+          <span class="hotel-badge"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v18"/><path d="M5 4h11l-2 4 2 4H5"/></svg>Egencia preferred</span>
+          <span class="hotel-badge hotel-badge--neutral"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 12 21.99 2 12 3 3h9z"/><circle cx="15.5" cy="7.5" r="1"/></svg>Negotiated</span>
         </div>
-        <div class="hotel-price">
-          <div class="price-caption">From</div>
-          <div class="price-flag-row">
-            <span class="oop-anchor oop-anchor--hoverable">
-              <button class="flag-trigger flag-trigger--md" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="tt-card-md" aria-label="Out of policy">
-                <svg class="flag-icon" viewBox="0 0 24 24" width="20" height="20"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
-              </button>
-              <div class="policy-tooltip policy-tooltip--md" id="tt-card-md" role="tooltip" data-oop-panel style="left:auto; right:0;">
-                <p class="policy-tooltip__title">Out of Policy</p>
-                <p class="policy-tooltip__message">Wes, this room does not comply with your company's maximum nightly rate of USD 420 for this region.</p>
-              </div>
-            </span>
-            <div class="price-value">$459</div>
+        <div class="hotel-card-main">
+          <div class="hotel-img placeholder-chrome">Photo</div>
+          <div class="hotel-body">
+            <h3 class="hotel-name">Hilton San Francisco Union Square</h3>
+            <div class="hotel-subrow"><span class="stars">★★★★</span><span class="muted">0.3 miles away</span></div>
+            <div class="hotel-reviews-box">
+              <div class="hotel-reviews-label">Reviews</div>
+              <div class="muted">4.3/5 Very Good (2,441 reviews)</div>
+              <div class="muted">Colleague Reviews: 4.5/5 (18 reviews)</div>
+            </div>
+            <div class="hotel-cert-line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9"/></svg>Sustainability certified</div>
+            <div class="coworker">58% of coworker bookings</div>
           </div>
-          <div class="price-sub">$421 w taxes and fees</div>
-          <div class="price-sub">CVV required</div>
-          <button class="btn btn-primary select-btn">Select</button>
+          <div class="hotel-price">
+            <div class="price-caption">From</div>
+            <div class="price-flag-row">
+              <span class="oop-anchor oop-anchor--hoverable">
+                <button class="flag-trigger flag-trigger--md" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="tt-card-md" aria-label="Out of policy">
+                  <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+                </button>
+                <div class="policy-tooltip" id="tt-card-md" role="tooltip" data-oop-panel style="left:auto; right:0;">
+                  <p class="policy-tooltip__title">Out of Policy</p>
+                  <p class="policy-tooltip__message">Wes, this room does not comply with your company's maximum nightly rate of USD 420 for this region.</p>
+                </div>
+              </span>
+              <div class="price-value">$459</div>
+            </div>
+            <div class="price-sub">$421 w taxes and fees</div>
+            <div class="price-sub">CVV required</div>
+            <button class="btn btn-primary select-btn">Select</button>
+          </div>
+        </div>
+        <div class="hotel-perk-strip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v4a4 4 0 01-4 4H8a4 4 0 01-4-4V4z"/><path d="M4 12v4a4 4 0 004 4h8a4 4 0 004-4v-4"/></svg>
+          Offers free breakfast, within company policy
         </div>
       </div>
     </div>
@@ -136,31 +167,45 @@
     <div>
       <div class="hotel-card-size-label">Large</div>
       <div class="hotel-card">
-        <div class="hotel-badge-row"><span class="hotel-badge">Egencia preferred</span></div>
-        <div class="hotel-img placeholder-chrome">Photo</div>
-        <div class="hotel-body">
-          <h3 class="hotel-name">Hilton San Francisco Union Square</h3>
-          <div class="hotel-subrow"><span class="stars">★★★★</span><span class="muted">0.3 miles away</span></div>
-          <div class="muted">4.3/5 Very Good (2,441 reviews)</div>
+        <div class="hotel-badge-row">
+          <span class="hotel-badge"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v18"/><path d="M5 4h11l-2 4 2 4H5"/></svg>Egencia preferred</span>
+          <span class="hotel-badge hotel-badge--neutral"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 12 21.99 2 12 3 3h9z"/><circle cx="15.5" cy="7.5" r="1"/></svg>Negotiated</span>
         </div>
-        <div class="hotel-price">
-          <div class="price-caption">From</div>
-          <div class="price-flag-row">
-            <span class="oop-anchor oop-anchor--hoverable">
-              <button class="flag-trigger flag-trigger--lg" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="tt-card-lg" aria-label="Out of policy">
-                <svg class="flag-icon" viewBox="0 0 24 24" width="24" height="24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
-              </button>
-              <div class="policy-tooltip policy-tooltip--lg" id="tt-card-lg" role="tooltip" data-oop-panel style="left:auto; right:0;">
-                <p class="policy-tooltip__title">Out of Policy</p>
-                <p class="policy-tooltip__message">Wes, this room does not comply with your company's maximum nightly rate of USD 420 for this region.</p>
-                <a class="policy-tooltip__link" href="#" onclick="return false;">View travel policy</a>
-              </div>
-            </span>
-            <div class="price-value">$459</div>
+        <div class="hotel-card-main">
+          <div class="hotel-img placeholder-chrome">Photo</div>
+          <div class="hotel-body">
+            <h3 class="hotel-name">Hilton San Francisco Union Square</h3>
+            <div class="hotel-subrow"><span class="stars">★★★★</span><span class="muted">0.3 miles away</span></div>
+            <div class="hotel-reviews-box">
+              <div class="hotel-reviews-label">Reviews</div>
+              <div class="muted">4.3/5 Very Good (2,441 reviews)</div>
+              <div class="muted">Colleague Reviews: 4.5/5 (18 reviews)</div>
+            </div>
+            <div class="hotel-cert-line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9"/></svg>Sustainability certified</div>
+            <div class="coworker">58% of coworker bookings</div>
           </div>
-          <div class="price-sub">$421 w taxes and fees</div>
-          <div class="price-sub">CVV required</div>
-          <button class="btn btn-primary select-btn">Select</button>
+          <div class="hotel-price">
+            <div class="price-caption">From</div>
+            <div class="price-flag-row">
+              <span class="oop-anchor oop-anchor--hoverable">
+                <button class="flag-trigger flag-trigger--lg" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="tt-card-lg" aria-label="Out of policy">
+                  <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+                </button>
+                <div class="policy-tooltip" id="tt-card-lg" role="tooltip" data-oop-panel style="left:auto; right:0;">
+                  <p class="policy-tooltip__title">Out of Policy</p>
+                  <p class="policy-tooltip__message">Wes, this room does not comply with your company's maximum nightly rate of USD 420 for this region.</p>
+                </div>
+              </span>
+              <div class="price-value">$459</div>
+            </div>
+            <div class="price-sub">$421 w taxes and fees</div>
+            <div class="price-sub">CVV required</div>
+            <button class="btn btn-primary select-btn">Select</button>
+          </div>
+        </div>
+        <div class="hotel-perk-strip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v4a4 4 0 01-4 4H8a4 4 0 01-4-4V4z"/><path d="M4 12v4a4 4 0 004 4h8a4 4 0 004-4v-4"/></svg>
+          Offers free breakfast, within company policy
         </div>
       </div>
     </div>
@@ -169,7 +214,7 @@
 
   <div class="notes-box">
     <h4>Decisions applied here</h4>
-    Hover, click, and tap all open the tooltip, matching today's live pattern · no close button, so it auto-dismisses 3s after the pointer leaves the trigger (not 3s from the click) · keyboard focus reveals it via <code>:focus-visible</code>, and every close path calls <code>blur()</code> so a lingering keyboard focus ring can't keep it visually stuck open · small drops the title entirely and condenses to one line; large adds a policy link. Full write-up: <a href="design-decisions.md" style="color: var(--accent); font-weight: 700;">design-decisions.md</a>.
+    Small/medium/large change only the flag icon's size (16/18/20px) — the tooltip itself (width, padding, "Out of Policy" title, message copy) is identical at every size · hover, click, and tap all open it, matching today's live pattern · no close button, so it auto-dismisses 3s after the pointer leaves the trigger (not 3s from the click) · keyboard focus reveals it via <code>:focus-visible</code>, and every close path calls <code>blur()</code> so a lingering keyboard focus ring can't keep it visually stuck open · hotel card shown with every optional data slot filled in (reviews + colleague reviews, sustainability certified, coworker bookings, perk strip) to match the real card's maximum-density state. Full write-up: <a href="design-decisions.md" style="color: var(--accent); font-weight: 700;">design-decisions.md</a>.
   </div>
 
 </div>

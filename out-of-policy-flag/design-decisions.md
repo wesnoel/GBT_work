@@ -30,16 +30,16 @@ The popover (B) keeps this as a safety net even though it has an explicit close 
 
 ## 5. Sizing strategy
 
-**Decision:** Small, medium, and large change icon size, padding, type scale, *and* content density together — not a uniform scale-up of one size. Concretely:
+**Decision (revised 2026-09-26):** small, medium, and large control *only* the flag icon's size — 16px / 18px / 20px. Everything else (panel width, padding, structure, and copy) is identical across all three. This replaces an earlier version of this build where size also changed padding, type scale, and content density (a tooltip's title/link, a popover's footer actions, a modal's button count all varied by size) — that turned out to conflate two separate things: how prominent the trigger icon looks in a given UI density, and how much information the disclosure surface shows once triggered. Those are independent; the flag can be small in a dense list row and still open the exact same "Out of Policy" tooltip/popover/modal as a large flag would.
 
-| | Small | Medium | Large |
-|---|---|---|---|
-| Icon | 16px | 20px | 24px |
-| Tooltip | message only, no title, 1 line | title + full message | title + full message + policy link |
-| Popover | header + condensed 1-line message, no footer | header + full message + policy-link footer | header + full message + footer with policy link *and* "Request exception" action |
-| Modal | title + message + single "Got it" button | + "View travel policy" link below the button | + icon badge grows to 48px, second "Request exception" action alongside "Got it" |
+All panel text is font_300 (14px / 18px line-height): title bold, body text regular — same tier, different weight only, per typography-tokens.md (bold and regular share size/line-height at every tier).
 
-Rationale: a small size is used where space is tightest (e.g. a dense list row) and should carry the minimum viable warning; a large size is used where the interaction is the focal point and can afford to offer a next step, not just a warning.
+Concretely, the disclosure content per concept (constant across all three icon sizes):
+- **Tooltip:** title + message, no link.
+- **Popover:** header (icon + title) + close button + message + footer with a "View travel policy" link.
+- **Modal:** header (icon badge + title) + close button + message + "Got it" primary button + "View travel policy" link.
+
+A single shared modal panel is reused by every trigger on Concept C's page regardless of icon size, since there's no longer any content variation to switch between.
 
 ## 6. Reusability — data-driven content, not hardcoded to hotel
 
@@ -62,14 +62,16 @@ Implemented in `app.js` as `OOP_DATA` (one entry per line of business, each with
 
 ## 7. Assumptions
 
-**Decision:** Used "Wes" as the traveler's first name (the requester) since the real component takes the logged-in user's name as data, not a hardcoded value. Used the real Hotel SRP price-block context (thumbnail, name, stars/distance, price block) from the existing hotel-card pattern, with a single example hotel (Hilton San Francisco Union Square, $459/night against a $420 policy limit) reused across every size variant so the flag's size is the only variable being compared.
+**Decision:** Used "Wes" as the traveler's first name (the requester) since the real component takes the logged-in user's name as data, not a hardcoded value. Used the real Hotel SRP price-block context (thumbnail, name, stars/distance, price block) from the existing hotel-card pattern, with a single example hotel (Hilton San Francisco Union Square, $459/night against a $420 policy limit) reused across every size variant so the flag's icon size is the only variable being compared.
+
+The hotel card itself was upgraded (2026-09-26) to show every optional data slot filled in at once — badges (Egencia preferred + Negotiated), the Reviews box with both the public score and Colleague Reviews, the Sustainability certified line, the coworker-booking-% line, and the perk/policy strip footer — matching a real reference screenshot of a fully-populated card (New York Hilton Midtown). This makes the out-of-policy flag's context realistic and maximally dense, rather than the stripped-down card used in the first pass.
 
 ## 8. Figma handoff notes
 
 - **Tooltip (A)** is the closest match to an existing Sticker Sheet Tooltip component, if one exists — check before rebuilding from scratch.
 - **Popover dialog (B)** is likely net-new — no obvious existing Sticker Sheet equivalent for an anchored, structured popover with its own header/close chrome. Flag as net-new work for whoever rebuilds this in Figma.
 - **Modal (C)** should map directly to the standard Dialog/Modal component in the Sticker Sheet.
-- Class naming (`flag-trigger`, `policy-tooltip`, `policy-popover`, `policy-modal`, each with `--sm`/`--md`/`--lg` modifiers) is intended to map to Figma component variants (Size: Small/Medium/Large) rather than one-off instances.
+- Class naming: `flag-trigger` carries the `--sm`/`--md`/`--lg` size modifiers (icon dimension only). `policy-tooltip`, `policy-popover`, and `policy-modal` have no size modifiers at all now — one Figma component/variant each, sized once, is enough; only the trigger needs a Size variant axis.
 
 ---
 

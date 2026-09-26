@@ -128,22 +128,19 @@ function initAllOopAnchors() {
   document.querySelectorAll(".oop-anchor").forEach(initOopAnchor);
 }
 
-/* ---- Concept C: modal (explicit dismiss only, no idle timer) ---- */
+/* ---- Concept C: modal (explicit dismiss only, no idle timer) ----
+   One shared panel — content is identical no matter which trigger (or which
+   icon size) opened it, so there's nothing to switch based on size. */
 function initOopModal() {
   var overlay = document.getElementById("policyModalOverlay");
   if (!overlay) return;
-  var panels = overlay.querySelectorAll(".policy-modal");
+  var panel = overlay.querySelector(".policy-modal");
   var lastTrigger = null;
 
   function open(trigger) {
     lastTrigger = trigger;
-    var size = trigger.getAttribute("data-size") || "md";
-    panels.forEach(function (p) {
-      p.classList.toggle("is-active", p.classList.contains("policy-modal--" + size));
-    });
     overlay.classList.add("is-open");
-    var activePanel = overlay.querySelector(".policy-modal.is-active");
-    var closeBtn = activePanel && activePanel.querySelector("[data-oop-close]");
+    var closeBtn = panel && panel.querySelector("[data-oop-close]");
     if (closeBtn) closeBtn.focus();
   }
 
