@@ -179,7 +179,10 @@ a { color: inherit; text-decoration: none; }
   display: none;
   position: absolute;
   top: calc(100% + 6px);
-  left: 0;
+  bottom: auto;
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
   z-index: 20;
   width: 260px;
   padding: 12px 14px;
@@ -197,16 +200,25 @@ a { color: inherit; text-decoration: none; }
 .policy-tooltip__message { font-weight: 400; font-size: 14px; line-height: 18px; color: #E8EAED; margin: 0; }
 
 /* Placement variants — where the panel opens relative to the trigger.
-   Default is below/left-aligned; these override just the position. */
-.policy-tooltip--above { top: auto; bottom: calc(100% + 6px); }
-.policy-tooltip--left { top: 0; left: auto; right: calc(100% + 6px); }
+   Default (no modifier) is below, centered on the trigger. Each modifier
+   fully restates top/bottom/left/right/transform so variants never bleed
+   into each other. "-left" variants are flush to the trigger's right edge
+   and grow leftward — for triggers that sit near a right edge (like the
+   hotel card's price column), where growing right would run off the card. */
+.policy-tooltip--above { top: auto; bottom: calc(100% + 6px); left: 50%; right: auto; transform: translateX(-50%); }
+.policy-tooltip--left { top: 50%; bottom: auto; left: auto; right: calc(100% + 6px); transform: translateY(-50%); }
+.policy-tooltip--below-left { top: calc(100% + 6px); bottom: auto; left: auto; right: 0; transform: none; }
+.policy-tooltip--above-left { top: auto; bottom: calc(100% + 6px); left: auto; right: 0; transform: none; }
 
 /* ================= Concept B — Popover dialog ================= */
 .policy-popover {
   display: none;
   position: absolute;
   top: calc(100% + 8px);
-  left: 0;
+  bottom: auto;
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
   z-index: 20;
   width: 300px;
   background: var(--surface);
@@ -250,9 +262,16 @@ a { color: inherit; text-decoration: none; }
 }
 .policy-popover__link { color: var(--accent); font-weight: 700; font-size: 14px; line-height: 18px; border-bottom: 1px dotted var(--accent); }
 
-/* Placement variants — where the panel opens relative to the trigger. */
-.policy-popover--above { top: auto; bottom: calc(100% + 8px); }
-.policy-popover--left { top: 0; left: auto; right: calc(100% + 8px); }
+/* Placement variants — where the panel opens relative to the trigger.
+   Default (no modifier) is below, centered on the trigger. Each modifier
+   fully restates top/bottom/left/right/transform so variants never bleed
+   into each other. "-left" variants are flush to the trigger's right edge
+   and grow leftward — for triggers that sit near a right edge (like the
+   hotel card's price column), where growing right would run off the card. */
+.policy-popover--above { top: auto; bottom: calc(100% + 8px); left: 50%; right: auto; transform: translateX(-50%); }
+.policy-popover--left { top: 50%; bottom: auto; left: auto; right: calc(100% + 8px); transform: translateY(-50%); }
+.policy-popover--below-left { top: calc(100% + 8px); bottom: auto; left: auto; right: 0; transform: none; }
+.policy-popover--above-left { top: auto; bottom: calc(100% + 8px); left: auto; right: 0; transform: none; }
 
 /* ================= Concept C — Modal ================= */
 .policy-modal-overlay {

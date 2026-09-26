@@ -76,9 +76,15 @@ The hotel card itself was upgraded (2026-09-26) to show every optional data slot
 
 ## 10. Placement variants — tooltip and popover
 
-**Decision (2026-09-26):** added explicit placement variants for Concept A (tooltip) and Concept B (popover) — **below** (the default), **above**, and **left** — as CSS position modifiers (`--above`, `--left`) on the same panel, demonstrated in a new "Placement" section on each concept page. This matters in practice: the default below-anchor placement can run off the bottom of a dense, scrollable list or the right edge of a narrow viewport, and a real implementation would need to pick a placement (or flip automatically) based on available space. Modal (Concept C) has no placement variant — it's centered/fixed by definition, not anchored to the trigger.
+**Decision (2026-09-26, revised same day):** five placement variants for Concept A (tooltip) and Concept B (popover), each a CSS position modifier on the same panel — no content changes, same as the size variants:
 
-**Flag for follow-up:** a production implementation would likely want this to flip automatically based on available viewport space (collision detection), rather than being a fixed per-instance choice — that's a real interaction detail worth prototyping in code, not fully resolvable in a static wireframe.
+- **Below** (default) and **Above** — centered horizontally on the trigger (`left: 50%; transform: translateX(-50%)`), not left-edge-aligned. A panel noticeably wider than a 16-20px icon looked lopsided when it only extended in one direction from the trigger's edge.
+- **Left** — vertically centered beside the trigger (`top: 50%; transform: translateY(-50%)`), opening directly to the left.
+- **Below, left** and **Above, left** — added after the first pass, because the hotel card's flag sits at the right edge of the price column: a panel that grows *rightward* from there (as plain Below/Above do) would run off the edge of the card. These two stay flush to the trigger's right edge (`right: 0`, no centering transform) and grow only leftward, which is the placement the price-column context actually needs.
+
+Every modifier fully restates `top`/`bottom`/`left`/`right`/`transform` (not just the properties that differ from the default) so variants can't bleed into each other regardless of class order. All five are shown twice per concept page: standalone, and applied to the real hotel card. Modal (Concept C) has no placement variant — it's centered/fixed by definition, not anchored to the trigger.
+
+**Flag for follow-up:** a production implementation would likely want this to flip automatically based on available viewport space (collision detection) rather than being a fixed per-instance choice — that's a real interaction detail worth prototyping in code, not fully resolvable in a static wireframe.
 
 ## 11. Figma handoff notes
 
