@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hotel Search Results — Grayscale Wireframe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #14161a;
+    --ink-soft: #52565f;
+    --ink-faint: #8b8f98;
+    --line: #d8dade;
+    --line-soft: #eceef1;
+    --surface: #ffffff;
+    --canvas: #f4f5f6;
+    --canvas-soft: #fafafb;
+    --radius: 10px;
+    --radius-sm: 6px;
+    font-size: 15px;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--canvas);
+    color: var(--ink);
+    font-family: "Open Sans", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; }
+  .icon { width: 16px; height: 16px; display: inline-block; vertical-align: -3px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .icon.filled { fill: currentColor; stroke: none; }
+
+  /* ---- header ---- */
+  .eg-header { width: 100%; background: var(--surface); border-bottom: 1px solid var(--line); }
+  .eg-header-inner { max-width: 1200px; margin: 0 auto; height: 72px; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; }
+  .eg-header-left { display: flex; align-items: center; gap: 32px; }
+  .eg-logo { font-size: 20px; font-weight: 800; letter-spacing: -0.01em; color: var(--ink); }
+  .eg-lob-icons { display: flex; align-items: center; gap: 18px; color: var(--ink-soft); }
+  .eg-header-nav { display: flex; align-items: center; gap: 24px; font-size: 14px; color: var(--ink-soft); font-weight: 600; }
+  .eg-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--line-soft); border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: var(--ink-soft); }
+
+  /* ---- hero / search bar ---- */
+  .hero-band { background: var(--canvas-soft); border-bottom: 1px solid var(--line-soft); padding: 24px 0; }
+  .shell { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  .search-edit-bar { background: var(--surface); border: 1.5px solid var(--ink); border-radius: var(--radius); display: flex; align-items: center; padding: 16px 24px; gap: 24px; }
+  .search-field { display: flex; flex-direction: column; gap: 4px; }
+  .search-field .primary { font-size: 18px; font-weight: 700; }
+  .search-field .secondary { font-size: 12px; color: var(--ink-soft); }
+  .search-divider { width: 1px; height: 36px; background: var(--line); }
+  .search-dates { display: flex; align-items: center; gap: 16px; }
+  .search-dates .dash { color: var(--ink-faint); }
+  .btn-edit { margin-left: auto; border: 1.5px solid var(--ink); background: var(--surface); border-radius: var(--radius-sm); padding: 10px 20px; font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+  .btn-edit:hover { background: var(--line-soft); }
+
+  /* ---- policy banner ---- */
+  .policy-banner { padding: 24px 0 0; }
+  .policy-banner h1 { font-size: 28px; line-height: 36px; letter-spacing: -1px; font-weight: 700; margin: 0 0 8px; } /* tier 600 per typography-tokens.md */
+  .policy-banner p { font-size: 14px; color: var(--ink-soft); margin: 0 0 6px; max-width: 520px; }
+  .policy-banner .link { font-size: 14px; font-weight: 700; text-decoration: underline; }
+
+  /* ---- filter bar (sticky) ---- */
+  .filter-bar-wrap { position: sticky; top: 0; z-index: 20; background: var(--canvas); padding-top: 20px; }
+  .filter-bar { background: var(--surface); border-bottom: 1px solid var(--line); box-shadow: 0 1px 0 var(--line); }
+  .filter-bar-inner { max-width: 1200px; margin: 0 auto; padding: 12px 24px; display: flex; align-items: center; gap: 16px; position: relative; }
+  .pill-row { display: flex; align-items: center; gap: 8px; flex: 1; flex-wrap: wrap; }
+  .pill { display: flex; align-items: center; gap: 6px; border: 1px solid var(--line); border-radius: 999px; padding: 7px 14px; font-size: 13px; font-weight: 600; color: var(--ink); background: var(--surface); white-space: nowrap; }
+  .pill:hover { background: var(--line-soft); }
+  .pill.selected { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+  .pill .chev { transition: transform .15s ease; }
+  .pill[aria-expanded="true"] .chev { transform: rotate(180deg); }
+  .filter-divider { width: 1px; height: 24px; background: var(--line); }
+  .results-count { max-width: 1200px; margin: 0 auto; padding: 10px 24px 0; font-size: 13px; color: var(--ink-soft); }
+  .filter-dropdown { position: absolute; top: 100%; margin-top: 8px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); box-shadow: 0 8px 24px rgba(0,0,0,0.12); padding: 16px; min-width: 220px; display: none; z-index: 30; }
+  .filter-dropdown.open { display: block; }
+  .filter-dropdown .opt { display: flex; align-items: center; gap: 8px; font-size: 13px; padding: 6px 0; color: var(--ink-soft); }
+  .filter-dropdown .opt input { accent-color: var(--ink); }
+
+  /* ---- body columns ---- */
+  .body-columns { max-width: 1200px; margin: 0 auto; padding: 20px 24px 64px; display: flex; gap: 32px; align-items: flex-start; }
+  .list-column { flex: 0 0 640px; display: flex; flex-direction: column; gap: 16px; }
+  .map-column { position: sticky; top: 132px; flex: 1; height: calc(100vh - 152px); min-height: 480px; }
+
+  /* ---- hotel card ---- */
+  .hotel-card { position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px 12px 12px 12px; transition: box-shadow .15s ease, border-color .15s ease; }
+  .hotel-card:hover, .hotel-card.hovered { border-color: var(--ink-soft); box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+  .badge-row { position: absolute; top: -12px; left: 16px; display: flex; gap: 8px; }
+  .badge { display: flex; align-items: center; gap: 6px; border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 700; background: var(--surface); border: 1px solid var(--ink); }
+  .badge.secondary { border-color: var(--line); color: var(--ink-soft); }
+  .card-main { display: flex; gap: 20px; padding: 0 12px; }
+  .card-thumb { width: 148px; height: 148px; border-radius: var(--radius-sm); flex: none; background: repeating-linear-gradient(135deg, #eceeF1, #eceeF1 8px, #e2e4e7 8px, #e2e4e7 16px); border: 1px dashed var(--line); }
+  .card-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+  .card-title-row { display: flex; justify-content: space-between; gap: 12px; }
+  .card-name { font-size: 18px; font-weight: 700; }
+  .card-stars-distance { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink-soft); }
+  .stars { display: flex; gap: 2px; color: var(--ink); }
+  .reviews-box { background: var(--canvas-soft); border-radius: var(--radius-sm); padding: 10px 12px; font-size: 12px; color: var(--ink-soft); display: flex; flex-direction: column; gap: 2px; }
+  .reviews-box strong { color: var(--ink); font-weight: 700; }
+  .simple-rating { font-size: 13px; color: var(--ink-soft); }
+  .eco-line { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; }
+  .coworkers-line { font-size: 13px; color: var(--ink-soft); }
+  .price-block { flex: none; width: 130px; text-align: right; display: flex; flex-direction: column; gap: 4px; }
+  .price-from { font-size: 12px; color: var(--ink-soft); }
+  .price-amount { font-size: 24px; font-weight: 800; display: flex; align-items: center; justify-content: flex-end; gap: 4px; }
+  .price-taxes { font-size: 11px; color: var(--ink-soft); }
+  .price-cvv { font-size: 11px; color: var(--ink-soft); display: flex; align-items: center; justify-content: flex-end; gap: 4px; margin-top: 4px; }
+  .perk-strip { margin-top: 12px; background: var(--canvas-soft); border-top: 1px solid var(--line-soft); border-radius: 0 0 var(--radius) var(--radius); padding: 8px 12px; font-size: 12px; color: var(--ink-soft); display: flex; align-items: center; gap: 6px; margin-left: -12px; margin-right: -12px; margin-bottom: -12px; }
+
+  .btn-secondary-full { width: 100%; padding: 12px; border: 1px solid var(--ink); background: var(--surface); border-radius: var(--radius-sm); font-size: 14px; font-weight: 700; }
+  .btn-secondary-full:hover { background: var(--line-soft); }
+
+  /* ---- map ---- */
+  .map-surface { position: relative; width: 100%; height: 100%; border-radius: var(--radius); overflow: hidden; background: repeating-linear-gradient(45deg, #eceeF1, #eceeF1 10px, #e5e7ea 10px, #e5e7ea 20px); border: 1px solid var(--line); }
+  .map-label { position: absolute; top: 12px; left: 12px; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; color: var(--ink-faint); background: rgba(255,255,255,0.85); padding: 4px 8px; border-radius: 4px; }
+  .pin { position: absolute; transform: translate(-50%, -100%); background: var(--ink); color: var(--surface); font-size: 11px; font-weight: 700; padding: 4px 8px; border-radius: 999px 999px 999px 2px; white-space: nowrap; transition: transform .15s ease, background .15s ease; cursor: default; }
+  .pin.top-pick { background: var(--surface); color: var(--ink); border: 1.5px solid var(--ink); }
+  .pin.active { transform: translate(-50%, -110%) scale(1.18); background: var(--ink); color: var(--surface); z-index: 5; }
+
+  /* ---- footer ---- */
+  .eg-footer { border-top: 1px solid var(--line); background: var(--surface); padding: 32px 24px; text-align: center; font-size: 12px; color: var(--ink-faint); }
+  .eg-footer .foot-links { display: flex; justify-content: center; gap: 20px; margin-bottom: 12px; font-weight: 600; color: var(--ink-soft); }
+
+  .visually-hidden-note { max-width: 1200px; margin: 0 auto 0; padding: 8px 24px 0; font-size: 12px; color: var(--ink-faint); }
+</style>
+</head>
+<body>
+
+<header class="eg-header">
+  <div class="eg-header-inner">
+    <div class="eg-header-left">
+      <span class="eg-logo">egencia</span>
+      <div class="eg-lob-icons">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M2 16l20-7-9 9 2 6-3-2-3 3-1-6-6-3z"/></svg>
+        <svg class="icon" viewBox="0 0 24 24"><path d="M3 21h18M5 21V9l7-6 7 6v12M9 21v-6h6v6"/></svg>
+        <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="10" width="18" height="6" rx="1"/><path d="M6 10V7h12v3M4 16v3M20 16v3"/></svg>
+        <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="10" rx="2"/><path d="M7 8V6h10v2M3 13h18"/></svg>
+      </div>
+    </div>
+    <nav class="eg-header-nav">
+      <a href="#">My trips</a>
+      <a href="#">Tools ⌄</a>
+      <a href="#">Admin ⌄</a>
+      <a href="#">Community</a>
+      <a href="#">Help</a>
+      <span class="eg-avatar">SB</span>
+    </nav>
+  </div>
+</header>
+
+<div class="hero-band">
+  <div class="shell">
+    <div class="search-edit-bar">
+      <div class="search-field">
+        <span class="primary">New York</span>
+        <span class="secondary">New York, United States of America</span>
+      </div>
+      <div class="search-divider"></div>
+      <div class="search-dates">
+        <div class="search-field">
+          <span class="primary">May 12</span>
+          <span class="secondary">Monday</span>
+        </div>
+        <span class="dash">—</span>
+        <div class="search-field">
+          <span class="primary">May 15</span>
+          <span class="secondary">Wednesday</span>
+        </div>
+      </div>
+      <div class="search-divider"></div>
+      <button class="btn-edit">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
+        Edit search
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="policy-banner shell">
+  <h1>Hotel search results</h1>
+  <p>Your company's travel policy rate for this area is $224 per night.</p>
+  <a class="link" href="#">View company messages</a>
+</div>
+
+<div class="filter-bar-wrap">
+  <div class="filter-bar">
+    <div class="filter-bar-inner" id="filterBar">
+      <div class="pill-row">
+        <button class="pill" data-trigger="all-filters" aria-expanded="false">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+          All filters
+        </button>
+        <button class="pill" data-trigger="rating" aria-expanded="false">
+          <svg class="icon filled" viewBox="0 0 24 24"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.8 1.7 7-6.3-3.9-6.3 3.9 1.7-7L2 9.5l7.1-.6z"/></svg>
+          Hotel rating
+          <svg class="icon chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <button class="pill" data-trigger="name" aria-expanded="false">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M3 21h18M5 21V9l7-6 7 6v12M9 21v-6h6v6"/></svg>
+          Hotel name
+          <svg class="icon chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <button class="pill" data-trigger="loyalty" aria-expanded="false">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M12 21s-7-4.35-9.5-8.5C.6 9 2 5.5 5.5 5c2-.3 3.7.8 6.5 3 2.8-2.2 4.5-3.3 6.5-3 3.5.5 4.9 4 3 7.5C19 16.65 12 21 12 21z"/></svg>
+          Loyalty
+          <svg class="icon chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <button class="pill" data-toggle="breakfast">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M4 21h16M6 21V9a6 6 0 0 1 12 0v12M9 6l1-2M13 6l1-2"/></svg>
+          Includes breakfast
+        </button>
+        <button class="pill" data-trigger="price" aria-expanded="false">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M20.6 12.6L12 21.2 2.8 12 11.4 3.4a2 2 0 0 1 2.8 0l6.4 6.4a2 2 0 0 1 0 2.8z"/><circle cx="8.5" cy="7.5" r="1"/></svg>
+          Price
+          <svg class="icon chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+
+        <div class="filter-dropdown" data-panel="all-filters">
+          <div class="opt"><input type="checkbox" checked>Refundable rates only</div>
+          <div class="opt"><input type="checkbox">Preferred properties</div>
+          <div class="opt"><input type="checkbox">Within policy only</div>
+        </div>
+        <div class="filter-dropdown" data-panel="rating">
+          <div class="opt"><input type="checkbox">5 stars</div>
+          <div class="opt"><input type="checkbox" checked>4 stars &amp; up</div>
+          <div class="opt"><input type="checkbox">3 stars &amp; up</div>
+        </div>
+        <div class="filter-dropdown" data-panel="name">
+          <div class="opt" style="flex-direction:column;align-items:stretch;">
+            <input type="text" placeholder="Search by hotel name" style="border:1px solid var(--line);border-radius:6px;padding:8px 10px;font-size:13px;font-family:inherit;">
+          </div>
+        </div>
+        <div class="filter-dropdown" data-panel="loyalty">
+          <div class="opt"><input type="checkbox">Marriott Bonvoy</div>
+          <div class="opt"><input type="checkbox">Hilton Honors</div>
+          <div class="opt"><input type="checkbox">World of Hyatt</div>
+        </div>
+        <div class="filter-dropdown" data-panel="price">
+          <div class="opt" style="color:var(--ink);font-weight:700;">Up to $500 / night</div>
+          <div class="opt"><input type="range" min="0" max="1000" value="500" style="width:100%;"></div>
+        </div>
+      </div>
+
+      <div class="filter-divider"></div>
+
+      <button class="pill" data-trigger="sort" aria-expanded="false">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M3 7h13M3 12h9M3 17h5M17 3v14M13 13l4 4 4-4"/></svg>
+        Recommended
+        <svg class="icon chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="filter-dropdown" data-panel="sort" style="right:24px;">
+        <div class="opt" style="color:var(--ink);font-weight:700;">Recommended</div>
+        <div class="opt">Price (low to high)</div>
+        <div class="opt">Price (high to low)</div>
+        <div class="opt">Guest rating</div>
+        <div class="opt">Distance</div>
+      </div>
+    </div>
+  </div>
+  <div class="results-count" id="resultsCount">Showing 90 results.</div>
+</div>
+
+<div class="body-columns">
+  <div class="list-column" id="listColumn">
+    <!-- cards injected by JS from data below -->
+  </div>
+  <div class="map-column">
+    <div class="map-surface" id="mapSurface">
+      <span class="map-label">Map view · static placeholder</span>
+      <!-- pins injected by JS -->
+    </div>
+  </div>
+</div>
+
+<footer class="eg-footer">
+  <div class="foot-links">
+    <a href="#">Egencia.com</a>
+    <a href="#">About</a>
+    <a href="#">Egencia Promise</a>
+    <a href="#">Terms of Use</a>
+    <a href="#">Customer Support</a>
+  </div>
+  © 2026 GBT Travel Services UK Limited. Grayscale wireframe — not a production screen.
+</footer>
+
+<script>
+  // ---- data: five hotel-card variants demonstrating the three optional slots ----
+  const hotels = [
+    {
+      id: 'h1', name: 'New York Hilton Midtown', stars: 4, distance: '0.06 miles away',
+      preferred: true, negotiated: true,
+      reviews: { public: '4.2/5 Very Good (1,001 reviews)', colleague: '4.5 / 5 (10 reviews)' },
+      eco: true, coworkers: '58% of coworker bookings',
+      perk: 'Offers free breakfast, within company policy',
+      price: 332, taxes: 193, pin: { x: 62, y: 38, topPick: true }
+    },
+    {
+      id: 'h2', name: 'The Renwick Hotel Times Square', stars: 4, distance: '0.11 miles away',
+      preferred: true, negotiated: false,
+      reviews: { public: '4.0/5 Very Good (642 reviews)', colleague: '4.1 / 5 (6 reviews)' },
+      eco: false, coworkers: null,
+      perk: null,
+      price: 289, taxes: 168, pin: { x: 48, y: 58 }
+    },
+    {
+      id: 'h3', name: 'Element Times Square West', stars: 3, distance: '0.22 miles away',
+      preferred: false, negotiated: true,
+      reviews: null, simpleRating: '4.3/5 (318 reviews)',
+      eco: true, coworkers: '41% of coworker bookings',
+      perk: 'Free cancellation until 24 hours before check-in',
+      price: 245, taxes: 141, pin: { x: 75, y: 22 }
+    },
+    {
+      id: 'h4', name: 'Pod Times Square', stars: 3, distance: '0.31 miles away',
+      preferred: false, negotiated: false,
+      reviews: null, simpleRating: '3.9/5 (204 reviews)',
+      eco: false, coworkers: null,
+      perk: null,
+      price: 198, taxes: 112, pin: { x: 30, y: 44 }
+    },
+    {
+      id: 'h5', name: 'Row NYC', stars: 3, distance: '0.35 miles away',
+      preferred: true, negotiated: true,
+      reviews: { public: '3.8/5 Good (890 reviews)', colleague: '4.0 / 5 (14 reviews)' },
+      eco: true, coworkers: '33% of coworker bookings',
+      perk: null,
+      price: 210, taxes: 121, pin: { x: 55, y: 72 }
+    }
+  ];
+
+  const starSvg = () => '<svg class="icon filled" viewBox="0 0 24 24"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.8 1.7 7-6.3-3.9-6.3 3.9 1.7-7L2 9.5l7.1-.6z"/></svg>';
+  const flagSvg = () => '<svg class="icon" viewBox="0 0 24 24"><path d="M5 21V4m0 0h12l-2.5 3.5L17 11H5"/></svg>';
+  const leafSvg = () => '<svg class="icon filled" viewBox="0 0 24 24"><path d="M4 20c8 0 16-8 16-16-8 0-16 8-16 16z"/></svg>';
+  const cardSvg = () => '<svg class="icon" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>';
+
+  function cardHtml(h) {
+    const badges = [
+      h.preferred ? `<span class="badge">${flagSvg()} Egencia preferred</span>` : '',
+      h.negotiated ? `<span class="badge secondary">${cardSvg()} Negotiated</span>` : ''
+    ].join('');
+
+    const starsHtml = Array.from({length: h.stars}).map(starSvg).join('');
+
+    const ratingBlock = h.reviews
+      ? `<div class="reviews-box">
+           <div><strong>Reviews</strong></div>
+           <div>${h.reviews.public}</div>
+           <div>Colleague reviews: ${h.reviews.colleague}</div>
+         </div>`
+      : `<div class="simple-rating">${h.simpleRating}</div>`;
+
+    const ecoBlock = h.eco ? `<div class="eco-line">${leafSvg()} Eco-friendly</div>` : '';
+    const coworkersBlock = h.coworkers ? `<div class="coworkers-line">${h.coworkers}</div>` : '';
+    const perkBlock = h.perk ? `<div class="perk-strip">✨ ${h.perk}</div>` : '';
+
+    return `
+      <div class="hotel-card" data-hotel="${h.id}">
+        <div class="badge-row">${badges}</div>
+        <div class="card-main">
+          <div class="card-thumb"></div>
+          <div class="card-body">
+            <div class="card-title-row">
+              <div>
+                <div class="card-name">${h.name}</div>
+                <div class="card-stars-distance"><span class="stars">${starsHtml}</span> ${h.distance}</div>
+              </div>
+            </div>
+            ${ratingBlock}
+            ${ecoBlock}
+            ${coworkersBlock}
+          </div>
+          <div class="price-block">
+            <div class="price-from">From</div>
+            <div class="price-amount">${flagSvg()} $${h.price}</div>
+            <div class="price-taxes">$${h.taxes} w taxes and fees</div>
+            <div class="price-cvv">${cardSvg()} CVV required</div>
+          </div>
+        </div>
+        ${perkBlock}
+      </div>`;
+  }
+
+  function pinHtml(h) {
+    return `<span class="pin${h.pin.topPick ? ' top-pick' : ''}" data-hotel="${h.id}" style="left:${h.pin.x}%; top:${h.pin.y}%;">$${h.price}</span>`;
+  }
+
+  const listColumn = document.getElementById('listColumn');
+  const mapSurface = document.getElementById('mapSurface');
+
+  function render(list) {
+    listColumn.innerHTML = list.map(cardHtml).join('');
+    mapSurface.innerHTML = '<span class="map-label">Map view · static placeholder</span>' + list.map(pinHtml).join('');
+    wireCardMapSync();
+  }
+
+  render(hotels);
+
+  // "View more hotels" — appends two more mock cards to prove the interaction is real
+  const moreBtn = document.createElement('button');
+  moreBtn.className = 'btn-secondary-full';
+  moreBtn.textContent = 'View more hotels';
+  moreBtn.addEventListener('click', () => {
+    const extra = [
+      { id: 'h6', name: 'Fairfield Inn & Suites Manhattan', stars: 3, distance: '0.42 miles away', preferred: false, negotiated: false, reviews: null, simpleRating: '3.7/5 (156 reviews)', eco: false, coworkers: null, perk: null, price: 179, taxes: 104, pin: { x: 20, y: 30 } },
+      { id: 'h7', name: 'Sheraton New York Times Square', stars: 4, distance: '0.28 miles away', preferred: true, negotiated: true, reviews: { public: '4.1/5 Very Good (2,140 reviews)', colleague: '4.3 / 5 (21 reviews)' }, eco: true, coworkers: '61% of coworker bookings', perk: 'Offers free breakfast, within company policy', price: 275, taxes: 158, pin: { x: 68, y: 65 } }
+    ];
+    hotels.push(...extra);
+    render(hotels);
+    moreBtn.remove();
+    listColumn.appendChild(makeMoreBtn());
+  });
+  listColumn.appendChild(moreBtn);
+  function makeMoreBtn() {
+    const b = document.createElement('button');
+    b.className = 'btn-secondary-full';
+    b.textContent = 'All 90 results loaded';
+    b.disabled = true;
+    b.style.opacity = '0.5';
+    b.style.cursor = 'default';
+    return b;
+  }
+
+  function wireCardMapSync() {
+    document.querySelectorAll('.hotel-card').forEach(card => {
+      const id = card.dataset.hotel;
+      card.addEventListener('mouseenter', () => {
+        card.classList.add('hovered');
+        const pin = mapSurface.querySelector(`.pin[data-hotel="${id}"]`);
+        if (pin) pin.classList.add('active');
+      });
+      card.addEventListener('mouseleave', () => {
+        card.classList.remove('hovered');
+        const pin = mapSurface.querySelector(`.pin[data-hotel="${id}"]`);
+        if (pin) pin.classList.remove('active');
+      });
+    });
+  }
+
+  // ---- filter pill dropdowns ----
+  const triggers = document.querySelectorAll('.pill[data-trigger]');
+  function closeAll(except) {
+    triggers.forEach(t => {
+      if (t !== except) {
+        t.setAttribute('aria-expanded', 'false');
+        const panel = document.querySelector(`.filter-dropdown[data-panel="${t.dataset.trigger}"]`);
+        if (panel) panel.classList.remove('open');
+      }
+    });
+  }
+  triggers.forEach(t => {
+    t.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = t.getAttribute('aria-expanded') === 'true';
+      closeAll(t);
+      t.setAttribute('aria-expanded', String(!isOpen));
+      const panel = document.querySelector(`.filter-dropdown[data-panel="${t.dataset.trigger}"]`);
+      if (panel) panel.classList.toggle('open', !isOpen);
+    });
+  });
+  document.addEventListener('click', () => closeAll(null));
+
+  // ---- "Includes breakfast" toggle pill ----
+  document.querySelector('.pill[data-toggle="breakfast"]').addEventListener('click', function () {
+    this.classList.toggle('selected');
+    updateResultsCount();
+  });
+
+  function updateResultsCount() {
+    const active = document.querySelector('.pill[data-toggle="breakfast"]').classList.contains('selected');
+    document.getElementById('resultsCount').textContent = active ? 'Showing 61 results.' : 'Showing 90 results.';
+  }
+</script>
+
+</body>
+</html>

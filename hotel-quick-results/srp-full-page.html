@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hotel Search Results (SRP) — Full Page | Hotel Quick Results</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+  .panel-cols-3 .panel-col { min-height: 240px; }
+  .skel-list-row { display:flex; gap:16px; padding:14px; border:1px solid var(--line); border-radius:var(--radius-sm); background:var(--surface); margin-bottom:10px; }
+  .skel-list-row .list-thumb { background: var(--line-soft); }
+</style>
+</head>
+<body>
+
+<header class="eg-header">
+  <div class="eg-header-inner">
+    <div class="eg-logo"><span class="eg-logo-sup">Amex GBT</span><span class="eg-logo-word">egencia</span></div>
+    <nav class="eg-nav"><a class="on" href="#">Trips</a><a href="#">Approvals</a><a href="#">Reports</a></nav>
+    <div class="eg-header-right"><div class="eg-avatar">WN</div></div>
+  </div>
+</header>
+<div class="eg-crumb"><a href="index.html">← Hotel Quick Results overview</a></div>
+
+<main class="eg-content">
+
+  <div style="margin-bottom:16px;">
+    <div class="t-800">Hotel Search Results — full page assembly</div>
+    <div class="t-400 ink-soft" style="margin-top:6px; max-width:760px;">
+      Where the SmartMix Panel actually sits on the real SRP: below the search summary and above the existing filter/list/map layout, which is otherwise unchanged. Step through the load sequence to see the perceived-performance story end to end, including deduplication and live filtering.
+    </div>
+  </div>
+
+  <div class="demo-strip">
+    <span class="demo-lbl">Load state</span>
+    <button class="demo-step on" data-step="0">⬜ Submitted</button>
+    <button class="demo-step" data-step="1">◐ Expedia Only</button>
+    <button class="demo-step" data-step="2">◑ + Recommended</button>
+    <button class="demo-step" data-step="3">● + Neg/Pref + full list</button>
+    <button class="demo-play" id="playBtn">▶ Play sequence</button>
+    <div class="demo-note" id="latencyNote">t = 0.0s — search submitted. Filter panel is interactive from this point on.</div>
+  </div>
+
+  <div class="search-bar">
+    <div class="search-item"><span class="search-item-lbl">Destination</span><span class="search-item-val">Chicago, IL</span></div>
+    <div class="search-div"></div>
+    <div class="search-item"><span class="search-item-lbl">Check-in</span><span class="search-item-val">Wed, Oct 14</span></div>
+    <div class="search-div"></div>
+    <div class="search-item"><span class="search-item-lbl">Check-out</span><span class="search-item-val">Fri, Oct 16</span></div>
+    <div class="search-div"></div>
+    <div class="search-item"><span class="search-item-lbl">Guests</span><span class="search-item-val">1 room, 1 guest</span></div>
+    <button class="search-edit">Edit search</button>
+  </div>
+
+  <div class="srp-layout">
+    <!-- Filter sidebar -->
+    <aside class="filter-panel" id="filterPanel">
+      <div class="filter-title">Filters</div>
+      <div class="filter-group">
+        <div class="filter-group-lbl">Star rating</div>
+        <div class="filter-stars">
+          <button class="filter-star-btn" data-star="3star">3★</button>
+          <button class="filter-star-btn" data-star="4star">4★</button>
+          <button class="filter-star-btn" data-star="5star">5★</button>
+        </div>
+      </div>
+      <div class="filter-group">
+        <div class="filter-group-lbl">Amenities</div>
+        <label class="filter-check"><input type="checkbox" value="wifi"> Free WiFi</label>
+        <label class="filter-check"><input type="checkbox" value="breakfast"> Breakfast included</label>
+      </div>
+      <div class="filter-group">
+        <div class="filter-group-lbl">Rate type</div>
+        <label class="filter-check">Preferred / Negotiated only <input type="checkbox" style="margin-left:auto;" disabled></label>
+        <div class="t-200 ink-faint" style="margin-top:-2px;">Wireframe scope: visual only, not wired to live filter logic.</div>
+      </div>
+      <button class="filter-reset">Reset filters</button>
+    </aside>
+
+    <!-- Main -->
+    <div class="srp-main">
+      <div style="margin-bottom:14px;">
+        <span class="t-600" id="resultsCount">Searching hotels in Chicago, IL…</span>
+      </div>
+
+      <!-- SmartMix Panel -->
+      <div class="panel-shell" id="panelShell">
+        <div class="panel-hdr">
+          <div>
+            <div class="panel-hdr-title">Recommended for you</div>
+            <div class="panel-hdr-sub">New this release — SmartMix Panel</div>
+          </div>
+          <div class="panel-status">
+            <span class="panel-dot spin" id="panelDot"></span>
+            <span id="panelStatusText">Loading…</span>
+          </div>
+        </div>
+        <div class="panel-cols panel-cols-3">
+          <div class="panel-col" data-col="recommended">
+            <div class="panel-col-hdr"><span class="panel-col-title">Recommended</span><span class="panel-col-src">SmartMix</span></div>
+            <div class="col-body" data-col-body="recommended">
+              <div class="card-hotel"><div class="card-skeleton" aria-hidden="true"><div class="sk h13 mb" style="width:72%"></div><div class="sk h10 mb" style="width:40%"></div><div class="sk h13 mb" style="width:60%"></div><div class="sk h20" style="width:36%"></div></div></div>
+              <div class="card-hotel"><div class="card-skeleton" aria-hidden="true"><div class="sk h13 mb" style="width:64%"></div><div class="sk h10 mb" style="width:40%"></div><div class="sk h13 mb" style="width:54%"></div><div class="sk h20" style="width:32%"></div></div></div>
+              <div class="card-hotel"><div class="card-skeleton" aria-hidden="true"><div class="sk h13 mb" style="width:80%"></div><div class="sk h10 mb" style="width:40%"></div><div class="sk h13 mb" style="width:66%"></div><div class="sk h20" style="width:38%"></div></div></div>
+              <template data-real-cards>
+                <div class="card-hotel is-loaded" data-tags="4star wifi"><div class="card-real" style="display:block">
+                  <div class="card-badges"><span class="badge badge-smartmix" tabindex="0">⚡ Near your meeting<span class="smartmix-tip" role="tooltip"><div class="smartmix-tip-lbl">Why this is recommended</div><div class="smartmix-tip-row">0.2 mi from your meeting location</div></span></span></div>
+                  <div class="card-name">Kimpton Gray Hotel</div><div class="card-stars">★★★★</div><div class="card-loc">N LaSalle St · 0.2 mi</div>
+                  <div class="card-row"><span class="card-price-block"><span class="card-price">$176</span><span class="card-per">/night</span></span><span class="card-source">Booking.com</span></div>
+                </div></div>
+                <div class="card-hotel is-loaded" data-tags="4star wifi breakfast"><div class="card-real" style="display:block">
+                  <div class="card-badges"><span class="badge badge-preferred">✓ Preferred</span><span class="badge badge-smartmix" tabindex="0">⚡ Preferred + nearby<span class="smartmix-tip" role="tooltip"><div class="smartmix-tip-lbl">Why this is recommended</div><div class="smartmix-tip-row">Company-preferred rate</div><div class="smartmix-tip-row">0.4 mi from your meeting location</div></span></span></div>
+                  <div class="card-name">Hyatt Regency Chicago</div><div class="card-stars">★★★★</div><div class="card-loc">E Wacker Dr · 0.4 mi</div>
+                  <div class="card-row"><span class="card-price-block"><span class="card-price">$189</span><span class="card-per">/night</span></span><span class="card-source">Amadeus</span></div>
+                </div></div>
+                <div class="card-hotel is-loaded" data-tags="4star wifi"><div class="card-real" style="display:block">
+                  <div class="card-badges"><span class="badge badge-smartmix" tabindex="0">⚡ Best value match<span class="smartmix-tip" role="tooltip"><div class="smartmix-tip-lbl">Why this is recommended</div><div class="smartmix-tip-row">Rate 21% below area median</div></span></span></div>
+                  <div class="card-name">Hotel EMC2</div><div class="card-stars">★★★★</div><div class="card-loc">E Ohio St · 0.5 mi</div>
+                  <div class="card-row"><span class="card-price-block"><span class="card-price">$159</span><span class="card-per">/night</span></span><span class="card-source">Expedia</span></div>
+                </div></div>
+              </template>
+            </div>
+          </div>
+          <div class="panel-col" data-col="expedia">
+            <div class="panel-col-hdr"><span class="panel-col-title">Expedia Only</span><span class="panel-col-src">SMP one-rate</span></div>
+            <div class="col-body" data-col-body="expedia">
+              <div class="card-hotel"><div class="card-skeleton" aria-hidden="true"><div class="sk h13 mb" style="width:75%"></div><div class="sk h10 mb" style="width:40%"></div><div class="sk h13 mb" style="width:62%"></div><div class="sk h20" style="width:34%"></div></div></div>
+              <div class="card-hotel"><div class="card-skeleton" aria-hidden="true"><div class="sk h13 mb" style="width:66%"></div><div class="sk h10 mb" style="width:40%"></div><div class="sk h13 mb" style="width:52%"></div><div class="sk h20" style="width:30%"></div></div></div>
+              <div class="card-hotel"><div class="card-skeleton" aria-hidden="true"><div class="sk h13 mb" style="width:82%"></div><div class="sk h10 mb" style="width:40%"></div><div class="sk h13 mb" style="width:68%"></div><div class="sk h20" style="width:36%"></div></div></div>
+              <template data-real-cards>
+                <div class="card-hotel is-loaded" data-tags="3star wifi"><div class="card-real" style="display:block">
+                  <div class="card-name">Found Hotel Chicago Loop</div><div class="card-stars">★★★</div><div class="card-loc">S Wabash Ave · 0.4 mi</div>
+                  <div class="card-row"><span class="card-price-block"><span class="card-price">$164</span><span class="card-per">/night</span></span><span class="card-source">Expedia</span></div>
+                </div></div>
+                <div class="card-hotel is-loaded" data-tags="3star"><div class="card-real" style="display:block">
+                  <div class="card-name">Freehand Chicago</div><div class="card-stars">★★★</div><div class="card-loc">N Wabash Ave · 0.6 mi</div>
+                  <div class="card-row"><span class="card-price-block"><span class="card-price">$138</span><span class="card-per">/night</span></span><span class="card-source">Expedia</span></div>
+                </div></div>
+                <div class="card-hotel is-loaded" data-tags="4star wifi breakfast"><div class="card-real" style="display:block">
+                  <div class="card-name">Virgin Hotels Chicago</div><div class="card-stars">★★★★</div><div class="card-loc">N Dearborn St · 0.3 mi</div>
+                  <div class="card-row"><span class="card-price-block"><span class="card-price">$182</span><span class="card-per">/night</span></span><span class="card-source">Expedia</span></div>
+                </div></div>
+              </template>
+            </div>
+          </div>
+          <div class="panel-col" data-col="negpref">
+            <div class="panel-col-hdr"><span class="panel-col-title">Neg / Pref</span><span class="panel-col-src">Amadeus · RHTS</span></div>
+            <div class="col-body" data-col-body="negpref">
+              <div class="card-hotel"><div class="card-skeleton" aria-hidden="true"><div class="sk h13 mb" style="width:68%"></div><div class="sk h10 mb" style="width:40%"></div><div class="sk h13 mb" style="width:56%"></div><div class="sk h20" style="width:38%"></div></div></div>
+              <div class="card-hotel"><div class="card-skeleton" aria-hidden="true"><div class="sk h13 mb" style="width:78%"></div><div class="sk h10 mb" style="width:40%"></div><div class="sk h13 mb" style="width:64%"></div><div class="sk h20" style="width:32%"></div></div></div>
+              <div class="card-hotel"><div class="card-skeleton" aria-hidden="true"><div class="sk h13 mb" style="width:62%"></div><div class="sk h10 mb" style="width:40%"></div><div class="sk h13 mb" style="width:50%"></div><div class="sk h20" style="width:36%"></div></div></div>
+              <template data-real-cards>
+                <div class="card-hotel is-loaded" data-tags="5star wifi breakfast"><div class="card-real" style="display:block">
+                  <div class="card-badges"><span class="badge badge-negotiated">✓ Negotiated</span></div>
+                  <div class="card-name">The Langham, Chicago</div><div class="card-stars">★★★★★</div><div class="card-loc">N Wacker Dr · 0.6 mi</div>
+                  <div class="card-row"><span class="card-price-block"><span class="card-price">$221</span><span class="card-per">/night</span></span><span class="card-source">Amadeus</span></div>
+                </div></div>
+                <div class="card-hotel is-loaded" data-tags="4star wifi breakfast"><div class="card-real" style="display:block">
+                  <div class="card-badges"><span class="badge badge-preferred">✓ Preferred</span></div>
+                  <div class="card-name">JW Marriott Chicago</div><div class="card-stars">★★★★</div><div class="card-loc">W Adams St · 0.5 mi</div>
+                  <div class="card-row"><span class="card-price-block"><span class="card-price">$198</span><span class="card-per">/night</span></span><span class="card-source">Amadeus</span></div>
+                </div></div>
+                <div class="card-hotel is-loaded" data-tags="4star wifi"><div class="card-real" style="display:block">
+                  <div class="card-badges"><span class="badge badge-negotiated">✓ Negotiated</span></div>
+                  <div class="card-name">Loews Chicago Hotel</div><div class="card-stars">★★★★</div><div class="card-loc">N Fairbanks Ct · 0.9 mi</div>
+                  <div class="card-row"><span class="card-price-block"><span class="card-price">$174</span><span class="card-per">/night</span></span><span class="card-source">Amadeus</span></div>
+                </div></div>
+              </template>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Full results list + map -->
+      <div class="results-shell">
+        <div class="results-list" id="fullList">
+          <div class="t-300 ink-faint" style="margin-bottom:2px;" id="fullListLabel">Full results — waiting on all sources…</div>
+
+          <div class="skel-list-row sk-list-row"><div class="list-thumb sk" style="width:96px;height:72px;flex-shrink:0;"></div><div style="flex:1;"><div class="sk h13 mb" style="width:55%"></div><div class="sk h10 mb" style="width:30%"></div><div class="sk h10" style="width:70%"></div></div></div>
+          <div class="skel-list-row sk-list-row"><div class="list-thumb sk" style="width:96px;height:72px;flex-shrink:0;"></div><div style="flex:1;"><div class="sk h13 mb" style="width:48%"></div><div class="sk h10 mb" style="width:35%"></div><div class="sk h10" style="width:60%"></div></div></div>
+          <div class="skel-list-row sk-list-row"><div class="list-thumb sk" style="width:96px;height:72px;flex-shrink:0;"></div><div style="flex:1;"><div class="sk h13 mb" style="width:60%"></div><div class="sk h10 mb" style="width:28%"></div><div class="sk h10" style="width:65%"></div></div></div>
+          <div class="skel-list-row sk-list-row"><div class="list-thumb sk" style="width:96px;height:72px;flex-shrink:0;"></div><div style="flex:1;"><div class="sk h13 mb" style="width:52%"></div><div class="sk h10 mb" style="width:32%"></div><div class="sk h10" style="width:68%"></div></div></div>
+
+          <template id="fullListTemplate">
+            <div class="list-card">
+              <div class="card-hotel is-loaded" data-tags="4star wifi" style="flex:1; display:flex; gap:16px; align-items:flex-start;">
+                <div class="list-thumb"><svg viewBox="0 0 96 72" xmlns="http://www.w3.org/2000/svg"><rect width="96" height="72" fill="#eef0f3"/><path d="M0 52 L24 30 L40 44 L60 20 L96 50 V72 H0 Z" fill="#dfe2e7"/></svg></div>
+                <div class="list-body">
+                  <div class="card-real" style="display:block;">
+                    <div class="card-badges"><span class="badge badge-preferred">✓ Preferred</span></div>
+                    <div class="card-name">Palmer House Hilton</div><div class="card-stars">★★★★</div><div class="card-loc">S State St · 0.8 mi</div>
+                    <div class="card-row"><span class="card-price-block"><span class="card-price">$161</span><span class="card-per">/night</span></span><span class="card-source">Amadeus</span></div>
+                    <div class="card-also"><button data-alt-price="$172" data-alt-src="Expedia">Also on Expedia · $172/night</button></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="list-card">
+              <div class="card-hotel is-loaded" data-tags="5star wifi breakfast" style="flex:1; display:flex; gap:16px; align-items:flex-start;">
+                <div class="list-thumb"><svg viewBox="0 0 96 72" xmlns="http://www.w3.org/2000/svg"><rect width="96" height="72" fill="#eef0f3"/><path d="M0 52 L24 30 L40 44 L60 20 L96 50 V72 H0 Z" fill="#dfe2e7"/></svg></div>
+                <div class="list-body">
+                  <div class="card-real" style="display:block;">
+                    <div class="card-badges"><span class="badge badge-preferred">✓ Preferred</span></div>
+                    <div class="card-name">InterContinental Chicago Magnificent Mile</div><div class="card-stars">★★★★★</div><div class="card-loc">N Michigan Ave · 0.9 mi</div>
+                    <div class="card-amenities">
+                      <span class="amenity"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 8a15 15 0 0 1 20 0M6 12a9 9 0 0 1 12 0M10 16a3 3 0 0 1 4 0"/></svg>Free WiFi</span>
+                      <span class="amenity"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10h12a4 4 0 0 1 0 8H4z"/><path d="M16 10v-2a2 2 0 0 1 4 0v2M2 20h18"/></svg>Breakfast incl.</span>
+                    </div>
+                    <div class="card-row"><span class="card-price-block"><span class="card-price">$212</span><span class="card-per">/night</span></span><span class="card-source">Amadeus</span></div>
+                    <div class="card-also"><button data-alt-price="$228" data-alt-src="Booking.com">Also on Booking.com · $228/night</button></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="list-card">
+              <div class="card-hotel is-loaded" data-tags="4star wifi" style="flex:1; display:flex; gap:16px; align-items:flex-start;">
+                <div class="list-thumb"><svg viewBox="0 0 96 72" xmlns="http://www.w3.org/2000/svg"><rect width="96" height="72" fill="#eef0f3"/><path d="M0 52 L24 30 L40 44 L60 20 L96 50 V72 H0 Z" fill="#dfe2e7"/></svg></div>
+                <div class="list-body">
+                  <div class="card-real" style="display:block;">
+                    <div class="card-badges"><span class="badge badge-negotiated">✓ Negotiated</span></div>
+                    <div class="card-name">Radisson Blu Aqua</div><div class="card-stars">★★★★</div><div class="card-loc">N Columbus Dr · 1.0 mi</div>
+                    <div class="card-row"><span class="card-price-block"><span class="card-price">$155</span><span class="card-per">/night</span></span><span class="card-source">Amadeus</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="list-card">
+              <div class="card-hotel is-loaded" data-tags="4star wifi breakfast" style="flex:1; display:flex; gap:16px; align-items:flex-start;">
+                <div class="list-thumb"><svg viewBox="0 0 96 72" xmlns="http://www.w3.org/2000/svg"><rect width="96" height="72" fill="#eef0f3"/><path d="M0 52 L24 30 L40 44 L60 20 L96 50 V72 H0 Z" fill="#dfe2e7"/></svg></div>
+                <div class="list-body">
+                  <div class="card-real" style="display:block;">
+                    <div class="card-name">The Gwen, Chicago</div><div class="card-stars">★★★★</div><div class="card-loc">N Michigan Ave · 0.7 mi</div>
+                    <div class="card-amenities">
+                      <span class="amenity"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 8a15 15 0 0 1 20 0M6 12a9 9 0 0 1 12 0M10 16a3 3 0 0 1 4 0"/></svg>Free WiFi</span>
+                      <span class="amenity"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10h12a4 4 0 0 1 0 8H4z"/><path d="M16 10v-2a2 2 0 0 1 4 0v2M2 20h18"/></svg>Breakfast incl.</span>
+                    </div>
+                    <div class="card-row"><span class="card-price-block"><span class="card-price">$205</span><span class="card-per">/night</span></span><span class="card-source">Expedia</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="list-card">
+              <div class="card-hotel is-loaded" data-tags="4star" style="flex:1; display:flex; gap:16px; align-items:flex-start;">
+                <div class="list-thumb"><svg viewBox="0 0 96 72" xmlns="http://www.w3.org/2000/svg"><rect width="96" height="72" fill="#eef0f3"/><path d="M0 52 L24 30 L40 44 L60 20 L96 50 V72 H0 Z" fill="#dfe2e7"/></svg></div>
+                <div class="list-body">
+                  <div class="card-real" style="display:block;">
+                    <div class="card-name">Cambria Hotel Chicago Loop</div><div class="card-stars">★★★★</div><div class="card-loc">S Michigan Ave · 1.1 mi</div>
+                    <!-- amenity data unavailable — renders without the row, per PRD T3 -->
+                    <div class="card-row"><span class="card-price-block"><span class="card-price">$149</span><span class="card-per">/night</span></span><span class="card-source">Expedia</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="list-card">
+              <div class="card-hotel is-loaded" data-tags="3star wifi" style="flex:1; display:flex; gap:16px; align-items:flex-start;">
+                <div class="list-thumb"><svg viewBox="0 0 96 72" xmlns="http://www.w3.org/2000/svg"><rect width="96" height="72" fill="#eef0f3"/><path d="M0 52 L24 30 L40 44 L60 20 L96 50 V72 H0 Z" fill="#dfe2e7"/></svg></div>
+                <div class="list-body">
+                  <div class="card-real" style="display:block;">
+                    <div class="card-name">Club Quarters, Wacker at Michigan</div><div class="card-stars">★★★</div><div class="card-loc">E Wacker Dr · 0.6 mi</div>
+                    <div class="card-row"><span class="card-price-block"><span class="card-price">$131</span><span class="card-per">/night</span></span><span class="card-source">Booking.com</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="list-card">
+              <div class="card-hotel is-loaded" data-tags="4star wifi" style="flex:1; display:flex; gap:16px; align-items:flex-start;">
+                <div class="list-thumb"><svg viewBox="0 0 96 72" xmlns="http://www.w3.org/2000/svg"><rect width="96" height="72" fill="#eef0f3"/><path d="M0 52 L24 30 L40 44 L60 20 L96 50 V72 H0 Z" fill="#dfe2e7"/></svg></div>
+                <div class="list-body">
+                  <div class="card-real" style="display:block;">
+                    <div class="card-name">Hotel Julian</div><div class="card-stars">★★★★</div><div class="card-loc">N Wabash Ave · 0.5 mi</div>
+                    <div class="card-row"><span class="card-price-block"><span class="card-price">$168</span><span class="card-per">/night</span></span><span class="card-source">Booking.com</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+
+        <div class="map-shell" id="mapShell">
+          <svg viewBox="0 0 320 460" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <rect width="320" height="460" fill="#eef0f3"/>
+            <path d="M0 120 L90 60 L160 140 L230 40 L320 110 L320 460 L0 460 Z" fill="#e2e5ea"/>
+            <path d="M0 260 L120 210 L210 300 L320 240 L320 460 L0 460 Z" fill="#dfe2e7"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<div id="a11y-live" class="sr-only" role="status" aria-live="polite"></div>
+<div class="a11y-log">
+  <div class="a11y-log-lbl">Screen reader announcements (live region, for review only)</div>
+  <div id="a11yLogList"></div>
+</div>
+
+<script src="app.js"></script>
+<script>
+  initSmartMixTooltips();
+  initFilterPanel(document.getElementById("filterPanel"), ".card-hotel");
+
+  const steps = [
+    { t: 0,    note: "t = 0.0s — search submitted. Filter panel is interactive from this point on." },
+    { t: 0.8,  note: "t ≈ 1.5s — Expedia Only column resolves." },
+    { t: 1.8,  note: "t ≈ 3.0s — Recommended column resolves." },
+    { t: 3.2,  note: "t ≈ 5.5s — Neg/Pref column resolves. Full results list and map render, deduplicated against the panel." }
+  ];
+
+  function hydrateColumn(col) {
+    const body = document.querySelector('[data-col-body="' + col + '"]');
+    const tmpl = body.querySelector("template[data-real-cards]");
+    if (!tmpl || body.dataset.hydrated) return;
+    body.dataset.hydrated = "1";
+    const skeletons = body.querySelectorAll(".card-hotel:not(.is-loaded)");
+    const clone = tmpl.content.cloneNode(true);
+    const realCards = clone.querySelectorAll(".card-hotel");
+    skeletons.forEach((sk, i) => {
+      if (realCards[i]) {
+        sk.replaceWith(realCards[i]);
+      } else {
+        sk.remove();
+      }
+    });
+    initSmartMixTooltips(body);
+    initCardClickToPDP(body);
+  }
+
+  function hydrateFullList() {
+    const list = document.getElementById("fullList");
+    if (list.dataset.hydrated) return;
+    list.dataset.hydrated = "1";
+    list.querySelectorAll(".sk-list-row").forEach((r) => r.remove());
+    const tmpl = document.getElementById("fullListTemplate");
+    list.appendChild(tmpl.content.cloneNode(true));
+    document.getElementById("fullListLabel").textContent = "Full results — Expedia, Booking.com & Amadeus, deduplicated against the panel above";
+    initSmartMixTooltips(list);
+    initSourceToggle(list);
+    initCardClickToPDP(list);
+  }
+
+  function updateResultsCount() {
+    const loaded = document.querySelectorAll(".card-hotel.is-loaded");
+    const visible = [...loaded].filter((c) => c.style.display !== "none");
+    const el = document.getElementById("resultsCount");
+    if (currentStep < 3) { el.textContent = "Searching hotels in Chicago, IL…"; return; }
+    el.textContent = visible.length === loaded.length
+      ? loaded.length + " hotels found in Chicago, IL"
+      : visible.length + " of " + loaded.length + " hotels match your filters";
+  }
+
+  let currentStep = 0;
+  function setStep(n) {
+    currentStep = n;
+    document.querySelectorAll(".demo-step").forEach((b) => b.classList.toggle("on", +b.dataset.step === n));
+    document.getElementById("latencyNote").textContent = steps[n].note;
+
+    if (n >= 1) hydrateColumn("expedia");
+    if (n >= 2) hydrateColumn("recommended");
+    if (n >= 3) { hydrateColumn("negpref"); hydrateFullList(); }
+
+    const dot = document.getElementById("panelDot");
+    const status = document.getElementById("panelStatusText");
+    if (n < 3) { dot.classList.add("spin"); dot.classList.remove("done"); status.textContent = "Loading…"; }
+    else { dot.classList.remove("spin"); dot.classList.add("done"); status.textContent = "Loaded"; }
+
+    if (document.getElementById("filterPanel")._reapply) document.getElementById("filterPanel")._reapply();
+    updateResultsCount();
+    announce(n === 0 ? "Searching for hotels in Chicago." : n === 3 ? "Full results available. Preferred and negotiated hotels shown first." : "First wave of results available.");
+  }
+
+  document.querySelectorAll(".demo-step").forEach((b) => b.addEventListener("click", () => setStep(+b.dataset.step)));
+  document.getElementById("playBtn").addEventListener("click", () => {
+    setStep(0);
+    steps.forEach((s, i) => { if (i > 0) setTimeout(() => setStep(i), s.t * 1000); });
+  });
+
+  // keep the results count in sync whenever a filter changes post-load
+  document.getElementById("filterPanel").addEventListener("change", () => updateResultsCount());
+  document.getElementById("filterPanel").addEventListener("click", (e) => { if (e.target.closest(".filter-star-btn, .filter-reset")) setTimeout(updateResultsCount, 0); });
+
+  setStep(0);
+</script>
+</body>
+</html>
