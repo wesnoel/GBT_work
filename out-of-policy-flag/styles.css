@@ -327,8 +327,6 @@ a { color: inherit; text-decoration: none; }
 .btn-primary { background: var(--negative); border-color: var(--negative); color: #fff; }
 .btn-primary:hover { background: var(--negative-strong); }
 .btn-secondary { background: var(--surface); border-color: var(--line); color: var(--ink); }
-.btn-tertiary { width: auto; background: transparent; border-color: transparent; color: var(--ink-soft); padding: 11px 16px; }
-.btn-tertiary:hover { background: var(--line-soft); border-color: transparent; }
 
 /* ---- Hotel card (Egencia SRP pattern) ---- */
 .hotel-card-demo { display: flex; flex-direction: column; gap: 20px; }
