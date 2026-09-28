@@ -1,6 +1,8 @@
-/* Out of Policy — shared interaction logic across all three concept directions.
-   Generic by design: OOP_DATA holds per-line-of-business content so the title
-   and reason copy are assembled from data, not hardcoded per line of business.
+/* Out of Policy — shared interaction logic across both concept directions
+   (tooltip and popover — the modal concept was explored and then removed
+   from scope). Generic by design: OOP_DATA holds per-line-of-business
+   content so the title and reason copy are assembled from data, not
+   hardcoded per line of business.
 
    Decision: every line of business shows the same "Out of Policy" title,
    full stop — a deliberate standardization, not a straight copy of what
@@ -128,44 +130,6 @@ function initAllOopAnchors() {
   document.querySelectorAll(".oop-anchor").forEach(initOopAnchor);
 }
 
-/* ---- Concept C: modal (explicit dismiss only, no idle timer) ----
-   One shared panel — content is identical no matter which trigger (or which
-   icon size) opened it, so there's nothing to switch based on size. */
-function initOopModal() {
-  var overlay = document.getElementById("policyModalOverlay");
-  if (!overlay) return;
-  var panel = overlay.querySelector(".policy-modal");
-  var lastTrigger = null;
-
-  function open(trigger) {
-    lastTrigger = trigger;
-    overlay.classList.add("is-open");
-    var closeBtn = panel && panel.querySelector("[data-oop-close]");
-    if (closeBtn) closeBtn.focus();
-  }
-
-  function close() {
-    overlay.classList.remove("is-open");
-    if (lastTrigger) lastTrigger.focus();
-  }
-
-  document.querySelectorAll("[data-oop-modal-trigger]").forEach(function (trigger) {
-    trigger.addEventListener("click", function () { open(trigger); });
-  });
-
-  overlay.addEventListener("click", function (e) {
-    if (e.target === overlay) close();
-  });
-
-  overlay.querySelectorAll("[data-oop-close]").forEach(function (btn) {
-    btn.addEventListener("click", close);
-  });
-
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape" && overlay.classList.contains("is-open")) close();
-  });
-}
-
 /* ---- Hub reusability demo: swap line-of-business, re-render from data ----
    Car has no confirmed real copy (unlike Hotel, Air, and Rail, all sourced
    from real screenshots) — it's adapted from the Hotel sentence pattern as
@@ -208,6 +172,5 @@ function initReuseDemo() {
 
 document.addEventListener("DOMContentLoaded", function () {
   initAllOopAnchors();
-  initOopModal();
   initReuseDemo();
 });

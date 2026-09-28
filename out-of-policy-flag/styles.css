@@ -63,7 +63,7 @@ a { color: inherit; text-decoration: none; }
 .hub-meta strong { color: var(--ink); }
 .hub-section-label { font-size: 13px; font-weight: 700; letter-spacing: 0.01em; color: var(--ink-soft); margin: 0 0 16px; }
 
-.card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 44px; }
+.card-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 44px; }
 .screen-card {
   background: var(--surface);
   border: 1px solid var(--line);
@@ -268,65 +268,18 @@ a { color: inherit; text-decoration: none; }
 .policy-popover--below-left { top: calc(100% + 8px); bottom: auto; left: auto; right: 0; transform: none; }
 .policy-popover--above-left { top: auto; bottom: calc(100% + 8px); left: auto; right: 0; transform: none; }
 
-/* ================= Concept C — Modal ================= */
-.policy-modal-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(20, 22, 26, 0.5);
-  align-items: center;
-  justify-content: center;
-  z-index: 200;
-  padding: 24px;
-}
-.policy-modal-overlay.is-open { display: flex; }
+/* ---- List content (Flight's "list" format — see app.js OOP_DATA) ----
+   Both tooltip and popover can render either a single flowing message
+   (.policy-tooltip__message / .policy-popover__message) or a numbered list
+   of 1-2 reasons (.policy-tooltip__list / .policy-popover__list), same
+   font_300 sizing either way — only the wrapper element changes. */
+.policy-tooltip__list { margin: 0; padding-left: 18px; font-weight: 400; font-size: 14px; line-height: 18px; color: #E8EAED; }
+.policy-tooltip__list li { margin-bottom: 6px; }
+.policy-tooltip__list li:last-child { margin-bottom: 0; }
 
-.policy-modal {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  width: 400px;
-  padding: 28px;
-  background: var(--surface);
-  text-align: left;
-  border-radius: var(--radius);
-  box-shadow: 0 24px 60px rgba(20, 22, 26, 0.3);
-}
-
-.policy-modal__header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
-.policy-modal__heading { display: flex; align-items: center; gap: 10px; }
-.policy-modal__icon-badge {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  width: 40px;
-  height: 40px;
-  border-radius: 999px;
-  background: var(--negative-soft);
-  color: var(--negative);
-}
-.policy-modal__icon-badge svg { width: 20px; height: 20px; }
-.policy-modal__title { font-weight: 700; font-size: 14px; line-height: 18px; color: var(--ink); margin: 0; }
-.policy-modal__close {
-  all: unset;
-  cursor: pointer;
-  color: var(--ink-faint);
-  font-size: 20px;
-  line-height: 1;
-  padding: 2px 4px;
-}
-.policy-modal__close:hover { color: var(--ink); }
-.policy-modal__close:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; border-radius: 4px; }
-
-.policy-modal__message { font-weight: 400; font-size: 14px; line-height: 18px; color: var(--ink-soft); margin: 0; }
-.policy-modal__footer { display: flex; justify-content: center; }
-
-.btn { border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--surface); cursor: pointer; font-family: inherit; font-weight: 700; font-size: 14px; color: var(--ink); width: 100%; padding: 11px 16px; }
-.btn:hover { border-color: #b7bbc3; }
-.btn-primary { background: var(--negative); border-color: var(--negative); color: #fff; }
-.btn-primary:hover { background: var(--negative-strong); }
-.btn-secondary { background: var(--surface); border-color: var(--line); color: var(--ink); }
+.policy-popover__list { margin: 0; padding-left: 18px; font-weight: 400; font-size: 14px; line-height: 18px; color: var(--ink-soft); }
+.policy-popover__list li { margin-bottom: 6px; }
+.policy-popover__list li:last-child { margin-bottom: 0; }
 
 /* ---- Hotel card (Egencia SRP pattern) ---- */
 .hotel-card-demo { display: flex; flex-direction: column; gap: 20px; }
@@ -384,10 +337,88 @@ a { color: inherit; text-decoration: none; }
 .price-value { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
 .price-sub { font-size: 12px; color: var(--ink-soft); }
 
+/* ---- Flight card (Egencia Air SRP pattern) — same anatomy as the hotel
+   card (badge row, media/details/price row, full-width inset perk strip),
+   proving the out-of-policy flag reuses cleanly across lines of business.
+   Kept as its own class family rather than reusing .hotel-* names, since a
+   flight card literally having class="hotel-name" would be misleading —
+   see references/hotel-card.md's naming-discipline note. */
+.flight-card {
+  width: 663px;
+  max-width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: relative;
+}
+.flight-badge-row { position: absolute; top: -10px; left: 18px; display: flex; gap: 8px; z-index: 1; }
+.flight-badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; background: var(--surface); border: 1px solid var(--gold); color: var(--gold); }
+.flight-badge svg { width: 12px; height: 12px; flex-shrink: 0; }
+.flight-badge--neutral { border-color: var(--line); color: var(--ink-soft); }
+
+.flight-card-main { display: flex; gap: 18px; }
+
+.flight-airline {
+  width: 140px;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--canvas);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  text-align: center;
+}
+.flight-airline-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+}
+.flight-airline-icon svg { width: 22px; height: 22px; }
+.flight-airline-name { font-size: 12px; font-weight: 700; color: var(--ink-soft); }
+
+.flight-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; padding-top: 4px; }
+.flight-route { margin: 0; font-size: 18px; line-height: 24px; font-weight: 700; }
+.flight-subrow { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink-soft); }
+.flight-times { color: var(--ink); font-weight: 600; }
+
+.flight-details-box { background: var(--canvas); border-radius: var(--radius-sm); padding: 8px 10px; display: flex; flex-direction: column; gap: 2px; margin: 2px 0; }
+.flight-details-label { font-size: 12px; font-weight: 700; color: var(--ink); }
+
+.flight-eco-line { display: flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 700; color: #178143; }
+.flight-eco-line svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+.flight-perk-strip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: var(--gold-soft);
+  border: 1px solid #F0D8AB;
+  border-radius: var(--radius-sm);
+  font-size: 12.5px;
+  color: var(--ink-soft);
+}
+.flight-perk-strip svg { width: 14px; height: 14px; flex-shrink: 0; color: var(--gold); }
+
+.flight-price { width: 168px; flex: none; padding-left: 18px; border-left: 1px solid var(--line); display: flex; flex-direction: column; align-items: flex-end; gap: 4px; text-align: right; }
+
 @media (max-width: 860px) {
   .card-grid { grid-template-columns: 1fr; }
-  .hotel-card-main { flex-wrap: wrap; }
-  .hotel-img { width: 100%; height: 140px; }
-  .hotel-price { width: 100%; padding-left: 0; border-left: none; border-top: 1px solid var(--line); padding-top: 12px; margin-top: 8px; align-items: flex-start; text-align: left; }
+  .hotel-card-main, .flight-card-main { flex-wrap: wrap; }
+  .hotel-img, .flight-airline { width: 100%; height: 140px; }
+  .hotel-price, .flight-price { width: 100%; padding-left: 0; border-left: none; border-top: 1px solid var(--line); padding-top: 12px; margin-top: 8px; align-items: flex-start; text-align: left; }
   .size-rail { gap: 24px; }
 }

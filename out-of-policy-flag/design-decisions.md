@@ -1,17 +1,16 @@
 # Out of Policy Flag — Design Decisions
 
-Resolves the open questions raised by exploring three interaction directions for the hotel-card out-of-policy flag. Each decision is also reflected directly in the wireframes (see `index.html`), so this doc is the rationale, not a separate spec.
+Resolves the open questions raised by exploring interaction directions for the out-of-policy flag, applied to both the Hotel and Air SRP card patterns. Each decision is also reflected directly in the wireframes (see `index.html`), so this doc is the rationale, not a separate spec.
 
-## 1. Scope of the three directions
+## 1. Scope of the directions
 
-**Decision:** The three concepts (tooltip, popover dialog, modal) isolate *interaction weight* as the variable being tested, not content or copy. All three show the identical real hotel-shopping message. This keeps the comparison honest — a stakeholder reviewing all three sees the same information disclosed with increasing structural weight, not three different messages that happen to look different.
+**Decision:** The concepts (tooltip, popover dialog — a third, modal, was explored and then removed from scope on 2026-09-28, see section 12) isolate *interaction weight* as the variable being tested, not content or copy. Both show the identical real per-line-of-business message. This keeps the comparison honest — a stakeholder reviewing both sees the same information disclosed with increasing structural weight, not two different messages that happen to look different.
 
 ## 2. Open trigger behavior per concept
 
 **Decision (revised 2026-09-26):**
 - **Tooltip (A):** hover, click, and tap all open it — matches today's live pattern exactly. No close button, since a lightweight hint shouldn't need one.
-- **Popover dialog (B):** hover, click, and tap all open it too — **this is a reversal of the original decision below, made the explicit standard going forward for both anchored disclosure concepts.** (Original reasoning, kept for the record: a heavier surface with a real header and an explicit close button appearing from a stray mouse pass could feel like a bug, not a feature — click/tap only felt safer. That's superseded now: hover/click/tap is the standard for every anchored trigger in this component, tooltip or popover, so the two concepts differ only in visual weight, not in how they open.)
-- **Modal (C):** click/tap only, unchanged. A full-screen takeover must never appear from hover or from keyboard focus landing on the trigger — only a deliberate activation should interrupt the whole screen. This reversal doesn't apply to Modal since it isn't an anchored disclosure pattern.
+- **Popover dialog (B):** hover, click, and tap all open it too — **this is a reversal of the original decision (see section 12's note on the original click/tap-only version), made the explicit standard going forward for both anchored disclosure concepts.** Hover/click/tap is the standard for every anchored trigger in this component, tooltip or popover, so the two concepts differ only in visual weight, not in how they open.
 
 ## 3. Idle-dismiss behavior
 
@@ -20,7 +19,7 @@ Resolves the open questions raised by exploring three interaction directions for
 - `mouseleave` on the anchor starts a 3s timer, but only if the panel is currently open.
 - A click that opens the panel starts the same 3s timer immediately *only* if there was no real mouse hover to begin with (pure touch/tap) — otherwise it waits for the eventual `mouseleave`.
 
-The popover (B) keeps this as a safety net even though it has an explicit close button, in case someone opens it and walks away without dismissing it. The modal (C) has no idle timer at all — once it takes over the screen, only an explicit close, backdrop click, or Escape dismisses it.
+The popover (B) keeps this as a safety net even though it has an explicit close button, in case someone opens it and walks away without dismissing it.
 
 **Flag for follow-up:** confirm the 3-second window with usability testing rather than treating it as final — it's carried over from the existing tooltip's real behavior, not re-validated here.
 
@@ -30,18 +29,15 @@ The popover (B) keeps this as a safety net even though it has an explicit close 
 
 ## 5. Sizing strategy
 
-**Decision (revised 2026-09-26):** small, medium, and large control *only* the flag icon's size — 16px / 18px / 20px. Everything else (panel width, padding, structure, and copy) is identical across all three. This replaces an earlier version of this build where size also changed padding, type scale, and content density (a tooltip's title/link, a popover's footer actions, a modal's button count all varied by size) — that turned out to conflate two separate things: how prominent the trigger icon looks in a given UI density, and how much information the disclosure surface shows once triggered. Those are independent; the flag can be small in a dense list row and still open the exact same "Out of Policy" tooltip/popover/modal as a large flag would.
+**Decision (revised 2026-09-26):** small, medium, and large control *only* the flag icon's size — 16px / 18px / 20px. Everything else (panel width, padding, structure, and copy) is identical across all three. This replaces an earlier version of this build where size also changed padding, type scale, and content density — that turned out to conflate two separate things: how prominent the trigger icon looks in a given UI density, and how much information the disclosure surface shows once triggered. Those are independent; the flag can be small in a dense list row and still open the exact same "Out of Policy" tooltip/popover as a large flag would.
 
 All panel text is font_300 (14px / 18px line-height): title bold, body text regular — same tier, different weight only, per typography-tokens.md (bold and regular share size/line-height at every tier).
 
 Concretely, the disclosure content per concept (constant across all three icon sizes, revised 2026-09-28 to remove the "View travel policy" link everywhere — it wasn't tied to a real destination and added a dead-end action):
-- **Tooltip:** title + message. No link, no footer.
-- **Popover:** header (icon + title) + close (&times;) button + message. No footer.
-- **Modal:** header (icon badge + title) + close (&times;) button + message + a single **secondary** "Close" button (revised from a primary "Got it" button — dismissing the modal is a lower-emphasis action than a primary confirmation, but still a real actionable button, not a plain text link or tertiary treatment).
+- **Tooltip:** title + message (sentence format) or title + numbered list (list format, e.g. Flight). No link, no footer.
+- **Popover:** header (icon + title) + close (&times;) button + message or numbered list. No footer.
 
-**In-context hotel card examples default to small (revised 2026-09-26):** since size only changes the icon now, three near-identical hotel cards side by side (differing by a 4px icon size difference) added length without adding information — the standalone icon-size rail already makes that comparison clearly. Removed the Small/Medium/Large hotel-card set from all three concept pages. Concept A and B's in-context demonstration is now the "placement variants" set (still small-icon, five cards); Concept C, which has no placement axis, keeps a single small-icon card.
-
-A single shared modal panel is reused by every trigger on Concept C's page regardless of icon size, since there's no longer any content variation to switch between.
+**In-context card examples default to small (revised 2026-09-26):** since size only changes the icon now, three near-identical cards side by side (differing by a 4px icon size difference) added length without adding information — the standalone icon-size rail already makes that comparison clearly. Removed the Small/Medium/Large card set from Concept A and B; the in-context demonstration is now the "placement variants" set (still small-icon, five cards each) — one set for the Hotel card, one for the Flight card (added 2026-09-28, see section 13).
 
 ## 6. Reusability — data-driven content, not hardcoded to hotel
 
@@ -74,7 +70,7 @@ The hotel card itself was upgraded (2026-09-26) to show every optional data slot
 
 ## 9. Bug fix — out-of-policy messaging inheriting right alignment
 
-**Found and fixed (2026-09-26):** the hotel card's price column (`.hotel-price`) is intentionally right-aligned (`text-align: right`), matching the real SRP price block. But `text-align` is inherited, and the tooltip/popover panels are DOM descendants of `.hotel-price` (they're nested inside the flag trigger's wrapper, which sits inside the price column) even though they're positioned absolutely elsewhere on screen. With no `text-align` of their own, the "Out of Policy" title and message were inheriting `right` from their ancestor and rendering right-aligned whenever triggered from within a hotel card — while the same panels looked correctly left-aligned in the standalone/placement sections, which sit outside any right-aligned container. Fixed by setting `text-align: left` directly on `.policy-tooltip`, `.policy-popover`, and `.policy-modal` themselves, so the messaging is always left-aligned regardless of what alignment its container happens to use. The price column's own right alignment is unchanged.
+**Found and fixed (2026-09-26):** the hotel card's price column (`.hotel-price`) is intentionally right-aligned (`text-align: right`), matching the real SRP price block. But `text-align` is inherited, and the tooltip/popover panels are DOM descendants of `.hotel-price` (they're nested inside the flag trigger's wrapper, which sits inside the price column) even though they're positioned absolutely elsewhere on screen. With no `text-align` of their own, the "Out of Policy" title and message were inheriting `right` from their ancestor and rendering right-aligned whenever triggered from within a hotel card — while the same panels looked correctly left-aligned in the standalone/placement sections, which sit outside any right-aligned container. Fixed by setting `text-align: left` directly on `.policy-tooltip` and `.policy-popover` themselves, so the messaging is always left-aligned regardless of what alignment its container happens to use. The price column's own right alignment is unchanged.
 
 ## 10. Placement variants — tooltip and popover
 
@@ -82,18 +78,33 @@ The hotel card itself was upgraded (2026-09-26) to show every optional data slot
 
 - **Below** (default) and **Above** — centered horizontally on the trigger (`left: 50%; transform: translateX(-50%)`), not left-edge-aligned. A panel noticeably wider than a 16-20px icon looked lopsided when it only extended in one direction from the trigger's edge.
 - **Left** — vertically centered beside the trigger (`top: 50%; transform: translateY(-50%)`), opening directly to the left.
-- **Below, left** and **Above, left** — added after the first pass, because the hotel card's flag sits at the right edge of the price column: a panel that grows *rightward* from there (as plain Below/Above do) would run off the edge of the card. These two stay flush to the trigger's right edge (`right: 0`, no centering transform) and grow only leftward, which is the placement the price-column context actually needs.
+- **Below, left** and **Above, left** — added after the first pass, because the hotel (and later, flight) card's flag sits at the right edge of the price column: a panel that grows *rightward* from there (as plain Below/Above do) would run off the edge of the card. These two stay flush to the trigger's right edge (`right: 0`, no centering transform) and grow only leftward, which is the placement the price-column context actually needs.
 
-Every modifier fully restates `top`/`bottom`/`left`/`right`/`transform` (not just the properties that differ from the default) so variants can't bleed into each other regardless of class order. All five are shown twice per concept page: standalone, and applied to the real hotel card. Modal (Concept C) has no placement variant — it's centered/fixed by definition, not anchored to the trigger.
+Every modifier fully restates `top`/`bottom`/`left`/`right`/`transform` (not just the properties that differ from the default) so variants can't bleed into each other regardless of class order. All five are shown three times per concept page: standalone, applied to the Hotel card, and applied to the Flight card (added 2026-09-28, see section 13) — same five CSS modifiers reused as-is, no per-card-type variant needed.
 
 **Flag for follow-up:** a production implementation would likely want this to flip automatically based on available viewport space (collision detection) rather than being a fixed per-instance choice — that's a real interaction detail worth prototyping in code, not fully resolvable in a static wireframe.
 
-## 11. Figma handoff notes
+## 12. Modal concept — removed from scope (2026-09-28)
+
+**Decision:** the third direction, Modal (Concept C — a full-screen dialog takeover), was built, reviewed, and then dropped from scope entirely at Wes's direction. This wasn't a usability finding against the modal itself — no negative feedback drove it, it was a scope-narrowing call to focus the exploration on the two anchored-disclosure directions (tooltip and popover). `concept-c-modal.html` has been deleted; the hub's "Interaction concepts" grid now shows two cards, not three.
+
+Kept for the record, since it may be worth revisiting: the modal's original design was a centered overlay (400px, 28px padding), header with a 40px icon badge + title + close button, message body, and a footer action — which itself went through two revisions before removal: a primary "Got it" button, then (per direction) a "Close" button restyled first as tertiary, then corrected to secondary. The `.policy-modal*` CSS, the `initOopModal()` JS, and the shared `.btn`/`.btn-primary`/`.btn-secondary` button classes (which existed only to support the modal's footer button) were all removed from `styles.css`/`app.js` along with the page — none of them are referenced anywhere else in the build.
+
+## 13. Flight card — proving reuse on a second line of business (2026-09-28)
+
+**Decision:** added a full "Flight" treatment alongside "Hotel" on Concept A and Concept B — same component, same interaction, same five placement variants, applied to a new `.flight-card` pattern modeled on the Air SRP instead of the Hotel SRP. This is the first time the reusability claim (see section 6) is demonstrated on an actual card rather than just in the hub's abstract data-preview dropdown.
+
+**Card anatomy** (parallel to the hotel card's, see `references/hotel-card.md`): badge row ("Egencia preferred" + "Nonstop" instead of "Negotiated" — a refundable-fare badge would have contradicted the "Nonrefundable fare" price-sub line, so it was dropped in favor of a non-contradictory second badge), an airline block in place of the thumbnail (icon + airline name, since there's no real logo asset), route + times + duration/stops, a fare details box (cabin + bag allowance) parallel to the Reviews box, a "Lower emissions than average flight" line parallel to Sustainability certified, the same coworker-booking-% line, and a full-width inset perk strip ("Includes 1 checked bag, within company policy") — same structure as the hotel perk strip, just flight-appropriate copy.
+
+**Content is genuinely data-driven, not just visually parallel:** the flight card's tooltip/popover renders `OOP_DATA.flight`'s real **list**-format content (both violation reasons — the reference-price ceiling and the cabin-class rule) as an actual numbered list inside the panel, not a sentence. This required a real component addition: `.policy-tooltip__list` / `.policy-popover__list` (ordered list, same font_300 sizing as the sentence variant) — previously the list format only existed in the hub's abstract reusability demo, never in a live, triggerable tooltip/popover. The example price ($865) and cabin class (Premium Economy) were chosen specifically to violate both rules at once, so the fuller 2-item list case gets exercised, not just the more common single-reason case.
+
+The hub also got a lightweight, single-card "Applied to Air SRP" section (tooltip-only, default placement) as a quick preview, linking out to Concept A and B for the full five-placement treatment.
+
+## 14. Figma handoff notes
 
 - **Tooltip (A)** is the closest match to an existing Sticker Sheet Tooltip component, if one exists — check before rebuilding from scratch.
 - **Popover dialog (B)** is likely net-new — no obvious existing Sticker Sheet equivalent for an anchored, structured popover with its own header/close chrome. Flag as net-new work for whoever rebuilds this in Figma.
-- **Modal (C)** should map directly to the standard Dialog/Modal component in the Sticker Sheet.
-- Class naming: `flag-trigger` carries the `--sm`/`--md`/`--lg` size modifiers (icon dimension only). `policy-tooltip`, `policy-popover`, and `policy-modal` have no size modifiers at all now — one Figma component/variant each, sized once, is enough; only the trigger needs a Size variant axis.
+- Class naming: `flag-trigger` carries the `--sm`/`--md`/`--lg` size modifiers (icon dimension only). `policy-tooltip` and `policy-popover` have no size modifiers at all now — one Figma component/variant each, sized once, is enough; only the trigger needs a Size variant axis. `.hotel-card` and `.flight-card` are deliberately separate class families rather than a shared generic one — see `references/hotel-card.md`'s naming-discipline note.
 
 ---
 
