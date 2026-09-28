@@ -64,7 +64,13 @@ function buildOopContent(lob, userName) {
    count as leaving. A close triggered by any path (timeout, close button,
    outside click, Escape) must also blur() the trigger — otherwise a
    :focus-visible CSS rule keeps the panel visually open even after the
-   JS state says it's closed. */
+   JS state says it's closed.
+
+   Only one panel open at a time, page-wide: every anchor's close() gets
+   registered in oopCloseAll, and opening any panel closes every other one
+   first — regardless of which card, concept, or line of business it's on. */
+var oopCloseAll = [];
+
 function initOopAnchor(anchor) {
   var trigger = anchor.querySelector("[data-oop-trigger]");
   var panel = anchor.querySelector("[data-oop-panel]");
@@ -76,6 +82,9 @@ function initOopAnchor(anchor) {
   function isOpen() { return panel.classList.contains("is-open"); }
 
   function open() {
+    oopCloseAll.forEach(function (closeOther) {
+      if (closeOther !== close) closeOther();
+    });
     panel.classList.add("is-open");
     trigger.setAttribute("aria-expanded", "true");
   }
@@ -124,6 +133,8 @@ function initOopAnchor(anchor) {
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape" && isOpen()) close();
   });
+
+  oopCloseAll.push(close);
 }
 
 function initAllOopAnchors() {
