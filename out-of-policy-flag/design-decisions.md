@@ -99,6 +99,8 @@ Kept for the record, since it may be worth revisiting: the modal's original desi
 
 **What's still genuinely proven, unchanged from the original goal:** the flag component itself (trigger, tooltip, popover, all five placement variants, the idle-dismiss/blur() logic) is 100% reused as-is between Hotel and Flight — nothing about `app.js` or the `.policy-tooltip`/`.policy-popover` CSS changed for this rebuild. Only the host card changed. The flight card's tooltip/popover still renders `OOP_DATA.flight`'s real **list**-format content (both violation reasons) via `.policy-tooltip__list`/`.policy-popover__list`, added in the first pass and still correct.
 
+**Flag/price order is reversed from Hotel (caught in design review, 2026-09-28):** on Hotel's price block the flag icon comes *before* the price (`flag $459`). On Flight's Elite fare column it's the opposite — the price comes first, flag after (`$865 flag`). Fixed in the markup for all five in-context cards on both Concept A and B's flight pages. This is exactly the kind of per-card-type difference the reusability story has to tolerate: the flag component (trigger + tooltip/popover, unchanged) doesn't dictate its own position relative to the price text — that's the host card's layout decision, and it genuinely differs between the two real card patterns.
+
 ## 14. Figma handoff notes
 
 - **Tooltip (A)** is the closest match to an existing Sticker Sheet Tooltip component, if one exists — check before rebuilding from scratch.

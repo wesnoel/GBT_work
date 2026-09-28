@@ -22,7 +22,7 @@
 
   <div class="hub-hero" style="padding: 0 0 28px;">
     <h1 style="font-size: 26px; line-height: 34px;">Concept B — Popover dialog — Flight</h1>
-    <p>Same popover component as the Hotel version (see <a href="concept-b-popover.html" style="color: var(--accent); font-weight: 700;">Concept B</a>), applied to the real Air SRP flight card instead of the Hotel SRP card. The flag sits on the Elite fare column's price, one of three fare tiers compared side by side — a genuinely different placement context than Hotel's single price block.</p>
+    <p>Same popover component as the Hotel version (see <a href="concept-b-popover.html" style="color: var(--accent); font-weight: 700;">Concept B</a>), applied to the real Air SRP flight card instead of the Hotel SRP card. The flag sits on the Elite fare column's price, one of three fare tiers compared side by side — a genuinely different placement context than Hotel's single price block, and the flag comes after the price here, not before it like Hotel.</p>
   </div>
 
   <p class="hub-section-label">Standalone — sizes</p>
@@ -262,6 +262,7 @@
               <div class="flight-fare-tier">Elite</div>
               <div class="flight-fare-caption">From</div>
               <div class="flight-fare-price-row">
+                <div class="flight-fare-price">$865</div>
                 <span class="oop-anchor oop-anchor--hoverable">
                   <button class="flag-trigger flag-trigger--sm" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-flight-below" aria-label="Out of policy">
                     <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
@@ -281,7 +282,6 @@
                     </div>
                   </div>
                 </span>
-                <div class="flight-fare-price">$865</div>
               </div>
               <div class="flight-fare-type">One way</div>
               <button class="flight-fare-chevron" aria-label="Expand fare details">&#8964;</button>
@@ -347,6 +347,7 @@
               <div class="flight-fare-tier">Elite</div>
               <div class="flight-fare-caption">From</div>
               <div class="flight-fare-price-row">
+                <div class="flight-fare-price">$865</div>
                 <span class="oop-anchor oop-anchor--hoverable">
                   <button class="flag-trigger flag-trigger--sm" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-flight-above" aria-label="Out of policy">
                     <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
@@ -366,7 +367,6 @@
                     </div>
                   </div>
                 </span>
-                <div class="flight-fare-price">$865</div>
               </div>
               <div class="flight-fare-type">One way</div>
               <button class="flight-fare-chevron" aria-label="Expand fare details">&#8964;</button>
@@ -432,6 +432,7 @@
               <div class="flight-fare-tier">Elite</div>
               <div class="flight-fare-caption">From</div>
               <div class="flight-fare-price-row">
+                <div class="flight-fare-price">$865</div>
                 <span class="oop-anchor oop-anchor--hoverable">
                   <button class="flag-trigger flag-trigger--sm" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-flight-left" aria-label="Out of policy">
                     <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
@@ -451,7 +452,6 @@
                     </div>
                   </div>
                 </span>
-                <div class="flight-fare-price">$865</div>
               </div>
               <div class="flight-fare-type">One way</div>
               <button class="flight-fare-chevron" aria-label="Expand fare details">&#8964;</button>
@@ -517,6 +517,7 @@
               <div class="flight-fare-tier">Elite</div>
               <div class="flight-fare-caption">From</div>
               <div class="flight-fare-price-row">
+                <div class="flight-fare-price">$865</div>
                 <span class="oop-anchor oop-anchor--hoverable">
                   <button class="flag-trigger flag-trigger--sm" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-flight-below-left" aria-label="Out of policy">
                     <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
@@ -536,7 +537,6 @@
                     </div>
                   </div>
                 </span>
-                <div class="flight-fare-price">$865</div>
               </div>
               <div class="flight-fare-type">One way</div>
               <button class="flight-fare-chevron" aria-label="Expand fare details">&#8964;</button>
@@ -602,6 +602,7 @@
               <div class="flight-fare-tier">Elite</div>
               <div class="flight-fare-caption">From</div>
               <div class="flight-fare-price-row">
+                <div class="flight-fare-price">$865</div>
                 <span class="oop-anchor oop-anchor--hoverable">
                   <button class="flag-trigger flag-trigger--sm" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-flight-above-left" aria-label="Out of policy">
                     <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
@@ -621,7 +622,6 @@
                     </div>
                   </div>
                 </span>
-                <div class="flight-fare-price">$865</div>
               </div>
               <div class="flight-fare-type">One way</div>
               <button class="flight-fare-chevron" aria-label="Expand fare details">&#8964;</button>
@@ -635,7 +635,7 @@
 
   <div class="notes-box">
     <h4>Decisions applied here</h4>
-Same popover component, interaction, and five placement variants as the Hotel version — see <a href="concept-b-popover.html" style="color: var(--accent); font-weight: 700;">Concept B</a> for that write-up · what's different is the host card: the real Air SRP flight card (references/pattern-flight-srp.md) compares three fare tiers per row (Essential/Smart/Elite), and the out-of-policy flag lives specifically on the Elite column's price, not a single price block like Hotel · the flag still sits near the card's right edge, so the same below-left/above-left placement variants apply for the same reason · content is Flight's real list-format data (two numbered violation reasons: the reference-price ceiling and the cabin-class rule) instead of Hotel's single sentence. Full write-up: <a href="design-decisions.md" style="color: var(--accent); font-weight: 700;">design-decisions.md</a>.
+Same popover component, interaction, and five placement variants as the Hotel version — see <a href="concept-b-popover.html" style="color: var(--accent); font-weight: 700;">Concept B</a> for that write-up · what's different is the host card: the real Air SRP flight card (references/pattern-flight-srp.md) compares three fare tiers per row (Essential/Smart/Elite), and the out-of-policy flag lives specifically on the Elite column's price, not a single price block like Hotel · within that price, the flag icon comes <strong>after</strong> the price value — the reverse order from Hotel, confirmed by design review · the flag still sits near the card's right edge, so the same below-left/above-left placement variants apply for the same reason · content is Flight's real list-format data (two numbered violation reasons: the reference-price ceiling and the cabin-class rule) instead of Hotel's single sentence. Full write-up: <a href="design-decisions.md" style="color: var(--accent); font-weight: 700;">design-decisions.md</a>.
   </div>
 
 </div>
