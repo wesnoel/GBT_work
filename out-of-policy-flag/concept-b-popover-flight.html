@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Concept B — Popover dialog — Flight — Out of Policy Flag</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<div class="placeholder-chrome placeholder-header">Header placeholder — global nav</div>
+
+<div class="shell">
+
+  <div class="crumb">
+    <a href="index.html">Out of Policy Flag</a>
+    <span class="sep">/</span>
+    <span>Concept B — Popover dialog — Flight</span>
+  </div>
+
+  <div class="hub-hero" style="padding: 0 0 28px;">
+    <h1 style="font-size: 26px; line-height: 34px;">Concept B — Popover dialog — Flight</h1>
+    <p>Same popover component as the Hotel version (see <a href="concept-b-popover.html" style="color: var(--accent); font-weight: 700;">Concept B</a>), applied to the real Air SRP flight card instead of the Hotel SRP card. The flag sits on the Elite fare column's price, one of three fare tiers compared side by side — a genuinely different placement context than Hotel's single price block.</p>
+  </div>
+
+  <p class="hub-section-label">Standalone — sizes</p>
+  <div class="size-rail">
+
+    <div class="size-sample">
+      <span class="oop-anchor oop-anchor--hoverable">
+        <button class="flag-trigger flag-trigger--sm" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-sm" aria-label="Out of policy">
+          <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+        </button>
+        <div class="policy-popover" id="pv-sm" role="dialog" aria-label="Out of policy" data-oop-panel>
+          <div class="policy-popover__header">
+            <div class="policy-popover__heading">
+              <span class="policy-popover__icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg></span>
+              <p class="policy-popover__title">Out of Policy</p>
+            </div>
+            <button class="policy-popover__close" data-oop-close aria-label="Close">&times;</button>
+          </div>
+          <div class="policy-popover__body">
+            <p class="policy-popover__message">Wes, this room does not comply with your company's maximum nightly rate of USD 420 for this region.</p>
+          </div>
+        </div>
+      </span>
+      <span class="size-sample-label">Small</span>
+    </div>
+
+    <div class="size-sample">
+      <span class="oop-anchor oop-anchor--hoverable">
+        <button class="flag-trigger flag-trigger--md" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-md" aria-label="Out of policy">
+          <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+        </button>
+        <div class="policy-popover" id="pv-md" role="dialog" aria-label="Out of policy" data-oop-panel>
+          <div class="policy-popover__header">
+            <div class="policy-popover__heading">
+              <span class="policy-popover__icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg></span>
+              <p class="policy-popover__title">Out of Policy</p>
+            </div>
+            <button class="policy-popover__close" data-oop-close aria-label="Close">&times;</button>
+          </div>
+          <div class="policy-popover__body">
+            <p class="policy-popover__message">Wes, this room does not comply with your company's maximum nightly rate of USD 420 for this region.</p>
+          </div>
+        </div>
+      </span>
+      <span class="size-sample-label">Medium</span>
+    </div>
+
+    <div class="size-sample">
+      <span class="oop-anchor oop-anchor--hoverable">
+        <button class="flag-trigger flag-trigger--lg" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-lg" aria-label="Out of policy">
+          <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+        </button>
+        <div class="policy-popover" id="pv-lg" role="dialog" aria-label="Out of policy" data-oop-panel>
+          <div class="policy-popover__header">
+            <div class="policy-popover__heading">
+              <span class="policy-popover__icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg></span>
+              <p class="policy-popover__title">Out of Policy</p>
+            </div>
+            <button class="policy-popover__close" data-oop-close aria-label="Close">&times;</button>
+          </div>
+          <div class="policy-popover__body">
+            <p class="policy-popover__message">Wes, this room does not comply with your company's maximum nightly rate of USD 420 for this region.</p>
+          </div>
+        </div>
+      </span>
+      <span class="size-sample-label">Large</span>
+    </div>
+
+  </div>
+
+  <p class="hub-section-label">Placement — where the popover opens relative to the flag</p>
+  <div class="size-rail" style="padding: 90px 24px 40px;">
+
+    <div class="size-sample">
+      <span class="oop-anchor oop-anchor--hoverable">
+        <button class="flag-trigger flag-trigger--md" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-place-below" aria-label="Out of policy">
+          <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+        </button>
+        <div class="policy-popover" id="pv-place-below" role="dialog" aria-label="Out of policy" data-oop-panel>
+          <div class="policy-popover__header">
+            <div class="policy-popover__heading">
+              <span class="policy-popover__icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg></span>
+              <p class="policy-popover__title">Out of Policy</p>
+            </div>
+            <button class="policy-popover__close" data-oop-close aria-label="Close">&times;</button>
+          </div>
+          <div class="policy-popover__body">
+            <p class="policy-popover__message">Wes, this room does not comply with your company's maximum nightly rate of USD 420 for this region.</p>
+          </div>
+        </div>
+      </span>
+      <span class="size-sample-label">Below (default)</span>
+    </div>
+
+    <div class="size-sample">
+      <span class="oop-anchor oop-anchor--hoverable">
+        <button class="flag-trigger flag-trigger--md" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-place-above" aria-label="Out of policy">
+          <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+        </button>
+        <div class="policy-popover policy-popover--above" id="pv-place-above" role="dialog" aria-label="Out of policy" data-oop-panel>
+          <div class="policy-popover__header">
+            <div class="policy-popover__heading">
+              <span class="policy-popover__icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg></span>
+              <p class="policy-popover__title">Out of Policy</p>
+            </div>
+            <button class="policy-popover__close" data-oop-close aria-label="Close">&times;</button>
+          </div>
+          <div class="policy-popover__body">
+            <p class="policy-popover__message">Wes, this room does not comply with your company's maximum nightly rate of USD 420 for this region.</p>
+          </div>
+        </div>
+      </span>
+      <span class="size-sample-label">Above</span>
+    </div>
+
+    <div class="size-sample">
+      <span class="oop-anchor oop-anchor--hoverable">
+        <button class="flag-trigger flag-trigger--md" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-place-left" aria-label="Out of policy">
+          <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+        </button>
+        <div class="policy-popover policy-popover--left" id="pv-place-left" role="dialog" aria-label="Out of policy" data-oop-panel>
+          <div class="policy-popover__header">
+            <div class="policy-popover__heading">
+              <span class="policy-popover__icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg></span>
+              <p class="policy-popover__title">Out of Policy</p>
+            </div>
+            <button class="policy-popover__close" data-oop-close aria-label="Close">&times;</button>
+          </div>
+          <div class="policy-popover__body">
+            <p class="policy-popover__message">Wes, this room does not comply with your company's maximum nightly rate of USD 420 for this region.</p>
+          </div>
+        </div>
+      </span>
+      <span class="size-sample-label">Left</span>
+    </div>
+
+    <div class="size-sample">
+      <span class="oop-anchor oop-anchor--hoverable">
+        <button class="flag-trigger flag-trigger--md" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-place-below-left" aria-label="Out of policy">
+          <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+        </button>
+        <div class="policy-popover policy-popover--below-left" id="pv-place-below-left" role="dialog" aria-label="Out of policy" data-oop-panel>
+          <div class="policy-popover__header">
+            <div class="policy-popover__heading">
+              <span class="policy-popover__icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg></span>
+              <p class="policy-popover__title">Out of Policy</p>
+            </div>
+            <button class="policy-popover__close" data-oop-close aria-label="Close">&times;</button>
+          </div>
+          <div class="policy-popover__body">
+            <p class="policy-popover__message">Wes, this room does not comply with your company's maximum nightly rate of USD 420 for this region.</p>
+          </div>
+        </div>
+      </span>
+      <span class="size-sample-label">Below, left</span>
+    </div>
+
+    <div class="size-sample">
+      <span class="oop-anchor oop-anchor--hoverable">
+        <button class="flag-trigger flag-trigger--md" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-place-above-left" aria-label="Out of policy">
+          <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+        </button>
+        <div class="policy-popover policy-popover--above-left" id="pv-place-above-left" role="dialog" aria-label="Out of policy" data-oop-panel>
+          <div class="policy-popover__header">
+            <div class="policy-popover__heading">
+              <span class="policy-popover__icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg></span>
+              <p class="policy-popover__title">Out of Policy</p>
+            </div>
+            <button class="policy-popover__close" data-oop-close aria-label="Close">&times;</button>
+          </div>
+          <div class="policy-popover__body">
+            <p class="policy-popover__message">Wes, this room does not comply with your company's maximum nightly rate of USD 420 for this region.</p>
+          </div>
+        </div>
+      </span>
+      <span class="size-sample-label">Above, left</span>
+    </div>
+
+  </div>
+
+  <p class="hub-section-label">In context — Air SRP flight card</p>
+  <div class="hotel-card-demo">
+
+    <div>
+      <div class="hotel-card-size-label">Below (default)</div>
+      <div class="flight-card">
+        <div class="flight-badge-row">
+          <span class="flight-badge flight-badge--info"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16v-2l-8-5V3.5C13 2.67 12.33 2 11.5 2S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2.5 1.5V22l4-1.5 4 1.5v-1.5L13 19v-5.5z"/></svg>Nonstop</span>
+          <span class="flight-badge flight-badge--eco"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9"/></svg>-15% CO2</span>
+        </div>
+        <div class="flight-card-body">
+          <div class="flight-itinerary">
+            <div class="flight-itinerary-legs">
+              <div class="flight-leg">
+                <div class="flight-time">8:05 AM</div>
+                <div class="flight-airport">JFK</div>
+                <div class="flight-city">New York</div>
+              </div>
+              <div class="flight-route-line"><span class="flight-route-track"></span></div>
+              <div class="flight-leg flight-leg--end">
+                <div class="flight-time">11:32 AM</div>
+                <div class="flight-airport">SFO</div>
+                <div class="flight-city">San Francisco</div>
+              </div>
+            </div>
+            <div class="flight-info-secondary">
+              <div class="flight-duration">5h 27m</div>
+              <div class="flight-amenities">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5a10 10 0 0 1 14 0"/><path d="M8.5 16a5.5 5.5 0 0 1 7 0"/><circle cx="12" cy="19" r="1" fill="currentColor" stroke="none"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v8"/><path d="M6.3 6.3a8 8 0 1 0 11.4 0"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4v10a2 2 0 002 2h9"/><path d="M6 10h9"/><path d="M17 16v4"/><path d="M7 16v4"/></svg>
+                <span class="flight-amenities-more">+2</span>
+              </div>
+            </div>
+            <div class="flight-carrier-row">
+              <span class="flight-carrier-logo"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5C13 2.67 12.33 2 11.5 2S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2.5 1.5V22l4-1.5 4 1.5v-1.5L13 19v-5.5z"/></svg></span>
+              <span class="flight-carrier-name">United Airlines</span>
+              <span class="flight-otp-badge">98% on time</span>
+              <span class="flight-preferred-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v18"/><path d="M5 4h11l-2 4 2 4H5"/></svg></span>
+              <a class="flight-view-details" href="#" onclick="return false;">View details</a>
+            </div>
+          </div>
+          <div class="flight-fare-columns">
+            <div class="flight-fare-col">
+              <div class="flight-fare-tier">Essential</div>
+              <div class="flight-fare-caption">From</div>
+              <div class="flight-fare-price">$520</div>
+              <div class="flight-fare-type">One way</div>
+              <button class="flight-fare-chevron" aria-label="Expand fare details">&#8964;</button>
+            </div>
+            <div class="flight-fare-col flight-fare-col--recommended">
+              <div class="flight-fare-tier">Smart</div>
+              <div class="flight-fare-caption">From</div>
+              <div class="flight-fare-price">$610</div>
+              <div class="flight-fare-type">One way</div>
+              <button class="flight-fare-chevron" aria-label="Expand fare details">&#8964;</button>
+            </div>
+            <div class="flight-fare-col">
+              <div class="flight-fare-tier">Elite</div>
+              <div class="flight-fare-caption">From</div>
+              <div class="flight-fare-price-row">
+                <span class="oop-anchor oop-anchor--hoverable">
+                  <button class="flag-trigger flag-trigger--sm" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-flight-below" aria-label="Out of policy">
+                    <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+                  </button>
+                  <div class="policy-popover" id="pv-flight-below" role="dialog" aria-label="Out of policy" data-oop-panel style="left:auto; right:0;">
+                    <div class="policy-popover__header">
+                      <div class="policy-popover__heading">
+                        <span class="policy-popover__icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg></span>
+                        <p class="policy-popover__title">Out of Policy</p>
+                      </div>
+                      <button class="policy-popover__close" data-oop-close aria-label="Close">&times;</button>
+                    </div>
+                    <div class="policy-popover__body">
+                      <ol class="policy-popover__list">
+                        <li>The reference price on this route is USD 650. To be compliant with your travel policy the price cannot exceed the reference price by more than USD 150.</li><li>This cabin class does not comply with your company's travel policy for this flight. Highest cabin class allowed : Economy</li>
+                      </ol>
+                    </div>
+                  </div>
+                </span>
+                <div class="flight-fare-price">$865</div>
+              </div>
+              <div class="flight-fare-type">One way</div>
+              <button class="flight-fare-chevron" aria-label="Expand fare details">&#8964;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="hotel-card-size-label">Above</div>
+      <div class="flight-card">
+        <div class="flight-badge-row">
+          <span class="flight-badge flight-badge--info"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16v-2l-8-5V3.5C13 2.67 12.33 2 11.5 2S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2.5 1.5V22l4-1.5 4 1.5v-1.5L13 19v-5.5z"/></svg>Nonstop</span>
+          <span class="flight-badge flight-badge--eco"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9"/></svg>-15% CO2</span>
+        </div>
+        <div class="flight-card-body">
+          <div class="flight-itinerary">
+            <div class="flight-itinerary-legs">
+              <div class="flight-leg">
+                <div class="flight-time">8:05 AM</div>
+                <div class="flight-airport">JFK</div>
+                <div class="flight-city">New York</div>
+              </div>
+              <div class="flight-route-line"><span class="flight-route-track"></span></div>
+              <div class="flight-leg flight-leg--end">
+                <div class="flight-time">11:32 AM</div>
+                <div class="flight-airport">SFO</div>
+                <div class="flight-city">San Francisco</div>
+              </div>
+            </div>
+            <div class="flight-info-secondary">
+              <div class="flight-duration">5h 27m</div>
+              <div class="flight-amenities">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5a10 10 0 0 1 14 0"/><path d="M8.5 16a5.5 5.5 0 0 1 7 0"/><circle cx="12" cy="19" r="1" fill="currentColor" stroke="none"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v8"/><path d="M6.3 6.3a8 8 0 1 0 11.4 0"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4v10a2 2 0 002 2h9"/><path d="M6 10h9"/><path d="M17 16v4"/><path d="M7 16v4"/></svg>
+                <span class="flight-amenities-more">+2</span>
+              </div>
+            </div>
+            <div class="flight-carrier-row">
+              <span class="flight-carrier-logo"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5C13 2.67 12.33 2 11.5 2S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2.5 1.5V22l4-1.5 4 1.5v-1.5L13 19v-5.5z"/></svg></span>
+              <span class="flight-carrier-name">United Airlines</span>
+              <span class="flight-otp-badge">98% on time</span>
+              <span class="flight-preferred-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v18"/><path d="M5 4h11l-2 4 2 4H5"/></svg></span>
+              <a class="flight-view-details" href="#" onclick="return false;">View details</a>
+            </div>
+          </div>
+          <div class="flight-fare-columns">
+            <div class="flight-fare-col">
+              <div class="flight-fare-tier">Essential</div>
+              <div class="flight-fare-caption">From</div>
+              <div class="flight-fare-price">$520</div>
+              <div class="flight-fare-type">One way</div>
+              <button class="flight-fare-chevron" aria-label="Expand fare details">&#8964;</button>
+            </div>
+            <div class="flight-fare-col flight-fare-col--recommended">
+              <div class="flight-fare-tier">Smart</div>
+              <div class="flight-fare-caption">From</div>
+              <div class="flight-fare-price">$610</div>
+              <div class="flight-fare-type">One way</div>
+              <button class="flight-fare-chevron" aria-label="Expand fare details">&#8964;</button>
+            </div>
+            <div class="flight-fare-col">
+              <div class="flight-fare-tier">Elite</div>
+              <div class="flight-fare-caption">From</div>
+              <div class="flight-fare-price-row">
+                <span class="oop-anchor oop-anchor--hoverable">
+                  <button class="flag-trigger flag-trigger--sm" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-flight-above" aria-label="Out of policy">
+                    <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+                  </button>
+                  <div class="policy-popover policy-popover--above" id="pv-flight-above" role="dialog" aria-label="Out of policy" data-oop-panel style="left:auto; right:0;">
+                    <div class="policy-popover__header">
+                      <div class="policy-popover__heading">
+                        <span class="policy-popover__icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg></span>
+                        <p class="policy-popover__title">Out of Policy</p>
+                      </div>
+                      <button class="policy-popover__close" data-oop-close aria-label="Close">&times;</button>
+                    </div>
+                    <div class="policy-popover__body">
+                      <ol class="policy-popover__list">
+                        <li>The reference price on this route is USD 650. To be compliant with your travel policy the price cannot exceed the reference price by more than USD 150.</li><li>This cabin class does not comply with your company's travel policy for this flight. Highest cabin class allowed : Economy</li>
+                      </ol>
+                    </div>
+                  </div>
+                </span>
+                <div class="flight-fare-price">$865</div>
+              </div>
+              <div class="flight-fare-type">One way</div>
+              <button class="flight-fare-chevron" aria-label="Expand fare details">&#8964;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="hotel-card-size-label">Left</div>
+      <div class="flight-card">
+        <div class="flight-badge-row">
+          <span class="flight-badge flight-badge--info"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16v-2l-8-5V3.5C13 2.67 12.33 2 11.5 2S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2.5 1.5V22l4-1.5 4 1.5v-1.5L13 19v-5.5z"/></svg>Nonstop</span>
+          <span class="flight-badge flight-badge--eco"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9"/></svg>-15% CO2</span>
+        </div>
+        <div class="flight-card-body">
+          <div class="flight-itinerary">
+            <div class="flight-itinerary-legs">
+              <div class="flight-leg">
+                <div class="flight-time">8:05 AM</div>
+                <div class="flight-airport">JFK</div>
+                <div class="flight-city">New York</div>
+              </div>
+              <div class="flight-route-line"><span class="flight-route-track"></span></div>
+              <div class="flight-leg flight-leg--end">
+                <div class="flight-time">11:32 AM</div>
+                <div class="flight-airport">SFO</div>
+                <div class="flight-city">San Francisco</div>
+              </div>
+            </div>
+            <div class="flight-info-secondary">
+              <div class="flight-duration">5h 27m</div>
+              <div class="flight-amenities">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5a10 10 0 0 1 14 0"/><path d="M8.5 16a5.5 5.5 0 0 1 7 0"/><circle cx="12" cy="19" r="1" fill="currentColor" stroke="none"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v8"/><path d="M6.3 6.3a8 8 0 1 0 11.4 0"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4v10a2 2 0 002 2h9"/><path d="M6 10h9"/><path d="M17 16v4"/><path d="M7 16v4"/></svg>
+                <span class="flight-amenities-more">+2</span>
+              </div>
+            </div>
+            <div class="flight-carrier-row">
+              <span class="flight-carrier-logo"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5C13 2.67 12.33 2 11.5 2S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2.5 1.5V22l4-1.5 4 1.5v-1.5L13 19v-5.5z"/></svg></span>
+              <span class="flight-carrier-name">United Airlines</span>
+              <span class="flight-otp-badge">98% on time</span>
+              <span class="flight-preferred-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v18"/><path d="M5 4h11l-2 4 2 4H5"/></svg></span>
+              <a class="flight-view-details" href="#" onclick="return false;">View details</a>
+            </div>
+          </div>
+          <div class="flight-fare-columns">
+            <div class="flight-fare-col">
+              <div class="flight-fare-tier">Essential</div>
+              <div class="flight-fare-caption">From</div>
+              <div class="flight-fare-price">$520</div>
+              <div class="flight-fare-type">One way</div>
+              <button class="flight-fare-chevron" aria-label="Expand fare details">&#8964;</button>
+            </div>
+            <div class="flight-fare-col flight-fare-col--recommended">
+              <div class="flight-fare-tier">Smart</div>
+              <div class="flight-fare-caption">From</div>
+              <div class="flight-fare-price">$610</div>
+              <div class="flight-fare-type">One way</div>
+              <button class="flight-fare-chevron" aria-label="Expand fare details">&#8964;</button>
+            </div>
+            <div class="flight-fare-col">
+              <div class="flight-fare-tier">Elite</div>
+              <div class="flight-fare-caption">From</div>
+              <div class="flight-fare-price-row">
+                <span class="oop-anchor oop-anchor--hoverable">
+                  <button class="flag-trigger flag-trigger--sm" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-flight-left" aria-label="Out of policy">
+                    <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+                  </button>
+                  <div class="policy-popover policy-popover--left" id="pv-flight-left" role="dialog" aria-label="Out of policy" data-oop-panel style="left:auto; right:0;">
+                    <div class="policy-popover__header">
+                      <div class="policy-popover__heading">
+                        <span class="policy-popover__icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg></span>
+                        <p class="policy-popover__title">Out of Policy</p>
+                      </div>
+                      <button class="policy-popover__close" data-oop-close aria-label="Close">&times;</button>
+                    </div>
+                    <div class="policy-popover__body">
+                      <ol class="policy-popover__list">
+                        <li>The reference price on this route is USD 650. To be compliant with your travel policy the price cannot exceed the reference price by more than USD 150.</li><li>This cabin class does not comply with your company's travel policy for this flight. Highest cabin class allowed : Economy</li>
+                      </ol>
+                    </div>
+                  </div>
+                </span>
+                <div class="flight-fare-price">$865</div>
+              </div>
+              <div class="flight-fare-type">One way</div>
+              <button class="flight-fare-chevron" aria-label="Expand fare details">&#8964;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="hotel-card-size-label">Below, left</div>
+      <div class="flight-card">
+        <div class="flight-badge-row">
+          <span class="flight-badge flight-badge--info"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16v-2l-8-5V3.5C13 2.67 12.33 2 11.5 2S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2.5 1.5V22l4-1.5 4 1.5v-1.5L13 19v-5.5z"/></svg>Nonstop</span>
+          <span class="flight-badge flight-badge--eco"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9"/></svg>-15% CO2</span>
+        </div>
+        <div class="flight-card-body">
+          <div class="flight-itinerary">
+            <div class="flight-itinerary-legs">
+              <div class="flight-leg">
+                <div class="flight-time">8:05 AM</div>
+                <div class="flight-airport">JFK</div>
+                <div class="flight-city">New York</div>
+              </div>
+              <div class="flight-route-line"><span class="flight-route-track"></span></div>
+              <div class="flight-leg flight-leg--end">
+                <div class="flight-time">11:32 AM</div>
+                <div class="flight-airport">SFO</div>
+                <div class="flight-city">San Francisco</div>
+              </div>
+            </div>
+            <div class="flight-info-secondary">
+              <div class="flight-duration">5h 27m</div>
+              <div class="flight-amenities">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5a10 10 0 0 1 14 0"/><path d="M8.5 16a5.5 5.5 0 0 1 7 0"/><circle cx="12" cy="19" r="1" fill="currentColor" stroke="none"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v8"/><path d="M6.3 6.3a8 8 0 1 0 11.4 0"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4v10a2 2 0 002 2h9"/><path d="M6 10h9"/><path d="M17 16v4"/><path d="M7 16v4"/></svg>
+                <span class="flight-amenities-more">+2</span>
+              </div>
+            </div>
+            <div class="flight-carrier-row">
+              <span class="flight-carrier-logo"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5C13 2.67 12.33 2 11.5 2S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2.5 1.5V22l4-1.5 4 1.5v-1.5L13 19v-5.5z"/></svg></span>
+              <span class="flight-carrier-name">United Airlines</span>
+              <span class="flight-otp-badge">98% on time</span>
+              <span class="flight-preferred-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v18"/><path d="M5 4h11l-2 4 2 4H5"/></svg></span>
+              <a class="flight-view-details" href="#" onclick="return false;">View details</a>
+            </div>
+          </div>
+          <div class="flight-fare-columns">
+            <div class="flight-fare-col">
+              <div class="flight-fare-tier">Essential</div>
+              <div class="flight-fare-caption">From</div>
+              <div class="flight-fare-price">$520</div>
+              <div class="flight-fare-type">One way</div>
+              <button class="flight-fare-chevron" aria-label="Expand fare details">&#8964;</button>
+            </div>
+            <div class="flight-fare-col flight-fare-col--recommended">
+              <div class="flight-fare-tier">Smart</div>
+              <div class="flight-fare-caption">From</div>
+              <div class="flight-fare-price">$610</div>
+              <div class="flight-fare-type">One way</div>
+              <button class="flight-fare-chevron" aria-label="Expand fare details">&#8964;</button>
+            </div>
+            <div class="flight-fare-col">
+              <div class="flight-fare-tier">Elite</div>
+              <div class="flight-fare-caption">From</div>
+              <div class="flight-fare-price-row">
+                <span class="oop-anchor oop-anchor--hoverable">
+                  <button class="flag-trigger flag-trigger--sm" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-flight-below-left" aria-label="Out of policy">
+                    <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+                  </button>
+                  <div class="policy-popover policy-popover--below-left" id="pv-flight-below-left" role="dialog" aria-label="Out of policy" data-oop-panel style="left:auto; right:0;">
+                    <div class="policy-popover__header">
+                      <div class="policy-popover__heading">
+                        <span class="policy-popover__icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg></span>
+                        <p class="policy-popover__title">Out of Policy</p>
+                      </div>
+                      <button class="policy-popover__close" data-oop-close aria-label="Close">&times;</button>
+                    </div>
+                    <div class="policy-popover__body">
+                      <ol class="policy-popover__list">
+                        <li>The reference price on this route is USD 650. To be compliant with your travel policy the price cannot exceed the reference price by more than USD 150.</li><li>This cabin class does not comply with your company's travel policy for this flight. Highest cabin class allowed : Economy</li>
+                      </ol>
+                    </div>
+                  </div>
+                </span>
+                <div class="flight-fare-price">$865</div>
+              </div>
+              <div class="flight-fare-type">One way</div>
+              <button class="flight-fare-chevron" aria-label="Expand fare details">&#8964;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="hotel-card-size-label">Above, left</div>
+      <div class="flight-card">
+        <div class="flight-badge-row">
+          <span class="flight-badge flight-badge--info"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16v-2l-8-5V3.5C13 2.67 12.33 2 11.5 2S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2.5 1.5V22l4-1.5 4 1.5v-1.5L13 19v-5.5z"/></svg>Nonstop</span>
+          <span class="flight-badge flight-badge--eco"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9"/></svg>-15% CO2</span>
+        </div>
+        <div class="flight-card-body">
+          <div class="flight-itinerary">
+            <div class="flight-itinerary-legs">
+              <div class="flight-leg">
+                <div class="flight-time">8:05 AM</div>
+                <div class="flight-airport">JFK</div>
+                <div class="flight-city">New York</div>
+              </div>
+              <div class="flight-route-line"><span class="flight-route-track"></span></div>
+              <div class="flight-leg flight-leg--end">
+                <div class="flight-time">11:32 AM</div>
+                <div class="flight-airport">SFO</div>
+                <div class="flight-city">San Francisco</div>
+              </div>
+            </div>
+            <div class="flight-info-secondary">
+              <div class="flight-duration">5h 27m</div>
+              <div class="flight-amenities">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5a10 10 0 0 1 14 0"/><path d="M8.5 16a5.5 5.5 0 0 1 7 0"/><circle cx="12" cy="19" r="1" fill="currentColor" stroke="none"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v8"/><path d="M6.3 6.3a8 8 0 1 0 11.4 0"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4v10a2 2 0 002 2h9"/><path d="M6 10h9"/><path d="M17 16v4"/><path d="M7 16v4"/></svg>
+                <span class="flight-amenities-more">+2</span>
+              </div>
+            </div>
+            <div class="flight-carrier-row">
+              <span class="flight-carrier-logo"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5C13 2.67 12.33 2 11.5 2S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2.5 1.5V22l4-1.5 4 1.5v-1.5L13 19v-5.5z"/></svg></span>
+              <span class="flight-carrier-name">United Airlines</span>
+              <span class="flight-otp-badge">98% on time</span>
+              <span class="flight-preferred-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v18"/><path d="M5 4h11l-2 4 2 4H5"/></svg></span>
+              <a class="flight-view-details" href="#" onclick="return false;">View details</a>
+            </div>
+          </div>
+          <div class="flight-fare-columns">
+            <div class="flight-fare-col">
+              <div class="flight-fare-tier">Essential</div>
+              <div class="flight-fare-caption">From</div>
+              <div class="flight-fare-price">$520</div>
+              <div class="flight-fare-type">One way</div>
+              <button class="flight-fare-chevron" aria-label="Expand fare details">&#8964;</button>
+            </div>
+            <div class="flight-fare-col flight-fare-col--recommended">
+              <div class="flight-fare-tier">Smart</div>
+              <div class="flight-fare-caption">From</div>
+              <div class="flight-fare-price">$610</div>
+              <div class="flight-fare-type">One way</div>
+              <button class="flight-fare-chevron" aria-label="Expand fare details">&#8964;</button>
+            </div>
+            <div class="flight-fare-col">
+              <div class="flight-fare-tier">Elite</div>
+              <div class="flight-fare-caption">From</div>
+              <div class="flight-fare-price-row">
+                <span class="oop-anchor oop-anchor--hoverable">
+                  <button class="flag-trigger flag-trigger--sm" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-flight-above-left" aria-label="Out of policy">
+                    <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+                  </button>
+                  <div class="policy-popover policy-popover--above-left" id="pv-flight-above-left" role="dialog" aria-label="Out of policy" data-oop-panel style="left:auto; right:0;">
+                    <div class="policy-popover__header">
+                      <div class="policy-popover__heading">
+                        <span class="policy-popover__icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg></span>
+                        <p class="policy-popover__title">Out of Policy</p>
+                      </div>
+                      <button class="policy-popover__close" data-oop-close aria-label="Close">&times;</button>
+                    </div>
+                    <div class="policy-popover__body">
+                      <ol class="policy-popover__list">
+                        <li>The reference price on this route is USD 650. To be compliant with your travel policy the price cannot exceed the reference price by more than USD 150.</li><li>This cabin class does not comply with your company's travel policy for this flight. Highest cabin class allowed : Economy</li>
+                      </ol>
+                    </div>
+                  </div>
+                </span>
+                <div class="flight-fare-price">$865</div>
+              </div>
+              <div class="flight-fare-type">One way</div>
+              <button class="flight-fare-chevron" aria-label="Expand fare details">&#8964;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="notes-box">
+    <h4>Decisions applied here</h4>
+Same popover component, interaction, and five placement variants as the Hotel version — see <a href="concept-b-popover.html" style="color: var(--accent); font-weight: 700;">Concept B</a> for that write-up · what's different is the host card: the real Air SRP flight card (references/pattern-flight-srp.md) compares three fare tiers per row (Essential/Smart/Elite), and the out-of-policy flag lives specifically on the Elite column's price, not a single price block like Hotel · the flag still sits near the card's right edge, so the same below-left/above-left placement variants apply for the same reason · content is Flight's real list-format data (two numbered violation reasons: the reference-price ceiling and the cabin-class rule) instead of Hotel's single sentence. Full write-up: <a href="design-decisions.md" style="color: var(--accent); font-weight: 700;">design-decisions.md</a>.
+  </div>
+
+</div>
+
+<div class="placeholder-chrome placeholder-footer">Footer placeholder — global footer</div>
+
+<script src="app.js"></script>
+</body>
+</html>

@@ -16,16 +16,16 @@
 
   <div class="hub-hero">
     <h1>Out of policy flag — component concepts</h1>
-    <p>The filled flag icon that appears next to price on out-of-policy hotel cards is currently a simple hover tooltip. This explores two interaction directions for the same trigger — a lightweight tooltip and a heavier structured popover — each in small, medium, and large variants. Built as one generic, reusable "Out of policy" component driven by data (line of business + violation reason), not hardcoded to hotel — proven out on both the Hotel and Air SRP card patterns below.</p>
+    <p>The filled flag icon that appears next to price on out-of-policy hotel cards is currently a simple hover tooltip. This explores two interaction directions for the same trigger — a lightweight tooltip and a heavier structured popover — each in small, medium, and large variants. Built as one generic, reusable "Out of policy" component driven by data (line of business + violation reason), not hardcoded to hotel — proven out against the real Hotel and Air SRP card patterns, each direction on its own page below.</p>
     <div class="hub-meta">
       <span><strong>Source:</strong> Design exploration — hotel-card out-of-policy flag interaction</span>
-      <span><strong>Reference:</strong> Hotel SRP price-block flag pattern</span>
+      <span><strong>Reference:</strong> Hotel SRP price-block flag pattern · Air SRP flight-card pattern</span>
       <span><strong>Fidelity:</strong> Egencia-branded, fully interactive</span>
-      <span><strong>Status:</strong> Exploration — 2 directions for review</span>
+      <span><strong>Status:</strong> Exploration — 2 directions × 2 lines of business</span>
     </div>
   </div>
 
-  <p class="hub-section-label">Interaction concepts</p>
+  <p class="hub-section-label">Hotel — interaction concepts (Hotel SRP)</p>
 
   <div class="card-grid">
 
@@ -40,6 +40,26 @@
       <span class="num">B — Popover dialog</span>
       <h3>Popover dialog</h3>
       <p>A heavier, structured popover — still anchored to the flag. Real header, explicit close button. Opens on hover, click, or tap, same as the tooltip.</p>
+      <span class="open-link">Open wireframe →</span>
+    </a>
+
+  </div>
+
+  <p class="hub-section-label">Flight — interaction concepts (Air SRP)</p>
+
+  <div class="card-grid">
+
+    <a class="screen-card" href="concept-a-tooltip-flight.html">
+      <span class="num">A — Tooltip</span>
+      <h3>Tooltip</h3>
+      <p>Same tooltip component as Hotel, applied to the real Air SRP flight card — the flag sits on the Elite fare column's price, not a single price block.</p>
+      <span class="open-link">Open wireframe →</span>
+    </a>
+
+    <a class="screen-card" href="concept-b-popover-flight.html">
+      <span class="num">B — Popover dialog</span>
+      <h3>Popover dialog</h3>
+      <p>Same popover component as Hotel, applied to the real Air SRP flight card — same three-fare-column layout, same Elite-column flag placement.</p>
       <span class="open-link">Open wireframe →</span>
     </a>
 
@@ -67,63 +87,9 @@
     <p class="reuse-demo-caption">Same markup and same <code>buildOopContent(lob, userName)</code> function in <code>app.js</code> — only the data fragment changes per line of business. Swapping copy and switching between a sentence and a numbered list are data changes, not a redesign. See <code>design-decisions.md</code> for the full data model.</p>
   </div>
 
-  <p class="hub-section-label">Applied to Air SRP</p>
-  <div class="hotel-card-demo">
-    <div>
-      <div class="flight-card">
-        <div class="flight-badge-row">
-          <span class="flight-badge"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v18"/><path d="M5 4h11l-2 4 2 4H5"/></svg>Egencia preferred</span>
-          <span class="flight-badge flight-badge--neutral"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>Nonstop</span>
-        </div>
-        <div class="flight-card-main">
-          <div class="flight-airline">
-            <span class="flight-airline-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5C13 2.67 12.33 2 11.5 2S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2.5 1.5V22l4-1.5 4 1.5v-1.5L13 19v-5.5z"/></svg></span>
-            <span class="flight-airline-name">United Airlines</span>
-          </div>
-          <div class="flight-body">
-            <h3 class="flight-route">New York (JFK) → San Francisco (SFO)</h3>
-            <div class="flight-subrow"><span class="flight-times">8:05 AM – 11:32 AM</span><span class="muted">5h 27m · Nonstop</span></div>
-            <div class="flight-details-box">
-              <div class="flight-details-label">Fare</div>
-              <div class="muted">Premium Economy · Main cabin</div>
-              <div class="muted">1 checked bag included</div>
-            </div>
-            <div class="flight-eco-line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9"/></svg>Lower emissions than average flight</div>
-            <div class="coworker">62% of coworker bookings</div>
-          </div>
-          <div class="flight-price">
-            <div class="price-caption">From</div>
-            <div class="price-flag-row">
-              <span class="oop-anchor oop-anchor--hoverable">
-                <button class="flag-trigger flag-trigger--sm" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="tt-hub-flight" aria-label="Out of policy">
-                  <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
-                </button>
-                <div class="policy-tooltip" id="tt-hub-flight" role="tooltip" data-oop-panel style="left: auto; right: 0; transform: none;">
-                  <p class="policy-tooltip__title">Out of Policy</p>
-                  <ol class="policy-tooltip__list">
-                    <li>The reference price on this route is USD 650. To be compliant with your travel policy the price cannot exceed the reference price by more than USD 150.</li>
-                    <li>This cabin class does not comply with your company's travel policy for this flight. Highest cabin class allowed : Economy</li>
-                  </ol>
-                </div>
-              </span>
-              <div class="price-value">$865</div>
-            </div>
-            <div class="price-sub">Taxes and fees included</div>
-            <div class="price-sub">Nonrefundable fare</div>
-          </div>
-        </div>
-        <div class="flight-perk-strip">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 8l-8 5-8-5"/><rect x="3" y="5" width="18" height="14" rx="2"/></svg>
-          Includes 1 checked bag, within company policy
-        </div>
-      </div>
-    </div>
-  </div>
-  <p class="reuse-demo-caption">Same tooltip component (Concept A), same numbered-list content shown in the reusability demo above — now on a real Air SRP card instead of an abstract preview. See <a href="concept-a-tooltip.html" style="color: var(--accent); font-weight: 700;">Concept A</a> and <a href="concept-b-popover.html" style="color: var(--accent); font-weight: 700;">Concept B</a> for the full flight treatment, including all five placement variants.</p>
-
   <div class="notes-box">
     <h4>Design decisions (resolved from the working assumptions in this exploration)</h4>
-    Two directions isolate interaction weight as the variable, not content — both tooltip and popover dialog open on hover, click, or tap (the standard interaction for anchored disclosure), differing only in weight: tooltip has no close button and relies on idle-dismiss, popover has an explicit close button plus idle-dismiss as a safety net. A third direction (modal) was explored and then dropped from scope · small/medium/large change only the flag icon's size (16/18/20px) — panel width, padding, and copy (font_300: 14px, title bold, text regular) stay constant across sizes, and the hotel/flight card examples default to the small size · content is data-driven by line of business: format (a flowing sentence vs. a numbered list, 1-2 items) varies, but the title is standardized to "Out of Policy" everywhere — a deliberate call, since real Air and Rail screenshots showed two different live conventions ("Policy violations:" and no title at all) that this unifies — demonstrated live above on both a data preview and a real Air SRP card, Car shown as an explicitly flagged placeholder pending real copy · every hover/focus-revealed panel is closed with <code>blur()</code> on every dismiss path, since <code>:focus-visible</code> alone can keep it visually open after the JS state changes. Full write-up: <a href="design-decisions.md" style="color: var(--accent); font-weight: 700;">design-decisions.md</a>.
+    Two directions isolate interaction weight as the variable, not content — both tooltip and popover dialog open on hover, click, or tap (the standard interaction for anchored disclosure), differing only in weight: tooltip has no close button and relies on idle-dismiss, popover has an explicit close button plus idle-dismiss as a safety net. A third direction (modal) was explored and then dropped from scope · small/medium/large change only the flag icon's size (16/18/20px) — panel width, padding, and copy (font_300: 14px, title bold, text regular) stay constant across sizes · content is data-driven by line of business: format (a flowing sentence vs. a numbered list, 1-2 items) varies, but the title is standardized to "Out of Policy" everywhere — a deliberate call, since real Air and Rail screenshots showed two different live conventions ("Policy violations:" and no title at all) that this unifies · Hotel and Flight each get their own set of pages per direction, since the flag lives in a genuinely different place on each card (a single price block on Hotel, the Elite fare column's price on Flight's three-column comparison) · every hover/focus-revealed panel is closed with <code>blur()</code> on every dismiss path, since <code>:focus-visible</code> alone can keep it visually open after the JS state changes. Full write-up: <a href="design-decisions.md" style="color: var(--accent); font-weight: 700;">design-decisions.md</a>.
   </div>
 
 </div>

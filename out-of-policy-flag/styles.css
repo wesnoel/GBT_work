@@ -337,88 +337,117 @@ a { color: inherit; text-decoration: none; }
 .price-value { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
 .price-sub { font-size: 12px; color: var(--ink-soft); }
 
-/* ---- Flight card (Egencia Air SRP pattern) — same anatomy as the hotel
-   card (badge row, media/details/price row, full-width inset perk strip),
-   proving the out-of-policy flag reuses cleanly across lines of business.
-   Kept as its own class family rather than reusing .hotel-* names, since a
-   flight card literally having class="hotel-name" would be misleading —
-   see references/hotel-card.md's naming-discipline note. */
+/* ---- Flight card (Egencia Air SRP pattern) ----
+   Real anatomy per references/pattern-flight-srp.md (live Figma inspection,
+   node 25:9679, "Flight - card"), NOT the hotel card's anatomy — a flight
+   result row is itinerary + a 3-fare-tier price comparison, not a
+   thumbnail + single price block. Collapsed state only (no expanded
+   fare-carousel — out of scope for testing the flag interaction).
+   Adaptations from the exact Figma spec, called out explicitly:
+     - Card renders at 100% of this deck's shell (max 1180px) rather than
+       the source frame's exact 1200px — same "full content width" intent.
+     - Fare-tier names ("Essential"/"Smart"/"Elite") are real column
+       headers shared above the whole results list in the source page;
+       since these cards render standalone/in pairs rather than in a full
+       list, the labels are folded into each card's own fare column.
+     - The real "Column Focus" accent bar sits flush along the whole
+       card's bottom edge, under the recommended column only. Rendered
+       here as a top border on that column instead (a real, if smaller,
+       positional difference) rather than reaching for a negative margin
+       to pull a bottom border down to the card's edge — that's the exact
+       overflow/negative-margin trap documented in
+       references/pattern-hotel-list-card.md gotcha #1, not worth repeating for a
+       cosmetic accent bar. */
 .flight-card {
-  width: 663px;
-  max-width: 100%;
+  width: 100%;
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  padding: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
   position: relative;
 }
-.flight-badge-row { position: absolute; top: -10px; left: 18px; display: flex; gap: 8px; z-index: 1; }
-.flight-badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; background: var(--surface); border: 1px solid var(--gold); color: var(--gold); }
-.flight-badge svg { width: 12px; height: 12px; flex-shrink: 0; }
-.flight-badge--neutral { border-color: var(--line); color: var(--ink-soft); }
 
-.flight-card-main { display: flex; gap: 18px; }
-
-.flight-airline {
-  width: 140px;
-  flex: none;
-  display: flex;
-  flex-direction: column;
+.flight-badge-row { display: flex; gap: 8px; padding: 12px 18px 0; }
+.flight-badge {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
-  background: var(--canvas);
-  border-radius: var(--radius-sm);
-  padding: 12px;
-  text-align: center;
-}
-.flight-airline-icon {
-  width: 40px;
-  height: 40px;
+  gap: 5px;
+  padding: 3px 10px;
   border-radius: 999px;
-  background: var(--surface);
+  font-size: 11px;
+  font-weight: 700;
+}
+.flight-badge svg { width: 12px; height: 12px; flex-shrink: 0; }
+.flight-badge--info { background: var(--accent-soft); color: var(--accent); }
+.flight-badge--eco { background: #E1FDEC; color: #0E3E23; }
+
+.flight-card-body { display: flex; gap: 24px; padding: 12px 18px 18px; }
+
+.flight-itinerary { flex: 1 1 55%; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+
+.flight-itinerary-legs { display: flex; align-items: center; gap: 14px; }
+.flight-leg { min-width: 0; }
+.flight-leg--end { text-align: right; }
+.flight-time { font-size: 22px; line-height: 26px; font-weight: 600; color: #0E1A23; }
+.flight-airport { font-size: 14px; font-weight: 600; color: #152835; }
+.flight-city { font-size: 12px; color: #495A65; }
+
+.flight-route-line { flex: 1; display: flex; align-items: center; gap: 4px; min-width: 60px; }
+.flight-route-line::before,
+.flight-route-line::after { content: ""; width: 6px; height: 6px; border-radius: 999px; background: var(--ink-faint); flex-shrink: 0; }
+.flight-route-track { flex: 1; height: 1px; background: var(--line); }
+
+.flight-info-secondary { display: flex; align-items: center; gap: 14px; }
+.flight-duration { font-size: 16px; color: #0E1A23; }
+.flight-amenities { display: flex; align-items: center; gap: 6px; color: var(--ink-faint); }
+.flight-amenities svg { width: 16px; height: 16px; }
+.flight-amenities-more { font-size: 13px; color: var(--accent); font-weight: 600; }
+
+.flight-carrier-row { display: flex; align-items: center; gap: 10px; }
+.flight-carrier-logo {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--canvas);
   border: 1px solid var(--line);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--accent);
-}
-.flight-airline-icon svg { width: 22px; height: 22px; }
-.flight-airline-name { font-size: 12px; font-weight: 700; color: var(--ink-soft); }
-
-.flight-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; padding-top: 4px; }
-.flight-route { margin: 0; font-size: 18px; line-height: 24px; font-weight: 700; }
-.flight-subrow { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink-soft); }
-.flight-times { color: var(--ink); font-weight: 600; }
-
-.flight-details-box { background: var(--canvas); border-radius: var(--radius-sm); padding: 8px 10px; display: flex; flex-direction: column; gap: 2px; margin: 2px 0; }
-.flight-details-label { font-size: 12px; font-weight: 700; color: var(--ink); }
-
-.flight-eco-line { display: flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 700; color: #178143; }
-.flight-eco-line svg { width: 14px; height: 14px; flex-shrink: 0; }
-
-.flight-perk-strip {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 12px;
-  background: var(--gold-soft);
-  border: 1px solid #F0D8AB;
-  border-radius: var(--radius-sm);
-  font-size: 12.5px;
   color: var(--ink-soft);
+  flex-shrink: 0;
 }
-.flight-perk-strip svg { width: 14px; height: 14px; flex-shrink: 0; color: var(--gold); }
+.flight-carrier-logo svg { width: 13px; height: 13px; }
+.flight-carrier-name { font-size: 10px; color: var(--ink); }
+.flight-otp-badge { font-size: 10px; color: var(--ink); background: var(--canvas); border-radius: 999px; padding: 2px 8px; }
+.flight-preferred-icon { color: var(--gold); flex-shrink: 0; }
+.flight-preferred-icon svg { width: 14px; height: 14px; }
+.flight-view-details { font-size: 14px; color: var(--accent); font-weight: 600; margin-left: auto; }
 
-.flight-price { width: 168px; flex: none; padding-left: 18px; border-left: 1px solid var(--line); display: flex; flex-direction: column; align-items: flex-end; gap: 4px; text-align: right; }
+.flight-fare-columns { flex: 0 0 45%; display: flex; }
+.flight-fare-col {
+  flex: 1;
+  min-width: 0;
+  padding: 0 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 4px;
+}
+.flight-fare-col + .flight-fare-col { border-left: 1px solid var(--line); }
+.flight-fare-col--recommended { border-top: 4px solid #FFB900; padding-top: 4px; }
+.flight-fare-tier { font-size: 11px; font-weight: 700; letter-spacing: 0.02em; color: var(--ink-faint); }
+.flight-fare-caption { font-size: 12px; color: #42525D; }
+.flight-fare-price-row { display: flex; align-items: center; gap: 4px; }
+.flight-fare-price { font-size: 22px; font-weight: 600; color: #0E1A23; letter-spacing: -0.3px; }
+.flight-fare-type { font-size: 12px; color: #303F49; }
+.flight-fare-chevron { all: unset; cursor: pointer; color: var(--ink-faint); font-size: 16px; line-height: 1; margin-top: 2px; }
 
 @media (max-width: 860px) {
   .card-grid { grid-template-columns: 1fr; }
-  .hotel-card-main, .flight-card-main { flex-wrap: wrap; }
-  .hotel-img, .flight-airline { width: 100%; height: 140px; }
-  .hotel-price, .flight-price { width: 100%; padding-left: 0; border-left: none; border-top: 1px solid var(--line); padding-top: 12px; margin-top: 8px; align-items: flex-start; text-align: left; }
+  .hotel-card-main { flex-wrap: wrap; }
+  .hotel-img { width: 100%; height: 140px; }
+  .hotel-price { width: 100%; padding-left: 0; border-left: none; border-top: 1px solid var(--line); padding-top: 12px; margin-top: 8px; align-items: flex-start; text-align: left; }
+  .flight-card-body { flex-wrap: wrap; }
+  .flight-fare-columns { flex-basis: 100%; }
   .size-rail { gap: 24px; }
 }
