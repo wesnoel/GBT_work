@@ -34,10 +34,10 @@ The popover (B) keeps this as a safety net even though it has an explicit close 
 
 All panel text is font_300 (14px / 18px line-height): title bold, body text regular — same tier, different weight only, per typography-tokens.md (bold and regular share size/line-height at every tier).
 
-Concretely, the disclosure content per concept (constant across all three icon sizes):
-- **Tooltip:** title + message, no link.
-- **Popover:** header (icon + title) + close button + message + footer with a "View travel policy" link.
-- **Modal:** header (icon badge + title) + close button + message + "Got it" primary button + "View travel policy" link.
+Concretely, the disclosure content per concept (constant across all three icon sizes, revised 2026-09-28 to remove the "View travel policy" link everywhere — it wasn't tied to a real destination and added a dead-end action):
+- **Tooltip:** title + message. No link, no footer.
+- **Popover:** header (icon + title) + close (&times;) button + message. No footer.
+- **Modal:** header (icon badge + title) + close (&times;) button + message + a single **tertiary** "Close" button (revised from a primary "Got it" button — dismissing the modal is a low-emphasis action, not a confirmation, so it shouldn't compete visually with anything else on the screen).
 
 **In-context hotel card examples default to small (revised 2026-09-26):** since size only changes the icon now, three near-identical hotel cards side by side (differing by a 4px icon size difference) added length without adding information — the standalone icon-size rail already makes that comparison clearly. Removed the Small/Medium/Large hotel-card set from all three concept pages. Concept A and B's in-context demonstration is now the "placement variants" set (still small-icon, five cards); Concept C, which has no placement axis, keeps a single small-icon card.
 

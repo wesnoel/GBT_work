@@ -256,12 +256,6 @@ a { color: inherit; text-decoration: none; }
 
 .policy-popover__body { padding: 12px 14px 14px; }
 .policy-popover__message { font-weight: 400; font-size: 14px; line-height: 18px; color: var(--ink-soft); margin: 0; }
-.policy-popover__footer {
-  display: flex;
-  align-items: center;
-  padding: 10px 14px 14px;
-}
-.policy-popover__link { color: var(--accent); font-weight: 700; font-size: 14px; line-height: 18px; border-bottom: 1px dotted var(--accent); }
 
 /* Placement variants — where the panel opens relative to the trigger.
    Default (no modifier) is below, centered on the trigger. Each modifier
@@ -326,14 +320,15 @@ a { color: inherit; text-decoration: none; }
 .policy-modal__close:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; border-radius: 4px; }
 
 .policy-modal__message { font-weight: 400; font-size: 14px; line-height: 18px; color: var(--ink-soft); margin: 0; }
-.policy-modal__footer { display: flex; flex-direction: column; align-items: center; gap: 10px; }
-.policy-modal__link { font-size: 14px; line-height: 18px; color: var(--accent); font-weight: 700; border-bottom: 1px dotted var(--accent); }
+.policy-modal__footer { display: flex; justify-content: center; }
 
 .btn { border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--surface); cursor: pointer; font-family: inherit; font-weight: 700; font-size: 14px; color: var(--ink); width: 100%; padding: 11px 16px; }
 .btn:hover { border-color: #b7bbc3; }
 .btn-primary { background: var(--negative); border-color: var(--negative); color: #fff; }
 .btn-primary:hover { background: var(--negative-strong); }
 .btn-secondary { background: var(--surface); border-color: var(--line); color: var(--ink); }
+.btn-tertiary { width: auto; background: transparent; border-color: transparent; color: var(--ink-soft); padding: 11px 16px; }
+.btn-tertiary:hover { background: var(--line-soft); border-color: transparent; }
 
 /* ---- Hotel card (Egencia SRP pattern) ---- */
 .hotel-card-demo { display: flex; flex-direction: column; gap: 20px; }
