@@ -241,11 +241,24 @@ svg { display: block; }
 .col-scroll {
   display: flex; flex-direction: column; gap: 12px;
   overflow-y: auto; position: relative;
-  padding-bottom: 4px;
+  padding-top: 16px; padding-bottom: 4px;
 }
-.col-scroll.peek { max-height: 280px; } /* ~1 full card (tallest first-card variant, ~212px) + gap + a ~1/4-card peek of the next */
+/* Extra breathing room on top of the column's own padding/gap — the first
+   card gets additional top clearance (on top of the badge-clearance
+   padding above), and every card gets a bottom margin so consecutive
+   cards in 2/3-column layouts don't read as touching. */
+.col-scroll .mini-card:first-child { margin-top: 12px; }
+.col-scroll .mini-card { margin-bottom: 12px; }
+.col-scroll.peek { max-height: 320px; } /* padding-top(16) + card1 margin-top(12) + ~1 full card (tallest first-card variant, ~212px) + gap(12) + card1 margin-bottom(12) + a ~1/4-card peek of the next (~56) */
+
+/* Scrollbars stay invisible until the user hovers or actually scrolls —
+   shown via .is-scrolling (toggled in app.js on the scroll event, with a
+   short timeout to fade it back out). */
+.col-scroll, .carousel-track { scrollbar-color: transparent transparent; transition: scrollbar-color .2s; }
+.col-scroll:hover, .col-scroll.is-scrolling { scrollbar-color: var(--line) transparent; }
 .col-scroll::-webkit-scrollbar { width: 6px; }
-.col-scroll::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+.col-scroll::-webkit-scrollbar-thumb { background: transparent; border-radius: 3px; transition: background .2s; }
+.col-scroll:hover::-webkit-scrollbar-thumb, .col-scroll.is-scrolling::-webkit-scrollbar-thumb { background: var(--line); }
 
 .col-fade {
   position: absolute; left: 0; right: 6px; bottom: 0; height: 56px;
@@ -270,9 +283,12 @@ svg { display: block; }
 .carousel-wrap { position: relative; }
 .carousel-track {
   display: flex; gap: 16px; overflow-x: auto; scroll-behavior: smooth; scroll-snap-type: x mandatory;
-  padding-bottom: 4px; -ms-overflow-style: none; scrollbar-width: none; cursor: grab;
+  padding-top: 16px; padding-bottom: 4px; cursor: grab;
 }
-.carousel-track::-webkit-scrollbar { display: none; }
+.carousel-track:hover, .carousel-track.is-dragging, .carousel-track.is-scrolling { scrollbar-color: var(--line) transparent; }
+.carousel-track::-webkit-scrollbar { height: 6px; }
+.carousel-track::-webkit-scrollbar-thumb { background: transparent; border-radius: 3px; transition: background .2s; }
+.carousel-track:hover::-webkit-scrollbar-thumb, .carousel-track.is-dragging::-webkit-scrollbar-thumb, .carousel-track.is-scrolling::-webkit-scrollbar-thumb { background: var(--line); }
 .carousel-track.is-dragging { cursor: grabbing; scroll-snap-type: none; }
 .carousel-track .mini-card { scroll-snap-align: start; }
 .carousel-arrow {

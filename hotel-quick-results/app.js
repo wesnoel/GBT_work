@@ -1,5 +1,23 @@
 /* Hotel Mini Card Panel — shared interactivity */
 
+/* ── Auto-hide scrollbars — invisible until hover or an actual scroll,
+   then fade back out ~800ms after activity stops. Hover is covered by
+   CSS alone (:hover); this adds the "actually scrolling" trigger (wheel,
+   trackpad, keyboard, drag) via a class toggled on the scroll event. */
+function initAutoHideScrollbars(scope) {
+  const root = scope || document;
+  root.querySelectorAll(".col-scroll, .carousel-track").forEach((el) => {
+    if (el._scrollbarWired) return;
+    el._scrollbarWired = true;
+    let hideTimer;
+    el.addEventListener("scroll", () => {
+      el.classList.add("is-scrolling");
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(() => el.classList.remove("is-scrolling"), 800);
+    });
+  });
+}
+
 let _toastEl = null;
 function showToast(msg) {
   if (!_toastEl) {
@@ -85,7 +103,7 @@ function initColumnPeek(scope) {
     const btn = wrap.querySelector(".col-fade-btn");
     if (!scroller || !btn || btn._wired) return;
     btn._wired = true;
-    const peekHeight = 280; // keep in sync with .col-scroll.peek in styles.css
+    const peekHeight = 320; // keep in sync with .col-scroll.peek in styles.css
     btn.addEventListener("click", () => {
       const expanded = scroller.style.maxHeight === "none" || (!scroller.classList.contains("peek"));
       if (expanded) {
@@ -111,7 +129,7 @@ function setColumnPeekMode(mode) {
     wrap.classList.toggle("mode-permanent", mode === "permanent");
     if (mode === "permanent") {
       scroller.classList.add("peek");
-      scroller.style.maxHeight = "280px"; // keep in sync with .col-scroll.peek in styles.css
+      scroller.style.maxHeight = "320px"; // keep in sync with .col-scroll.peek in styles.css
     }
   });
 }
