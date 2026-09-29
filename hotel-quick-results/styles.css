@@ -243,7 +243,7 @@ svg { display: block; }
   overflow-y: auto; position: relative;
   padding-bottom: 4px;
 }
-.col-scroll.peek { max-height: 372px; } /* ~1.5 cards @ mini-card real height + gap */
+.col-scroll.peek { max-height: 280px; } /* ~1 full card (tallest first-card variant, ~212px) + gap + a ~1/4-card peek of the next */
 .col-scroll::-webkit-scrollbar { width: 6px; }
 .col-scroll::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
 

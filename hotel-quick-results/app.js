@@ -85,7 +85,7 @@ function initColumnPeek(scope) {
     const btn = wrap.querySelector(".col-fade-btn");
     if (!scroller || !btn || btn._wired) return;
     btn._wired = true;
-    const peekHeight = 372;
+    const peekHeight = 280; // keep in sync with .col-scroll.peek in styles.css
     btn.addEventListener("click", () => {
       const expanded = scroller.style.maxHeight === "none" || (!scroller.classList.contains("peek"));
       if (expanded) {
@@ -111,7 +111,7 @@ function setColumnPeekMode(mode) {
     wrap.classList.toggle("mode-permanent", mode === "permanent");
     if (mode === "permanent") {
       scroller.classList.add("peek");
-      scroller.style.maxHeight = "372px";
+      scroller.style.maxHeight = "280px"; // keep in sync with .col-scroll.peek in styles.css
     }
   });
 }
