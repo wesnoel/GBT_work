@@ -36,7 +36,9 @@
   </div>
 
   <div class="note-card" style="margin-bottom:28px;">
-    <b>On the missing Figma frame:</b> I couldn't locate "Hotel Mini Card - minimal data" via metadata search (it wasn't under either page the file's index returned — likely a Figma-desktop-tab visibility quirk, not a real absence). State 2 below is my inference of "minimal" from the full-data frame's own structure. Send me the frame link whenever you have it and I'll true this up.
+    <b>Content rules (per your latest guidance):</b> price + the "$X w taxes and fees" line always show, and the price block always sits flush at the bottom of the card regardless of what's above it. A Reviews section always shows too — the public score line is required, the Colleague Reviews line is optional. Stars (3–4★ range for these examples) and distance always show. Everything else — badges, sustainability cert, coworker %, perk strip — may or may not appear.
+    <br><br>
+    I still couldn't locate "Hotel Mini Card - minimal data" via metadata search (it wasn't under either page the file's index returned — likely a Figma-desktop-tab visibility quirk). States below now follow the rules above directly rather than a Figma pull; send me the frame's direct link or select it in Figma desktop and I'll true up the exact spacing/copy.
   </div>
 
   <!-- 1. Skeleton -->
@@ -101,20 +103,24 @@
     <div class="note-card">Both badges shown together here for reference — you noted this pairing is rare/never in practice. Every other state below shows realistic single-badge-or-none combinations instead.</div>
   </section>
 
-  <!-- 3. Minimal data (inferred) -->
+  <!-- 3. Minimal data — required floor only -->
   <section>
-    <div class="state-label">3 · Minimal data (inferred) — thumbnail, name, stars, distance, price only</div>
+    <div class="state-label">3 · Minimal data — the required floor: thumbnail, name, stars, distance, reviews (score only), price</div>
     <div class="row-flow">
       <div class="mini-card">
         <div class="mini-real">
-          <div class="mini-header" style="margin-bottom:0;">
+          <div class="mini-header">
             <div class="mini-thumb"><svg viewBox="0 0 77 77" xmlns="http://www.w3.org/2000/svg"><rect width="77" height="77" fill="#eef0f2"/><path d="M0 55 L20 32 L34 46 L52 22 L77 52 V77 H0 Z" fill="#d8dee2"/></svg></div>
             <div class="mini-header-body">
               <div class="mini-name">Cambria Hotel Seattle</div>
               <div class="mini-stars-distance"><span class="mini-stars">★★★</span><span class="mini-distance">1.2 miles away</span></div>
             </div>
           </div>
-          <div class="mini-price-block" style="border-top:none; margin-top:12px;">
+          <div class="mini-reviews">
+            <div class="mini-reviews-label">Reviews</div>
+            <div class="mini-reviews-line">4.0/5 Very Good (206 reviews)</div>
+          </div>
+          <div class="mini-price-block">
             <div class="mini-price-row"><span class="mini-price">$149</span></div>
             <div class="mini-price-subs">$161 w taxes and fees</div>
           </div>
@@ -123,9 +129,9 @@
     </div>
   </section>
 
-  <!-- 4. Single badge — Egencia Preferred, no reviews box, no perk -->
+  <!-- 4. Single badge — Egencia Preferred, no perk -->
   <section>
-    <div class="state-label">4 · Egencia Preferred only — cert + coworker%, no reviews box, no perk strip</div>
+    <div class="state-label">4 · Egencia Preferred only — cert + coworker%, no perk strip</div>
     <div class="row-flow">
       <div class="mini-card">
         <div class="mini-real">
@@ -141,6 +147,11 @@
             </div>
           </div>
           <div class="mini-coworker">31% of coworker bookings</div>
+          <div class="mini-reviews">
+            <div class="mini-reviews-label">Reviews</div>
+            <div class="mini-reviews-line">4.7/5 Exceptional (1,180 reviews)</div>
+            <div class="mini-reviews-line">Colleague Reviews: 4.6/5 (9 reviews)</div>
+          </div>
           <div class="mini-price-block">
             <div class="mini-price-row"><span class="mini-price">$256</span></div>
             <div class="mini-price-subs">$278 w taxes and fees</div>

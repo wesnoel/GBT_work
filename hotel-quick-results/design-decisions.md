@@ -24,13 +24,15 @@ You asked to see both side by side before deciding, so this is deliberately left
 
 **Decision:** Visible prev/next arrows (disabled at the ends) plus native pointer-based drag/swipe, snapping to card edges. Confirmed per your answer.
 
-## 5. Minimal-data Mini Card — inferred, not sourced from Figma
+## 5. Mini Card required floor vs. optional slots — per your explicit content rules
 
-**Decision:** Built as thumbnail + name + stars/distance + price (+ one taxes-and-fees line) only — every other optional slot (badges, sustainability cert, coworker %, reviews box, perk strip, payment/CVV notes) dropped.
+**Decision:** Every card, regardless of data richness, always shows: thumbnail, name, star rating (3–4★ for these examples), distance, a Reviews section (public score line required; Colleague Reviews line optional), and the price block (price + "$X w taxes and fees") pinned to the bottom of the card. Everything else — badges, sustainability cert, coworker %, perk strip, payment/CVV notes — may or may not appear.
 
-I couldn't locate the "Hotel Mini Card - minimal data" frame in your Figma file — it wasn't under either page the file's metadata index returned (`Hotel SRP` / `Hotel SRP Map expand + interactions`), most likely because the Figma-desktop bridge only sees pages currently open as tabs, not the full file. Rather than guess a node-id, I inferred the minimal state from the full-data frame's own structure (many of its fields are already independently optional per `pattern-hotel-list-card.md`'s "one component, several switchable slots" model).
+This supersedes an earlier pass where "minimal data" dropped the Reviews box and treated the taxes line as optional — corrected across every card in `component-mini-card.html`, `panel-layout-mechanics.html`, and `srp-integration.html` (29 card instances total) once you clarified the required floor. Implementation: `.mini-card` and `.mini-real` are now a flex column, and `.mini-price-block` uses `margin-top: auto` to push itself to the bottom regardless of how much optional content sits above it — this also means cards in the same row (carousel, or side-by-side columns) stretch to equal height and their price lines align across the row, even when their optional content differs a lot.
 
-**Flag for follow-up:** Send the frame's direct link (or select it in Figma desktop) and I'll true this component up against the real reference.
+I still couldn't locate the "Hotel Mini Card - minimal data" frame in your Figma file — it wasn't under either page the file's metadata index returned (`Hotel SRP` / `Hotel SRP Map expand + interactions`), most likely because the Figma-desktop bridge only sees pages currently open as tabs, not the full file. The rules above came from you directly rather than a Figma pull.
+
+**Flag for follow-up:** Send the frame's direct link (or select it in Figma desktop) and I'll true up the exact spacing/copy against the real reference.
 
 ## 6. Company Preferred badge — corrected a copy bug, not reproduced it
 
