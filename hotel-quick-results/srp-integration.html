@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hotel SRP — Panel in Context | Hotel Mini Card Panel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<header class="eg-header">
+  <div class="eg-header-inner">
+    <div class="eg-logo"><span class="eg-logo-sup">Amex GBT</span><span class="eg-logo-word">egencia</span></div>
+    <nav class="eg-nav"><a class="on" href="#">Trips</a><a href="#">Approvals</a><a href="#">Reports</a></nav>
+    <div class="eg-header-right"><div class="eg-avatar">WN</div></div>
+  </div>
+</header>
+<div class="eg-crumb"><a href="index.html">← Hotel Mini Card Panel overview</a></div>
+
+<div class="eg-hero">
+  <div class="eg-hero-swoosh"></div>
+  <main class="eg-content">
+
+    <div style="margin-bottom:16px;">
+      <div class="t-700">Hotel Search Results — panel in context</div>
+      <div class="t-300 ink-soft" style="margin-top:4px; max-width:700px;">
+        Same panel, dropped into the real page: search-summary bar, policy banner, filter pill row, then the panel, then the existing full results list + map, unchanged. Shown at 3 columns — see <a href="panel-layout-mechanics.html">panel-layout-mechanics.html</a> for the column-count / peek-behavior / carousel demo.
+      </div>
+    </div>
+
+    <div class="search-bar-wrap">
+      <div class="search-bar">
+        <div>
+          <div class="search-dest">Seattle (and vicinity)</div>
+          <div class="search-dest-sub">Washington, United States of America</div>
+        </div>
+        <div class="search-dates">
+          <div class="search-date"><div class="search-date-val">Oct 6</div><div class="search-date-day">Tuesday</div></div>
+          <svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px;color:var(--ink-faint);"><path d="M5 12h14"/></svg>
+          <div class="search-date"><div class="search-date-val">Oct 7</div><div class="search-date-day">Wednesday</div></div>
+        </div>
+        <button class="search-edit-btn">Edit search</button>
+      </div>
+      <div class="search-traveler">
+        <div class="search-traveler-avatar">TV</div>
+        <span class="t-300">tm vasudevan</span>
+      </div>
+    </div>
+
+    <div class="policy-banner">Your company's travel policy rate for this area is $220 per night.<a href="#">View company messages</a></div>
+
+    <div class="filter-bar">
+      <button class="filter-pill"><svg class="icon" viewBox="0 0 24 24"><path d="M4 6h16M7 12h10M10 18h4"/></svg>All filters</button>
+      <button class="filter-pill"><svg class="icon" viewBox="0 0 24 24"><path d="M12 2l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z"/></svg>Hotel rating<svg class="icon" viewBox="0 0 24 24" style="width:12px;height:12px;"><path d="M6 9l6 6 6-6"/></svg></button>
+      <button class="filter-pill"><svg class="icon" viewBox="0 0 24 24"><path d="M3 7h18M3 12h18M3 17h18"/></svg>Hotel name<svg class="icon" viewBox="0 0 24 24" style="width:12px;height:12px;"><path d="M6 9l6 6 6-6"/></svg></button>
+      <button class="filter-pill">Includes breakfast</button>
+      <button class="filter-pill">Price<svg class="icon" viewBox="0 0 24 24" style="width:12px;height:12px;"><path d="M6 9l6 6 6-6"/></svg></button>
+      <div class="filter-div"></div>
+      <button class="filter-pill filter-sort">Recommended<svg class="icon" viewBox="0 0 24 24" style="width:12px;height:12px;"><path d="M6 9l6 6 6-6"/></svg></button>
+    </div>
+
+    <!-- Panel (3-column, permanent peek) -->
+    <div class="panel-wrap">
+      <div class="panel-toplabel">Featured for you</div>
+      <div class="panel-cols" data-cols="3">
+
+        <div class="layout-multi-col" data-role="featured">
+          <div class="panel-col-hdr"><span class="panel-col-title">Featured</span><span class="panel-col-count">5 results</span></div>
+          <div class="col-wrap mode-permanent">
+            <div class="col-scroll peek">
+              <div class="mini-card"><div class="mini-real">
+                <div class="mini-badges"><span class="badge badge-recommended">Recommended</span></div>
+                <div class="mini-header"><div class="mini-thumb"><svg viewBox="0 0 77 77"><rect width="77" height="77" fill="#eef0f2"/><path d="M0 55 L20 32 L34 46 L52 22 L77 52 V77 H0 Z" fill="#d8dee2"/></svg></div>
+                  <div class="mini-header-body"><div class="mini-name">Grand Hyatt Seattle</div><div class="mini-stars-distance"><span class="mini-stars">★★★★</span><span class="mini-distance">4.8/5 Exceptional</span></div></div>
+                </div>
+                <div class="mini-perk"><svg class="icon" viewBox="0 0 24 24"><path d="M4 4h16v4a4 4 0 01-4 4H8a4 4 0 01-4-4V4z"/><path d="M4 12v4a4 4 0 004 4h8a4 4 0 004-4v-4"/></svg>Offer in policy rate</div>
+                <div class="mini-price-block" style="border-top:none;"><div class="mini-price-row"><span class="mini-price">$904</span></div></div>
+              </div></div>
+              <div class="mini-card"><div class="mini-real">
+                <div class="mini-header"><div class="mini-thumb"><svg viewBox="0 0 77 77"><rect width="77" height="77" fill="#eef0f2"/><path d="M0 55 L20 32 L34 46 L52 22 L77 52 V77 H0 Z" fill="#d8dee2"/></svg></div>
+                  <div class="mini-header-body"><div class="mini-name">Fairmont Olympic Hotel Seattle</div><div class="mini-stars-distance"><span class="mini-stars">★★★★★</span></div></div>
+                </div>
+                <div class="mini-price-block"><div class="mini-price-row"><span class="mini-price">$612</span></div></div>
+              </div></div>
+              <div class="mini-card"><div class="mini-real">
+                <div class="mini-header"><div class="mini-thumb"><svg viewBox="0 0 77 77"><rect width="77" height="77" fill="#eef0f2"/><path d="M0 55 L20 32 L34 46 L52 22 L77 52 V77 H0 Z" fill="#d8dee2"/></svg></div>
+                  <div class="mini-header-body"><div class="mini-name">The Charter Hotel Seattle</div><div class="mini-stars-distance"><span class="mini-stars">★★★★</span></div></div>
+                </div>
+                <div class="mini-price-block"><div class="mini-price-row"><span class="mini-price">$389</span></div></div>
+              </div></div>
+            </div>
+            <div class="col-fade"></div>
+          </div>
+        </div>
+
+        <div class="layout-multi-col" data-role="egencia-preferred">
+          <div class="panel-col-hdr"><span class="panel-col-title">Egencia Preferred</span><span class="panel-col-count">5 results</span></div>
+          <div class="col-wrap mode-permanent">
+            <div class="col-scroll peek">
+              <div class="mini-card"><div class="mini-real">
+                <div class="mini-badges"><span class="badge badge-egencia-preferred"><svg class="icon" viewBox="0 0 24 24"><path d="M5 3v18"/><path d="M5 4h11l-2 4 2 4H5"/></svg>Egencia preferred</span></div>
+                <div class="mini-header"><div class="mini-thumb"><svg viewBox="0 0 77 77"><rect width="77" height="77" fill="#eef0f2"/><path d="M0 55 L20 32 L34 46 L52 22 L77 52 V77 H0 Z" fill="#d8dee2"/></svg></div>
+                  <div class="mini-header-body"><div class="mini-name">The Alexis Royal Sonesta Hotel Seattle</div><div class="mini-stars-distance"><span class="mini-stars">★★★★</span><span class="mini-distance">0.44 miles away</span></div></div>
+                </div>
+                <div class="mini-perk"><svg class="icon" viewBox="0 0 24 24"><path d="M4 4h16v4a4 4 0 01-4 4H8a4 4 0 01-4-4V4z"/><path d="M4 12v4a4 4 0 004 4h8a4 4 0 004-4v-4"/></svg>Close to searched location. 4-star hotel.</div>
+                <div class="mini-price-block" style="border-top:none;"><div class="mini-price-row"><span class="mini-price">$256</span></div></div>
+              </div></div>
+              <div class="mini-card"><div class="mini-real">
+                <div class="mini-badges"><span class="badge badge-egencia-preferred"><svg class="icon" viewBox="0 0 24 24"><path d="M5 3v18"/><path d="M5 4h11l-2 4 2 4H5"/></svg>Egencia preferred</span></div>
+                <div class="mini-header"><div class="mini-thumb"><svg viewBox="0 0 77 77"><rect width="77" height="77" fill="#eef0f2"/><path d="M0 55 L20 32 L34 46 L52 22 L77 52 V77 H0 Z" fill="#d8dee2"/></svg></div>
+                  <div class="mini-header-body"><div class="mini-name">citizenM Seattle South Lake Union</div><div class="mini-stars-distance"><span class="mini-stars">★★★</span></div></div>
+                </div>
+                <div class="mini-price-block" style="border-top:none;"><div class="mini-price-row"><span class="mini-price">$211</span></div></div>
+              </div></div>
+              <div class="mini-card"><div class="mini-real">
+                <div class="mini-badges"><span class="badge badge-egencia-preferred"><svg class="icon" viewBox="0 0 24 24"><path d="M5 3v18"/><path d="M5 4h11l-2 4 2 4H5"/></svg>Egencia preferred</span></div>
+                <div class="mini-header"><div class="mini-thumb"><svg viewBox="0 0 77 77"><rect width="77" height="77" fill="#eef0f2"/><path d="M0 55 L20 32 L34 46 L52 22 L77 52 V77 H0 Z" fill="#d8dee2"/></svg></div>
+                  <div class="mini-header-body"><div class="mini-name">Motif Seattle</div><div class="mini-stars-distance"><span class="mini-stars">★★★★</span></div></div>
+                </div>
+                <div class="mini-price-block"><div class="mini-price-row"><span class="mini-price">$234</span></div></div>
+              </div></div>
+            </div>
+            <div class="col-fade"></div>
+          </div>
+        </div>
+
+        <div class="layout-multi-col" data-role="company-preferred">
+          <div class="panel-col-hdr"><span class="panel-col-title">Company Preferred</span><span class="panel-col-count">5 results</span></div>
+          <div class="col-wrap mode-permanent">
+            <div class="col-scroll peek">
+              <div class="mini-card"><div class="mini-real">
+                <div class="mini-badges"><span class="badge badge-company-preferred"><svg class="icon" viewBox="0 0 24 24"><rect x="6" y="7" width="12" height="13" rx="1.5"/><path d="M9 7V5a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>Company Preferred</span></div>
+                <div class="mini-header"><div class="mini-thumb"><svg viewBox="0 0 77 77"><rect width="77" height="77" fill="#eef0f2"/><path d="M0 55 L20 32 L34 46 L52 22 L77 52 V77 H0 Z" fill="#d8dee2"/></svg></div>
+                  <div class="mini-header-body"><div class="mini-name">Hilton Seattle Airport &amp; Conference Center</div><div class="mini-stars-distance"><span class="mini-stars">★★★★</span><span class="mini-distance">11.68 miles away</span></div></div>
+                </div>
+                <div class="mini-price-block"><div class="mini-price-row"><span class="mini-price">$141</span></div></div>
+              </div></div>
+              <div class="mini-card"><div class="mini-real">
+                <div class="mini-badges"><span class="badge badge-company-preferred"><svg class="icon" viewBox="0 0 24 24"><rect x="6" y="7" width="12" height="13" rx="1.5"/><path d="M9 7V5a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>Company Preferred</span></div>
+                <div class="mini-header"><div class="mini-thumb"><svg viewBox="0 0 77 77"><rect width="77" height="77" fill="#eef0f2"/><path d="M0 55 L20 32 L34 46 L52 22 L77 52 V77 H0 Z" fill="#d8dee2"/></svg></div>
+                  <div class="mini-header-body"><div class="mini-name">Hilton Motif Seattle</div><div class="mini-stars-distance"><span class="mini-stars">★★★★</span><span class="mini-distance">0.12 miles away</span></div></div>
+                </div>
+                <div class="mini-price-block"><div class="mini-price-row"><span class="mini-price">$187</span></div></div>
+              </div></div>
+              <div class="mini-card"><div class="mini-real">
+                <div class="mini-badges"><span class="badge badge-company-preferred"><svg class="icon" viewBox="0 0 24 24"><rect x="6" y="7" width="12" height="13" rx="1.5"/><path d="M9 7V5a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>Company Preferred</span></div>
+                <div class="mini-header"><div class="mini-thumb"><svg viewBox="0 0 77 77"><rect width="77" height="77" fill="#eef0f2"/><path d="M0 55 L20 32 L34 46 L52 22 L77 52 V77 H0 Z" fill="#d8dee2"/></svg></div>
+                  <div class="mini-header-body"><div class="mini-name">Sheraton Grand Seattle</div><div class="mini-stars-distance"><span class="mini-stars">★★★★</span></div></div>
+                </div>
+                <div class="mini-price-block"><div class="mini-price-row"><span class="mini-price">$203</span></div></div>
+              </div></div>
+            </div>
+            <div class="col-fade"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="results-count">27 hotels found — deduplicated against the panel above.</div>
+
+    <!-- Full results list + map (unchanged, per pattern-hotel-list-card.md) -->
+    <div class="srp-body">
+      <div class="srp-list">
+
+        <div class="hotel-card">
+          <div class="hotel-badge-row"><span class="badge badge-negotiated"><svg class="icon" viewBox="0 0 24 24"><path d="M20.59 13.41 12 21.99 2 12 3 3h9z"/><circle cx="15.5" cy="7.5" r="1"/></svg>Negotiated</span></div>
+          <div class="hotel-card-main">
+            <div class="hotel-img"><svg viewBox="0 0 140 140"><rect width="140" height="140" fill="#eef0f2"/><path d="M0 100 L36 58 L62 84 L94 40 L140 92 V140 H0 Z" fill="#d8dee2"/></svg></div>
+            <div class="hotel-body">
+              <div class="hotel-name">Hyatt Regency Seattle</div>
+              <div class="hotel-subrow"><span class="stars">★★★★</span><span class="distance">0.6 miles away</span></div>
+              <div class="hotel-reviews-box"><div class="label">Reviews</div><div class="line">4.4/5 Exceptional (3,102 reviews)</div><div class="line">Colleague Reviews: 4.2/5 (14 reviews)</div></div>
+              <div class="hotel-coworker">22% of coworker bookings</div>
+            </div>
+            <div class="hotel-price">
+              <div class="price-caption">From</div>
+              <div class="price-flag-row"><span class="price-value">$228</span></div>
+              <div class="price-sub">$246 w taxes and fees</div>
+              <div class="price-sub">CVV required</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hotel-card">
+          <div class="hotel-card-main">
+            <div class="hotel-img"><svg viewBox="0 0 140 140"><rect width="140" height="140" fill="#eef0f2"/><path d="M0 100 L36 58 L62 84 L94 40 L140 92 V140 H0 Z" fill="#d8dee2"/></svg></div>
+            <div class="hotel-body">
+              <div class="hotel-name">Mediterranean Inn</div>
+              <div class="hotel-subrow"><span class="stars">★★★</span><span class="distance">1.4 miles away</span></div>
+            </div>
+            <div class="hotel-price">
+              <div class="price-caption">From</div>
+              <div class="price-flag-row">
+                <span class="price-flag"><svg class="icon icon-filled" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg></span>
+                <span class="price-value">$118</span>
+              </div>
+              <div class="price-sub">$127 w taxes and fees</div>
+            </div>
+          </div>
+          <div class="hotel-perk-strip"><svg class="icon" viewBox="0 0 24 24"><path d="M4 4h16v4a4 4 0 01-4 4H8a4 4 0 01-4-4V4z"/><path d="M4 12v4a4 4 0 004 4h8a4 4 0 004-4v-4"/></svg>Offers free breakfast, within company policy</div>
+        </div>
+
+        <div class="hotel-card">
+          <div class="hotel-card-main">
+            <div class="hotel-img"><svg viewBox="0 0 140 140"><rect width="140" height="140" fill="#eef0f2"/><path d="M0 100 L36 58 L62 84 L94 40 L140 92 V140 H0 Z" fill="#d8dee2"/></svg></div>
+            <div class="hotel-body">
+              <div class="hotel-name">Silver Cloud Hotel Seattle Broadway</div>
+              <div class="hotel-subrow"><span class="stars">★★★</span><span class="distance">2.1 miles away</span></div>
+              <div class="hotel-cert-line"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9"/></svg>Sustainability certified</div>
+            </div>
+            <div class="hotel-price">
+              <div class="price-caption">From</div>
+              <div class="price-flag-row"><span class="price-value">$164</span></div>
+              <div class="price-sub">$177 w taxes and fees</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="map-shell">
+        <svg viewBox="0 0 460 640" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <rect width="460" height="640" fill="#eef0f2"/>
+          <path d="M0 160 L120 90 L210 180 L300 60 L460 150 L460 640 L0 640 Z" fill="#e2e5ea"/>
+          <path d="M0 360 L160 290 L280 400 L460 320 L460 640 L0 640 Z" fill="#d8dee2"/>
+        </svg>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="app.js"></script>
+<script>
+  initCardClickToPDP();
+  initOutOfPolicyFlags();
+</script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hotel Quick Results — Progressive Rendering & SmartMix Explainability</title>
+<title>Hotel Mini Card Panel — Dynamic 1-3 Column Layout</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="styles.css" />
@@ -20,81 +20,70 @@
 
 <div class="hub-hero">
   <div class="hub-hero-inner">
-    <span class="hub-tag">Egencia · Hotel Marketplace</span>
-    <div class="t-900">Hotel Quick Results</div>
-    <div class="t-600 ink-soft" style="margin-top:2px; font-weight:400;">Progressive Rendering & SmartMix Explainability</div>
+    <span class="hub-tag">Egencia · Hotel SRP</span>
+    <div class="t-900">Hotel Mini Card Panel</div>
+    <div class="t-600 ink-soft" style="margin-top:2px; font-weight:400;">Dynamic 1–3 column layout for the Featured / Egencia Preferred / Company Preferred panel</div>
     <div class="hub-desc">
-      Interactive wireframes for the SmartMix Panel — the new 3-column module that gets travelers to actionable hotel results in seconds instead of the current ~6s blank wait, while keeping preferred and negotiated rates fully visible and explaining why SmartMix ranked results the way it did. Built from the approved PRD, UX spec, and tech spec as the step before Figma.
+      A layout that flexes between 1 and 3 columns depending on how many sources have results — a full-width horizontal carousel when there's only one, independent vertical-scroll peek columns when there are two or three — built from a smaller Hotel Mini Card so the panel doesn't compete for width with the full results list below it.
     </div>
     <div class="hub-meta-row">
-      <div class="hub-meta"><span class="hub-meta-lbl">Source PRD</span><span class="hub-meta-val">Hotel Quick Results PRD, v8</span></div>
-      <div class="hub-meta"><span class="hub-meta-lbl">UX Spec</span><span class="hub-meta-val">Approved · Wes Noel · 2026-07-08</span></div>
-      <div class="hub-meta"><span class="hub-meta-lbl">Fidelity</span><span class="hub-meta-val">Mid-fi, fully interactive</span></div>
+      <div class="hub-meta"><span class="hub-meta-lbl">Reference</span><span class="hub-meta-val">Real SRP screenshots + Figma Mini Card frames</span></div>
+      <div class="hub-meta"><span class="hub-meta-lbl">Fidelity</span><span class="hub-meta-val">High-fi, fully interactive</span></div>
       <div class="hub-meta"><span class="hub-meta-lbl">Platform</span><span class="hub-meta-val">Desktop web only</span></div>
-      <div class="hub-meta"><span class="hub-meta-lbl">Status</span><span class="hub-meta-val">Draft for Figma handoff review</span></div>
+      <div class="hub-meta"><span class="hub-meta-lbl">Status</span><span class="hub-meta-val">Draft for review</span></div>
     </div>
   </div>
 </div>
 
 <main class="eg-content">
 
-  <div class="hub-section-lbl">Component concepts</div>
-  <div class="hub-grid two">
+  <div class="hub-section-lbl">Component & layout concepts</div>
+  <div class="hub-grid">
 
-    <a class="hub-card" href="component-hotel-card.html">
+    <a class="hub-card" href="component-mini-card.html">
       <div class="hub-thumb">
         <span class="hub-num">01</span>
-        <div class="mini-cols">
-          <div class="mini-card"><div class="mini-block dk" style="width:55%"></div><div class="mini-block" style="width:80%"></div><div class="mini-block" style="width:40%;height:14px;"></div></div>
+        <div class="mini-thumb-sketch" style="width:100%;">
+          <div class="col"><div class="card"><div class="blk" style="width:60%;height:14px;"></div><div class="blk" style="width:90%"></div><div class="blk" style="width:50%"></div><div class="blk" style="width:30%;margin-left:auto;height:10px;"></div></div></div>
         </div>
       </div>
       <div class="hub-body">
-        <div class="hub-card-name">Hotel card — all states</div>
-        <div class="hub-card-desc">The single reusable card used everywhere: skeleton, Expedia-only, preferred/negotiated badge, SmartMix badge + tooltip, deduplicated with source toggle, and the amenity-unavailable fallback.</div>
+        <div class="hub-card-name">Hotel Mini Card — states &amp; variance</div>
+        <div class="hub-card-desc">Full-data, minimal-data, and realistic in-between combinations: single badge, no badge, reviews on/off, perk strip, out-of-policy flag.</div>
         <span class="hub-card-cta">Open wireframe →</span>
       </div>
     </a>
 
-    <a class="hub-card" href="component-smartmix-panel.html">
+    <a class="hub-card" href="panel-layout-mechanics.html">
       <div class="hub-thumb">
         <span class="hub-num">02</span>
-        <div class="mini-cols">
-          <div class="mini-col"><div class="mini-block" style="width:70%"></div><div class="mini-card"><div class="mini-block dk" style="width:50%"></div><div class="mini-block" style="width:80%"></div></div><div class="mini-card"><div class="mini-block dk" style="width:60%"></div><div class="mini-block" style="width:70%"></div></div></div>
-          <div class="mini-col"><div class="mini-block" style="width:60%"></div><div class="mini-card"><div class="mini-block dk" style="width:45%"></div><div class="mini-block" style="width:75%"></div></div><div class="mini-card"><div class="mini-block dk" style="width:55%"></div><div class="mini-block" style="width:65%"></div></div></div>
-          <div class="mini-col"><div class="mini-block" style="width:65%"></div><div class="mini-card"><div class="mini-block dk" style="width:52%"></div><div class="mini-block" style="width:78%"></div></div><div class="mini-card"><div class="mini-block dk" style="width:48%"></div><div class="mini-block" style="width:72%"></div></div></div>
+        <div class="mini-thumb-sketch" style="width:100%;">
+          <div class="col"><div class="card"><div class="blk" style="width:70%"></div></div><div class="card"><div class="blk" style="width:60%"></div></div></div>
+          <div class="col"><div class="card"><div class="blk" style="width:65%"></div></div><div class="card"><div class="blk" style="width:55%"></div></div></div>
+          <div class="col"><div class="card"><div class="blk" style="width:68%"></div></div><div class="card"><div class="blk" style="width:50%"></div></div></div>
         </div>
       </div>
       <div class="hub-body">
-        <div class="hub-card-name">SmartMix Panel — progressive load</div>
-        <div class="hub-card-desc">Recommended, Expedia Only, and Neg/Pref columns loading independently. Step through or play the real load sequence; also shows the Expedia-empty and all-sources-fail states.</div>
+        <div class="hub-card-name">Panel layout mechanics</div>
+        <div class="hub-card-desc">The core deliverable: a Columns 1/2/3 toggle driving carousel vs. vertical peek columns, plus a side-by-side comparison of permanent vs. expands-on-interaction peek height.</div>
         <span class="hub-card-cta">Open wireframe →</span>
       </div>
     </a>
 
-  </div>
-
-  <div class="hub-section-lbl">Full page assembly</div>
-  <div class="hub-grid" style="grid-template-columns: 1fr;">
-
-    <a class="hub-card" href="srp-full-page.html" style="display:flex; align-items:stretch;">
-      <div class="hub-thumb" style="width:260px; flex-shrink:0; height:auto;">
+    <a class="hub-card" href="srp-integration.html">
+      <div class="hub-thumb">
         <span class="hub-num">03</span>
         <div style="width:100%; display:flex; flex-direction:column; gap:6px;">
-          <div class="mini-block" style="width:80%; height:10px;"></div>
-          <div style="display:flex; gap:5px;">
-            <div class="mini-card" style="flex:1;"><div class="mini-block dk" style="width:60%"></div><div class="mini-block" style="width:80%"></div></div>
-            <div class="mini-card" style="flex:1;"><div class="mini-block dk" style="width:55%"></div><div class="mini-block" style="width:75%"></div></div>
-            <div class="mini-card" style="flex:1;"><div class="mini-block dk" style="width:65%"></div><div class="mini-block" style="width:70%"></div></div>
-          </div>
-          <div style="display:flex; gap:5px; margin-top:2px;">
-            <div class="mini-block" style="flex:2; height:26px; border-radius:4px;"></div>
-            <div class="mini-block" style="flex:1; height:26px; border-radius:4px; background:var(--ink-faint);"></div>
+          <div class="mini-thumb-sketch"><div class="col"><div class="card"><div class="blk" style="width:70%"></div></div></div><div class="col"><div class="card"><div class="blk" style="width:60%"></div></div></div><div class="col"><div class="card"><div class="blk" style="width:65%"></div></div></div></div>
+          <div style="display:flex; gap:5px; margin-top:4px;">
+            <div class="blk" style="flex:2; height:22px; border-radius:4px; background:var(--line-soft);"></div>
+            <div class="blk" style="flex:1; height:22px; border-radius:4px; background:var(--ink-faint);"></div>
           </div>
         </div>
       </div>
-      <div class="hub-body" style="display:flex; flex-direction:column; justify-content:center;">
-        <div class="hub-card-name">Hotel Search Results (SRP) — full page</div>
-        <div class="hub-card-desc" style="max-width:520px;">Search summary, filters, the SmartMix Panel, and the existing full results list + map, all in one page — with the same load-sequence stepper driving deduplication and live filtering end to end.</div>
+      <div class="hub-body">
+        <div class="hub-card-name">SRP — panel in context</div>
+        <div class="hub-card-desc">The panel dropped into the real page: search bar, policy banner, filter pill row, then the panel, then the unchanged full results list + map.</div>
         <span class="hub-card-cta">Open wireframe →</span>
       </div>
     </a>
@@ -102,7 +91,7 @@
   </div>
 
   <div class="hub-notes">
-    <b>Key decisions baked into these wireframes:</b> 3-column panel order is Recommended · Expedia Only · Neg/Pref (per tech spec — supersedes the earlier "Egencia Preferred / Company Preferred / Recommended" naming from the July 8 exploration decks). Skeletons crossfade in place per column as each source responds, independently — no column waits for another. Deduplicated hotels are removed from the full list silently, with no "shown above" indicator. Amenity icons appear on full-list cards to satisfy the PRD's T3 acceptance criteria — see <a href="design-decisions.md">design-decisions.md</a> for the full rationale, including one flagged conflict between the PRD and the approved UX spec worth resolving before Figma.
+    <b>Key decisions:</b> column count is a config/business-rule toggle here, not inferred live from result counts (see <a href="design-decisions.md">design-decisions.md</a>). The 1-column carousel and 2/3-column vertical peek both use the same fixed-width Mini Card — no separate wide-card variant. Peek height is built two ways so you can compare permanent vs. expands-on-interaction before picking one. One QA catch along the way: the real product's "Company Preferred" badge renders as "Chat bhandar Preferred" — built here as the intended copy, flagged for engineering.
   </div>
 
 </main>

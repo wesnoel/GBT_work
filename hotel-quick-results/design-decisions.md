@@ -1,54 +1,52 @@
-# Hotel Quick Results — Design Decisions
+# Hotel Mini Card Panel — Design Decisions
 
-Resolves the questions these wireframes had to make a call on, given the approved [UX Spec](https://confluence.amexgbt.com/pages/viewpage.action?pageId=672447544), the [PRD](https://confluence.amexgbt.com/pages/viewpage.action?pageId=672447535) (v8), and the [Tech Spec](https://confluence.amexgbt.com/pages/viewpage.action?pageId=672447566). Each decision is reflected directly in the wireframes in this folder — this doc is the rationale, not a separate spec. Most product-level open questions were already closed by the UX spec; what's below is what the wireframe build itself had to resolve, plus one conflict worth flagging before Figma.
+Resolves the open questions raised while building the dynamic 1–3 column panel. Each decision is reflected directly in the wireframes in this folder.
 
-## 1. ⚠️ Amenity display — PRD and UX spec disagree
+## 1. Column count is config-driven, not data-driven
 
-**Decision:** Show a compact 2-icon amenity row (e.g. Free WiFi, Breakfast included) on full-results-list cards only, not on SmartMix Panel cards.
+**Decision:** Built as a manual "Columns: 1/2/3" toggle rather than something inferred live from how many sources actually returned results.
 
-The UX spec's decision log (2026-07-08) says amenities appear **nowhere on the card** — "depth better served on PDP," keeping cards lean. But PRD v8 (updated 2026-09-25, after the UX spec) makes card-level amenities a hard acceptance criterion in T3: *"Each hotel card on the results page displays key amenities"* and *"Amenity data is displayed for Expedia results in the first render wave."* These directly contradict each other.
+You explicitly called this out: column count is a business-rule/config signal, not something the demo should derive from live data availability. The toggle on `panel-layout-mechanics.html` lets you preview all three shapes on demand. Underlying semantics still track the real product logic for realism (1 column = only Featured has results; 2 = Featured + Egencia Preferred; 3 = all three) — swapping which datasets populate which state is a config decision for engineering, not a UI concern this wireframe needs to solve.
 
-This wireframe splits the difference rather than silently picking one: amenities appear on the wider full-list cards (where there's room and it doesn't compete with the panel's badges), but not on the narrower panel column cards (where the UX spec's "keep it lean" reasoning holds up best — the panel is already dense with badges/tooltips). The amenity-unavailable fallback (Cambria Hotel Chicago Loop in the full list) renders with no row at all, per T3's own guidance.
+## 2. Same Mini Card width in every column state
 
-**Flag for follow-up:** This needs an explicit call from Wes/UX before Figma — either amend the UX spec's decision log to match PRD v8, or push back on PRD v8's T3 wording if the "lean card" reasoning should still hold. Don't let this ride into Figma unresolved.
+**Decision:** The 1-column carousel and the 2/3-column vertical layout both use the identical 291px Mini Card — no separate "wide" card for the single-column case.
 
-## 2. Panel layout format — confirmed 3-column, naming updated
+Three full cards plus a peek of a fourth fit naturally inside the 1200px content width at that fixed size, so there was no reason to introduce a second card width to maintain. Also keeps Figma handoff simpler: one card component, reused everywhere.
 
-**Decision:** Recommended · Expedia Only · Neg/Pref, in that left-to-right order, matching the tech spec's ASCII layout diagram.
+## 3. Peek height — both variants built, no final pick yet
 
-The PRD's §16 open question ("3-column panel vs. single ranked list + carousel") is resolved — the tech spec builds only the 3-column version, so that's what's wireframed. Column naming/order here supersedes the July 8 exploration decks (`hotel-hackathon-smartmix-concepts.html`, `hotel-smartmix-component-hackathon.html`), which used "Egencia Preferred / Company Preferred / Recommended" and put Recommended on the right. If those older files are still being referenced anywhere, they're now stale — this folder is the current source.
+**Decision:** Built both permanent-peek and expands-on-interaction as live, toggleable behaviors on the same page rather than converging on one.
 
-## 3. Cards per column (OTQ-2, still open in tech spec)
+You asked to see both side by side before deciding, so this is deliberately left open — pick one after reviewing `panel-layout-mechanics.html`. Implementation note: "expands on interaction" is triggered by an explicit "Show more" affordance in the fade at the bottom of the column (not a bare scroll-detection heuristic) — more discoverable and accessible than inferring intent from a scroll event, and it doubles as the same control that collapses the column back down ("Show less").
 
-**Decision:** 4 visible cards per panel column in the standalone component wireframe, 3 in the full-page assembly (to keep the full page's scroll length reasonable alongside the full list + map).
+## 4. Carousel controls: arrows + drag/swipe
 
-Tech spec explicitly defers "number of cards per column (visible/scrollable)" to the UX spec, and the UX spec doesn't state a number either. This is a placeholder for review, not a final call — needs a real number once card density is tested against the Pref/Neg carousel cap (PRD §8a: 5–10 hotels) and actual result volumes.
+**Decision:** Visible prev/next arrows (disabled at the ends) plus native pointer-based drag/swipe, snapping to card edges. Confirmed per your answer.
 
-**Flag for follow-up:** Confirm final per-column count with engineering — it affects `hotel-search-service`'s `RECOMMENDED`/`NEG_PREF` top-N response size.
+## 5. Minimal-data Mini Card — inferred, not sourced from Figma
 
-## 4. Deduplication visual treatment — resolved as silent removal
+**Decision:** Built as thumbnail + name + stars/distance + price (+ one taxes-and-fees line) only — every other optional slot (badges, sustainability cert, coworker %, reviews box, perk strip, payment/CVV notes) dropped.
 
-**Decision:** No "shown above" indicator on the full list. A hotel already shown in a panel column simply doesn't reappear below — it's just gone.
+I couldn't locate the "Hotel Mini Card - minimal data" frame in your Figma file — it wasn't under either page the file's metadata index returned (`Hotel SRP` / `Hotel SRP Map expand + interactions`), most likely because the Figma-desktop bridge only sees pages currently open as tabs, not the full file. Rather than guess a node-id, I inferred the minimal state from the full-data frame's own structure (many of its fields are already independently optional per `pattern-hotel-list-card.md`'s "one component, several switchable slots" model).
 
-The PRD flags this as its own open visual question (§16: *"mechanism is resolved... open question is purely visual: how, if at all, is this indicated to the traveler?"*). The UX spec's decision log doesn't address it directly, but its stated reasoning for the *source* toggle ("clean and transparent, avoids duplicate card clutter") points the same direction: don't add a second UI signal on top of an already-busy list. A "seen above ↑" tag would imply the traveler needs to reconcile two lists, which undercuts the whole point of the panel.
+**Flag for follow-up:** Send the frame's direct link (or select it in Figma desktop) and I'll true this component up against the real reference.
 
-## 5. Expedia Only empty state
+## 6. Company Preferred badge — corrected a copy bug, not reproduced it
 
-**Decision:** Compact centered message inside the column ("No Expedia-only inventory for this search") with a hotel icon, while the other two columns keep loading independently — matches PRD T1's acceptance criteria directly.
+**Decision:** Badge and column header both read "Company Preferred." Your reference screenshot's actual card renders "Chat bhandar Preferred" on the badge itself (while the column header correctly says "Company Preferred") — that mismatch reads like a leftover placeholder/localization-key string bug in the live product, not intentional copy, so it wasn't reproduced here.
 
-## 6. All-sources-fail global state
+**Flag for follow-up:** Worth passing to engineering as a live bug independent of this design work.
 
-**Decision:** Replaces the entire panel shell with a single centered error block and a "Modify search" CTA, rather than three separately-erroring columns. Three redundant error messages side by side would be noisier than one clear one, and the PRD only requires *an* appropriate empty/error state, not per-column messaging in this failure mode.
+## 7. Amenity/field variance across cards
 
-## 7. Load-sequence timing shown in the demo
-
-**Decision:** Compressed to demo-friendly delays (~0.8s / ~1.8s / ~3.2s between steps) rather than the real ~1–2s / ~2–4s / ~5–6s from the tech spec's latency table, so reviewers aren't sitting through a slow "Play" click. The on-screen note during playback states the *real* target latency at each step so the relative story (Expedia Only first, Neg/Pref last) still reads correctly.
+**Decision:** Rather than build every card at full-data or minimal-data, the panel and SRP-integration pages deliberately mix realistic partial states (some cards with just a perk strip, some with just a reviews box, some fully bare) — matching your note that "most cards will not have all the data points" and that there's real variance in what's available per hotel.
 
 ## Figma handoff notes
 
-- **Maps to existing Sticker Sheet components:** badge (`.badge-preferred`, `.badge-negotiated`, `.badge-smartmix`), button (`.btn-primary`, `.btn-secondary`), checkbox/filter controls, card shell, tooltip.
-- **Net-new, no obvious Sticker Sheet equivalent:** the 3-column `SmartMix Panel` layout itself (independent per-column loading), the SmartMix tooltip's specific 1–3 reason-row content pattern, and the dedup "Also on…" source-toggle interaction on a card. Flag these for actual component design in Figma rather than assuming an instance swap will cover them.
+- **Maps to existing patterns already captured in this skill:** the regular hotel card (`pattern-hotel-list-card.md`), the SRP chrome/search-bar/filter-bar (`pattern-hotel-srp.md`), all color/icon tokens (`color-tokens.md`, `icons.md`).
+- **Net-new, no Sticker Sheet equivalent yet:** the Mini Card itself at this exact spec (291px, stacked single-column layout rather than the regular card's image+body+price row), the column peek/fade/"Show more" expand pattern, and the carousel's peek-of-next-card affordance. Flag these for real component design in Figma.
 
 ---
 
-*Source: [PRD (v8)](https://confluence.amexgbt.com/pages/viewpage.action?pageId=672447535) · [UX Spec (approved)](https://confluence.amexgbt.com/pages/viewpage.action?pageId=672447544) · [Tech Spec (draft)](https://confluence.amexgbt.com/pages/viewpage.action?pageId=672447566) · wireframes in this folder.*
+*Source: real SRP screenshots (Seattle search, "tm vasudevan") · Figma "Hotel Mini Card - full data" frame (fileKey `58shpbRLtrjCvw0OLqI2od`, node `3597:31358`) · this skill's own `pattern-hotel-srp.md` / `pattern-hotel-list-card.md` / `color-tokens.md` / `icons.md` references · wireframes in this folder.*

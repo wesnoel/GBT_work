@@ -1,89 +1,15 @@
-/* Hotel Quick Results — shared interactivity across every wireframe page */
-
-/* ── SmartMix badge tooltip: hover already works via CSS; this adds
-   keyboard/click support + Escape-to-dismiss + click-outside-to-close,
-   per the UX spec's accessibility requirements. ─────────────────────── */
-function initSmartMixTooltips(scope) {
-  const root = scope || document;
-  const badges = root.querySelectorAll(".badge-smartmix");
-  badges.forEach((b) => {
-    b.addEventListener("click", (e) => {
-      e.stopPropagation();
-      const wasOpen = b.classList.contains("tip-open");
-      badges.forEach((o) => o.classList.remove("tip-open"));
-      if (!wasOpen) b.classList.add("tip-open");
-    });
-  });
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") badges.forEach((b) => b.classList.remove("tip-open"));
-  });
-  document.addEventListener("click", (e) => {
-    if (!e.target.closest(".badge-smartmix")) badges.forEach((b) => b.classList.remove("tip-open"));
-  });
-}
-
-/* ── Deduplication source toggle: "Also on Booking.com · $195/night"
-   swaps the displayed rate + source label; preferred/negotiated badge
-   persists per the design decision log. ─────────────────────────────── */
-function initSourceToggle(scope) {
-  const root = scope || document;
-  root.querySelectorAll(".card-also button").forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      const card = btn.closest(".card-hotel");
-      const priceEl = card.querySelector(".card-price");
-      const srcEl = card.querySelector(".card-source");
-      const altPrice = btn.dataset.altPrice;
-      const altSrc = btn.dataset.altSrc;
-      const curPrice = priceEl.textContent;
-      const curSrc = srcEl.textContent;
-      priceEl.textContent = altPrice;
-      srcEl.textContent = altSrc;
-      btn.dataset.altPrice = curPrice;
-      btn.dataset.altSrc = curSrc;
-      btn.textContent = "Also on " + curSrc + " · " + curPrice + "/night";
-    });
-  });
-}
-
-/* ── Hotel card click → simulate PDP navigation (no real PDP in this
-   wireframe deck; shows an intent toast so the interaction reads as real). */
-function initCardClickToPDP(scope) {
-  const root = scope || document;
-  root.querySelectorAll(".card-hotel").forEach((card) => {
-    card.setAttribute("tabindex", card.getAttribute("tabindex") || "0");
-    card.addEventListener("click", (e) => {
-      if (e.target.closest(".card-also") || e.target.closest(".badge-smartmix")) return;
-      const name = card.querySelector(".card-name");
-      showToast((name ? name.textContent : "Hotel") + " → opening room details (PDP)…");
-    });
-    card.addEventListener("keydown", (e) => {
-      if ((e.key === "Enter" || e.key === " ") && !e.target.closest(".card-also, .badge-smartmix")) {
-        e.preventDefault();
-        card.click();
-      }
-    });
-  });
-}
+/* Hotel Mini Card Panel — shared interactivity */
 
 let _toastEl = null;
 function showToast(msg) {
   if (!_toastEl) {
     _toastEl = document.createElement("div");
-    _toastEl.style.position = "fixed";
-    _toastEl.style.bottom = "24px";
-    _toastEl.style.left = "50%";
-    _toastEl.style.transform = "translateX(-50%)";
-    _toastEl.style.background = "#14161a";
-    _toastEl.style.color = "#fff";
-    _toastEl.style.padding = "10px 18px";
-    _toastEl.style.borderRadius = "8px";
-    _toastEl.style.fontSize = "13px";
-    _toastEl.style.fontWeight = "600";
-    _toastEl.style.zIndex = "999";
-    _toastEl.style.boxShadow = "0 10px 32px rgba(0,0,0,.25)";
-    _toastEl.style.opacity = "0";
-    _toastEl.style.transition = "opacity .15s";
+    Object.assign(_toastEl.style, {
+      position: "fixed", bottom: "24px", left: "50%", transform: "translateX(-50%)",
+      background: "#14161a", color: "#fff", padding: "10px 18px", borderRadius: "8px",
+      fontSize: "13px", fontWeight: "600", zIndex: "999", boxShadow: "0 10px 32px rgba(0,0,0,.25)",
+      opacity: "0", transition: "opacity .15s"
+    });
     document.body.appendChild(_toastEl);
   }
   _toastEl.textContent = msg;
@@ -92,66 +18,162 @@ function showToast(msg) {
   _toastEl._t = setTimeout(() => { _toastEl.style.opacity = "0"; }, 1800);
 }
 
-/* ── ARIA live-region announcer + visible a11y log (for reviewers) ──── */
-function announce(msg) {
-  const live = document.getElementById("a11y-live");
-  if (live) live.textContent = msg;
-  const log = document.getElementById("a11yLogList");
-  if (log) {
-    const line = document.createElement("div");
-    line.className = "a11y-log-line";
-    line.textContent = msg;
-    log.appendChild(line);
-    log.scrollTop = log.scrollHeight;
-  }
+/* ── Mini/regular card click → simulated PDP navigation ─────────── */
+function initCardClickToPDP(scope) {
+  const root = scope || document;
+  root.querySelectorAll(".mini-card:not(.is-skeleton), .hotel-card").forEach((card) => {
+    if (card._pdpWired) return;
+    card._pdpWired = true;
+    card.setAttribute("tabindex", card.getAttribute("tabindex") || "0");
+    card.addEventListener("click", (e) => {
+      if (e.target.closest(".mini-flag, .price-flag, .col-fade-btn, .carousel-arrow")) return;
+      const name = card.querySelector(".mini-name, .hotel-name");
+      showToast((name ? name.textContent.trim() : "Hotel") + " → opening room details (PDP)…");
+    });
+    card.addEventListener("keydown", (e) => {
+      if ((e.key === "Enter" || e.key === " ") && !e.target.closest(".mini-flag, .price-flag")) {
+        e.preventDefault();
+        card.click();
+      }
+    });
+  });
 }
 
-/* ── Filter panel: checkbox/star filters drive [data-tags] matching on
-   any .card-hotel with a data-tags attribute (space-separated tokens:
-   e.g. "preferred pool gym 4star"). Cards not matching all active
-   filters are hidden; skeleton cards are unaffected. ─────────────────── */
-function initFilterPanel(panelEl, targetsSelector) {
-  if (!panelEl) return;
-  const state = { stars: new Set(), amenities: new Set() };
+/* ── Out-of-policy flag popover — per icons.md's confirmed pattern:
+   hover/click/tap all show it; auto-close 3s after pointer actually
+   leaves (not 3s after the click); blur on every close path so a
+   focus-visible trigger doesn't keep the popover visually stuck open. */
+function initOutOfPolicyFlags(scope) {
+  const root = scope || document;
+  root.querySelectorAll(".mini-flag, .price-flag").forEach((flag) => {
+    if (flag._oopWired) return;
+    flag._oopWired = true;
+    flag.setAttribute("tabindex", "0");
+    flag.setAttribute("role", "button");
+    flag.setAttribute("aria-label", "This hotel is out of policy");
 
-  function apply() {
-    let matchCount = 0;
-    document.querySelectorAll(targetsSelector).forEach((card) => {
-      if (!card.classList.contains("is-loaded")) return; // don't filter skeletons
-      const tags = (card.dataset.tags || "").split(" ");
-      let visible = true;
-      if (state.stars.size && ![...state.stars].some((s) => tags.includes(s))) visible = false;
-      if (state.amenities.size && ![...state.amenities].every((a) => tags.includes(a))) visible = false;
-      card.style.display = visible ? "" : "none";
-      if (visible) matchCount++;
+    const pop = document.createElement("span");
+    pop.className = "oop-pop";
+    pop.textContent = "This hotel is out of policy.";
+    flag.style.position = "relative";
+    flag.appendChild(pop);
+
+    let closeTimer = null;
+    const open = () => { pop.classList.add("open"); clearTimeout(closeTimer); };
+    const scheduleClose = () => { closeTimer = setTimeout(close, 3000); };
+    const close = () => { pop.classList.remove("open"); flag.blur(); };
+
+    flag.addEventListener("mouseenter", open);
+    flag.addEventListener("mouseleave", scheduleClose);
+    // Click/tap always opens (idempotent) — a real pointer click fires
+    // mouseenter first, so toggling closed here would immediately undo
+    // the hover-open. Only the leave-timer above closes it.
+    flag.addEventListener("click", (e) => {
+      e.stopPropagation();
+      open();
+      scheduleClose();
     });
-    announce(matchCount + " results match current filters.");
-  }
+    flag.addEventListener("focus", open);
+  });
+}
 
-  panelEl.querySelectorAll(".filter-star-btn").forEach((btn) => {
+/* ── Column peek/expand — vertical columns in the 2/3-col layout ── */
+function initColumnPeek(scope) {
+  const root = scope || document;
+  root.querySelectorAll(".col-wrap").forEach((wrap) => {
+    const scroller = wrap.querySelector(".col-scroll");
+    const btn = wrap.querySelector(".col-fade-btn");
+    if (!scroller || !btn || btn._wired) return;
+    btn._wired = true;
+    const peekHeight = 372;
     btn.addEventListener("click", () => {
-      const v = btn.dataset.star;
-      btn.classList.toggle("on");
-      btn.classList.contains("on") ? state.stars.add(v) : state.stars.delete(v);
-      apply();
+      const expanded = scroller.style.maxHeight === "none" || (!scroller.classList.contains("peek"));
+      if (expanded) {
+        scroller.classList.add("peek");
+        scroller.style.maxHeight = peekHeight + "px";
+        btn.classList.remove("is-expanded");
+        btn.querySelector(".fade-btn-label").textContent = "Show more";
+        scroller.scrollTop = 0;
+      } else {
+        scroller.classList.remove("peek");
+        scroller.style.maxHeight = "none";
+        btn.classList.add("is-expanded");
+        btn.querySelector(".fade-btn-label").textContent = "Show less";
+      }
     });
   });
-  panelEl.querySelectorAll(".filter-check input").forEach((cb) => {
-    cb.addEventListener("change", () => {
-      cb.checked ? state.amenities.add(cb.value) : state.amenities.delete(cb.value);
-      apply();
+}
+
+function setColumnPeekMode(mode) {
+  // mode: "permanent" | "interactive"
+  document.querySelectorAll(".col-wrap").forEach((wrap) => {
+    const scroller = wrap.querySelector(".col-scroll");
+    wrap.classList.toggle("mode-permanent", mode === "permanent");
+    if (mode === "permanent") {
+      scroller.classList.add("peek");
+      scroller.style.maxHeight = "372px";
+    }
+  });
+}
+
+/* ── Horizontal carousel (1-column state) ─────────────────────────── */
+function initCarousel(scope) {
+  const root = scope || document;
+  root.querySelectorAll(".carousel-wrap").forEach((wrap) => {
+    if (wrap._wired) return;
+    wrap._wired = true;
+    const track = wrap.querySelector(".carousel-track");
+    const prev = wrap.querySelector(".carousel-arrow.prev");
+    const next = wrap.querySelector(".carousel-arrow.next");
+
+    function cardStep() {
+      const card = track.querySelector(".mini-card");
+      return card ? card.getBoundingClientRect().width + 16 : 300;
+    }
+    function updateArrows() {
+      prev.disabled = track.scrollLeft <= 4;
+      next.disabled = track.scrollLeft >= track.scrollWidth - track.clientWidth - 4;
+    }
+    prev.addEventListener("click", () => track.scrollBy({ left: -cardStep(), behavior: "smooth" }));
+    next.addEventListener("click", () => track.scrollBy({ left: cardStep(), behavior: "smooth" }));
+    track.addEventListener("scroll", updateArrows);
+
+    // drag/swipe
+    let isDown = false, startX = 0, startScroll = 0;
+    track.addEventListener("pointerdown", (e) => {
+      isDown = true;
+      track.classList.add("is-dragging");
+      startX = e.clientX;
+      startScroll = track.scrollLeft;
+      track.setPointerCapture(e.pointerId);
+    });
+    track.addEventListener("pointermove", (e) => {
+      if (!isDown) return;
+      track.scrollLeft = startScroll - (e.clientX - startX);
+    });
+    ["pointerup", "pointercancel", "pointerleave"].forEach((ev) =>
+      track.addEventListener(ev, () => { isDown = false; track.classList.remove("is-dragging"); })
+    );
+
+    // Re-check whenever the track's size changes — including the
+    // display:none → visible transition when a demo toggle swaps this
+    // carousel into view, which a scroll-only listener would miss
+    // entirely (arrows would stay stuck on their stale initial state).
+    new ResizeObserver(updateArrows).observe(track);
+    updateArrows();
+  });
+}
+
+/* ── Column-count demo control (config/business-rule driven) ──────── */
+function initColumnCountDemo(stripEl, panelSelector) {
+  if (!stripEl) return;
+  stripEl.querySelectorAll(".demo-step[data-cols]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      stripEl.querySelectorAll(".demo-step[data-cols]").forEach((b) => b.classList.remove("on"));
+      btn.classList.add("on");
+      const n = btn.dataset.cols;
+      document.querySelectorAll(panelSelector).forEach((panel) => (panel.dataset.cols = n));
+      document.dispatchEvent(new CustomEvent("columncountchange", { detail: { cols: n } }));
     });
   });
-  const reset = panelEl.querySelector(".filter-reset");
-  if (reset) {
-    reset.addEventListener("click", () => {
-      state.stars.clear();
-      state.amenities.clear();
-      panelEl.querySelectorAll(".filter-star-btn.on").forEach((b) => b.classList.remove("on"));
-      panelEl.querySelectorAll(".filter-check input:checked").forEach((c) => (c.checked = false));
-      apply();
-    });
-  }
-  // expose so a page can re-run apply() after new results stream in
-  panelEl._reapply = apply;
 }
