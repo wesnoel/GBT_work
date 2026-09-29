@@ -147,6 +147,7 @@ a { color: inherit; text-decoration: none; }
 .size-rail { display: flex; align-items: flex-start; gap: 48px; padding: 40px 8px; flex-wrap: wrap; }
 .size-sample { display: flex; flex-direction: column; align-items: center; gap: 14px; }
 .size-sample-label { font-size: 13px; font-weight: 700; letter-spacing: 0.01em; color: var(--ink-faint); }
+.size-sample-px { font-weight: 400; color: var(--ink-faint); }
 
 /* ---- oop-anchor: shared positioning wrapper for trigger + panel ---- */
 .oop-anchor { position: relative; display: inline-flex; }
