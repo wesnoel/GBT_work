@@ -88,10 +88,27 @@
       </div>
     </a>
 
+    <a class="hub-card" href="generative-poc.html">
+      <div class="hub-thumb">
+        <span class="hub-num">04</span>
+        <div class="mini-thumb-sketch" style="width:100%;">
+          <div class="col"><div class="card"><div class="blk" style="width:55%;height:10px;"></div><div class="blk" style="width:70%"></div></div></div>
+          <div class="col"><div class="card"><div class="blk" style="width:60%;height:10px;"></div><div class="blk" style="width:40%"></div></div></div>
+          <div class="col"><div class="card"><div class="blk" style="width:65%;height:10px;"></div><div class="blk" style="width:50%"></div></div></div>
+        </div>
+      </div>
+      <div class="hub-body">
+        <div class="hub-card-name">Generative UI proof of concept</div>
+        <div class="hub-card-desc">Same panel, same content rules — but column count, optional slots, and card order are now chosen live by a rules engine reading a shared schema, driven by a context simulator instead of a manual toggle.</div>
+        <span class="hub-card-cta">Open wireframe →</span>
+      </div>
+    </a>
+
   </div>
 
   <div class="hub-notes">
     <b>Key decisions:</b> column count is a config/business-rule toggle here, not inferred live from result counts (see <a href="design-decisions.md">design-decisions.md</a>). The 1-column carousel and 2/3-column vertical peek both use the same fixed-width Mini Card — no separate wide-card variant. Peek height is a permanent fixed height — the expands-on-interaction alternative was explored and dropped in favor of this. One QA catch along the way: the real product's "Company Preferred" badge renders as "Chat bhandar Preferred" — built here as the intended copy, flagged for engineering.
+    <br><br><b>Generative UI POC (04):</b> inverts the config-driven column toggle above into a context-driven one — see <a href="generative-poc.html">generative-poc.html</a> for the schema, rules engine, and stubbed novel-scenario reasoning path.
   </div>
 
 </main>
