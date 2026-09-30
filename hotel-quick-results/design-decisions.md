@@ -42,10 +42,35 @@ I still couldn't locate the "Hotel Mini Card - minimal data" frame in your Figma
 
 **Decision:** Rather than build every card at full-data or minimal-data, the panel and SRP-integration pages deliberately mix realistic partial states (some cards with just a perk strip, some with just a reviews box, some fully bare) — matching your note that "most cards will not have all the data points" and that there's real variance in what's available per hotel.
 
+## 8. "Recommended for you" variant — rebuilt a PM concept on real components, didn't reproduce its visual style
+
+**Decision:** `srp-recommended-carousel-variant.html` keeps the PM's HTML concept's structure and content intent (one pinned "best match" hero card + a horizontal carousel of other featured rates, sitting above the unchanged full results list) but rebuilds it entirely in this deck's own system — real Egencia chrome, Open Sans, the established color tokens, and the existing Mini Card / Hotel Card / carousel components — rather than the mockup's own navy/Segoe UI/ad-hoc gray palette. This is a genuinely different shape from the 1/2/3-column panel elsewhere in this deck (one row with a single pinned card, not N parallel columns), kept as a separate page rather than a fourth column-count state.
+
+Specific mappings from the PM's markup to this deck's system:
+- "Recommended" / "Company Preferred" / "Negotiated Rate" / plain "Preferred" badges → the existing `.badge-recommended` / `.badge-company-preferred` / `.badge-negotiated` / `.badge-egencia-preferred` classes (no new badge types needed).
+- The pinned card's teal border + "📌 PINNED" flag → a new `.hero-card` / `.hero-pin-flag` treatment using the existing `--positive` semantic token (not a new color — see #9 below for why that token now renders gray anyway), since nothing in this deck yet had a "hero" card at this width (320px, between the 291px Mini Card and the 663px Hotel Card).
+- New optional signals added to the full results list, all built from existing tokens: `.eco-tag` (positive-green inline tag, distinct from the existing "Sustainability certified" cert line — these are two different claims), `.highlight-note` (a compact chip version of the existing perk-strip pattern), `.price-strike` + `.save-tag` (crossed-out price + savings), `.urgency` (negative-red scarcity messaging), and `.hotel-img-badge` (a badge overlaid directly on the thumbnail, as a second, independent badge-placement pattern alongside the existing card-edge `.hotel-badge-row`).
+
+**Flag for follow-up:** This variant introduces a second badge-badge-placement convention (on-image vs. card-edge) and a second "featured card" width (320px hero vs. 291px Mini Card). Worth a deliberate call before Figma on whether both should survive into the real product, or whether one SRP concept (column panel vs. pinned+carousel) should win outright.
+
+## 9. HTML/web wireframes are grayscale-only; Figma carries the real fidelity
+
+**Decision:** Every color family in `styles.css` (`--c-accent1` through `--c-accent6`) now resolves to a gray ramp instead of the real Egencia blue/gold/green/red/orange hues — applied once at the `:root` level, so every page in this deck picked it up without touching a single HTML file or component rule. Semantic meaning (badge type, positive/negative, brand highlight) now reads through icon shape, label text, weight, and relative lightness instead of hue, which is how a real low-fi wireframe should read anyway.
+
+This is a standing split going forward, not a one-off: the HTML/web wireframes in this deck are for structure and interaction review only, kept deliberately low-fi/gray; real look-and-feel work happens in Figma. The two builds in this folder's Figma file (the `SmartMix Panel` variant set and the `Card Skeleton`) stay in full high-fidelity color — that split is intentional, not an oversight if the two ever look inconsistent side by side.
+
+**Flag for follow-up:** If new pages get added to this deck later, don't reach for the real color tokens by default — grayscale is now this deck's baseline until told otherwise.
+
+## 10. Second "Recommended for you" placement — aligned with the map, not spanning full width
+
+**Decision:** `srp-recommended-map-aligned-variant.html` keeps the same pinned-hero + carousel content as variant one, but moves the whole band to live *inside* `.srp-list` (the results column) as its first child, rather than as a full-width section above both the list and the map. Concretely: the band's top edge is now what the sticky map aligns against, so the map runs the full height of the band plus the plain list below it — instead of starting lower, at the same point the plain list would have started on its own.
+
+No new CSS was needed for this — `.hero-card` and `.carousel-wrap` already sized themselves to their container, so narrowing that container (from the full ~1151px content width down to the ~700px results column) just means fewer carousel cards peek into view before the fade/scroll, which is the correct responsive behavior, not a bug to fix.
+
 ## Figma handoff notes
 
 - **Maps to existing patterns already captured in this skill:** the regular hotel card (`pattern-hotel-list-card.md`), the SRP chrome/search-bar/filter-bar (`pattern-hotel-srp.md`), all color/icon tokens (`color-tokens.md`, `icons.md`).
-- **Net-new, no Sticker Sheet equivalent yet:** the Mini Card itself at this exact spec (291px, stacked single-column layout rather than the regular card's image+body+price row), the column peek/fade/"Show more" expand pattern, and the carousel's peek-of-next-card affordance. Flag these for real component design in Figma.
+- **Net-new, no Sticker Sheet equivalent yet:** the Mini Card itself at this exact spec (291px, stacked single-column layout rather than the regular card's image+body+price row), the column peek/fade/"Show more" expand pattern, the carousel's peek-of-next-card affordance, and (new) the 320px hero/pinned card treatment. Flag these for real component design in Figma.
 
 ---
 

@@ -5,21 +5,29 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  /* ── Foundation scales (Color_<family>_<step>) ─────────────────── */
-  --c-accent1-900:#001142; --c-accent1-800:#1E2C5D; --c-accent1-700:#1A3578; --c-accent1-600:#003D92;
-  --c-accent1-500:#006FCF; --c-accent1-400:#639CF4; --c-accent1-300:#81B1FF; --c-accent1-200:#A3CBFF;
-  --c-accent1-100:#D4EBFF; --c-accent1-50:#EDF6FE;
+  /* ── Foundation scales — GRAYSCALE ONLY ─────────────────────────
+     Per standing direction: HTML/web wireframes stay low-fi grayscale;
+     real Egencia color tokens (color-tokens.md) are reserved for the
+     Figma build. Every family below collapses to a gray ramp — variable
+     NAMES are kept identical to the token system so no component rule
+     or HTML file needs to change, only these root values. Semantic
+     distinctions (badge type, positive/negative, etc.) now ride on
+     icon shape, label text, weight, and relative lightness instead of
+     hue — exactly how a real grayscale wireframe should read. */
+  --c-accent1-900:#14161A; --c-accent1-800:#1F2226; --c-accent1-700:#2B2F36; --c-accent1-600:#3A3F46;
+  --c-accent1-500:#52565F; --c-accent1-400:#7A7F88; --c-accent1-300:#A7ABB4; --c-accent1-200:#D0D3D8;
+  --c-accent1-100:#E8EAED; --c-accent1-50:#F5F6F7;
 
-  --c-accent2-900:#523300; --c-accent2-800:#855500; --c-accent2-700:#9D6800; --c-accent2-600:#B57B00;
-  --c-accent2-500:#C48800; --c-accent2-400:#FFB900; --c-accent2-300:#FFCF89; --c-accent2-200:#FFDB9D;
-  --c-accent2-100:#FFECBA; --c-accent2-50:#FBF9F5;
+  --c-accent2-900:#2E2E2E; --c-accent2-800:#454545; --c-accent2-700:#5C5C5C; --c-accent2-600:#757575;
+  --c-accent2-500:#8E8E8E; --c-accent2-400:#ABABAB; --c-accent2-300:#C4C4C4; --c-accent2-200:#DADADA;
+  --c-accent2-100:#EDEDED; --c-accent2-50:#F8F8F8;
 
-  --c-accent4-900:#0A2E19; --c-accent4-700:#114C2B; --c-accent4-600:#19693B; --c-accent4-500:#178143;
-  --c-accent4-400:#1FA758; --c-accent4-300:#28CD6E; --c-accent4-200:#81E0AA; --c-accent4-100:#C3F2D7; --c-accent4-50:#E1FDEC;
+  --c-accent4-900:#1A1C1F; --c-accent4-700:#333639; --c-accent4-600:#484C50; --c-accent4-500:#5D6266;
+  --c-accent4-400:#83878B; --c-accent4-300:#ABAEB1; --c-accent4-200:#CBCDCF; --c-accent4-100:#E4E5E6; --c-accent4-50:#F2F3F3;
 
-  --c-accent5-500:#C6261E; --c-accent5-400:#E3463C; --c-accent5-200:#FFB3B0; --c-accent5-100:#F9D3D2; --c-accent5-50:#FFF0F0;
+  --c-accent5-500:#26282B; --c-accent5-400:#454749; --c-accent5-200:#BDBEC0; --c-accent5-100:#DCDDDE; --c-accent5-50:#F1F1F1;
 
-  --c-accent6-500:#E16304; --c-accent6-200:#F5BA81; --c-accent6-100:#FADBB3; --c-accent6-50:#FEF1E6;
+  --c-accent6-500:#4A4A4A; --c-accent6-200:#C7C7C7; --c-accent6-100:#E0E0E0; --c-accent6-50:#F5F5F5;
 
   --c-neutral1-900:#1B1D25; --c-neutral1-800:#152835; --c-neutral1-700:#303F49; --c-neutral1-600:#42525D;
   --c-neutral1-500:#74818B; --c-neutral1-400:#9CA5AC; --c-neutral1-300:#C1C8CD; --c-neutral1-200:#E0E4E6;
@@ -56,11 +64,11 @@
   --radius-sm: 6px;
   font-size: 15px;
 
-  /* Gradients (Color_gradient_*) */
-  --grad-active-blue: linear-gradient(263deg, #97CBFF 0%, #006FCF 100%);
-  --grad-powder-blue: linear-gradient(265deg, #B4D9FA 0%, #97CBFF 100%);
-  --grad-page-light-blue: linear-gradient(180deg, #E6F0FA 0%, #FFFFFF 100%);
-  --grad-border-highlight: linear-gradient(102deg, rgba(255,185,0,0.6) 0%, rgba(0,111,207,0.6) 100%);
+  /* Gradients — grayscale stand-ins for the real brand gradients (Color_gradient_*) */
+  --grad-active-blue: linear-gradient(263deg, #D0D3D8 0%, #7A7F88 100%);
+  --grad-powder-blue: linear-gradient(265deg, #E0E2E5 0%, #C7CACE 100%);
+  --grad-page-light-blue: linear-gradient(180deg, #EEF0F2 0%, #FFFFFF 100%);
+  --grad-border-highlight: linear-gradient(102deg, rgba(120,120,120,0.5) 0%, rgba(60,63,70,0.5) 100%);
 }
 
 html, body {
@@ -120,6 +128,11 @@ svg { display: block; }
 .search-date-day { font-size: 11.5px; color: var(--ink-faint); }
 .search-edit-btn { margin-left: auto; padding: 9px 18px; border-radius: 20px; border: 1px solid var(--accent); background: var(--surface); color: var(--accent); font-size: 13.5px; font-weight: 700; cursor: pointer; }
 .search-edit-btn:hover { background: var(--accent-soft); }
+
+.btn-primary { padding: 8px 18px; border-radius: var(--radius-sm); border: none; background: var(--accent); color: #fff; font-size: 13.5px; font-weight: 700; cursor: pointer; font-family: inherit; }
+.btn-primary:hover { background: var(--accent-dark); }
+.btn-secondary { padding: 8px 18px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--surface); color: var(--ink); font-size: 13.5px; font-weight: 700; cursor: pointer; font-family: inherit; }
+.btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
 .search-traveler { display: flex; align-items: center; gap: 10px; padding: 12px 22px; background: var(--surface); border-radius: 0 0 12px 12px; margin-top: -1px; }
 .search-traveler-avatar { width: 26px; height: 26px; border-radius: 50%; background: var(--accent-100); color: var(--accent-dark); font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
 
@@ -348,6 +361,48 @@ svg { display: block; }
 .hotel-perk-strip { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--ink-soft); background: var(--canvas); border-radius: var(--radius-sm); padding: 8px 12px; }
 .hotel-perk-strip .icon { width: 16px; height: 16px; color: var(--ink-soft); }
 
+/* Badge overlaid directly on the thumbnail (vs. the card-edge badge row above) —
+   used by the "Recommended for you" variant's list cards. */
+.hotel-img-wrap { position: relative; flex-shrink: 0; }
+.hotel-img-badge { position: absolute; top: 8px; left: 8px; }
+
+/* Eco-friendly inline tag — distinct from the "Sustainability certified" line */
+.eco-tag { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--positive); }
+.eco-tag .icon { width: 14px; height: 14px; color: var(--positive); }
+
+/* Compact highlight chip — "Close to searched location...", lighter than the full perk strip */
+.highlight-note { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-soft); background: var(--canvas); border-radius: var(--radius-sm); padding: 5px 10px; align-self: flex-start; }
+.highlight-note .icon { width: 13px; height: 13px; color: var(--accent); flex-shrink: 0; }
+
+/* Strike-through original price + savings tag */
+.price-strike { font-size: 12.5px; color: var(--ink-faint); text-decoration: line-through; }
+.save-tag { font-size: 12.5px; font-weight: 700; color: var(--positive); }
+
+/* Urgency messaging — "5 rooms left at this rate!" */
+.urgency { font-size: 11.5px; font-weight: 700; color: var(--negative); }
+
+/* ── "Recommended for you" band: pinned hero card + carousel ──────────── */
+.featured-label { display: flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 700; margin-bottom: 12px; }
+.featured-label .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--positive); flex-shrink: 0; }
+.featured-row { display: flex; gap: 20px; align-items: flex-start; }
+
+.hero-card {
+  width: 320px; flex-shrink: 0; position: relative;
+  background: var(--surface); border: 2px solid var(--positive); border-radius: var(--radius);
+  box-shadow: 0 6px 20px rgba(23,129,67,.12);
+  padding: 16px; display: flex; flex-direction: column; gap: 8px; cursor: pointer;
+}
+.hero-pin-flag {
+  position: absolute; top: 10px; right: 10px; display: flex; align-items: center; gap: 4px;
+  background: var(--positive); color: #fff; font-size: 10.5px; font-weight: 700;
+  padding: 4px 9px; border-radius: 20px; letter-spacing: 0.03em; z-index: 2;
+}
+.hero-pin-flag .icon { width: 11px; height: 11px; }
+.hero-thumb { width: 100%; height: 130px; border-radius: var(--radius-sm); overflow: hidden; background: var(--line-soft); }
+.hero-thumb svg { width: 100%; height: 100%; }
+.hero-card-price-row { margin-top: auto; display: flex; align-items: baseline; justify-content: space-between; padding-top: 10px; border-top: 1px solid var(--line-soft); }
+.hero-card-price-row .mini-price { font-size: 19px; }
+
 /* Out-of-policy popover (shared) */
 .oop-pop {
   display: none; position: absolute; bottom: calc(100% + 8px); right: 0; z-index: 40;
@@ -358,7 +413,7 @@ svg { display: block; }
 
 /* ── SRP body layout ────────────────────────────────────────────── */
 .srp-body { display: grid; grid-template-columns: 1fr 460px; gap: 20px; align-items: start; }
-.srp-list { display: flex; flex-direction: column; gap: 14px; }
+.srp-list { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
 .map-shell { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); height: 640px; position: sticky; top: 20px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
 
 /* ── Hub ─────────────────────────────────────────────────────────── */
