@@ -412,9 +412,9 @@ svg { display: block; }
 .oop-pop.open { display: block; }
 
 /* ── SRP body layout ────────────────────────────────────────────── */
-.srp-body { display: grid; grid-template-columns: 1fr 460px; gap: 20px; align-items: start; }
+.srp-body { display: grid; grid-template-columns: 1fr 460px; gap: 20px; align-items: stretch; }
 .srp-list { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
-.map-shell { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); height: 640px; position: sticky; top: 20px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.map-shell { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); min-height: 640px; position: sticky; top: 20px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
 
 /* ── Hub ─────────────────────────────────────────────────────────── */
 .hub-hero { background: var(--surface); border-bottom: 1px solid var(--line); padding: 40px 0 32px; }
