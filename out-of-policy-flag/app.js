@@ -61,20 +61,30 @@ function buildOopContent(lob, userName) {
    transform) — that alone can't know how close the trigger is to a viewport
    edge. After the panel is actually visible (open via click, hover-reveal,
    or :focus-visible keyboard reveal), measure its real rect and nudge it
-   back on-screen with margin-left/margin-top if any edge would clip past
-   the viewport, leaving a small MARGIN px buffer so it never touches the
-   very edge either. margin (not left/top) is the correction mechanism
-   specifically because every variant already uses some combination of
-   left/right/top/bottom/transform for its own positioning — margin is the
-   one box-model lever that composes cleanly on top of all of them without
-   having to know which variant is active. Always resets to '' first so the
-   measurement is against the variant's natural, unclamped position, not a
-   stale correction from a previous open at a different scroll position. */
-var VIEWPORT_CLAMP_MARGIN = 8;
+   back on-screen if any edge would clip past the viewport, leaving a small
+   MARGIN px buffer so it never touches the very edge either. Always resets
+   the correction to '' first so the measurement is against the variant's
+   natural, unclamped position, not a stale correction from a previous open
+   at a different scroll position.
+
+   Correction mechanism: the CSS `translate` property, not margin. Margin
+   was tried first and looked right in isolation, but it only works for
+   variants positioned via `left:<value>` — for every right-anchored variant
+   (Left, Below-left, Above-left, which is the default), the panel has
+   `left:auto; right:0`, and the box-model constraint solver recomputes
+   `left` to keep the right edge pinned, so margin-left has *no visible
+   effect at all* on exactly the variants most likely to overflow the left
+   edge. `translate` is a pure post-layout paint-time offset — it doesn't
+   feed back into how left/right/auto was solved, so it moves the panel
+   correctly no matter which combination of left/right/top/bottom/transform
+   the active variant uses. It also composes cleanly with the `transform`
+   property the centered variants already use for translateX(-50%), since
+   `translate` and `transform` are independent CSS properties that combine
+   rather than overwrite each other. */
+var VIEWPORT_CLAMP_MARGIN = 16;
 
 function clampToViewport(panel) {
-  panel.style.marginLeft = "";
-  panel.style.marginTop = "";
+  panel.style.translate = "";
 
   if (getComputedStyle(panel).display === "none") return;
 
@@ -94,8 +104,7 @@ function clampToViewport(panel) {
     dy = (window.innerHeight - VIEWPORT_CLAMP_MARGIN) - rect.bottom;
   }
 
-  if (dx) panel.style.marginLeft = dx + "px";
-  if (dy) panel.style.marginTop = dy + "px";
+  if (dx || dy) panel.style.translate = dx + "px " + dy + "px";
 }
 
 /* Resizing the window doesn't re-fire open/hover/focus on a panel that's
@@ -113,9 +122,62 @@ function clampToViewport(panel) {
    reliably correct than it is slow. */
 window.addEventListener("resize", function () {
   document.querySelectorAll("[data-oop-panel]").forEach(function (panel) {
-    if (getComputedStyle(panel).display !== "none") clampToViewport(panel);
+    if (getComputedStyle(panel).display !== "none") {
+      applyMobileDefaultPlacement(panel.closest(".oop-anchor"), panel);
+      clampToViewport(panel);
+    }
   });
 });
+
+/* ---- Mobile-web default placement: center, flip toward the open side ----
+   Above-left (section 10/15b) is the desktop default, chosen because the
+   flag sits at a card's right edge and a panel needs somewhere to grow that
+   doesn't run off that edge. On a narrow mobile-web viewport there's no
+   equivalent "which side has a card edge" reasoning — the trigger is close
+   to centered either way — so the default there is instead centered
+   horizontally on the trigger (reusing the same centered rule the Below/
+   Above variants already use) and flipped vertically toward whichever of
+   top/bottom has more room, so it's maximally unlikely to need the
+   viewport-clamp correction at all. Deliberately scoped to *default*
+   panels only — a panel carrying an explicit placement modifier
+   (--below/--above/--left/--below-left) is there specifically to
+   demonstrate that named placement, on any viewport, so this leaves it
+   alone. OOP_MOBILE_BREAKPOINT intentionally matches the 860px breakpoint
+   already used for responsive layout elsewhere in styles.css — keep them
+   in sync if that value ever changes. */
+var OOP_MOBILE_BREAKPOINT = 860;
+
+function hasExplicitPlacementModifier(panel) {
+  return Array.from(panel.classList).some(function (c) {
+    return /--(below-left|below|above|left)$/.test(c);
+  });
+}
+
+function applyMobileDefaultPlacement(anchor, panel) {
+  panel.style.top = "";
+  panel.style.bottom = "";
+  panel.style.left = "";
+  panel.style.transform = "";
+
+  if (!anchor || hasExplicitPlacementModifier(panel)) return;
+  if (window.innerWidth > OOP_MOBILE_BREAKPOINT) return;
+
+  var trigger = anchor.querySelector("[data-oop-trigger]");
+  var triggerRect = trigger.getBoundingClientRect();
+  var roomAbove = triggerRect.top;
+  var roomBelow = window.innerHeight - triggerRect.bottom;
+
+  panel.style.left = "50%";
+  panel.style.transform = "translateX(-50%)";
+
+  if (roomBelow >= roomAbove) {
+    panel.style.top = "calc(100% + 6px)";
+    panel.style.bottom = "auto";
+  } else {
+    panel.style.bottom = "calc(100% + 6px)";
+    panel.style.top = "auto";
+  }
+}
 
 /* ---- Concept A (tooltip) + Concept B (popover): shared anchor logic ----
    Decision (per design-decisions.md): close 3s after the pointer actually
@@ -148,6 +210,7 @@ function initOopAnchor(anchor) {
     });
     panel.classList.add("is-open");
     trigger.setAttribute("aria-expanded", "true");
+    applyMobileDefaultPlacement(anchor, panel);
     clampToViewport(panel);
   }
 
@@ -155,8 +218,11 @@ function initOopAnchor(anchor) {
     panel.classList.remove("is-open");
     trigger.setAttribute("aria-expanded", "false");
     trigger.blur();
-    panel.style.marginLeft = "";
-    panel.style.marginTop = "";
+    panel.style.translate = "";
+    panel.style.top = "";
+    panel.style.bottom = "";
+    panel.style.left = "";
+    panel.style.transform = "";
     if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
   }
 
@@ -171,10 +237,12 @@ function initOopAnchor(anchor) {
   anchor.addEventListener("mouseenter", function () {
     hovering = true;
     if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+    applyMobileDefaultPlacement(anchor, panel);
     clampToViewport(panel);
   });
 
   trigger.addEventListener("focus", function () {
+    applyMobileDefaultPlacement(anchor, panel);
     clampToViewport(panel);
   });
 
