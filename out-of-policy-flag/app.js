@@ -56,6 +56,67 @@ function buildOopContent(lob, userName) {
   };
 }
 
+/* ---- Viewport-aware clamping ----
+   Every placement variant is still a fixed CSS rule (top/bottom/left/right/
+   transform) — that alone can't know how close the trigger is to a viewport
+   edge. After the panel is actually visible (open via click, hover-reveal,
+   or :focus-visible keyboard reveal), measure its real rect and nudge it
+   back on-screen with margin-left/margin-top if any edge would clip past
+   the viewport, leaving a small MARGIN px buffer so it never touches the
+   very edge either. margin (not left/top) is the correction mechanism
+   specifically because every variant already uses some combination of
+   left/right/top/bottom/transform for its own positioning — margin is the
+   one box-model lever that composes cleanly on top of all of them without
+   having to know which variant is active. Always resets to '' first so the
+   measurement is against the variant's natural, unclamped position, not a
+   stale correction from a previous open at a different scroll position. */
+var VIEWPORT_CLAMP_MARGIN = 8;
+
+function clampToViewport(panel) {
+  panel.style.marginLeft = "";
+  panel.style.marginTop = "";
+
+  if (getComputedStyle(panel).display === "none") return;
+
+  var rect = panel.getBoundingClientRect();
+  var dx = 0;
+  var dy = 0;
+
+  if (rect.left < VIEWPORT_CLAMP_MARGIN) {
+    dx = VIEWPORT_CLAMP_MARGIN - rect.left;
+  } else if (rect.right > window.innerWidth - VIEWPORT_CLAMP_MARGIN) {
+    dx = (window.innerWidth - VIEWPORT_CLAMP_MARGIN) - rect.right;
+  }
+
+  if (rect.top < VIEWPORT_CLAMP_MARGIN) {
+    dy = VIEWPORT_CLAMP_MARGIN - rect.top;
+  } else if (rect.bottom > window.innerHeight - VIEWPORT_CLAMP_MARGIN) {
+    dy = (window.innerHeight - VIEWPORT_CLAMP_MARGIN) - rect.bottom;
+  }
+
+  if (dx) panel.style.marginLeft = dx + "px";
+  if (dy) panel.style.marginTop = dy + "px";
+}
+
+/* Resizing the window doesn't re-fire open/hover/focus on a panel that's
+   already visible — clampToViewport only ran at the moment it opened, so a
+   popover left open while the viewport shrinks around it stayed exactly
+   where it was, edges and all. Re-clamp on resize too: on every resize,
+   re-check every panel that's currently actually visible (regardless of
+   which path revealed it — click's is-open class, CSS hover, or CSS
+   :focus-visible) and snap it back inside the new viewport if needed.
+   Deliberately not requestAnimationFrame-coalesced: rAF callbacks can be
+   suspended indefinitely in a backgrounded/hidden tab, which would silently
+   drop the correction exactly when a resize is in flight. clampToViewport
+   is cheap (a few getBoundingClientRect/style reads on at most one visible
+   panel), so calling it directly on every resize tick is simpler and more
+   reliably correct than it is slow. */
+window.addEventListener("resize", function () {
+  document.querySelectorAll("[data-oop-panel]").forEach(function (panel) {
+    if (getComputedStyle(panel).display !== "none") clampToViewport(panel);
+  });
+});
+
 /* ---- Concept A (tooltip) + Concept B (popover): shared anchor logic ----
    Decision (per design-decisions.md): close 3s after the pointer actually
    leaves the trigger/panel, not 3s after the click that opened it. Track a
@@ -87,12 +148,15 @@ function initOopAnchor(anchor) {
     });
     panel.classList.add("is-open");
     trigger.setAttribute("aria-expanded", "true");
+    clampToViewport(panel);
   }
 
   function close() {
     panel.classList.remove("is-open");
     trigger.setAttribute("aria-expanded", "false");
     trigger.blur();
+    panel.style.marginLeft = "";
+    panel.style.marginTop = "";
     if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
   }
 
@@ -101,9 +165,17 @@ function initOopAnchor(anchor) {
     closeTimer = setTimeout(close, 3000);
   }
 
+  // Hover-reveal (CSS :hover on a --hoverable anchor) and keyboard reveal
+  // (CSS :focus-visible on the trigger, below) both show the panel with no
+  // JS "open" call at all — clamp on those paths too, not just click.
   anchor.addEventListener("mouseenter", function () {
     hovering = true;
     if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+    clampToViewport(panel);
+  });
+
+  trigger.addEventListener("focus", function () {
+    clampToViewport(panel);
   });
 
   anchor.addEventListener("mouseleave", function () {
