@@ -65,6 +65,10 @@
 
   </div>
 
+  <!-- Hidden from human view per direction (2026-10-01) — kept here, not deleted,
+       since this is reference content worth being able to restore or consult.
+       Reusability demo: same markup/buildOopContent(lob, userName) in app.js,
+       swapping Hotel/Flight/Car/Rail content live via the dropdown.
   <p class="hub-section-label">Reusability — same component, different line of business</p>
   <div class="reuse-demo">
     <div class="reuse-demo-controls">
@@ -86,11 +90,15 @@
     </div>
     <p class="reuse-demo-caption">Same markup and same <code>buildOopContent(lob, userName)</code> function in <code>app.js</code> — only the data fragment changes per line of business. Swapping copy and switching between a sentence and a numbered list are data changes, not a redesign. See <code>design-decisions.md</code> for the full data model.</p>
   </div>
+  -->
 
+  <!-- Hidden from human view per direction (2026-10-01) — kept here, not deleted.
+       Design decisions summary (full write-up lives in design-decisions.md):
   <div class="notes-box">
     <h4>Design decisions (resolved from the working assumptions in this exploration)</h4>
     Two directions isolate interaction weight as the variable, not content — both tooltip and popover dialog open on hover, click, or tap (the standard interaction for anchored disclosure), differing only in weight: tooltip has no close button and relies on idle-dismiss, popover has an explicit close button plus idle-dismiss as a safety net. A third direction (modal) was explored and then dropped from scope · small/medium/large/extra large change only the flag icon's size (16/18/20/24px) — panel width, padding, and copy (font_300: 14px, title bold, text regular) stay constant across sizes; card examples default to medium, and the panel's default placement is above, left (flush to the trigger's right edge, growing up and left) rather than below-centered · content is data-driven by line of business: format (a flowing sentence vs. a numbered list, 1-2 items) varies, but the title is standardized to "Out of Policy" everywhere — a deliberate call, since real Air and Rail screenshots showed two different live conventions ("Policy violations:" and no title at all) that this unifies · Hotel and Flight each get their own set of pages per direction, since the flag lives in a genuinely different place on each card (a single price block on Hotel, the Elite fare column's price on Flight's three-column comparison) · every hover/focus-revealed panel is closed with <code>blur()</code> on every dismiss path, since <code>:focus-visible</code> alone can keep it visually open after the JS state changes. Full write-up: <a href="design-decisions.md" style="color: var(--accent); font-weight: 700;">design-decisions.md</a>.
   </div>
+  -->
 
 </div>
 
