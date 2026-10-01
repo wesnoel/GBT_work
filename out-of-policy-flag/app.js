@@ -85,6 +85,7 @@ var VIEWPORT_CLAMP_MARGIN = 16;
 
 function clampToViewport(panel) {
   panel.style.translate = "";
+  panel.style.setProperty("--oop-arrow-shift", "0px 0px");
 
   if (getComputedStyle(panel).display === "none") return;
 
@@ -104,7 +105,15 @@ function clampToViewport(panel) {
     dy = (window.innerHeight - VIEWPORT_CLAMP_MARGIN) - rect.bottom;
   }
 
-  if (dx || dy) panel.style.translate = dx + "px " + dy + "px";
+  if (dx || dy) {
+    panel.style.translate = dx + "px " + dy + "px";
+    /* --oop-arrow-shift: the Tooltip's ::after arrow reads this custom
+       property (styles.css) and translates by the exact inverse, so a
+       clamp correction moves the box to stay on-screen without dragging
+       the arrow away from the trigger it's supposed to be pointing at. No
+       effect on the Dialog, which has no arrow/doesn't read the property. */
+    panel.style.setProperty("--oop-arrow-shift", (-dx) + "px " + (-dy) + "px");
+  }
 }
 
 /* Resizing the window doesn't re-fire open/hover/focus on a panel that's

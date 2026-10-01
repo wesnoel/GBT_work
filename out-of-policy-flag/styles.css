@@ -93,7 +93,7 @@ a { color: inherit; text-decoration: none; }
 .notes-box h4 { margin: 0 0 8px; color: var(--ink); font-size: 13px; letter-spacing: 0.01em; font-weight: 700; }
 
 /* ---- Component API section (props table + positioning rules) ---- */
-.props-section { margin-bottom: 44px; }
+.props-section { margin-top: 24px; margin-bottom: 44px; }
 .props-table-wrap {
   background: var(--surface);
   border: 1px solid var(--line);
@@ -262,6 +262,82 @@ a { color: inherit; text-decoration: none; }
 .policy-tooltip--left { top: 50%; bottom: auto; left: auto; right: calc(100% + 6px); transform: translateY(-50%); }
 .policy-tooltip--below-left { top: calc(100% + 6px); bottom: auto; left: auto; right: 0; transform: none; }
 .policy-tooltip--above-left { top: auto; bottom: calc(100% + 6px); left: auto; right: 0; transform: none; }
+
+/* Tooltip pointer — the little triangle tooltips conventionally have,
+   pointing from the box back at the trigger. Not used on the Dialog
+   (policy-popover): a structured dialog with its own header/close button
+   reads as a floating card, not an anchored callout, so it doesn't get one.
+
+   The base rule below doubles as the shape reset (0x0 box, 6px transparent
+   border on every side, so only the relevant side needs a color) AND the
+   default/above-left placement's arrow (bottom edge, pointing down, since
+   that's the one variant used almost everywhere in this build) — every
+   other variant fully restates every arrow property it touches (position
+   + which border side is colored), same discipline the box's own
+   top/bottom/left/right/transform modifiers already use, so variants can't
+   bleed into each other.
+
+   Horizontal offset for the above-left/below-left family (flush to the
+   trigger's right edge) is set per icon size via a sibling selector on
+   .flag-trigger, since the icon's actual center — trigger padding (6px) +
+   half the icon's own width — shifts a few px between sm/md/lg/xl even
+   though the tooltip box itself stays a constant width. Centered variants
+   (below/above) and the vertically-centered left variant don't need this:
+   the box is already centered/aligned on the trigger regardless of icon
+   size, so a centered arrow lands on the icon automatically. */
+.policy-tooltip::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-top-color: var(--ink);
+  top: 100%;
+  bottom: auto;
+  left: auto;
+  right: 15px;
+  transform: none;
+  /* Countered by app.js whenever the viewport clamp has to translate the
+     box itself — see clampToViewport's --oop-arrow-shift comment — so the
+     arrow stays glued to the trigger's actual position instead of drifting
+     away from it by however far the box had to move to stay on-screen. */
+  translate: var(--oop-arrow-shift, 0px 0px);
+  pointer-events: none;
+}
+.flag-trigger--sm ~ .policy-tooltip::after { right: 14px; }
+.flag-trigger--lg ~ .policy-tooltip::after { right: 16px; }
+.flag-trigger--xl ~ .policy-tooltip::after { right: 18px; }
+
+.policy-tooltip--below::after {
+  border-top-color: transparent;
+  border-bottom-color: var(--ink);
+  top: auto; bottom: 100%;
+  left: 50%; right: auto;
+  transform: translateX(-50%);
+}
+.policy-tooltip--above::after {
+  border-top-color: var(--ink);
+  top: 100%; bottom: auto;
+  left: 50%; right: auto;
+  transform: translateX(-50%);
+}
+.policy-tooltip--left::after {
+  border-top-color: transparent;
+  border-left-color: var(--ink);
+  top: 50%; bottom: auto;
+  left: 100%; right: auto;
+  transform: translateY(-50%);
+}
+.policy-tooltip--below-left::after {
+  border-top-color: transparent;
+  border-bottom-color: var(--ink);
+  top: auto; bottom: 100%;
+  left: auto; right: 15px;
+  transform: none;
+}
+.flag-trigger--sm ~ .policy-tooltip--below-left::after { right: 14px; }
+.flag-trigger--lg ~ .policy-tooltip--below-left::after { right: 16px; }
+.flag-trigger--xl ~ .policy-tooltip--below-left::after { right: 18px; }
 
 /* ================= Concept B — Popover dialog ================= */
 .policy-popover {
