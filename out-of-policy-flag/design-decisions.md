@@ -148,6 +148,16 @@ Implemented as `applyMobileDefaultPlacement(anchor, panel)` in `app.js`, wired i
 
 **Decision:** confirmed and reinforced, not newly built — every flag trigger already had `tabindex="0"` and a `:focus-visible` CSS rule (`.flag-trigger:focus-visible ~ .policy-tooltip/.policy-popover { display: block; }`) revealing the panel on keyboard focus, going back to the component's earliest version (see section 4, the focus-visible/`blur()` gotcha). What changed 2026-10-01: keyboard-focus reveal now also runs `clampToViewport` (section 15) via a new `focus` listener on the trigger, so a keyboard user tabbing to a flag near a viewport edge gets the same on-screen guarantee a mouse or touch user gets — this was a real gap before, since the click path's `open()` was the only place clamping ran.
 
+## 16b. Component API section — props table and viewport-positioning rules (2026-10-01)
+
+**Decision:** added a new "Component API — props & positioning rules" section to all four concept pages, directly above each page's own "Decisions applied here" box, documenting what a real React implementation's props would look like plus a plain-language restatement of the automatic viewport logic (sections 15/15b/15c) for anyone who isn't going to read the JS.
+
+**Two components, not one with a variant switch:** production will ship either the Tooltip or the Dialog, never both behind a single prop — so the props table calls them `OutOfPolicyTooltip` and `OutOfPolicyDialog` ("Dialog," not "Popover" — renamed per direction) rather than one `OutOfPolicyFlag` with a `variant` prop. The two tables are otherwise identical, reused as-is between each concept's Hotel and Flight page, and differ only in the word "Tooltip"/"Dialog" where the copy refers to the disclosure element itself.
+
+**Deliberately excludes two props that this wireframe's own data model uses:** `lineOfBusiness` and `title`. Both exist in `app.js`'s `OOP_DATA` purely to drive this *exploration* (comparing Hotel's sentence copy against Flight's list copy from one data source), but the real component should be fully generic — it takes whatever `message` it's given and doesn't need to know what line of business it's on, current or future. `title` isn't a prop at all; it's called out in a caption under the table instead, since "Out of Policy" is the component's only use and never varies.
+
+**Props shown:** `size`, `placement`, `message` (string → sentence, array → numbered list — replaces the wireframe's internal `format` field with a type check instead of a separate prop), `idleCloseDelay`, `viewportMargin`, plus the standard-practice `onOpenChange`/`className` escape hatches that aren't literally demonstrated anywhere in this build but would be expected of any real disclosure component.
+
 ## 17. Figma handoff notes
 
 - **Tooltip (A)** is the closest match to an existing Sticker Sheet Tooltip component, if one exists — check before rebuilding from scratch.

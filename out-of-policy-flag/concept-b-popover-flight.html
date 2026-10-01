@@ -648,6 +648,37 @@
 
   </div>
 
+  <p class="hub-section-label">Component API — props &amp; positioning rules</p>
+  <div class="props-section">
+    <div class="props-table-wrap">
+      <table class="props-table">
+        <thead>
+          <tr><th>Prop</th><th>Type</th><th>Default</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>size</td><td><code>'sm' | 'md' | 'lg' | 'xl'</code></td><td><code>'md'</code></td><td>Icon only — 16/18/20/24px. The Dialog itself is identical at every size.</td></tr>
+          <tr><td>placement</td><td><code>'above-left' | 'below' | 'above' | 'left' | 'below-left'</code></td><td><code>'above-left'</code></td><td>Starting position only — auto-overridden on mobile-web and auto-nudged by the viewport clamp. See rules below.</td></tr>
+          <tr><td>message</td><td><code>string | string[]</code></td><td>required</td><td>A string renders as a sentence; an array renders as a numbered list. The only content input — works the same for any line of business, current or future.</td></tr>
+          <tr><td>idleCloseDelay</td><td><code>number</code> (ms)</td><td><code>3000</code></td><td>Time after the pointer leaves before it auto-dismisses, as a safety net alongside the explicit close button. <code>0</code> disables idle auto-dismiss.</td></tr>
+          <tr><td>viewportMargin</td><td><code>number</code> (px)</td><td><code>16</code></td><td>Minimum clearance enforced on every viewport edge.</td></tr>
+          <tr><td>onOpenChange</td><td><code>(open: boolean) =&gt; void</code></td><td>—</td><td>Optional controlled-state hook.</td></tr>
+          <tr><td>className</td><td><code>string</code></td><td>—</td><td>Style-extension escape hatch.</td></tr>
+        </tbody>
+      </table>
+      <div class="props-table-caption">Title is not a prop — every instance is hardcoded to "Out of Policy," since that's this component's only use.</div>
+    </div>
+
+    <div class="viewport-rules">
+      <h5>Automatic viewport positioning</h5>
+      <ol>
+        <li>Default is Above, left on desktop and tablet.</li>
+        <li>Below the mobile-web breakpoint, the default instead centers horizontally on the trigger and auto-flips Above/Below toward whichever side has more room.</li>
+        <li>Whichever placement is active — default or explicit — the Dialog is nudged to stay at least <code>viewportMargin</code> inside the viewport on every edge, recalculated on open, hover, keyboard focus, and live on window resize.</li>
+        <li>An explicit <code>placement</code> is respected as the starting position; the clamp only nudges it back on-screen, it never swaps to a different side.</li>
+      </ol>
+    </div>
+  </div>
+
   <div class="notes-box">
     <h4>Decisions applied here</h4>
 Same popover component, interaction, and five placement variants as the Hotel version — see <a href="concept-b-popover.html" style="color: var(--accent); font-weight: 700;">Concept B</a> for that write-up · what's different is the host card: the real Air SRP flight card (references/pattern-flight-srp.md) compares three fare tiers per row (Essential/Smart/Elite), and the out-of-policy flag lives specifically on the Elite column's price, not a single price block like Hotel · within that price, the flag icon comes <strong>after</strong> the price value — the reverse order from Hotel, confirmed by design review · the flag still sits near the card's right edge, so the same below-left/above-left placement variants apply for the same reason · content is Flight's real list-format data (two numbered violation reasons: the reference-price ceiling and the cabin-class rule) instead of Hotel's single sentence. Full write-up: <a href="design-decisions.md" style="color: var(--accent); font-weight: 700;">design-decisions.md</a>.

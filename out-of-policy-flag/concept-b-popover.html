@@ -488,6 +488,37 @@
 
   </div>
 
+  <p class="hub-section-label">Component API — props &amp; positioning rules</p>
+  <div class="props-section">
+    <div class="props-table-wrap">
+      <table class="props-table">
+        <thead>
+          <tr><th>Prop</th><th>Type</th><th>Default</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>size</td><td><code>'sm' | 'md' | 'lg' | 'xl'</code></td><td><code>'md'</code></td><td>Icon only — 16/18/20/24px. The Dialog itself is identical at every size.</td></tr>
+          <tr><td>placement</td><td><code>'above-left' | 'below' | 'above' | 'left' | 'below-left'</code></td><td><code>'above-left'</code></td><td>Starting position only — auto-overridden on mobile-web and auto-nudged by the viewport clamp. See rules below.</td></tr>
+          <tr><td>message</td><td><code>string | string[]</code></td><td>required</td><td>A string renders as a sentence; an array renders as a numbered list. The only content input — works the same for any line of business, current or future.</td></tr>
+          <tr><td>idleCloseDelay</td><td><code>number</code> (ms)</td><td><code>3000</code></td><td>Time after the pointer leaves before it auto-dismisses, as a safety net alongside the explicit close button. <code>0</code> disables idle auto-dismiss.</td></tr>
+          <tr><td>viewportMargin</td><td><code>number</code> (px)</td><td><code>16</code></td><td>Minimum clearance enforced on every viewport edge.</td></tr>
+          <tr><td>onOpenChange</td><td><code>(open: boolean) =&gt; void</code></td><td>—</td><td>Optional controlled-state hook.</td></tr>
+          <tr><td>className</td><td><code>string</code></td><td>—</td><td>Style-extension escape hatch.</td></tr>
+        </tbody>
+      </table>
+      <div class="props-table-caption">Title is not a prop — every instance is hardcoded to "Out of Policy," since that's this component's only use.</div>
+    </div>
+
+    <div class="viewport-rules">
+      <h5>Automatic viewport positioning</h5>
+      <ol>
+        <li>Default is Above, left on desktop and tablet.</li>
+        <li>Below the mobile-web breakpoint, the default instead centers horizontally on the trigger and auto-flips Above/Below toward whichever side has more room.</li>
+        <li>Whichever placement is active — default or explicit — the Dialog is nudged to stay at least <code>viewportMargin</code> inside the viewport on every edge, recalculated on open, hover, keyboard focus, and live on window resize.</li>
+        <li>An explicit <code>placement</code> is respected as the starting position; the clamp only nudges it back on-screen, it never swaps to a different side.</li>
+      </ol>
+    </div>
+  </div>
+
   <div class="notes-box">
     <h4>Decisions applied here</h4>
 Small/medium/large/extra large change only the flag icon's size (16/18/20/24px) — the popover itself (width, header, body, footer, type) is identical at every size, shown standalone above · hover, click, and tap all open it — the standard interaction for both tooltip and popover going forward, superseding an earlier click/tap-only version of this concept · has an explicit close (&times;) button, but still auto-dismisses 3s after the pointer leaves in case someone opens it and walks away without closing · keyboard focus reveals it via <code>:focus-visible</code>, and every close path (timeout, &times; button, outside click, Escape) calls <code>blur()</code> · five placement variants (above-left, below, above, left, below-left) — **above, left is the default** (revised 2026-10-01; was below, centered), flush to the trigger's right edge and growing up and to the left, since that's what the hotel/flight card actually needs given its flag sits at the right edge of the price column; below/above center the popover on the trigger, left is vertically centered beside it · the card examples default to the medium icon size (revised from small). The same popover applied to the Flight/Air SRP card lives on its own page — see <a href="concept-b-popover-flight.html" style="color: var(--accent); font-weight: 700;">Flight — Popover dialog</a>. Full write-up: <a href="design-decisions.md" style="color: var(--accent); font-weight: 700;">design-decisions.md</a>.

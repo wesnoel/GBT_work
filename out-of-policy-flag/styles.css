@@ -92,6 +92,54 @@ a { color: inherit; text-decoration: none; }
 }
 .notes-box h4 { margin: 0 0 8px; color: var(--ink); font-size: 13px; letter-spacing: 0.01em; font-weight: 700; }
 
+/* ---- Component API section (props table + positioning rules) ---- */
+.props-section { margin-bottom: 44px; }
+.props-table-wrap {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.props-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.props-table th {
+  text-align: left;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  background: var(--canvas);
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--line);
+}
+.props-table td { padding: 12px 16px; border-bottom: 1px solid var(--line-soft); color: var(--ink-soft); line-height: 1.5; vertical-align: top; }
+.props-table tr:last-child td { border-bottom: none; }
+.props-table td:first-child { color: var(--ink); font-weight: 600; white-space: nowrap; }
+.props-table code {
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 12.5px;
+  background: var(--canvas);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 1px 5px;
+  color: var(--ink);
+}
+.props-table-caption { padding: 12px 16px; font-size: 12.5px; color: var(--ink-faint); border-top: 1px solid var(--line); background: var(--canvas); }
+
+.viewport-rules { margin: 16px 0 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; }
+.viewport-rules h5 { margin: 0 0 10px; font-size: 13px; font-weight: 700; color: var(--ink); }
+.viewport-rules ol { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px; }
+.viewport-rules li { font-size: 13.5px; color: var(--ink-soft); line-height: 1.55; }
+.viewport-rules code {
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 12.5px;
+  background: var(--canvas);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 1px 5px;
+  color: var(--ink);
+}
+
 /* ---- Reusability demo (hub only) ---- */
 .reuse-demo {
   background: var(--surface);
