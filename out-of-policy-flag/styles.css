@@ -92,14 +92,25 @@ a { color: inherit; text-decoration: none; }
 }
 .notes-box h4 { margin: 0 0 8px; color: var(--ink); font-size: 13px; letter-spacing: 0.01em; font-weight: 700; }
 
-/* ---- Component API section (props table + positioning rules) ---- */
-.props-section { margin-top: 24px; margin-bottom: 44px; }
+/* ---- Component API section (props table + positioning rules) ----
+   Two independent cards, each carrying its own heading and its own
+   margin-top — order in the HTML is viewport-rules (moved above the props
+   table 2026-10-01, since engineers tend to hit the "where does it open"
+   question before "what props exist") then props-table-wrap. Siblings'
+   margin-top/margin-bottom collapse to the larger value, not the sum, so
+   giving both cards the same 24px margin-top (rather than relying on one
+   card's margin-bottom) produces a clean 24px gap in both directions
+   without double-spacing. */
 .props-table-wrap {
+  margin-top: 24px;
+  margin-bottom: 44px;
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   overflow: hidden;
 }
+.props-table-header { padding: 16px 16px 2px; }
+.props-table-header h5 { margin: 0 0 10px; font-size: 13px; font-weight: 700; color: var(--ink); }
 .props-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
 .props-table th {
   text-align: left;
@@ -126,7 +137,7 @@ a { color: inherit; text-decoration: none; }
 }
 .props-table-caption { padding: 12px 16px; font-size: 12.5px; color: var(--ink-faint); border-top: 1px solid var(--line); background: var(--canvas); }
 
-.viewport-rules { margin: 16px 0 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; }
+.viewport-rules { margin-top: 24px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; }
 .viewport-rules h5 { margin: 0 0 10px; font-size: 13px; font-weight: 700; color: var(--ink); }
 .viewport-rules ol { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px; }
 .viewport-rules li { font-size: 13.5px; color: var(--ink-soft); line-height: 1.55; }

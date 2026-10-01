@@ -536,9 +536,20 @@
 
   </div>
 
-  <p class="hub-section-label">Component API — props &amp; positioning rules</p>
-  <div class="props-section">
-    <div class="props-table-wrap">
+  <div class="viewport-rules">
+      <h5>Automatic viewport positioning</h5>
+      <ol>
+        <li>Default is Above, left on desktop and tablet.</li>
+        <li>Below the mobile-web breakpoint, the default instead centers horizontally on the trigger and auto-flips Above/Below toward whichever side has more room.</li>
+        <li>Whichever placement is active — default or explicit — the Tooltip is nudged to stay at least <code>viewportMargin</code> inside the viewport on every edge, recalculated on open, hover, keyboard focus, and live on window resize.</li>
+        <li>An explicit <code>placement</code> is respected as the starting position; the clamp only nudges it back on-screen, it never swaps to a different side.</li>
+      </ol>
+  </div>
+
+  <div class="props-table-wrap">
+    <div class="props-table-header">
+      <h5>Component API — props &amp; positioning rules</h5>
+    </div>
       <table class="props-table">
         <thead>
           <tr><th>Prop</th><th>Type</th><th>Default</th><th>Notes</th></tr>
@@ -554,17 +565,6 @@
         </tbody>
       </table>
       <div class="props-table-caption">Title is not a prop — every instance is hardcoded to "Out of Policy," since that's this component's only use.</div>
-    </div>
-
-    <div class="viewport-rules">
-      <h5>Automatic viewport positioning</h5>
-      <ol>
-        <li>Default is Above, left on desktop and tablet.</li>
-        <li>Below the mobile-web breakpoint, the default instead centers horizontally on the trigger and auto-flips Above/Below toward whichever side has more room.</li>
-        <li>Whichever placement is active — default or explicit — the Tooltip is nudged to stay at least <code>viewportMargin</code> inside the viewport on every edge, recalculated on open, hover, keyboard focus, and live on window resize.</li>
-        <li>An explicit <code>placement</code> is respected as the starting position; the clamp only nudges it back on-screen, it never swaps to a different side.</li>
-      </ol>
-    </div>
   </div>
 
   <div class="notes-box">
