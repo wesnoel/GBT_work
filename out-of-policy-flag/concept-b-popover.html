@@ -22,7 +22,7 @@
 
   <div class="hub-hero" style="padding: 0 0 28px;">
     <h1 style="font-size: 26px; line-height: 34px;">Concept B — Popover dialog</h1>
-    <p>A heavier, structured popover — still anchored to the flag, not a full modal. Has a real header (icon + title) and an explicit close button. Opens on hover, click, or tap — the standard interaction for both tooltip and popover going forward. Small/medium/large only change the flag icon's size (16/18/20px) — the popover's content, width, padding, and type are the same at every size.</p>
+    <p>A heavier, structured popover — still anchored to the flag, not a full modal. Has a real header (icon + title) and an explicit close button. Opens on hover, click, or tap — the standard interaction for both tooltip and popover going forward. Small/medium/large/extra large only change the flag icon's size (16/18/20/24px) — the popover's content, width, padding, and type are the same at every size.</p>
   </div>
 
   <p class="hub-section-label">Standalone — sizes</p>
@@ -91,17 +91,12 @@
       <span class="size-sample-label">Large <span class="size-sample-px">20px</span></span>
     </div>
 
-  </div>
-
-  <p class="hub-section-label">Placement — where the popover opens relative to the flag</p>
-  <div class="size-rail" style="padding: 90px 24px 40px;">
-
     <div class="size-sample">
       <span class="oop-anchor oop-anchor--hoverable">
-        <button class="flag-trigger flag-trigger--md" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-place-below" aria-label="Out of policy">
+        <button class="flag-trigger flag-trigger--xl" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-xl" aria-label="Out of policy">
           <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
         </button>
-        <div class="policy-popover" id="pv-place-below" role="dialog" aria-label="Out of policy" data-oop-panel>
+        <div class="policy-popover" id="pv-xl" role="dialog" aria-label="Out of policy" data-oop-panel>
           <div class="policy-popover__header">
             <div class="policy-popover__heading">
               <span class="policy-popover__icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg></span>
@@ -114,9 +109,54 @@
           </div>
         </div>
       </span>
-      <span class="size-sample-label">Below (default)</span>
+      <span class="size-sample-label">Extra Large <span class="size-sample-px">24px</span></span>
     </div>
 
+  </div>
+
+  <p class="hub-section-label">Placement — where the popover opens relative to the flag</p>
+  <div class="size-rail" style="padding: 90px 24px 40px;">
+
+    <div class="size-sample">
+      <span class="oop-anchor oop-anchor--hoverable">
+        <button class="flag-trigger flag-trigger--md" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-place-above-left" aria-label="Out of policy">
+          <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+        </button>
+        <div class="policy-popover" id="pv-place-above-left" role="dialog" aria-label="Out of policy" data-oop-panel>
+          <div class="policy-popover__header">
+            <div class="policy-popover__heading">
+              <span class="policy-popover__icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg></span>
+              <p class="policy-popover__title">Out of Policy</p>
+            </div>
+            <button class="policy-popover__close" data-oop-close aria-label="Close">&times;</button>
+          </div>
+          <div class="policy-popover__body">
+            <p class="policy-popover__message">Wes, this room does not comply with your company's maximum nightly rate of USD 420 for this region.</p>
+          </div>
+        </div>
+      </span>
+      <span class="size-sample-label">Above, left (default)</span>
+    </div>
+    <div class="size-sample">
+      <span class="oop-anchor oop-anchor--hoverable">
+        <button class="flag-trigger flag-trigger--md" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-place-below" aria-label="Out of policy">
+          <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+        </button>
+        <div class="policy-popover policy-popover--below" id="pv-place-below" role="dialog" aria-label="Out of policy" data-oop-panel>
+          <div class="policy-popover__header">
+            <div class="policy-popover__heading">
+              <span class="policy-popover__icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg></span>
+              <p class="policy-popover__title">Out of Policy</p>
+            </div>
+            <button class="policy-popover__close" data-oop-close aria-label="Close">&times;</button>
+          </div>
+          <div class="policy-popover__body">
+            <p class="policy-popover__message">Wes, this room does not comply with your company's maximum nightly rate of USD 420 for this region.</p>
+          </div>
+        </div>
+      </span>
+      <span class="size-sample-label">Below</span>
+    </div>
     <div class="size-sample">
       <span class="oop-anchor oop-anchor--hoverable">
         <button class="flag-trigger flag-trigger--md" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-place-above" aria-label="Out of policy">
@@ -137,7 +177,6 @@
       </span>
       <span class="size-sample-label">Above</span>
     </div>
-
     <div class="size-sample">
       <span class="oop-anchor oop-anchor--hoverable">
         <button class="flag-trigger flag-trigger--md" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-place-left" aria-label="Out of policy">
@@ -158,7 +197,6 @@
       </span>
       <span class="size-sample-label">Left</span>
     </div>
-
     <div class="size-sample">
       <span class="oop-anchor oop-anchor--hoverable">
         <button class="flag-trigger flag-trigger--md" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-place-below-left" aria-label="Out of policy">
@@ -180,26 +218,6 @@
       <span class="size-sample-label">Below, left</span>
     </div>
 
-    <div class="size-sample">
-      <span class="oop-anchor oop-anchor--hoverable">
-        <button class="flag-trigger flag-trigger--md" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-place-above-left" aria-label="Out of policy">
-          <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
-        </button>
-        <div class="policy-popover policy-popover--above-left" id="pv-place-above-left" role="dialog" aria-label="Out of policy" data-oop-panel>
-          <div class="policy-popover__header">
-            <div class="policy-popover__heading">
-              <span class="policy-popover__icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg></span>
-              <p class="policy-popover__title">Out of Policy</p>
-            </div>
-            <button class="policy-popover__close" data-oop-close aria-label="Close">&times;</button>
-          </div>
-          <div class="policy-popover__body">
-            <p class="policy-popover__message">Wes, this room does not comply with your company's maximum nightly rate of USD 420 for this region.</p>
-          </div>
-        </div>
-      </span>
-      <span class="size-sample-label">Above, left</span>
-    </div>
 
   </div>
 
@@ -207,7 +225,7 @@
   <div class="hotel-card-demo">
 
     <div>
-      <div class="hotel-card-size-label">Below (default)</div>
+      <div class="hotel-card-size-label">Above, left (default)</div>
       <div class="hotel-card">
         <div class="hotel-badge-row">
           <span class="hotel-badge"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v18"/><path d="M5 4h11l-2 4 2 4H5"/></svg>Egencia preferred</span>
@@ -230,10 +248,10 @@
             <div class="price-caption">From</div>
             <div class="price-flag-row">
               <span class="oop-anchor oop-anchor--hoverable">
-                <button class="flag-trigger flag-trigger--sm" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-ctx-below" aria-label="Out of policy">
+                <button class="flag-trigger flag-trigger--md" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-ctx-above-left" aria-label="Out of policy">
                   <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
                 </button>
-                <div class="policy-popover" id="pv-ctx-below" role="dialog" aria-label="Out of policy" data-oop-panel>
+                <div class="policy-popover" id="pv-ctx-above-left" role="dialog" aria-label="Out of policy" data-oop-panel>
                   <div class="policy-popover__header">
                     <div class="policy-popover__heading">
                       <span class="policy-popover__icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg></span>
@@ -258,7 +276,58 @@
         </div>
       </div>
     </div>
-
+    <div>
+      <div class="hotel-card-size-label">Below</div>
+      <div class="hotel-card">
+        <div class="hotel-badge-row">
+          <span class="hotel-badge"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v18"/><path d="M5 4h11l-2 4 2 4H5"/></svg>Egencia preferred</span>
+          <span class="hotel-badge hotel-badge--neutral"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 12 21.99 2 12 3 3h9z"/><circle cx="15.5" cy="7.5" r="1"/></svg>Negotiated</span>
+        </div>
+        <div class="hotel-card-main">
+          <div class="hotel-img placeholder-chrome">Photo</div>
+          <div class="hotel-body">
+            <h3 class="hotel-name">Hilton San Francisco Union Square</h3>
+            <div class="hotel-subrow"><span class="stars">★★★★</span><span class="muted">0.3 miles away</span></div>
+            <div class="hotel-reviews-box">
+              <div class="hotel-reviews-label">Reviews</div>
+              <div class="muted">4.3/5 Very Good (2,441 reviews)</div>
+              <div class="muted">Colleague Reviews: 4.5/5 (18 reviews)</div>
+            </div>
+            <div class="hotel-cert-line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9"/></svg>Sustainability certified</div>
+            <div class="coworker">58% of coworker bookings</div>
+          </div>
+          <div class="hotel-price">
+            <div class="price-caption">From</div>
+            <div class="price-flag-row">
+              <span class="oop-anchor oop-anchor--hoverable">
+                <button class="flag-trigger flag-trigger--md" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-ctx-below" aria-label="Out of policy">
+                  <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+                </button>
+                <div class="policy-popover policy-popover--below" id="pv-ctx-below" role="dialog" aria-label="Out of policy" data-oop-panel>
+                  <div class="policy-popover__header">
+                    <div class="policy-popover__heading">
+                      <span class="policy-popover__icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg></span>
+                      <p class="policy-popover__title">Out of Policy</p>
+                    </div>
+                    <button class="policy-popover__close" data-oop-close aria-label="Close">&times;</button>
+                  </div>
+                  <div class="policy-popover__body">
+                    <p class="policy-popover__message">Wes, this room does not comply with your company's maximum nightly rate of USD 420 for this region.</p>
+                  </div>
+                </div>
+              </span>
+              <div class="price-value">$459</div>
+            </div>
+            <div class="price-sub">$421 w taxes and fees</div>
+            <div class="price-sub">CVV required</div>
+          </div>
+        </div>
+        <div class="hotel-perk-strip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v4a4 4 0 01-4 4H8a4 4 0 01-4-4V4z"/><path d="M4 12v4a4 4 0 004 4h8a4 4 0 004-4v-4"/></svg>
+          Offers free breakfast, within company policy
+        </div>
+      </div>
+    </div>
     <div>
       <div class="hotel-card-size-label">Above</div>
       <div class="hotel-card">
@@ -283,7 +352,7 @@
             <div class="price-caption">From</div>
             <div class="price-flag-row">
               <span class="oop-anchor oop-anchor--hoverable">
-                <button class="flag-trigger flag-trigger--sm" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-ctx-above" aria-label="Out of policy">
+                <button class="flag-trigger flag-trigger--md" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-ctx-above" aria-label="Out of policy">
                   <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
                 </button>
                 <div class="policy-popover policy-popover--above" id="pv-ctx-above" role="dialog" aria-label="Out of policy" data-oop-panel>
@@ -311,7 +380,6 @@
         </div>
       </div>
     </div>
-
     <div>
       <div class="hotel-card-size-label">Left</div>
       <div class="hotel-card">
@@ -336,7 +404,7 @@
             <div class="price-caption">From</div>
             <div class="price-flag-row">
               <span class="oop-anchor oop-anchor--hoverable">
-                <button class="flag-trigger flag-trigger--sm" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-ctx-left" aria-label="Out of policy">
+                <button class="flag-trigger flag-trigger--md" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-ctx-left" aria-label="Out of policy">
                   <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
                 </button>
                 <div class="policy-popover policy-popover--left" id="pv-ctx-left" role="dialog" aria-label="Out of policy" data-oop-panel>
@@ -364,7 +432,6 @@
         </div>
       </div>
     </div>
-
     <div>
       <div class="hotel-card-size-label">Below, left</div>
       <div class="hotel-card">
@@ -389,7 +456,7 @@
             <div class="price-caption">From</div>
             <div class="price-flag-row">
               <span class="oop-anchor oop-anchor--hoverable">
-                <button class="flag-trigger flag-trigger--sm" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-ctx-below-left" aria-label="Out of policy">
+                <button class="flag-trigger flag-trigger--md" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-ctx-below-left" aria-label="Out of policy">
                   <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
                 </button>
                 <div class="policy-popover policy-popover--below-left" id="pv-ctx-below-left" role="dialog" aria-label="Out of policy" data-oop-panel>
@@ -418,64 +485,12 @@
       </div>
     </div>
 
-    <div>
-      <div class="hotel-card-size-label">Above, left</div>
-      <div class="hotel-card">
-        <div class="hotel-badge-row">
-          <span class="hotel-badge"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v18"/><path d="M5 4h11l-2 4 2 4H5"/></svg>Egencia preferred</span>
-          <span class="hotel-badge hotel-badge--neutral"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 12 21.99 2 12 3 3h9z"/><circle cx="15.5" cy="7.5" r="1"/></svg>Negotiated</span>
-        </div>
-        <div class="hotel-card-main">
-          <div class="hotel-img placeholder-chrome">Photo</div>
-          <div class="hotel-body">
-            <h3 class="hotel-name">Hilton San Francisco Union Square</h3>
-            <div class="hotel-subrow"><span class="stars">★★★★</span><span class="muted">0.3 miles away</span></div>
-            <div class="hotel-reviews-box">
-              <div class="hotel-reviews-label">Reviews</div>
-              <div class="muted">4.3/5 Very Good (2,441 reviews)</div>
-              <div class="muted">Colleague Reviews: 4.5/5 (18 reviews)</div>
-            </div>
-            <div class="hotel-cert-line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9"/></svg>Sustainability certified</div>
-            <div class="coworker">58% of coworker bookings</div>
-          </div>
-          <div class="hotel-price">
-            <div class="price-caption">From</div>
-            <div class="price-flag-row">
-              <span class="oop-anchor oop-anchor--hoverable">
-                <button class="flag-trigger flag-trigger--sm" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="pv-ctx-above-left" aria-label="Out of policy">
-                  <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
-                </button>
-                <div class="policy-popover policy-popover--above-left" id="pv-ctx-above-left" role="dialog" aria-label="Out of policy" data-oop-panel>
-                  <div class="policy-popover__header">
-                    <div class="policy-popover__heading">
-                      <span class="policy-popover__icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg></span>
-                      <p class="policy-popover__title">Out of Policy</p>
-                    </div>
-                    <button class="policy-popover__close" data-oop-close aria-label="Close">&times;</button>
-                  </div>
-                  <div class="policy-popover__body">
-                    <p class="policy-popover__message">Wes, this room does not comply with your company's maximum nightly rate of USD 420 for this region.</p>
-                  </div>
-                </div>
-              </span>
-              <div class="price-value">$459</div>
-            </div>
-            <div class="price-sub">$421 w taxes and fees</div>
-            <div class="price-sub">CVV required</div>
-          </div>
-        </div>
-        <div class="hotel-perk-strip">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v4a4 4 0 01-4 4H8a4 4 0 01-4-4V4z"/><path d="M4 12v4a4 4 0 004 4h8a4 4 0 004-4v-4"/></svg>
-          Offers free breakfast, within company policy
-        </div>
-      </div>
-    </div>
 
   </div>
 
   <div class="notes-box">
     <h4>Decisions applied here</h4>
-Small/medium/large change only the flag icon's size (16/18/20px) — the popover itself (width, header, body, footer, type) is identical at every size, shown standalone above · hover, click, and tap all open it — the standard interaction for both tooltip and popover going forward, superseding an earlier click/tap-only version of this concept · has an explicit close (&times;) button, but still auto-dismisses 3s after the pointer leaves in case someone opens it and walks away without closing · keyboard focus reveals it via <code>:focus-visible</code>, and every close path (timeout, &times; button, outside click, Escape) calls <code>blur()</code> · five placement variants (below, above, left, below-left, above-left) — below/above center the popover on the trigger, left is vertically centered beside it, and the "-left" variants stay flush to the trigger's right edge and grow leftward instead of rightward, which is what the hotel card actually needs since its flag sits at the right edge of the price column · the hotel card examples default to the small icon size. The same popover applied to the Flight/Air SRP card lives on its own page — see <a href="concept-b-popover-flight.html" style="color: var(--accent); font-weight: 700;">Flight — Popover dialog</a>. Full write-up: <a href="design-decisions.md" style="color: var(--accent); font-weight: 700;">design-decisions.md</a>.
+Small/medium/large/extra large change only the flag icon's size (16/18/20/24px) — the popover itself (width, header, body, footer, type) is identical at every size, shown standalone above · hover, click, and tap all open it — the standard interaction for both tooltip and popover going forward, superseding an earlier click/tap-only version of this concept · has an explicit close (&times;) button, but still auto-dismisses 3s after the pointer leaves in case someone opens it and walks away without closing · keyboard focus reveals it via <code>:focus-visible</code>, and every close path (timeout, &times; button, outside click, Escape) calls <code>blur()</code> · five placement variants (above-left, below, above, left, below-left) — **above, left is the default** (revised 2026-10-01; was below, centered), flush to the trigger's right edge and growing up and to the left, since that's what the hotel/flight card actually needs given its flag sits at the right edge of the price column; below/above center the popover on the trigger, left is vertically centered beside it · the card examples default to the medium icon size (revised from small). The same popover applied to the Flight/Air SRP card lives on its own page — see <a href="concept-b-popover-flight.html" style="color: var(--accent); font-weight: 700;">Flight — Popover dialog</a>. Full write-up: <a href="design-decisions.md" style="color: var(--accent); font-weight: 700;">design-decisions.md</a>.
   </div>
 
 </div>

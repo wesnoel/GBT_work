@@ -67,6 +67,19 @@
       <span class="size-sample-label">Large <span class="size-sample-px">20px</span></span>
     </div>
 
+    <div class="size-sample">
+      <span class="oop-anchor oop-anchor--hoverable">
+        <button class="flag-trigger flag-trigger--xl" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="tt-xl" aria-label="Out of policy">
+          <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+        </button>
+        <div class="policy-tooltip" id="tt-xl" role="tooltip" data-oop-panel>
+          <p class="policy-tooltip__title">Out of Policy</p>
+          <p class="policy-tooltip__message">Wes, this room does not comply with your company's maximum nightly rate of USD 420 for this region.</p>
+        </div>
+      </span>
+      <span class="size-sample-label">Extra Large <span class="size-sample-px">24px</span></span>
+    </div>
+
   </div>
 
   <p class="hub-section-label">Placement — where the tooltip opens relative to the flag</p>
@@ -74,17 +87,28 @@
 
     <div class="size-sample">
       <span class="oop-anchor oop-anchor--hoverable">
-        <button class="flag-trigger flag-trigger--md" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="tt-place-below" aria-label="Out of policy">
+        <button class="flag-trigger flag-trigger--md" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="tt-place-above-left" aria-label="Out of policy">
           <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
         </button>
-        <div class="policy-tooltip" id="tt-place-below" role="tooltip" data-oop-panel>
+        <div class="policy-tooltip" id="tt-place-above-left" role="tooltip" data-oop-panel>
           <p class="policy-tooltip__title">Out of Policy</p>
           <p class="policy-tooltip__message">Wes, this room does not comply with your company's maximum nightly rate of USD 420 for this region.</p>
         </div>
       </span>
-      <span class="size-sample-label">Below (default)</span>
+      <span class="size-sample-label">Above, left (default)</span>
     </div>
-
+    <div class="size-sample">
+      <span class="oop-anchor oop-anchor--hoverable">
+        <button class="flag-trigger flag-trigger--md" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="tt-place-below" aria-label="Out of policy">
+          <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+        </button>
+        <div class="policy-tooltip policy-tooltip--below" id="tt-place-below" role="tooltip" data-oop-panel>
+          <p class="policy-tooltip__title">Out of Policy</p>
+          <p class="policy-tooltip__message">Wes, this room does not comply with your company's maximum nightly rate of USD 420 for this region.</p>
+        </div>
+      </span>
+      <span class="size-sample-label">Below</span>
+    </div>
     <div class="size-sample">
       <span class="oop-anchor oop-anchor--hoverable">
         <button class="flag-trigger flag-trigger--md" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="tt-place-above" aria-label="Out of policy">
@@ -97,7 +121,6 @@
       </span>
       <span class="size-sample-label">Above</span>
     </div>
-
     <div class="size-sample">
       <span class="oop-anchor oop-anchor--hoverable">
         <button class="flag-trigger flag-trigger--md" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="tt-place-left" aria-label="Out of policy">
@@ -110,7 +133,6 @@
       </span>
       <span class="size-sample-label">Left</span>
     </div>
-
     <div class="size-sample">
       <span class="oop-anchor oop-anchor--hoverable">
         <button class="flag-trigger flag-trigger--md" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="tt-place-below-left" aria-label="Out of policy">
@@ -124,18 +146,6 @@
       <span class="size-sample-label">Below, left</span>
     </div>
 
-    <div class="size-sample">
-      <span class="oop-anchor oop-anchor--hoverable">
-        <button class="flag-trigger flag-trigger--md" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="tt-place-above-left" aria-label="Out of policy">
-          <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
-        </button>
-        <div class="policy-tooltip policy-tooltip--above-left" id="tt-place-above-left" role="tooltip" data-oop-panel>
-          <p class="policy-tooltip__title">Out of Policy</p>
-          <p class="policy-tooltip__message">Wes, this room does not comply with your company's maximum nightly rate of USD 420 for this region.</p>
-        </div>
-      </span>
-      <span class="size-sample-label">Above, left</span>
-    </div>
 
   </div>
 
@@ -143,7 +153,7 @@
   <div class="hotel-card-demo">
 
     <div>
-      <div class="hotel-card-size-label">Below (default)</div>
+      <div class="hotel-card-size-label">Above, left (default)</div>
       <div class="flight-card">
         <div class="flight-badge-row">
           <span class="flight-badge flight-badge--info"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16v-2l-8-5V3.5C13 2.67 12.33 2 11.5 2S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2.5 1.5V22l4-1.5 4 1.5v-1.5L13 19v-5.5z"/></svg>Nonstop</span>
@@ -200,10 +210,10 @@
               <div class="flight-fare-price-row">
                 <div class="flight-fare-price">$865</div>
                 <span class="oop-anchor oop-anchor--hoverable">
-                  <button class="flag-trigger flag-trigger--sm" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="tt-flight-below" aria-label="Out of policy">
+                  <button class="flag-trigger flag-trigger--md" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="tt-flight-above-left" aria-label="Out of policy">
                     <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
                   </button>
-                  <div class="policy-tooltip" id="tt-flight-below" role="tooltip" data-oop-panel>
+                  <div class="policy-tooltip" id="tt-flight-above-left" role="tooltip" data-oop-panel style="left:auto; right:0;">
                     <p class="policy-tooltip__title">Out of Policy</p>
                     <ol class="policy-tooltip__list">
                       <li>The reference price on this route is USD 650. To be compliant with your travel policy the price cannot exceed the reference price by more than USD 150.</li><li>This cabin class does not comply with your company's travel policy for this flight. Highest cabin class allowed : Economy</li>
@@ -218,7 +228,82 @@
         </div>
       </div>
     </div>
-
+    <div>
+      <div class="hotel-card-size-label">Below</div>
+      <div class="flight-card">
+        <div class="flight-badge-row">
+          <span class="flight-badge flight-badge--info"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16v-2l-8-5V3.5C13 2.67 12.33 2 11.5 2S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2.5 1.5V22l4-1.5 4 1.5v-1.5L13 19v-5.5z"/></svg>Nonstop</span>
+          <span class="flight-badge flight-badge--eco"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9"/></svg>-15% CO2</span>
+        </div>
+        <div class="flight-card-body">
+          <div class="flight-itinerary">
+            <div class="flight-itinerary-legs">
+              <div class="flight-leg">
+                <div class="flight-time">8:05 AM</div>
+                <div class="flight-airport">JFK</div>
+                <div class="flight-city">New York</div>
+              </div>
+              <div class="flight-route-line"><span class="flight-route-track"></span></div>
+              <div class="flight-leg flight-leg--end">
+                <div class="flight-time">11:32 AM</div>
+                <div class="flight-airport">SFO</div>
+                <div class="flight-city">San Francisco</div>
+              </div>
+            </div>
+            <div class="flight-info-secondary">
+              <div class="flight-duration">5h 27m</div>
+              <div class="flight-amenities">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5a10 10 0 0 1 14 0"/><path d="M8.5 16a5.5 5.5 0 0 1 7 0"/><circle cx="12" cy="19" r="1" fill="currentColor" stroke="none"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v8"/><path d="M6.3 6.3a8 8 0 1 0 11.4 0"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4v10a2 2 0 002 2h9"/><path d="M6 10h9"/><path d="M17 16v4"/><path d="M7 16v4"/></svg>
+                <span class="flight-amenities-more">+2</span>
+              </div>
+            </div>
+            <div class="flight-carrier-row">
+              <span class="flight-carrier-logo"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5C13 2.67 12.33 2 11.5 2S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2.5 1.5V22l4-1.5 4 1.5v-1.5L13 19v-5.5z"/></svg></span>
+              <span class="flight-carrier-name">United Airlines</span>
+              <span class="flight-otp-badge">98% on time</span>
+              <span class="flight-preferred-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v18"/><path d="M5 4h11l-2 4 2 4H5"/></svg></span>
+              <a class="flight-view-details" href="#" onclick="return false;">View details</a>
+            </div>
+          </div>
+          <div class="flight-fare-columns">
+            <div class="flight-fare-col">
+              <div class="flight-fare-tier">Essential</div>
+              <div class="flight-fare-caption">From</div>
+              <div class="flight-fare-price">$520</div>
+              <div class="flight-fare-type">One way</div>
+              <button class="flight-fare-chevron" aria-label="Expand fare details">&#8964;</button>
+            </div>
+            <div class="flight-fare-col flight-fare-col--recommended">
+              <div class="flight-fare-tier">Smart</div>
+              <div class="flight-fare-caption">From</div>
+              <div class="flight-fare-price">$610</div>
+              <div class="flight-fare-type">One way</div>
+              <button class="flight-fare-chevron" aria-label="Expand fare details">&#8964;</button>
+            </div>
+            <div class="flight-fare-col">
+              <div class="flight-fare-tier">Elite</div>
+              <div class="flight-fare-caption">From</div>
+              <div class="flight-fare-price-row">
+                <div class="flight-fare-price">$865</div>
+                <span class="oop-anchor oop-anchor--hoverable">
+                  <button class="flag-trigger flag-trigger--md" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="tt-flight-below" aria-label="Out of policy">
+                    <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+                  </button>
+                  <div class="policy-tooltip policy-tooltip--below" id="tt-flight-below" role="tooltip" data-oop-panel>
+                    <p class="policy-tooltip__title">Out of Policy</p>
+                    <ol class="policy-tooltip__list">
+                      <li>The reference price on this route is USD 650. To be compliant with your travel policy the price cannot exceed the reference price by more than USD 150.</li><li>This cabin class does not comply with your company's travel policy for this flight. Highest cabin class allowed : Economy</li>
+                    </ol>
+                  </div>
+                </span>
+              </div>
+              <div class="flight-fare-type">One way</div>
+              <button class="flight-fare-chevron" aria-label="Expand fare details">&#8964;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div>
       <div class="hotel-card-size-label">Above</div>
       <div class="flight-card">
@@ -277,7 +362,7 @@
               <div class="flight-fare-price-row">
                 <div class="flight-fare-price">$865</div>
                 <span class="oop-anchor oop-anchor--hoverable">
-                  <button class="flag-trigger flag-trigger--sm" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="tt-flight-above" aria-label="Out of policy">
+                  <button class="flag-trigger flag-trigger--md" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="tt-flight-above" aria-label="Out of policy">
                     <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
                   </button>
                   <div class="policy-tooltip policy-tooltip--above" id="tt-flight-above" role="tooltip" data-oop-panel>
@@ -295,7 +380,6 @@
         </div>
       </div>
     </div>
-
     <div>
       <div class="hotel-card-size-label">Left</div>
       <div class="flight-card">
@@ -354,7 +438,7 @@
               <div class="flight-fare-price-row">
                 <div class="flight-fare-price">$865</div>
                 <span class="oop-anchor oop-anchor--hoverable">
-                  <button class="flag-trigger flag-trigger--sm" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="tt-flight-left" aria-label="Out of policy">
+                  <button class="flag-trigger flag-trigger--md" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="tt-flight-left" aria-label="Out of policy">
                     <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
                   </button>
                   <div class="policy-tooltip policy-tooltip--left" id="tt-flight-left" role="tooltip" data-oop-panel>
@@ -372,7 +456,6 @@
         </div>
       </div>
     </div>
-
     <div>
       <div class="hotel-card-size-label">Below, left</div>
       <div class="flight-card">
@@ -431,7 +514,7 @@
               <div class="flight-fare-price-row">
                 <div class="flight-fare-price">$865</div>
                 <span class="oop-anchor oop-anchor--hoverable">
-                  <button class="flag-trigger flag-trigger--sm" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="tt-flight-below-left" aria-label="Out of policy">
+                  <button class="flag-trigger flag-trigger--md" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="tt-flight-below-left" aria-label="Out of policy">
                     <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
                   </button>
                   <div class="policy-tooltip policy-tooltip--below-left" id="tt-flight-below-left" role="tooltip" data-oop-panel style="left:auto; right:0;">
@@ -450,82 +533,6 @@
       </div>
     </div>
 
-    <div>
-      <div class="hotel-card-size-label">Above, left</div>
-      <div class="flight-card">
-        <div class="flight-badge-row">
-          <span class="flight-badge flight-badge--info"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16v-2l-8-5V3.5C13 2.67 12.33 2 11.5 2S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2.5 1.5V22l4-1.5 4 1.5v-1.5L13 19v-5.5z"/></svg>Nonstop</span>
-          <span class="flight-badge flight-badge--eco"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9"/></svg>-15% CO2</span>
-        </div>
-        <div class="flight-card-body">
-          <div class="flight-itinerary">
-            <div class="flight-itinerary-legs">
-              <div class="flight-leg">
-                <div class="flight-time">8:05 AM</div>
-                <div class="flight-airport">JFK</div>
-                <div class="flight-city">New York</div>
-              </div>
-              <div class="flight-route-line"><span class="flight-route-track"></span></div>
-              <div class="flight-leg flight-leg--end">
-                <div class="flight-time">11:32 AM</div>
-                <div class="flight-airport">SFO</div>
-                <div class="flight-city">San Francisco</div>
-              </div>
-            </div>
-            <div class="flight-info-secondary">
-              <div class="flight-duration">5h 27m</div>
-              <div class="flight-amenities">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5a10 10 0 0 1 14 0"/><path d="M8.5 16a5.5 5.5 0 0 1 7 0"/><circle cx="12" cy="19" r="1" fill="currentColor" stroke="none"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v8"/><path d="M6.3 6.3a8 8 0 1 0 11.4 0"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4v10a2 2 0 002 2h9"/><path d="M6 10h9"/><path d="M17 16v4"/><path d="M7 16v4"/></svg>
-                <span class="flight-amenities-more">+2</span>
-              </div>
-            </div>
-            <div class="flight-carrier-row">
-              <span class="flight-carrier-logo"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5C13 2.67 12.33 2 11.5 2S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2.5 1.5V22l4-1.5 4 1.5v-1.5L13 19v-5.5z"/></svg></span>
-              <span class="flight-carrier-name">United Airlines</span>
-              <span class="flight-otp-badge">98% on time</span>
-              <span class="flight-preferred-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v18"/><path d="M5 4h11l-2 4 2 4H5"/></svg></span>
-              <a class="flight-view-details" href="#" onclick="return false;">View details</a>
-            </div>
-          </div>
-          <div class="flight-fare-columns">
-            <div class="flight-fare-col">
-              <div class="flight-fare-tier">Essential</div>
-              <div class="flight-fare-caption">From</div>
-              <div class="flight-fare-price">$520</div>
-              <div class="flight-fare-type">One way</div>
-              <button class="flight-fare-chevron" aria-label="Expand fare details">&#8964;</button>
-            </div>
-            <div class="flight-fare-col flight-fare-col--recommended">
-              <div class="flight-fare-tier">Smart</div>
-              <div class="flight-fare-caption">From</div>
-              <div class="flight-fare-price">$610</div>
-              <div class="flight-fare-type">One way</div>
-              <button class="flight-fare-chevron" aria-label="Expand fare details">&#8964;</button>
-            </div>
-            <div class="flight-fare-col">
-              <div class="flight-fare-tier">Elite</div>
-              <div class="flight-fare-caption">From</div>
-              <div class="flight-fare-price-row">
-                <div class="flight-fare-price">$865</div>
-                <span class="oop-anchor oop-anchor--hoverable">
-                  <button class="flag-trigger flag-trigger--sm" data-oop-trigger tabindex="0" aria-expanded="false" aria-describedby="tt-flight-above-left" aria-label="Out of policy">
-                    <svg class="flag-icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
-                  </button>
-                  <div class="policy-tooltip policy-tooltip--above-left" id="tt-flight-above-left" role="tooltip" data-oop-panel style="left:auto; right:0;">
-                    <p class="policy-tooltip__title">Out of Policy</p>
-                    <ol class="policy-tooltip__list">
-                      <li>The reference price on this route is USD 650. To be compliant with your travel policy the price cannot exceed the reference price by more than USD 150.</li><li>This cabin class does not comply with your company's travel policy for this flight. Highest cabin class allowed : Economy</li>
-                    </ol>
-                  </div>
-                </span>
-              </div>
-              <div class="flight-fare-type">One way</div>
-              <button class="flight-fare-chevron" aria-label="Expand fare details">&#8964;</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
 
   </div>
 

@@ -31,7 +31,7 @@ The popover (B) keeps this as a safety net even though it has an explicit close 
 
 ## 5. Sizing strategy
 
-**Decision (revised 2026-09-26):** small, medium, and large control *only* the flag icon's size — 16px / 18px / 20px. Everything else (panel width, padding, structure, and copy) is identical across all three. This replaces an earlier version of this build where size also changed padding, type scale, and content density — that turned out to conflate two separate things: how prominent the trigger icon looks in a given UI density, and how much information the disclosure surface shows once triggered. Those are independent; the flag can be small in a dense list row and still open the exact same "Out of Policy" tooltip/popover as a large flag would.
+**Decision (revised 2026-09-26, extended 2026-10-01):** small, medium, large, and extra large control *only* the flag icon's size — 16px / 18px / 20px / 24px. Everything else (panel width, padding, structure, and copy) is identical across all four. This replaces an earlier version of this build where size also changed padding, type scale, and content density — that turned out to conflate two separate things: how prominent the trigger icon looks in a given UI density, and how much information the disclosure surface shows once triggered. Those are independent; the flag can be small in a dense list row and still open the exact same "Out of Policy" tooltip/popover as an extra large flag would. Extra Large (24px) was added 2026-10-01 as a fourth tier on the standalone icon-size rail only — it doesn't have its own in-context card example, matching how Small and Large already don't either (see below).
 
 All panel text is font_300 (14px / 18px line-height): title bold, body text regular — same tier, different weight only, per typography-tokens.md (bold and regular share size/line-height at every tier).
 
@@ -39,7 +39,7 @@ Concretely, the disclosure content per concept (constant across all three icon s
 - **Tooltip:** title + message (sentence format) or title + numbered list (list format, e.g. Flight). No link, no footer.
 - **Popover:** header (icon + title) + close (&times;) button + message or numbered list. No footer.
 
-**In-context card examples default to small (revised 2026-09-26):** since size only changes the icon now, three near-identical cards side by side (differing by a 4px icon size difference) added length without adding information — the standalone icon-size rail already makes that comparison clearly. Removed the Small/Medium/Large card set from Concept A and B; the in-context demonstration is now the "placement variants" set (still small-icon, five cards each) — one set for the Hotel card, one for the Flight card (added 2026-09-28, see section 13).
+**In-context card examples default to small, then medium (revised 2026-09-26, then 2026-10-01):** since size only changes the icon now, three near-identical cards side by side (differing by a 4px icon size difference) added length without adding information — the standalone icon-size rail already makes that comparison clearly. Removed the Small/Medium/Large card set from Concept A and B; the in-context demonstration is now the "placement variants" set (five cards each) — one set for the Hotel card, one for the Flight card (added 2026-09-28, see section 13). That set first defaulted to the small icon; changed to **medium** on 2026-10-01 across all four card-example sets (Hotel and Flight, both concepts) — small is still shown on the standalone icon-size rail, just no longer what the card examples use.
 
 ## 6. Reusability — data-driven content, not hardcoded to hotel
 
@@ -76,11 +76,14 @@ The hotel card itself was upgraded (2026-09-26) to show every optional data slot
 
 ## 10. Placement variants — tooltip and popover
 
-**Decision (2026-09-26, revised same day):** five placement variants for Concept A (tooltip) and Concept B (popover), each a CSS position modifier on the same panel — no content changes, same as the size variants:
+**Decision (2026-09-26, revised 2026-10-01):** five placement variants for Concept A (tooltip) and Concept B (popover), each a CSS position modifier on the same panel — no content changes, same as the size variants:
 
-- **Below** (default) and **Above** — centered horizontally on the trigger (`left: 50%; transform: translateX(-50%)`), not left-edge-aligned. A panel noticeably wider than a 16-20px icon looked lopsided when it only extended in one direction from the trigger's edge.
+- **Above, left — the default** (revised 2026-10-01; was Below, centered). Flush to the trigger's right edge (`right: 0`, no centering transform), growing up and to the left. This is now what renders with *no* modifier class at all — the base `.policy-tooltip`/`.policy-popover` rule *is* Above-left; a new `--below` modifier exists for the old default so it's still available as an explicit variant.
+- **Below** and **Above** — centered horizontally on the trigger (`left: 50%; transform: translateX(-50%)`), not left-edge-aligned. A panel noticeably wider than a 16-20px icon looked lopsided when it only extended in one direction from the trigger's edge.
 - **Left** — vertically centered beside the trigger (`top: 50%; transform: translateY(-50%)`), opening directly to the left.
-- **Below, left** and **Above, left** — added after the first pass, because the hotel (and later, flight) card's flag sits at the right edge of the price column: a panel that grows *rightward* from there (as plain Below/Above do) would run off the edge of the card. These two stay flush to the trigger's right edge (`right: 0`, no centering transform) and grow only leftward, which is the placement the price-column context actually needs.
+- **Below, left** — flush to the trigger's right edge (`right: 0`, no centering transform), growing down and to the left — the same mechanic as the new default, just downward instead of upward.
+
+All five stay relevant because the hotel (and flight) card's flag sits at the right edge of the price column: a panel that grows *rightward* (plain Below/Above) would run off the edge of the card, which is exactly why the "-left" family exists and why one of them is now the default.
 
 Every modifier fully restates `top`/`bottom`/`left`/`right`/`transform` (not just the properties that differ from the default) so variants can't bleed into each other regardless of class order. All five are shown three times per concept page: standalone, applied to the Hotel card, and applied to the Flight card (added 2026-09-28, see section 13) — same five CSS modifiers reused as-is, no per-card-type variant needed.
 
