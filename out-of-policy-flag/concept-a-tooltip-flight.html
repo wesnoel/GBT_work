@@ -536,6 +536,17 @@
 
   </div>
 
+  <div class="interaction-rules">
+      <h5>Interactions</h5>
+      <ol>
+        <li>Hover, click, or tap all open it — the same trigger behavior on desktop and mobile-web.</li>
+        <li>Auto-dismisses after <code>idleCloseDelay</code> (default <code>3000</code>ms) once the pointer actually leaves the trigger/Tooltip — timed from leaving, not from the moment it opened, so reading it doesn't race a clock.</li>
+        <li>Tab to the flag reveals it via keyboard focus; Escape or clicking anywhere outside it closes it.</li>
+        <li>No close button, by design — it's meant to be lightweight, relying on idle-dismiss, moving away, or Escape rather than an explicit action.</li>
+        <li>Opening any instance closes whichever other one is already open — only one Tooltip is ever visible at a time, page-wide.</li>
+      </ol>
+  </div>
+
   <div class="viewport-rules">
       <h5>Automatic viewport positioning</h5>
       <ol>
