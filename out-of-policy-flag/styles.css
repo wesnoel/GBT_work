@@ -267,8 +267,15 @@ a { color: inherit; text-decoration: none; }
   border-radius: var(--radius-sm);
   box-shadow: 0 10px 24px rgba(20, 22, 26, 0.22);
 }
+/* Hover reveal is NOT a CSS :hover rule — deliberately. A pure-CSS
+   :hover selector would show the panel the instant the real cursor enters,
+   with no way for HOVER_OPEN_DELAY (app.js) to hold it back: :hover starts
+   matching immediately, before any JS timer gets a chance to run, so the
+   delay would be entirely bypassed and it would flash open on every pass
+   regardless. Hover-reveal goes through open() (app.js) instead, which
+   adds .is-open only after the delay elapses — this is the only path that
+   shows the panel on hover. :focus-visible stays instant for keyboard. */
 .policy-tooltip.is-open,
-.oop-anchor--hoverable:hover .policy-tooltip,
 .flag-trigger:focus-visible ~ .policy-tooltip { display: block; }
 
 .policy-tooltip__title { font-weight: 700; font-size: 14px; line-height: 18px; color: #fff; margin: 0 0 4px; }
@@ -381,8 +388,10 @@ a { color: inherit; text-decoration: none; }
   border-radius: var(--radius);
   box-shadow: 0 16px 32px rgba(20, 22, 26, 0.16);
 }
+/* Same reasoning as .policy-tooltip above — no CSS :hover reveal, so
+   HOVER_OPEN_DELAY (app.js) is actually the thing governing hover-open,
+   not a CSS rule that fires before any JS delay gets a chance to apply. */
 .policy-popover.is-open,
-.oop-anchor--hoverable:hover .policy-popover,
 .flag-trigger:focus-visible ~ .policy-popover { display: block; }
 
 .policy-popover__header {
