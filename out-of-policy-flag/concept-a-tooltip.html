@@ -379,8 +379,8 @@
   <div class="interaction-rules">
       <h5>Interactions</h5>
       <ol>
-        <li>Hover, click, or tap all open it — the same trigger behavior on desktop and mobile-web.</li>
-        <li>Auto-dismisses after <code>idleCloseDelay</code> (default <code>3000</code>ms) once the pointer actually leaves the trigger/Tooltip — timed from leaving, not from the moment it opened, so reading it doesn't race a clock.</li>
+        <li>Hover opens it after a short <code>hoverOpenDelay</code> (default <code>200</code>ms) — long enough that a quick pass-through across a dense results list never flashes it open, short enough not to feel sluggish on a deliberate hover. Click or tap open it instantly, no delay.</li>
+        <li>Auto-dismisses after <code>idleCloseDelay</code> (default <code>3000</code>ms) once the pointer actually leaves the trigger/Tooltip — timed from leaving, not from the moment it opened, and applies the same whether it was revealed by hover or click (a bug fixed 2026-10-06: hover-revealed instances used to skip this and vanish instantly on leave).</li>
         <li>Tab to the flag reveals it via keyboard focus; Escape or clicking anywhere outside it closes it.</li>
         <li>No close button, by design — it's meant to be lightweight, relying on idle-dismiss, moving away, or Escape rather than an explicit action.</li>
         <li>Opening any instance closes whichever other one is already open — only one Tooltip is ever visible at a time, page-wide.</li>
@@ -409,6 +409,7 @@
           <tr><td>size</td><td><code>'sm' | 'md' | 'lg' | 'xl'</code></td><td><code>'md'</code></td><td>Icon only — 16/18/20/24px. The Tooltip itself is identical at every size.</td></tr>
           <tr><td>placement</td><td><code>'above-left' | 'below' | 'above' | 'left' | 'below-left'</code></td><td><code>'above-left'</code></td><td>Starting position only — auto-overridden on mobile-web and auto-nudged by the viewport clamp. See rules below.</td></tr>
           <tr><td>message</td><td><code>string | string[]</code></td><td>required</td><td>A string renders as a sentence; an array renders as a numbered list. The only content input — works the same for any line of business, current or future.</td></tr>
+          <tr><td>hoverOpenDelay</td><td><code>number</code> (ms)</td><td><code>200</code></td><td>Delay before hover reveals it. <code>0</code> opens instantly on hover (click and keyboard focus are always instant, regardless of this prop).</td></tr>
           <tr><td>idleCloseDelay</td><td><code>number</code> (ms)</td><td><code>3000</code></td><td>Time after the pointer leaves before it auto-dismisses. <code>0</code> disables idle auto-dismiss.</td></tr>
           <tr><td>viewportMargin</td><td><code>number</code> (px)</td><td><code>16</code></td><td>Minimum clearance enforced on every viewport edge.</td></tr>
           <tr><td>onOpenChange</td><td><code>(open: boolean) =&gt; void</code></td><td>—</td><td>Optional controlled-state hook.</td></tr>

@@ -200,7 +200,26 @@ function applyMobileDefaultPlacement(anchor, panel) {
 
    Only one panel open at a time, page-wide: every anchor's close() gets
    registered in oopCloseAll, and opening any panel closes every other one
-   first — regardless of which card, concept, or line of business it's on. */
+   first — regardless of which card, concept, or line of business it's on.
+
+   Bug fix (2026-10-06): a pure mouse hover (no click) never called open(),
+   so it never set the is-open class — meaning on mouseleave, isOpen() was
+   false and scheduleClose() never ran. The panel just vanished the instant
+   CSS :hover stopped matching, with no grace period at all, contradicting
+   the "3s after the pointer leaves" rule for the one path (hover) most
+   likely to be used. Fixed by routing hover through the same open() click
+   already uses, so is-open is set uniformly regardless of reveal path, and
+   mouseleave's grace-dismiss logic applies consistently everywhere.
+
+   HOVER_OPEN_DELAY (new, 2026-10-06): hovering no longer opens instantly —
+   a short delay first, cancelled if the pointer leaves before it elapses.
+   Prevents the panel flashing open during incidental mouse travel across a
+   dense results list (many flagged cards in a row). Kept short (200ms, not
+   the 500-700ms some tooltip libraries default to) because this is flagging
+   a real policy violation, not decorative help text — worth seeing quickly
+   once the hover looks deliberate, just not on every pixel the cursor
+   crosses. Click and keyboard focus stay instant; only hover is debounced. */
+var HOVER_OPEN_DELAY = 200;
 var oopCloseAll = [];
 
 function initOopAnchor(anchor) {
@@ -209,6 +228,7 @@ function initOopAnchor(anchor) {
   if (!trigger || !panel) return;
 
   var closeTimer = null;
+  var hoverOpenTimer = null;
   var hovering = false;
 
   function isOpen() { return panel.classList.contains("is-open"); }
@@ -240,14 +260,19 @@ function initOopAnchor(anchor) {
     closeTimer = setTimeout(close, 3000);
   }
 
-  // Hover-reveal (CSS :hover on a --hoverable anchor) and keyboard reveal
-  // (CSS :focus-visible on the trigger, below) both show the panel with no
-  // JS "open" call at all — clamp on those paths too, not just click.
+  // Hover-reveal now goes through the same open() click uses (see the fix
+  // note above), after HOVER_OPEN_DELAY so a quick pass-through never
+  // triggers it. Keyboard reveal (CSS :focus-visible on the trigger, below)
+  // still shows the panel with no JS "open" call at all — clamp on that
+  // path too, not just click/hover.
   anchor.addEventListener("mouseenter", function () {
     hovering = true;
     if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
-    applyMobileDefaultPlacement(anchor, panel);
-    clampToViewport(panel);
+    if (hoverOpenTimer) clearTimeout(hoverOpenTimer);
+    hoverOpenTimer = setTimeout(function () {
+      hoverOpenTimer = null;
+      open();
+    }, HOVER_OPEN_DELAY);
   });
 
   trigger.addEventListener("focus", function () {
@@ -257,11 +282,13 @@ function initOopAnchor(anchor) {
 
   anchor.addEventListener("mouseleave", function () {
     hovering = false;
+    if (hoverOpenTimer) { clearTimeout(hoverOpenTimer); hoverOpenTimer = null; }
     if (isOpen()) scheduleClose();
   });
 
   trigger.addEventListener("click", function (e) {
     e.stopPropagation();
+    if (hoverOpenTimer) { clearTimeout(hoverOpenTimer); hoverOpenTimer = null; }
     if (isOpen()) { close(); return; }
     open();
     if (!hovering) scheduleClose();
