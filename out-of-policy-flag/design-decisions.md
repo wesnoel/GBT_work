@@ -160,6 +160,8 @@ Implemented as `applyMobileDefaultPlacement(anchor, panel)` in `app.js`, wired i
 
 ## 16c. Tooltip pointer, aligned with the flag icon (2026-10-01)
 
+**Removed 2026-10-08 — see section 16g.** Kept below for the record of what was built and why; none of it is currently in the wireframe.
+
 **Decision:** added the small triangular pointer tooltips conventionally have, pointing from the box back at the trigger — Tooltip only, not the Dialog (a structured dialog with its own header and close button reads as a floating card, not an anchored callout, so it doesn't get one). Implemented as a `::after` pseudo-element on `.policy-tooltip` in `styles.css`, one rule per placement variant: pointing down from the bottom edge for the default/Above-left and Above variants, up from the top edge for Below/Below-left, right from the right edge for Left — same "fully restate every property" discipline the box's own placement modifiers already use, so variants can't bleed into each other.
 
 For the right-anchored family (default/Above-left, Below-left), the pointer's horizontal offset is set per icon size via a `.flag-trigger--sm/lg/xl ~ .policy-tooltip::after` sibling selector, since the box sits flush to the trigger's right edge but the icon's actual center (trigger padding + half the icon's own width) shifts a few px between sm/md/lg/xl even though the tooltip box itself stays a constant 260px wide. Centered variants (Below/Above) and the vertically-centered Left variant don't need this — the box is already centered/aligned on the trigger regardless of icon size.
@@ -187,6 +189,16 @@ For the right-anchored family (default/Above-left, Below-left), the pointer's ho
 **Why section 16e's verification didn't catch this:** that check asserted against the `is-open` *class* and the simulated sequence was built with `dispatchEvent(new MouseEvent('mouseenter'))`, which fires the JS listener but does not trigger genuine CSS `:hover` matching (that requires real pointer tracking, not a dispatched event) — so the test environment itself couldn't exercise the exact CSS rule that was the actual problem. It correctly proved the JS *timer* logic worked in isolation; it didn't prove the panel's real on-screen visibility was gated by that timer, which turned out to be the wrong thing to assume.
 
 **Fix:** removed the `:hover` selector from both reveal rules in `styles.css`. Hover-reveal now has exactly one path to visibility — `open()` adding `.is-open`, after the delay — matching `.is-open`/`:focus-visible` only. Re-verified with a corrected test that checks actual rendered `display` (via `getComputedStyle`, with the real stylesheet injected) rather than the `is-open` class: now correctly `none` at 0ms and 100ms, `block` at 250ms, against the real CSS cascade rather than a proxy for it.
+
+## 16g. Tooltip pointer removed (2026-10-08)
+
+**Decision:** removed the triangular pointer added in section 16c, and the viewport-clamp counter-shift (`--oop-arrow-shift`) built to keep it aligned (section 16c's bug fix, also section 16e/16f's clamp work which had to account for it). Per direction, based on conversations about the real current tooltip this wireframe is modeling: it doesn't have a pointer or caret, so this wireframe shouldn't be showing one — for now, at least. Not a usability finding against the pointer itself; it worked correctly (sections 16c/16e/16f went to real effort proving it stayed aligned through clamping and resize). This is a fidelity-to-the-real-thing call, not a design regression.
+
+**What changed:** removed the entire `.policy-tooltip::after` rule block from `styles.css` (base rule plus the five placement-variant overrides plus the per-icon-size sibling selectors), and removed the `--oop-arrow-shift` get/set from `clampToViewport` in `app.js` (it had no other purpose — the Dialog never used it, since section 16c never gave the Dialog a pointer to begin with). The Tooltip now renders as a plain rounded dark box, matching the Dialog's "no pointer" treatment structurally, though the two remain visually distinct (dark bubble vs. white card) and functionally distinct (no close button vs. explicit close button) per their own sections.
+
+**Left untouched:** every placement variant (Above-left/Below/Above/Left/Below-left) and the viewport clamp itself — removing the pointer only removes what rode *on* the box, not how the box itself is positioned. The Component API props table and Interactions card don't mention the pointer by name anywhere, so no copy changes were needed there.
+
+**Flag for follow-up:** "for now" in the request suggests this may be revisited — if the real tooltip gains a pointer later, section 16c's implementation (placement-aware triangle + clamp counter-shift) is a working reference to restore from, not a dead end.
 
 ## 17. Figma handoff notes
 

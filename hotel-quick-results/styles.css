@@ -98,7 +98,7 @@ svg { display: block; }
 
 /* ── Egencia chrome (per pattern-hotel-srp.md) ─────────────────── */
 .eg-header { background: var(--surface); border-bottom: 1px solid var(--line); position: relative; z-index: 2; }
-.eg-header-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; height: 60px; gap: 32px; }
+.eg-header-inner { max-width: 1248px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; height: 60px; gap: 32px; }
 .eg-logo { display: flex; flex-direction: column; line-height: 1; }
 .eg-logo-sup { font-size: 9px; font-weight: 700; letter-spacing: 0.09em; color: var(--ink-faint); text-transform: uppercase; }
 .eg-logo-word { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; color: var(--ink); }
@@ -108,13 +108,13 @@ svg { display: block; }
 .eg-header-right { margin-left: auto; }
 .eg-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--accent-soft); color: var(--accent-dark); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; }
 
-.eg-crumb { max-width: 1200px; margin: 0 auto; padding: 14px 24px 0; font-size: 13px; color: var(--ink-faint); position: relative; z-index: 2; }
+.eg-crumb { max-width: 1248px; margin: 0 auto; padding: 14px 24px 0; font-size: 13px; color: var(--ink-faint); position: relative; z-index: 2; }
 .eg-crumb a { color: var(--ink-soft); font-weight: 600; }
 .eg-crumb a:hover { color: var(--accent); }
 
 .eg-hero { background: var(--grad-page-light-blue); position: relative; overflow: hidden; padding-bottom: 20px; }
 .eg-hero-swoosh { position: absolute; top: -140px; right: -160px; width: 480px; height: 340px; background: var(--grad-powder-blue); border-radius: 50%; filter: blur(2px); opacity: .55; }
-.eg-content { max-width: 1200px; margin: 0 auto; padding: 20px 24px 80px; position: relative; z-index: 1; }
+.eg-content { max-width: 1248px; margin: 0 auto; padding: 20px 24px 80px; position: relative; z-index: 1; }
 
 /* Search-summary bar — white card, gold→blue gradient border */
 .search-bar-wrap { border-radius: 14px; background: var(--grad-border-highlight); padding: 2px; margin-bottom: 14px; }
@@ -241,12 +241,13 @@ svg { display: block; }
    explicit min-width:0 restores normal shrink-to-fit behavior. */
 .panel-cols > * { min-width: 0; }
 
-/* 2-column state: more room per column, so widen the mini card to use it.
+/* 2- and 3-column states: the card fills its column instead of sitting at the fixed carousel width.
    .col-scroll is a column-direction flex container with the default
    align-items:stretch — removing the card's fixed width lets it stretch
    to the column's actual width instead of sitting at the narrower
    1/3-column size with wasted space on either side. */
-.panel-cols[data-cols="2"] .layout-multi-col .mini-card { width: auto; }
+.panel-cols[data-cols="2"] .layout-multi-col .mini-card,
+.panel-cols[data-cols="3"] .layout-multi-col .mini-card { width: auto; }
 
 .panel-col-hdr { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 12px; }
 .panel-col-title { font-size: 15px; font-weight: 700; }
@@ -264,7 +265,7 @@ svg { display: block; }
    cards in 2/3-column layouts don't read as touching. */
 .col-scroll .mini-card:first-child { margin-top: 12px; }
 .col-scroll .mini-card { margin-bottom: 12px; }
-.col-scroll.peek { max-height: 320px; } /* padding-top(16) + card1 margin-top(12) + ~1 full card (tallest first-card variant, ~212px) + gap(12) + card1 margin-bottom(12) + a ~1/4-card peek of the next (~56) */
+.col-scroll.peek { max-height: 384px; } /* padding-top(16) + card1 margin-top(12) + ~1 full card (~177-212px) + gap(12) + card1 margin-bottom(12) + a short peek of the next card; no fade overlay */
 
 /* Scrollbars stay invisible until the user hovers or actually scrolls —
    shown via .is-scrolling (toggled in app.js on the scroll event, with a
@@ -275,24 +276,7 @@ svg { display: block; }
 .col-scroll::-webkit-scrollbar-thumb { background: transparent; border-radius: 3px; transition: background .2s; }
 .col-scroll:hover::-webkit-scrollbar-thumb, .col-scroll.is-scrolling::-webkit-scrollbar-thumb { background: var(--line); }
 
-.col-fade {
-  position: absolute; left: 0; right: 6px; bottom: 0; height: 56px;
-  background: linear-gradient(180deg, rgba(237,246,254,0) 0%, var(--accent-soft) 78%);
-  pointer-events: none; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 8px;
-  transition: opacity .2s;
-}
-.col-fade-btn {
-  pointer-events: auto; display: inline-flex; align-items: center; gap: 5px;
-  padding: 6px 14px; border-radius: 20px; border: 1px solid var(--accent-200);
-  background: var(--surface); color: var(--accent-dark); font-size: 12px; font-weight: 700; cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0,111,207,.12);
-}
-.col-fade-btn:hover { background: var(--accent-100); }
-.col-fade-btn .icon { width: 13px; height: 13px; transition: transform .2s; }
-.col-fade-btn.is-expanded .icon { transform: rotate(180deg); }
 .col-wrap { position: relative; }
-.col-wrap.mode-permanent .col-fade-btn { display: none; }
-.col-wrap.mode-permanent .col-fade { background: linear-gradient(180deg, rgba(237,246,254,0) 0%, var(--accent-soft) 92%); }
 
 /* 1-col horizontal carousel */
 .carousel-wrap { position: relative; }
@@ -418,7 +402,7 @@ svg { display: block; }
 
 /* ── Hub ─────────────────────────────────────────────────────────── */
 .hub-hero { background: var(--surface); border-bottom: 1px solid var(--line); padding: 40px 0 32px; }
-.hub-hero-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+.hub-hero-inner { max-width: 1248px; margin: 0 auto; padding: 0 24px; }
 .hub-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-dark); background: var(--accent-soft); padding: 4px 10px; border-radius: 20px; margin-bottom: 14px; }
 .hub-desc { font-size: 15px; color: var(--ink-soft); max-width: 680px; margin-top: 10px; line-height: 1.6; }
 .hub-meta-row { display: flex; gap: 28px; margin-top: 20px; flex-wrap: wrap; }

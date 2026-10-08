@@ -79,6 +79,14 @@ For the map-aligned variant specifically: the filter-pills frame was shrunk back
 
 **Flag for follow-up:** the hero card's "Select" button had to be placed *below* the real Card component instance rather than inline with its price row, since that instance's internal layout is locked (not auto-layout) and can't accept a new child. Worth a real component update if the pinned-card treatment is going to stick around.
 
+## 12. 1200px panel, no fade, taller peek, and the production Figma build
+
+**Decision:** The panel-wrap is now exactly 1200px wide (page content max-width 1248px with 24px side padding). The soft fade over the peeking next card is removed from every version, so the next card simply shows a little of itself, cut off cleanly. The 2 and 3 column scroll area grew by 64px (320px to 384px) to give that peek room, and in the 2 and 3 column layouts the cards now fill their column instead of holding a fixed width. `setColumnPeekMode()` in `app.js` sets the same 384px, so keep the two in sync.
+
+**Figma:** The three panels live on the "All three original versions" page as one variant set, "Quick results panel" (Columns=1, 2, 3), each 1200px wide. They are built from a single "Hotel Mini Card" component taken from the refined card, with properties for the three badges, hotel name, price, taxes and fees, distance, sustainability, coworker bookings, colleague reviews, out of policy flag, CVV and the perk strip. Everything uses the Egencia library: color variables (Accent 1 50 panel, Accent 1 200 card stroke, Neutral text), the `400__bold`, `200__regular`, `200__bold` and `100__bold` text styles, the library icons, and the Sticker Sheet icon buttons for the carousel arrows. The 2 and 3 column panels are 561px tall (the previous 497px plus 64px), and the 1 column carousel hugs its card with a 48px peek of the next one.
+
+**Flag for follow-up:** The Company preferred badge is a copy of the Negotiated badge with the handshake icon, since no standalone library badge exists for it. Worth a real badge variant.
+
 ## Figma handoff notes
 
 - **Maps to existing patterns already captured in this skill:** the regular hotel card (`pattern-hotel-list-card.md`), the SRP chrome/search-bar/filter-bar (`pattern-hotel-srp.md`), all color/icon tokens (`color-tokens.md`, `icons.md`).

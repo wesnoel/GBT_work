@@ -44,7 +44,7 @@ function initCardClickToPDP(scope) {
     card._pdpWired = true;
     card.setAttribute("tabindex", card.getAttribute("tabindex") || "0");
     card.addEventListener("click", (e) => {
-      if (e.target.closest(".mini-flag, .price-flag, .col-fade-btn, .carousel-arrow")) return;
+      if (e.target.closest(".mini-flag, .price-flag, .carousel-arrow")) return;
       const name = card.querySelector(".mini-name, .hotel-name");
       showToast((name ? name.textContent.trim() : "Hotel") + " → opening room details (PDP)…");
     });
@@ -95,42 +95,13 @@ function initOutOfPolicyFlags(scope) {
   });
 }
 
-/* ── Column peek/expand — vertical columns in the 2/3-col layout ── */
-function initColumnPeek(scope) {
-  const root = scope || document;
-  root.querySelectorAll(".col-wrap").forEach((wrap) => {
-    const scroller = wrap.querySelector(".col-scroll");
-    const btn = wrap.querySelector(".col-fade-btn");
-    if (!scroller || !btn || btn._wired) return;
-    btn._wired = true;
-    const peekHeight = 320; // keep in sync with .col-scroll.peek in styles.css
-    btn.addEventListener("click", () => {
-      const expanded = scroller.style.maxHeight === "none" || (!scroller.classList.contains("peek"));
-      if (expanded) {
-        scroller.classList.add("peek");
-        scroller.style.maxHeight = peekHeight + "px";
-        btn.classList.remove("is-expanded");
-        btn.querySelector(".fade-btn-label").textContent = "Show more";
-        scroller.scrollTop = 0;
-      } else {
-        scroller.classList.remove("peek");
-        scroller.style.maxHeight = "none";
-        btn.classList.add("is-expanded");
-        btn.querySelector(".fade-btn-label").textContent = "Show less";
-      }
-    });
-  });
-}
-
-function setColumnPeekMode(mode) {
-  // mode: "permanent" | "interactive"
-  document.querySelectorAll(".col-wrap").forEach((wrap) => {
-    const scroller = wrap.querySelector(".col-scroll");
-    wrap.classList.toggle("mode-permanent", mode === "permanent");
-    if (mode === "permanent") {
-      scroller.classList.add("peek");
-      scroller.style.maxHeight = "320px"; // keep in sync with .col-scroll.peek in styles.css
-    }
+/* ── Column peek — vertical columns in the 2/3-col layout use a fixed,
+   permanent peek height (1 full card + a short peek of the next). The
+   value below must stay in sync with .col-scroll.peek in styles.css. ── */
+function setColumnPeekMode() {
+  document.querySelectorAll(".col-scroll").forEach((scroller) => {
+    scroller.classList.add("peek");
+    scroller.style.maxHeight = "384px";
   });
 }
 
