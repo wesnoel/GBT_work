@@ -292,8 +292,8 @@ body{background:var(--bg);font-family:var(--font);color:var(--text);line-height:
           <td><a href="#changehub" style="color:var(--text);text-decoration:none;font-weight:600">Change HUB</a></td>
           <td>"Change your hotel booking" — Room type card</td>
           <td><span class="bug-val">$0.00 / EUR 0.00</span></td>
-          <td><span class="fix-val">Same copy as CKO per scenario</span></td>
-          <td><span class="fix-val">S1/S3: unchanged · S2: suppressed</span></td>
+          <td><span class="fix-val">Cancellation penalties may apply (all scenarios)</span></td>
+          <td><span class="fix-val">S1: unchanged · S2 + S3: suppressed</span></td>
           <td><span class="badge b-dark">In scope</span></td>
         </tr>
       </tbody>
@@ -335,7 +335,7 @@ body{background:var(--bg);font-family:var(--font);color:var(--text);line-height:
     <a class="card" href="#changehub">
       <div class="card-sid">Change HUB</div>
       <div class="card-title">"Change your hotel booking" page</div>
-      <div class="card-desc">Room type card shows penalty per scenario. S2 suppresses Total in right panel. CKO-consistent copy across all 3 scenarios.</div>
+      <div class="card-desc">Room type card shows "Cancellation penalties may apply" for all scenarios. S2 + S3 suppress Total in right panel. Detailed breakdown shown on CKO.</div>
       <div class="card-foot"><span class="card-vars">3 scenarios + current</span><span class="card-arrow">→</span></div>
     </a>
   </div>
@@ -1025,7 +1025,7 @@ body{background:var(--bg);font-family:var(--font);color:var(--text);line-height:
   <div class="sc-head">
     <div class="sc-label">Change HUB · "Change your hotel booking" page — Room type card</div>
     <h2 class="sc-title">Change HUB — Cancellation penalty in the Room type card</h2>
-    <p class="sc-desc">The "Change your hotel booking" page has three left-side card components — Traveler details, Travel dates, and Room type — plus a right-side current booking summary. The cancellation policy text lives in the Room type card. For S2 (both timing and amount unknown), the Total in the right panel is also suppressed; asserting a definitive total when the penalty is unknowable is misleading. All three scenarios use the same copy strings as CKO per AC-S6.</p>
+    <p class="sc-desc">The "Change your hotel booking" page has three left-side card components — Traveler details, Travel dates, and Room type — plus a right-side current booking summary. The cancellation policy text lives in the Room type card. Change HUB is an informational entry point: all three incomplete-data scenarios show a single unified message — "Cancellation penalties may apply." The scenario-specific detail (exact amounts, deadlines, qualifiers) is surfaced when the traveler lands on the Change CKO page. S2 and S3 suppress the right-panel Total; S1 leaves it unchanged.</p>
     <div class="sc-refs">
       <span class="reftag">PRD §7 — AC for S6</span>
       <span class="reftag">UX Spec §3 — Flow 7</span>
@@ -1099,7 +1099,7 @@ body{background:var(--bg);font-family:var(--font);color:var(--text);line-height:
     <!-- S1 -->
     <div class="vframe">
       <div class="vlabel proposed"><span class="vlabel-dot"></span>S1 — Timing known, amount unknown</div>
-      <p class="vdesc">Deadline shown (it's available). Penalty shows "Amount unknown." Right panel Total unchanged — the booking total is unaffected; only the penalty figure is missing.</p>
+      <p class="vdesc">Room type card shows the unified message. Right panel Total unchanged — S1 is the entry-level uncertainty case; specifics shown on CKO.</p>
       <div style="display:flex;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px">
         <div style="flex:3;display:flex;flex-direction:column;gap:8px">
           <div style="background:#fff;border:1px solid var(--border);border-radius:6px;padding:10px">
@@ -1129,13 +1129,9 @@ body{background:var(--bg);font-family:var(--font);color:var(--text);line-height:
               <div style="font-size:9px;border:1px solid var(--border);border-radius:4px;padding:2px 8px;color:var(--g500)">Change</div>
             </div>
             <div style="font-size:9px;font-weight:600;color:var(--g900);margin-bottom:5px">2 Queen Standard 325 SqFt</div>
-            <div style="display:flex;justify-content:space-between;font-size:9px;margin-bottom:3px">
-              <span style="color:var(--text-2)">Cancellation deadline</span>
-              <span style="color:var(--g900);font-weight:600">Sep 15, 11:59 PM</span>
-            </div>
             <div style="display:flex;justify-content:space-between;font-size:9px;margin-bottom:5px">
               <span style="color:var(--text-2)">Cancellation penalty <span class="apin">1</span></span>
-              <span style="color:var(--g900);font-weight:600">Amount unknown</span>
+              <span style="color:var(--g900);font-weight:600">Cancellation penalties may apply</span>
             </div>
             <div style="font-size:8px;color:var(--text-3)">Hotel Loyalty Points &nbsp;·&nbsp; Paid by company &nbsp;·&nbsp; Free Breakfast</div>
           </div>
@@ -1162,7 +1158,7 @@ body{background:var(--bg);font-family:var(--font);color:var(--text);line-height:
     <!-- S2 -->
     <div class="vframe">
       <div class="vlabel proposed"><span class="vlabel-dot"></span>S2 — Both timing and amount unknown</div>
-      <p class="vdesc">No deadline, no amount. Room type shows "May apply — contact hotel." Right panel: Total suppressed — cannot assert a total when penalty is unknown. <span class="apin">2</span></p>
+      <p class="vdesc">Room type card shows the unified message. Right panel Total suppressed — penalty fully unknown. <span class="apin">2</span></p>
       <div style="display:flex;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px">
         <div style="flex:3;display:flex;flex-direction:column;gap:8px">
           <div style="background:#fff;border:1px solid var(--border);border-radius:6px;padding:10px">
@@ -1192,9 +1188,9 @@ body{background:var(--bg);font-family:var(--font);color:var(--text);line-height:
               <div style="font-size:9px;border:1px solid var(--border);border-radius:4px;padding:2px 8px;color:var(--g500)">Change</div>
             </div>
             <div style="font-size:9px;font-weight:600;color:var(--g900);margin-bottom:5px">2 Queen Standard 325 SqFt</div>
-            <div style="display:flex;justify-content:space-between;align-items:flex-start;font-size:9px;margin-bottom:5px">
+            <div style="display:flex;justify-content:space-between;font-size:9px;margin-bottom:5px">
               <span style="color:var(--text-2)">Cancellation penalty <span class="apin">1</span></span>
-              <span style="color:var(--g900);font-weight:600;text-align:right;max-width:110px;line-height:1.4">May apply — contact hotel</span>
+              <span style="color:var(--g900);font-weight:600">Cancellation penalties may apply</span>
             </div>
             <div style="font-size:8px;color:var(--text-3)">Hotel Loyalty Points &nbsp;·&nbsp; Paid by company &nbsp;·&nbsp; Free Breakfast</div>
           </div>
@@ -1219,7 +1215,7 @@ body{background:var(--bg);font-family:var(--font);color:var(--text);line-height:
     <!-- S3 -->
     <div class="vframe">
       <div class="vlabel proposed"><span class="vlabel-dot"></span>S3 — Amount known, timing unknown</div>
-      <p class="vdesc">Deadline omitted (unavailable). Room type shows "EUR 85.00 (may apply)*" with footnote. Right panel Total unchanged. Consistent with CKO Variant A.</p>
+      <p class="vdesc">Room type card shows the unified message. No footnote — no specific amount is being qualified here. Right panel Total suppressed; amount exists in the data but isn't surfaced in Change HUB. Specifics shown on CKO. <span class="apin">2</span></p>
       <div style="display:flex;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px">
         <div style="flex:3;display:flex;flex-direction:column;gap:8px">
           <div style="background:#fff;border:1px solid var(--border);border-radius:6px;padding:10px">
@@ -1249,11 +1245,10 @@ body{background:var(--bg);font-family:var(--font);color:var(--text);line-height:
               <div style="font-size:9px;border:1px solid var(--border);border-radius:4px;padding:2px 8px;color:var(--g500)">Change</div>
             </div>
             <div style="font-size:9px;font-weight:600;color:var(--g900);margin-bottom:5px">Deluxe Room, City View</div>
-            <div style="display:flex;justify-content:space-between;font-size:9px;margin-bottom:3px">
+            <div style="display:flex;justify-content:space-between;font-size:9px;margin-bottom:5px">
               <span style="color:var(--text-2)">Cancellation penalty <span class="apin">1</span></span>
-              <span style="color:var(--g900);font-weight:600">EUR 85.00 (may apply)*</span>
+              <span style="color:var(--g900);font-weight:600">Cancellation penalties may apply</span>
             </div>
-            <div style="font-size:8px;color:var(--text-3);margin-bottom:5px">* Cancellation deadline not provided by hotel <span class="apin">3</span></div>
             <div style="font-size:8px;color:var(--text-3)">Hotel Loyalty Points &nbsp;·&nbsp; Paid by company</div>
           </div>
         </div>
@@ -1268,9 +1263,7 @@ body{background:var(--bg);font-family:var(--font);color:var(--text);line-height:
             <span style="font-size:8px;color:var(--text-3)">Sep 12</span>
           </div>
           <div style="margin-top:auto;border-top:1px solid var(--border);padding-top:8px">
-            <div style="display:flex;justify-content:space-between;font-size:10px;font-weight:700;color:var(--g900)">
-              <span>Total</span><span>EUR 342.00</span>
-            </div>
+            <div style="font-size:8px;color:var(--text-3);font-style:italic;line-height:1.5">Total not shown — cancellation penalty not confirmed <span class="apin">2</span></div>
           </div>
         </div>
       </div>
@@ -1286,17 +1279,12 @@ body{background:var(--bg);font-family:var(--font);color:var(--text);line-height:
     <div class="ann-body">
       <div class="ann-row">
         <div class="ann-n">1</div>
-        <div class="ann-t"><strong>Cancellation penalty in Room type card:</strong> Uses the same copy strings as the CKO confirmation page per AC-S6 — "Amount unknown" (S1), "May apply — contact hotel" (S2), or "EUR [Amount] (may apply)*" (S3). The cancellation deadline row shows when available (S1) and is omitted when not (S2, S3). Engineering to confirm current rendering behavior of this row. <span class="ann-ref">PRD §7 AC-S6</span> <span class="ann-warn">⚠ Copy: voice/L10n review required</span></div>
+        <div class="ann-t"><strong>Unified copy — "Cancellation penalties may apply":</strong> Change HUB is an informational entry point, not a transaction confirmation. All three incomplete-data scenarios (S1, S2, S3) show the same string. The scenario-specific detail — exact amounts, deadline dates, qualifiers — is surfaced when the traveler proceeds to the Change CKO page. This is an intentional divergence from the CKO per-scenario copy, confirmed per Anoushka's feedback. <span class="ann-warn">⚠ Copy: voice/L10n review required</span></div>
       </div>
       <hr class="ann-hr">
       <div class="ann-row">
         <div class="ann-n">2</div>
-        <div class="ann-t"><strong>S2 — Total suppressed in right panel:</strong> When both timing and penalty amount are unknown, the Total in the right booking summary is suppressed. Asserting a definitive total when the penalty cannot be quantified is misleading. Engineering to confirm which data fields drive the Total calculation in this view and whether "Total paid" and "Total due" are distinct line items — both are suppressed for S2. <span class="ann-ref">PRD §10</span></div>
-      </div>
-      <hr class="ann-hr">
-      <div class="ann-row">
-        <div class="ann-n">3</div>
-        <div class="ann-t"><strong>S3 footnote:</strong> "* Cancellation deadline not provided by hotel" — conditional render for S3 only, appears below the penalty line within the Room type card. Requires <code style="font-family:var(--mono);font-size:10px">aria-describedby</code> association for screen readers. <span class="ann-ref">UX Spec §6 a11y</span></div>
+        <div class="ann-t"><strong>S2 and S3 — Total suppressed in right panel:</strong> For S2 (both unknown) and S3 (amount known but timing unknown), the Total in the right booking summary is suppressed. S3 has a known penalty amount in the data, but since Change HUB does not surface the per-scenario detail, asserting a total that includes an unconfirmed penalty would be misleading. Engineering to confirm which data fields drive the Total calculation in this view. <span class="ann-ref">PRD §10</span></div>
       </div>
     </div>
   </div>

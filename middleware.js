@@ -2,6 +2,11 @@ import { next } from '@vercel/functions';
 
 const COOKIE_NAME = 'gbt_auth';
 const MAX_AGE = 60 * 60 * 24 * 400; // 400 days (the browser-enforced cap on cookie lifetime)
+const ROBOTS_HEADER = 'noindex, nofollow, noarchive, nosnippet, noimageindex';
+
+export const config = {
+  matcher: '/((?!robots\\.txt).*)',
+};
 
 async function hash(value) {
   const data = new TextEncoder().encode(value);
@@ -63,7 +68,10 @@ function loginPage(showError) {
 function challenge(showError) {
   return new Response(loginPage(showError), {
     status: 401,
-    headers: { 'content-type': 'text/html; charset=utf-8' },
+    headers: {
+      'content-type': 'text/html; charset=utf-8',
+      'X-Robots-Tag': ROBOTS_HEADER,
+    },
   });
 }
 
@@ -71,7 +79,10 @@ export default async function middleware(request) {
   const sitePassword = process.env.SITE_PASSWORD;
 
   if (!sitePassword) {
-    return new Response('Password protection is misconfigured: SITE_PASSWORD is not set.', { status: 500 });
+    return new Response('Password protection is misconfigured: SITE_PASSWORD is not set.', {
+      status: 500,
+      headers: { 'X-Robots-Tag': ROBOTS_HEADER },
+    });
   }
 
   const expected = await hash(sitePassword);
@@ -79,7 +90,7 @@ export default async function middleware(request) {
   const match = cookieHeader.match(new RegExp(`${COOKIE_NAME}=([^;]+)`));
 
   if (match && match[1] === expected) {
-    return next();
+    return next({ headers: { 'X-Robots-Tag': ROBOTS_HEADER } });
   }
 
   if (request.method === 'POST') {
@@ -89,7 +100,10 @@ export default async function middleware(request) {
     if ((await hash(submitted)) === expected) {
       const response = new Response(null, {
         status: 302,
-        headers: { Location: request.url },
+        headers: {
+          Location: request.url,
+          'X-Robots-Tag': ROBOTS_HEADER,
+        },
       });
       response.headers.append(
         'Set-Cookie',
