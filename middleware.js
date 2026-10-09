@@ -1,11 +1,14 @@
 import { next } from '@vercel/functions';
-import { createHash } from 'node:crypto';
 
 const COOKIE_NAME = 'gbt_auth';
 const MAX_AGE = 60 * 60 * 24 * 400; // 400 days (the browser-enforced cap on cookie lifetime)
 
-function hash(value) {
-  return createHash('sha256').update(value).digest('hex');
+async function hash(value) {
+  const data = new TextEncoder().encode(value);
+  const digest = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(digest))
+    .map((byte) => byte.toString(16).padStart(2, '0'))
+    .join('');
 }
 
 function loginPage(showError) {
@@ -50,7 +53,7 @@ export default async function middleware(request) {
     return new Response('Password protection is misconfigured: SITE_PASSWORD is not set.', { status: 500 });
   }
 
-  const expected = hash(sitePassword);
+  const expected = await hash(sitePassword);
   const cookieHeader = request.headers.get('cookie') || '';
   const match = cookieHeader.match(new RegExp(`${COOKIE_NAME}=([^;]+)`));
 
@@ -62,7 +65,7 @@ export default async function middleware(request) {
     const form = await request.formData();
     const submitted = form.get('password') || '';
 
-    if (hash(submitted) === expected) {
+    if ((await hash(submitted)) === expected) {
       const response = new Response(null, {
         status: 302,
         headers: { Location: request.url },
