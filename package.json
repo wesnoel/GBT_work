@@ -1,0 +1,8 @@
+{
+  "name": "gbt-work",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@vercel/functions": "latest"
+  }
+}
