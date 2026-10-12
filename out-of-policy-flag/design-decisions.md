@@ -200,6 +200,12 @@ For the right-anchored family (default/Above-left, Below-left), the pointer's ho
 
 **Flag for follow-up:** "for now" in the request suggests this may be revisited — if the real tooltip gains a pointer later, section 16c's implementation (placement-aware triangle + clamp counter-shift) is a working reference to restore from, not a dead end.
 
+## 16h. Bug fix — clicking while hovering dismissed it instead of reinforcing it (2026-10-12)
+
+**Found and fixed, from direct report ("when hovering, if the user clicks the icon, the popover or tooltip should NOT be dismissed... clicking the icon should just reinforce the persist for the configured time frame"):** the click handler's toggle logic — `if (isOpen()) { close(); return; }` — didn't distinguish *why* it was already open. That toggle is exactly right for a tap, since touch has no hover state and a second tap is the only way those users can dismiss it. But for a mouse user, hover already opens it (section 16e), and clicking it again — e.g. for emphasis, or just an incidental click while reading — closed it immediately, which reads as broken: nothing about the hover changed, yet the thing they're looking at disappeared.
+
+**Fix:** the click handler now checks `hovering` before deciding what a click on an already-open instance means. While hovering, a click no longer calls `close()` at all — it just clears any stray `closeTimer` (reinforcing the open state) and returns, leaving `mouseleave`'s existing grace-dismiss logic (section 16e) to handle the eventual close once the pointer actually leaves, for the full configured `idleCloseDelay`. When hover isn't involved — `hovering` is `false`, meaning the open state came from a prior click/tap — a second click still closes it, unchanged. Verified both paths directly: hovered-then-clicked-twice stayed open throughout, continued to respect the full 3-second grace period after a real `mouseleave`, and closed at the end of it; a no-hover click-open-then-click-again (simulating tap) still toggled closed immediately, confirming the touch path wasn't affected. Documented as a new item in the Interactions card (all four concept pages), directly below the idle-dismiss rule it's a corollary of.
+
 ## 17. Figma handoff notes
 
 - **Tooltip (A)** is the closest match to an existing Sticker Sheet Tooltip component, if one exists — check before rebuilding from scratch.

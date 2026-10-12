@@ -280,7 +280,21 @@ function initOopAnchor(anchor) {
   trigger.addEventListener("click", function (e) {
     e.stopPropagation();
     if (hoverOpenTimer) { clearTimeout(hoverOpenTimer); hoverOpenTimer = null; }
-    if (isOpen()) { close(); return; }
+    if (isOpen()) {
+      // Bug fix (2026-10-12): clicking while it's open because of hover used
+      // to unconditionally close() it — toggle logic that makes sense for a
+      // tap (the only way a touch user can dismiss it) but not for a mouse
+      // user who's still hovering and clicks for emphasis/confirmation. A
+      // click during an active hover now just reinforces the open state
+      // instead of dismissing it — mouseleave's normal grace-dismiss still
+      // applies once the pointer actually leaves.
+      if (hovering) {
+        if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+        return;
+      }
+      close();
+      return;
+    }
     open();
     if (!hovering) scheduleClose();
   });

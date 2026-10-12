@@ -493,6 +493,7 @@
       <ol>
         <li>Hover opens it after a short <code>hoverOpenDelay</code> (default <code>200</code>ms) — long enough that a quick pass-through across a dense results list never flashes it open, short enough not to feel sluggish on a deliberate hover. Click or tap open it instantly, no delay.</li>
         <li>Auto-dismisses after <code>idleCloseDelay</code> (default <code>3000</code>ms) once the pointer actually leaves the trigger/Dialog — timed from leaving, not from the moment it opened, and applies the same whether it was revealed by hover or click (a bug fixed 2026-10-06: hover-revealed instances used to skip this and vanish instantly on leave).</li>
+        <li>Clicking the trigger while it’s already open from hover reinforces it rather than dismissing it (a bug fixed 2026-10-12: it used to toggle-close on click even mid-hover, which read as broken since nothing else about the hover had changed). A second click only closes it when hover isn’t involved — e.g. tap, the only way a touch user can dismiss it.</li>
         <li>Tab to the flag reveals it via keyboard focus; Escape or clicking anywhere outside it closes it.</li>
         <li>Has an explicit &times; close button; idle-dismiss still runs underneath it as a safety net, in case someone opens it and walks away without closing.</li>
         <li>Opening any instance closes whichever other one is already open — only one Dialog is ever visible at a time, page-wide.</li>
