@@ -120,14 +120,75 @@ function clampToViewport(panel) {
    is cheap (a few getBoundingClientRect/style reads on at most one visible
    panel), so calling it directly on every resize tick is simpler and more
    reliably correct than it is slow. */
-window.addEventListener("resize", function () {
+function oopReclampVisiblePanels() {
   document.querySelectorAll("[data-oop-panel]").forEach(function (panel) {
     if (getComputedStyle(panel).display !== "none") {
       applyMobileDefaultPlacement(panel.closest(".oop-anchor"), panel);
       clampToViewport(panel);
     }
   });
-});
+}
+window.addEventListener("resize", oopReclampVisiblePanels);
+
+/* Scrolling has the same gap resize did, for the same reason: clamping only
+   ran once, at reveal. Scrolling the trigger toward (or past) the viewport
+   edge left an open panel exactly where it first rendered, so it could
+   drift off-screen along with the trigger instead of staying usable.
+
+   Decision (2026-10-13, WCAG 2.2): reposition on scroll, never close on
+   scroll. The alternative — auto-closing once the trigger scrolls out of
+   view — isn't flatly non-compliant (1.4.13 Content on Hover or Focus
+   permits dismissal once content is "no longer valid," and a reasonable
+   read is that an off-screen anchor qualifies), but it's much shakier for
+   one specific path: a keyboard user who tabbed to the trigger (so the
+   panel is showing via :focus-visible, focus still on the trigger) and then
+   scrolled without moving focus. 1.4.13 requires such content stay visible
+   "until the hover or focus trigger is removed" — and focus hasn't been
+   removed there, only scrolled out of view, so closing it is a genuinely
+   debatable reading of the spec in exactly that case. Repositioning sidesteps
+   the question entirely: the content simply stays visible and valid
+   regardless of why the viewport moved, which is what a magnification or
+   non-standard-input user scrolling incidentally (not as a deliberate
+   "I'm done" gesture) needs. Reuses the exact same reclamp used for resize.
+
+   Not throttled, for the same reason resize isn't (see above) — bears
+   repeating here because scroll fires far more often than resize, so it's
+   a more deliberate call in this case, not an oversight: clampToViewport
+   is cheap enough per call that direct, untouched calls on every scroll
+   tick are simpler and more reliably correct than adding a throttle.
+
+   Also debounces a trailing reclamp off the "scroll" ticks themselves
+   (SCROLL_SETTLE_DELAY): every tick clears and reschedules a short timer,
+   and once scrolling actually goes quiet for that long, the timer fires
+   one more reclamp. This is defense-in-depth for fast/fling scrolling —
+   browsers are documented to coalesce "scroll" event dispatch relative to
+   true compositor position during high-velocity momentum scrolling (mobile
+   fling gestures especially), so the *last* tick isn't strictly guaranteed
+   to land exactly at the fully-settled position. The live per-tick calls
+   already handle the common case (confirmed directly: simulating a real
+   multi-tick scroll — several genuine "scroll" dispatches stepping toward
+   a trigger scrolled off the top of the viewport — clamped correctly on
+   the very first tick, settled position matching the plain direct-call
+   math exactly). The debounce is the safety net for wherever scrolling
+   finally stops, not the thing making the common case work. Tried
+   "scrollend" first (fires once scrolling has actually stopped, which is
+   exactly this use case) but dropped it as the sole mechanism — it didn't
+   fire at all for a programmatic scroll in one test environment despite
+   'onscrollend' in window reporting true, which was enough reason not to
+   depend on it alone; the timer-based debounce doesn't have that
+   dependency. Kept short (100ms) since it's correcting a possible
+   mis-position, not deciding whether to open anything — nowhere near
+   HOVER_OPEN_DELAY territory, where the delay is the point. */
+var SCROLL_SETTLE_DELAY = 100;
+var oopScrollSettleTimer = null;
+window.addEventListener("scroll", function () {
+  oopReclampVisiblePanels();
+  if (oopScrollSettleTimer) clearTimeout(oopScrollSettleTimer);
+  oopScrollSettleTimer = setTimeout(function () {
+    oopScrollSettleTimer = null;
+    oopReclampVisiblePanels();
+  }, SCROLL_SETTLE_DELAY);
+}, { passive: true });
 
 /* ---- Mobile-web default placement: center, flip toward the open side ----
    Above-left (section 10/15b) is the desktop default, chosen because the
