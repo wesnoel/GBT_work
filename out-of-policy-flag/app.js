@@ -130,65 +130,39 @@ function oopReclampVisiblePanels() {
 }
 window.addEventListener("resize", oopReclampVisiblePanels);
 
-/* Scrolling has the same gap resize did, for the same reason: clamping only
-   ran once, at reveal. Scrolling the trigger toward (or past) the viewport
-   edge left an open panel exactly where it first rendered, so it could
-   drift off-screen along with the trigger instead of staying usable.
+/* Scrolling does NOT reposition an open panel. That was tried first (see
+   design-decisions.md section 16i for the original reasoning and section
+   16j for why it got reversed) and dropped per direct feedback: clamping a
+   panel to the viewport edge decouples it from its trigger, so it ends up
+   sitting on top of whatever OTHER content has scrolled into that spot —
+   exactly the "covers what I'm reading" problem repositioning was supposed
+   to avoid, just relocated. A panel's position on scroll is left alone
+   entirely here — it behaves like any other absolutely-positioned element,
+   scrolling with its trigger, on-screen or off, no JS correction at all.
 
-   Decision (2026-10-13, WCAG 2.2): reposition on scroll, never close on
-   scroll. The alternative — auto-closing once the trigger scrolls out of
-   view — isn't flatly non-compliant (1.4.13 Content on Hover or Focus
-   permits dismissal once content is "no longer valid," and a reasonable
-   read is that an off-screen anchor qualifies), but it's much shakier for
-   one specific path: a keyboard user who tabbed to the trigger (so the
-   panel is showing via :focus-visible, focus still on the trigger) and then
-   scrolled without moving focus. 1.4.13 requires such content stay visible
-   "until the hover or focus trigger is removed" — and focus hasn't been
-   removed there, only scrolled out of view, so closing it is a genuinely
-   debatable reading of the spec in exactly that case. Repositioning sidesteps
-   the question entirely: the content simply stays visible and valid
-   regardless of why the viewport moved, which is what a magnification or
-   non-standard-input user scrolling incidentally (not as a deliberate
-   "I'm done" gesture) needs. Reuses the exact same reclamp used for resize.
-
-   Not throttled, for the same reason resize isn't (see above) — bears
-   repeating here because scroll fires far more often than resize, so it's
-   a more deliberate call in this case, not an oversight: clampToViewport
-   is cheap enough per call that direct, untouched calls on every scroll
-   tick are simpler and more reliably correct than adding a throttle.
-
-   Also debounces a trailing reclamp off the "scroll" ticks themselves
-   (SCROLL_SETTLE_DELAY): every tick clears and reschedules a short timer,
-   and once scrolling actually goes quiet for that long, the timer fires
-   one more reclamp. This is defense-in-depth for fast/fling scrolling —
-   browsers are documented to coalesce "scroll" event dispatch relative to
-   true compositor position during high-velocity momentum scrolling (mobile
-   fling gestures especially), so the *last* tick isn't strictly guaranteed
-   to land exactly at the fully-settled position. The live per-tick calls
-   already handle the common case (confirmed directly: simulating a real
-   multi-tick scroll — several genuine "scroll" dispatches stepping toward
-   a trigger scrolled off the top of the viewport — clamped correctly on
-   the very first tick, settled position matching the plain direct-call
-   math exactly). The debounce is the safety net for wherever scrolling
-   finally stops, not the thing making the common case work. Tried
-   "scrollend" first (fires once scrolling has actually stopped, which is
-   exactly this use case) but dropped it as the sole mechanism — it didn't
-   fire at all for a programmatic scroll in one test environment despite
-   'onscrollend' in window reporting true, which was enough reason not to
-   depend on it alone; the timer-based debounce doesn't have that
-   dependency. Kept short (100ms) since it's correcting a possible
-   mis-position, not deciding whether to open anything — nowhere near
-   HOVER_OPEN_DELAY territory, where the delay is the point. */
-var SCROLL_SETTLE_DELAY = 100;
-var oopScrollSettleTimer = null;
-window.addEventListener("scroll", function () {
-  oopReclampVisiblePanels();
-  if (oopScrollSettleTimer) clearTimeout(oopScrollSettleTimer);
-  oopScrollSettleTimer = setTimeout(function () {
-    oopScrollSettleTimer = null;
-    oopReclampVisiblePanels();
-  }, SCROLL_SETTLE_DELAY);
-}, { passive: true });
+   Instead: once the trigger itself is no longer in the viewport at all —
+   fully above (rect.bottom <= 0) or fully below (rect.top >= innerHeight),
+   not some buffered "almost gone" — a hover- or click-opened panel closes.
+   Scoped to is-open only, deliberately: a panel revealed purely by
+   :focus-visible (keyboard, no is-open class — see initOopAnchor) is left
+   alone here entirely. Per direction, if the user tabbed to the trigger, it
+   stays open until a new trigger/click/tap/focus happens, however far it
+   scrolls — closing it on scroll alone would mean a keyboard user's focus
+   is still on an element whose disclosure just vanished with no action
+   from them at all, a worse read of WCAG 2.2's 1.4.13 "persistent until
+   focus is removed" than anything repositioning was trying to avoid. */
+function oopCloseScrolledOffscreenPanels() {
+  document.querySelectorAll("[data-oop-panel].is-open").forEach(function (panel) {
+    var anchor = panel.closest(".oop-anchor");
+    var trigger = anchor && anchor.querySelector("[data-oop-trigger]");
+    if (!trigger) return;
+    var rect = trigger.getBoundingClientRect();
+    if ((rect.bottom <= 0 || rect.top >= window.innerHeight) && anchor._oopClose) {
+      anchor._oopClose();
+    }
+  });
+}
+window.addEventListener("scroll", oopCloseScrolledOffscreenPanels, { passive: true });
 
 /* ---- Mobile-web default placement: center, flip toward the open side ----
    Above-left (section 10/15b) is the desktop default, chosen because the
@@ -377,6 +351,11 @@ function initOopAnchor(anchor) {
   });
 
   oopCloseAll.push(close);
+  // Lets oopCloseScrolledOffscreenPanels (above) reach this specific
+  // anchor's close() from a plain DOM query — close() itself is a closure
+  // private to this initOopAnchor call, with no other way to address it
+  // from outside once it's created.
+  anchor._oopClose = close;
 }
 
 function initAllOopAnchors() {
