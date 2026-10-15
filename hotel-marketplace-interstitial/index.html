@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hotel marketplace value interstitial | Concept directions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<main class="hub">
+  <span class="tag">Egencia project</span>
+  <h1>Hotel marketplace value interstitial</h1>
+  <p class="lede">Four directions, plus three variations on D, for the variant of the SRP loading modal. After a user clicks search, the SRP takes about 6 to 10 seconds to load. This is the moment to reinforce the breadth of the Egencia marketplace without making the wait feel longer.</p>
+  <div class="meta">
+    <span><b>Source:</b> PRD-EGE-20261013 and the design brief</span>
+    <span><b>Fidelity:</b> Low-fi, high interaction</span>
+    <span><b>Focus:</b> Desktop. Mobile web likely keeps the current modal</span>
+    <span><b>Footprint:</b> 453 x 568, same as control</span>
+    <span><b>Status:</b> Draft for review</span>
+  </div>
+
+  <h2 class="sec">Reference</h2>
+  <div class="cards">
+    <a class="card" href="control.html"><span class="n">00</span><h3>Control</h3><p>Today's loading modal at its real size: static illustration, timed bar, cycling action text. The baseline for timing and perceived wait.</p><span class="go">Open wireframe &rarr;</span></a>
+  </div>
+
+  <h2 class="sec">Concept directions</h2>
+  <div class="cards">
+    <a class="card" href="concept-a-source-checklist.html"><span class="n">A</span><h3>Source checklist</h3><p>Four rows tick in sequence as the bar fills. The wait becomes the proof.</p><span class="risk"><b>Watch for:</b> most reading, needs a compact repeat form.</span><span class="go">Open wireframe &rarr;</span></a>
+    <a class="card" href="concept-b-rotating-line.html"><span class="n">B</span><h3>Rotating line</h3><p>The control already cycles its subtext through actions. Swap that list for the four value points.</p><span class="risk"><b>Watch for:</b> easy to miss, needs a static fallback.</span><span class="go">Open wireframe &rarr;</span></a>
+    <a class="card" href="concept-c-source-map.html"><span class="n">C</span><h3>Source map</h3><p>Source types light up around "Your search" with a running count. Breadth shown, not claimed.</p><span class="risk"><b>Watch for:</b> any numbers must be real before shipping.</span><span class="go">Open wireframe &rarr;</span></a>
+    <a class="card" href="concept-d-badge-preview.html"><span class="n">D</span><h3>Badge preview</h3><p>A mini result card reveals the real badges and what each one means.</p><span class="risk"><b>Watch for:</b> Member rate badge may be net-new.</span><span class="go">Open wireframe &rarr;</span></a>
+  </div>
+
+  <h2 class="sec">Direction D variations</h2>
+  <div class="cards">
+    <a class="card" href="concept-d1-providers-and-rates.html"><span class="n">D1</span><h3>Providers and rates</h3><p>Names the sources (Expedia, Booking.com, hotels direct), then reveals the Negotiated and Member rate badges.</p><span class="risk"><b>Watch for:</b> partner names need brand and legal approval.</span><span class="go">Open wireframe &rarr;</span></a>
+    <a class="card" href="concept-d2-all-signals.html"><span class="n">D2</span><h3>All the signals</h3><p>The mini card collects every value signal in turn, including coworker bookings and colleague reviews.</p><span class="risk"><b>Watch for:</b> six signals is a lot for a short wait.</span><span class="go">Open wireframe &rarr;</span></a>
+    <a class="card" href="concept-d3-by-user-type.html"><span class="n">D3</span><h3>By user type</h3><p>Value framed for travelers or arrangers, with a generic fallback when the role is unknown.</p><span class="risk"><b>Watch for:</b> close to the PRD's out-of-scope personalization.</span><span class="go">Open wireframe &rarr;</span></a>
+  </div>
+
+  <div class="notes">
+    <b>How to review.</b> Every page has the same controls: results-ready time (2s to 10s), a minimum display time, desktop or mobile (mobile keeps the current modal by default), first-time or repeat exposure, reduce motion, a control comparison, and a simulated variant failure. Settings carry across pages so you can compare directions under the same conditions.
+    <ul>
+      <li><b>Claim wording:</b> "True for everyone" holds for every user and needs no personalization. "PRD claims" uses the stronger wording (best prices, your negotiated rates) and needs substantiation first.</li>
+      <li><b>Wait time:</b> a minimum display time longer than the results time shows in red, because the brief says the variant must not outlast the control.</li>
+      <li><b>Accessibility:</b> the panel logs what a screen reader would announce, including where focus lands when the modal closes.</li>
+    </ul>
+    <p>Full rationale and open items are in <a href="design-decisions.md">design-decisions.md</a>.</p>
+  </div>
+</main>
+</body>
+</html>
