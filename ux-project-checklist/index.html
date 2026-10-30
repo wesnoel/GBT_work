@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MPLC UX project checklist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fafafa; --surface: #fff; --text: #111; --muted: #6b6b6b;
+    --line: #e4e4e4; --hover: #f3f3f3; --accent: #111; --sel: #f0f0f0;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#0e0e0e; --surface:#161616; --text:#f2f2f2; --muted:#9a9a9a; --line:#2a2a2a; --hover:#1d1d1d; --accent:#f2f2f2; --sel:#202020; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font-family:'Open Sans',system-ui,sans-serif; line-height:1.5; }
+  .wrap { max-width:880px; margin:0 auto; padding:48px 24px 120px; }
+  h1 { font-size:26px; font-weight:700; letter-spacing:-.01em; margin:0 0 4px; }
+  .sub { color:var(--muted); font-size:14px; margin:0 0 28px; }
+  .bar { position:sticky; top:0; z-index:5; background:var(--bg); padding:12px 0; display:flex; gap:12px; align-items:center; flex-wrap:wrap; border-bottom:1px solid var(--line); }
+  .bar input[type=search] { flex:1; min-width:200px; padding:9px 12px; border:1px solid var(--line); border-radius:8px; background:var(--surface); color:var(--text); font:inherit; font-size:14px; }
+  .bar input:focus-visible, button:focus-visible, .row:focus-within { outline:2px solid var(--accent); outline-offset:2px; }
+  button { font:inherit; font-size:13px; font-weight:600; padding:8px 12px; border-radius:8px; border:1px solid var(--line); background:var(--surface); color:var(--text); cursor:pointer; }
+  button:hover { background:var(--hover); }
+  button.primary { background:var(--accent); color:var(--bg); border-color:var(--accent); }
+  button.primary:hover { opacity:.88; }
+  button:disabled { opacity:.4; cursor:not-allowed; }
+  .count { font-size:13px; color:var(--muted); margin-left:auto; white-space:nowrap; }
+  .count b { color:var(--text); }
+  ul { list-style:none; margin:0; padding:0; }
+  .row { display:flex; gap:14px; padding:14px 12px; border-bottom:1px solid var(--line); cursor:pointer; border-radius:6px; transition:background .15s; }
+  .row:hover { background:var(--hover); }
+  .row.on { background:var(--sel); }
+  .row input { margin-top:4px; width:18px; height:18px; accent-color:var(--accent); flex:none; cursor:pointer; }
+  .num { color:var(--muted); font-size:12px; width:22px; flex:none; margin-top:3px; font-variant-numeric:tabular-nums; }
+  .t { font-weight:600; font-size:15px; }
+  .d { color:var(--muted); font-size:13px; margin-top:2px; }
+  .empty { padding:40px 0; text-align:center; color:var(--muted); }
+  .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--accent); color:var(--bg); padding:10px 16px; border-radius:8px; font-size:13px; opacity:0; pointer-events:none; transition:.2s; }
+  .toast.show { opacity:1; transform:translateX(-50%); }
+  @media (prefers-reduced-motion: reduce) { * { transition:none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>MPLC UX project checklist</h1>
+  <p class="sub">Hotel Search &amp; Content, Nov '26 to Apr '27. Check every milestone that needs UX design work from you.</p>
+
+  <div class="bar">
+    <input type="search" id="q" placeholder="Filter milestones" aria-label="Filter milestones">
+    <button id="clear">Clear all</button>
+    <button id="apply" class="primary">Apply</button>
+    <button id="copy">Copy selection</button>
+    <button id="dl">Download JSON</button>
+    <span class="count" id="count" aria-live="polite"></span>
+  </div>
+
+  <ul id="list"></ul>
+  <div class="empty" id="empty" hidden>No milestones match that filter.</div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const ITEMS = [
+  ["Egencia Adobe WebSDK Migration - Hotel Shopping", "Deploy Adobe WebSDK on your service and migrate all the Adobe Analytics existing tagging and new tagging using the push d..."],
+  ["Egencia Hotel - Integration of Travelport as new inventory source", "Adding in the support of altered rates types for Travelport (Neg, AFR, SMB, Secure Govt rates & Direct Bill). 2M Travelport rol..."],
+  ["Egencia Trial - Hotel", "As part of self-serve trial experience, prospects will be evaluating hotel content, shopping experience and value/benefits they c..."],
+  ["Traveler message enhancements", "Enhance traveler messages config to increase flexibility around display"],
+  ["Deprecate and remove Taco.globalContext.arrangees", "**PLEASE IGNORE IF NOT USING STEP PLATFORM** As part of GEP project current mechanisms to propagate booking conte..."],
+  ["Egencia Trial V2 Dependency - Hotel", "For trial V2, we plan to enable savings finder hotel. This might require changes to handling merchant rates"],
+  ["Marketplace hotel booking agent", "Cosmos team will be starting work on the hotel booking agent that cover both shop and book. We are dependent on the hotel t..."],
+  ["Hotel shopping MCP support", "Hotel shopping MCP support as we roll out the agents for Egencia"],
+  ["Handoff Hotel Booking Agent", "Handoff of python based hotel booking agent to Marketplace Value Communication team"],
+  ["Hotel LOB Setup for South Africa/Mexico - POS Expansion", "Setting up Mexico Instance for Hotel (discovery, scope, dev, test, documentation),"],
+  ["Implement Lead Rate API in search", "HMP needs the in/out of policy indicator to use this API. The benefit is to GBT's ability to design experiments."],
+  ["Publish AI agents' tracing data in the datalake - Hotel", "Product teams (Hotel) to publish AI agents' tracing data in the datalake via a Kinesis stream or directly to datalake S3 buckets s..."],
+  ["Keep the Lights On (KTLO) - Hotel Search & Content general maintenance", "Capacity reserved for ongoing maintenance, bug fixes, and technical health work across Hotel Search & Content services for th..."],
+  ["Hotel SRP: Inline and Skyscraper Ad placements", "Introduce advertising placements on the Hotel SRP, including inline ad units and skyscraper placements, supporting hotel suppli..."],
+  ["Rosario improvements", "Discovery on Rosario React migration & Reachitecture. .25M Rosario Bulk update support 1M"],
+  ["Hotel Quick Results", "Inital launch: - Move pref/neg to top - Featured rates - Persona based results"],
+  ["Hotel Card Improvements", "- Hotel Card expansion - Map zoom - One click book"],
+  ["Hotel Interstitial to convey marketplace value", "AB test message on the interstitial to convey the value of the hotel marketplace which will improve hotel attach and hotel ..."],
+  ["Hotel Name Search Improvements", "In the hotel name search field on the hotel SRP, move up the wild card hotel search from the bottom to the top of the results."],
+  ["Hotel Map Improvements", "- Grouping of map pins - Adding Nearby places"],
+  ["Improvements to cancellation details", "Update RPE API for cancellation details"],
+  ["Neighborhood safety rating- discovery", "At the request of AM's look at options for providing safety data on the Hotel SRP."],
+  ["Agentic Shopping: Smart Filter v2", "As a follow up to AI Smart Filter v1, look at the strings that are unmatched and find improvements to match the strings through ..."],
+  ["Agentic Shopping: Context fetch & save", "Develop a ML model that stores personalized traveler data and search information and is able to use it within the hotel SRP."],
+  ["Standardization of hotel filter pills", "Standardize the hotel SRP filter pills by: - Removing the apply button - Moving selected filters to the left"],
+  ["Adding additional structure types to hotel SRP- discovery", "Look at the structures that are currently filtered out by MPP & Rosario and determine if there could be value by adding them int..."],
+  ["Accessibility - Hotel SRP - Remediate severe WCAG issues", "Since the completion of the WCAG audit this effort will resolve any severe issues that were found on the Hotel Search Results ..."],
+  ["Accessibility - Hotel SRP - Meet all WCAG AA standards", "Since the completion of the WCAG audit this effort will ensure that the Hotel Search Results Page is WCAG 2.2 AA compliant."]
+].map(([title, description], i) => ({ id: i + 1, title, description }));
+
+const KEY = "mplc-ux-checklist-v1";
+let sel = new Set();
+try { sel = new Set(JSON.parse(localStorage.getItem(KEY) || "[]")); } catch (e) {}
+let applied = false;
+try { applied = localStorage.getItem(KEY + "-applied") === "1"; } catch (e) {}
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify([...sel])); localStorage.setItem(KEY + "-applied", applied ? "1" : "0"); } catch (e) {} };
+
+const list = document.getElementById("list"), q = document.getElementById("q");
+const esc = s => s.replace(/[&<>"]/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[c]));
+
+list.innerHTML = ITEMS.map(it => `
+  <li><label class="row" data-id="${it.id}">
+    <input type="checkbox" value="${it.id}">
+    <span class="num">${it.id}</span>
+    <span><div class="t">${esc(it.title)}</div><div class="d">${esc(it.description)}</div></span>
+  </label></li>`).join("");
+
+function render() {
+  const term = q.value.trim().toLowerCase();
+  let shown = 0;
+  list.querySelectorAll("li").forEach((li, i) => {
+    const it = ITEMS[i], row = li.firstElementChild, cb = row.querySelector("input");
+    const match = !term || (it.title + " " + it.description).toLowerCase().includes(term);
+    const visible = match && (!applied || sel.has(it.id));
+    li.hidden = !visible; shown += visible;
+    cb.checked = sel.has(it.id);
+    row.classList.toggle("on", cb.checked);
+  });
+  document.getElementById("empty").hidden = shown > 0;
+  document.getElementById("count").innerHTML = applied
+    ? `<b>${sel.size}</b> of ${ITEMS.length} kept`
+    : `<b>${sel.size}</b> of ${ITEMS.length} selected`;
+  const ap = document.getElementById("apply");
+  ap.textContent = applied ? "Restore full list" : "Apply";
+  ap.disabled = !applied && sel.size === 0;
+  ap.classList.toggle("primary", !applied);
+  document.getElementById("clear").hidden = applied;
+  document.querySelector(".sub").textContent = applied
+    ? "Showing only the milestones you need UX work on. Restore the full list to change your selection."
+    : "Hotel Search & Content, Nov '26 to Apr '27. Check every milestone that needs UX design work from you, then press Apply to drop the rest.";
+}
+
+document.getElementById("apply").onclick = () => {
+  applied = !applied; save(); render();
+  toast(applied ? `Kept ${sel.size}, removed ${ITEMS.length - sel.size}` : "Full list restored");
+};
+
+list.addEventListener("change", e => {
+  const id = +e.target.value;
+  e.target.checked ? sel.add(id) : sel.delete(id);
+  save(); render();
+});
+q.addEventListener("input", render);
+document.getElementById("clear").onclick = () => { sel.clear(); save(); render(); };
+
+const chosen = () => ITEMS.filter(i => sel.has(i.id));
+function toast(msg) { const t = document.getElementById("toast"); t.textContent = msg; t.classList.add("show"); setTimeout(() => t.classList.remove("show"), 1800); }
+
+document.getElementById("copy").onclick = async () => {
+  const text = chosen().map(i => `- ${i.title}`).join("\n");
+  try { await navigator.clipboard.writeText(text); toast(`Copied ${sel.size} milestones`); } catch (e) { toast("Copy blocked, use Download JSON"); }
+};
+document.getElementById("dl").onclick = () => {
+  const data = { program: "MPLC - Hotel Search & Content", window: "Nov '26 - Apr '27", selected: chosen() };
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: "application/json" }));
+  a.download = "ux-selected-projects.json"; a.click();
+};
+
+render();
+</script>
+</body>
+</html>

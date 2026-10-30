@@ -538,6 +538,61 @@
 Small/medium/large/extra large change only the flag icon's size (16/18/20/24px) — the popover itself (width, header, body, footer, type) is identical at every size, shown standalone above · hover, click, and tap all open it — the standard interaction for both tooltip and popover going forward, superseding an earlier click/tap-only version of this concept · has an explicit close (&times;) button, but still auto-dismisses 3s after the pointer leaves in case someone opens it and walks away without closing · keyboard focus reveals it via <code>:focus-visible</code>, and every close path (timeout, &times; button, outside click, Escape) calls <code>blur()</code> · five placement variants (above-left, below, above, left, below-left) — **above, left is the default** (revised 2026-10-01; was below, centered), flush to the trigger's right edge and growing up and to the left, since that's what the hotel/flight card actually needs given its flag sits at the right edge of the price column; below/above center the popover on the trigger, left is vertically centered beside it · the card examples default to the medium icon size (revised from small). The same popover applied to the Flight/Air SRP card lives on its own page — see <a href="concept-b-popover-flight.html" style="color: var(--accent); font-weight: 700;">Flight — Popover dialog</a>. Full write-up: <a href="design-decisions.md" style="color: var(--accent); font-weight: 700;">design-decisions.md</a>.
   </div>
 
+  <div class="implementation-notes">
+    <h5>Implementation sketch — hint/toggle detection &amp; sheet gating (UITK React)</h5>
+    <p>Mapped to the real files: <code>uitk-tooltip.tsx</code> and <code>uitk-react-popover.tsx</code>/<code>.scss</code>. Rough shape, not a drop-in patch.</p>
+
+    <div class="code-note"><span class="code-file">uitk-tooltip.tsx</span> — one handler set that decides per interaction, instead of branching the whole trigger on <code>viewport.viewportSize</code>.</div>
+    <pre><code>const hoverSeenRef = React.useRef(false);
+
+const triggerProps = {
+  ["aria-owns"]: `${props.id}-popover`,
+  ["aria-expanded"]: !!attachElement,
+  onPointerEnter: (e) => {
+    if (e.pointerType === "touch") return;  // no hover state to report
+    hoverSeenRef.current = true;            // mouse, or a hover-capable pen
+    onOpen(e);
+  },
+  onPointerLeave: onHoverOut,
+  onPointerDown: (e) => {
+    const alreadyOpenFromHover = e.pointerType !== "touch" && hoverSeenRef.current;
+    if (alreadyOpenFromHover) return;        // mouse click / hover-pen tap: no-op
+    attachElement ? onClose(e) : onOpen(e);  // finger tap, or non-hover pen tap: toggle
+  },
+  onFocus: onOpen,
+  onBlur: onClose,
+  id: props.id,
+};</code></pre>
+
+    <div class="code-note">Resolve mode first, then decide presentation from that. Hint never gets a sheet — toggle can use either, based on room.</div>
+    <pre><code>const mode = hoverSeenRef.current || document.activeElement === triggerRef.current
+  ? "hint"
+  : "toggle";
+
+const presentation =
+  mode === "hint" ? "bubble" :
+  viewport.viewportSize === "SMALL" ? "sheet" : "bubble";</code></pre>
+
+    <div class="code-note">The actual backdrop bug: today it's a width media query, blind to hint/toggle. Gate it on the resolved <code>presentation</code> instead.</div>
+    <pre><code>/* uitk-react-popover.scss */
+.uitk-popover-overlay {
+  display: none; /* was: display: block under $breakpoint__small__max —
+                     a width query, with no regard for hint vs. toggle */
+}
+
+.uitk-popover.is-sheet .uitk-popover-overlay {
+  display: block; /* only when this instance actually resolved to a sheet */
+}</code></pre>
+    <pre><code>// uitk-react-popover.tsx — pass the resolved state down instead of guessing from width
+&lt;div
+  className={classNames(
+    baseClass,
+    { show: props.attachTo, "is-sheet": props.presentation === "sheet" },
+    props.className
+  )}
+&gt;</code></pre>
+  </div>
+
 </div>
 
 <div class="placeholder-chrome placeholder-footer">Footer placeholder — global footer</div>
