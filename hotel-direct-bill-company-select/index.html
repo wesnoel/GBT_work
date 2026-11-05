@@ -1,0 +1,572 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Hotel direct bill configuration: company selection wireframe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  /* Egencia neutral_1 scale (grayscale build). No other hues. */
+  :root {
+    --n900: #1B1D25; --n700: #303F49; --n600: #42525D; --n500: #74818B; --n400: #9CA5AC;
+    --n300: #C1C8CD; --n200: #E0E4E6; --n100: #EEF0F2; --n50: #F6F8FA; --white: #FFFFFF;
+    /* Egencia type scale (size / line-height) */
+    --t500: 22px; --l500: 30px;   /* page title */
+    --t400: 18px; --l400: 24px;   /* company name */
+    --t300: 14px; --l300: 18px;   /* body, table, inputs */
+    --t200: 12px; --l200: 16px;   /* labels, helper, badges */
+    --radius: 16px; --radius-sm: 8px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; font-family: "Open Sans", sans-serif; -webkit-font-smoothing: antialiased; color: var(--n900); background: var(--white); font-size: var(--t300); line-height: var(--l300); }
+  button, input, select { font: inherit; color: inherit; }
+  svg { width: 20px; height: 20px; fill: currentColor; flex: none; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  :focus-visible { outline: 2px solid var(--n900); outline-offset: 2px; }
+
+  /* Chrome */
+  .eg-header { background: var(--white); border-bottom: 1px solid var(--n100); }
+  .eg-header .in { max-width: 1200px; margin: 0 auto; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .logo { display: block; color: var(--n900); text-decoration: none; }
+  .logo b { display: block; font-size: 28px; line-height: 30px; letter-spacing: -1px; font-weight: 400; }
+  .logo small { display: block; font-size: 10px; line-height: 12px; font-weight: 700; letter-spacing: 0; color: var(--n600); }
+  .hdr-right { display: flex; align-items: center; gap: 20px; }
+  .admin { display: flex; align-items: center; gap: 6px; background: none; border: 0; cursor: default; }
+  .who { display: flex; align-items: center; gap: 12px; }
+  .avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--n200); display: grid; place-items: center; font-size: var(--t300); }
+  .who-t { text-align: right; }
+  .who-t .nm { display: block; font-size: var(--t300); line-height: var(--l300); }
+  .who-t .co { display: block; font-size: var(--t200); line-height: var(--l200); color: var(--n600); }
+
+  .band { background: linear-gradient(180deg, var(--n100) 0%, var(--n50) 100%); padding: 32px 24px 40px; }
+  .wrap { max-width: 1200px; margin: 0 auto; }
+  .card { background: var(--white); border: 1px solid var(--n200); border-radius: var(--radius); padding: 24px; position: relative; }
+  .card-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  h1 { margin: 0; font-size: var(--t500); line-height: var(--l500); letter-spacing: -0.5px; font-weight: 400; }
+  .desc { margin: 4px 0 16px; }
+
+  /* Buttons */
+  .btn { border-radius: var(--radius-sm); border: 1px solid var(--n900); padding: 10px 20px; min-height: 40px; cursor: pointer; font-size: var(--t300); line-height: var(--l300); background: var(--white); }
+  .btn:hover { background: var(--n100); }
+  .btn-primary { background: var(--n900); color: var(--white); }
+  .btn-primary:hover { background: var(--n700); }
+  .btn-sm { min-height: 32px; padding: 6px 14px; }
+  .btn-link { background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; color: var(--n900); }
+
+  /* Hero (zero state picker) */
+  .hero { border: 1px solid var(--n200); border-radius: 12px; background: var(--n50); padding: 20px; margin-bottom: 16px; }
+  .lbl { display: block; font-weight: 700; margin-bottom: 8px; }
+  .help { margin: 8px 0 0; font-size: var(--t200); line-height: var(--l200); color: var(--n600); }
+  #heroSlot { max-width: 560px; }
+
+  /* Combobox */
+  .cb { position: relative; width: 100%; max-width: 560px; }
+  .cb-field { display: flex; align-items: center; gap: 8px; background: var(--white); border: 1px solid var(--n900); border-radius: var(--radius-sm); padding: 0 12px; min-height: 44px; }
+  .cb-field:focus-within { outline: 2px solid var(--n900); outline-offset: 2px; }
+  .cb-field input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; min-height: 40px; }
+  .cb-field input::placeholder { color: var(--n500); }
+  .cb-clear { border: 0; background: none; cursor: pointer; padding: 2px; display: none; }
+  .cb.has-text .cb-clear { display: block; }
+  .cb-spin { display: none; width: 16px; height: 16px; border: 2px solid var(--n300); border-top-color: var(--n900); border-radius: 50%; animation: spin .7s linear infinite; }
+  .cb.busy .cb-spin { display: block; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .cb-list { position: absolute; z-index: 20; left: 0; right: 0; top: calc(100% + 6px); background: var(--white); border: 1px solid var(--n300); border-radius: var(--radius-sm); box-shadow: 0 6px 20px rgba(27,29,37,.14); margin: 0; padding: 6px; list-style: none; max-height: 296px; overflow-y: auto; }
+  .cb-list[hidden] { display: none; }
+  .cb-opt { padding: 8px 10px; border-radius: 6px; cursor: pointer; }
+  .cb-opt[aria-selected="true"], .cb-opt:hover { background: var(--n200); }
+  .cb-opt b { font-weight: 700; }
+  .cb-msg { padding: 10px; color: var(--n600); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .cb-foot { padding: 6px 10px 2px; font-size: var(--t200); line-height: var(--l200); color: var(--n500); }
+
+  /* Company bar */
+  .bar { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; flex-wrap: wrap; border: 1px solid var(--n200); background: var(--n50); border-radius: 12px; padding: 16px 20px; margin-bottom: 16px; }
+  .bar[hidden], .hero[hidden], .form[hidden], #addBtn[hidden] { display: none; }
+  .mini { display: block; font-size: var(--t200); line-height: var(--l200); color: var(--n600); margin-bottom: 4px; }
+  .bar-line { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; min-height: 32px; }
+  .co-name { margin: 0; font-size: var(--t400); line-height: var(--l400); font-weight: 700; }
+  .co-name:focus-visible { outline-offset: 4px; }
+  .meta { display: block; margin-top: 4px; font-size: var(--t200); line-height: var(--l200); color: var(--n600); }
+  #barSlot { display: none; flex: 1; min-width: 260px; }
+  .bar.changing #barSlot { display: block; }
+  .bar.changing .co-name, .bar.changing #changeBtn { display: none; }
+  #cancelChange { display: none; }
+  .bar.changing #cancelChange { display: inline-block; }
+  .bar-status { text-align: left; }
+  .st-row { display: flex; align-items: center; gap: 12px; min-height: 32px; }
+
+  /* Status badge: text + icon, never color alone. On = filled, Off = outline, Unavailable = dashed. */
+  .badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px 4px 8px; border-radius: 999px; font-size: var(--t200); line-height: var(--l200); font-weight: 700; }
+  .badge svg { width: 16px; height: 16px; }
+  .badge.on { background: var(--n900); color: var(--white); border: 1px solid var(--n900); }
+  .badge.off { background: var(--white); color: var(--n900); border: 1px solid var(--n500); }
+  .badge.na { background: var(--white); color: var(--n900); border: 1.5px dashed var(--n600); }
+  .badge.load { width: 96px; height: 26px; padding: 0; border: 0; background: linear-gradient(90deg, var(--n100), var(--n200), var(--n100)); background-size: 200% 100%; animation: shimmer 1.1s linear infinite; }
+  @keyframes shimmer { to { background-position: -200% 0; } }
+
+  /* Inline form (Add hotel / edit): existing behavior, shown only so the discard dialog can be demonstrated */
+  .form { border: 1px solid var(--n300); border-radius: 12px; padding: 16px 20px; margin-bottom: 16px; }
+  .form h2 { margin: 0 0 12px; font-size: var(--t400); line-height: var(--l400); font-weight: 700; }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px 16px; }
+  .fld label { display: block; font-size: var(--t200); line-height: var(--l200); color: var(--n600); margin-bottom: 4px; }
+  .fld input, .fld select { width: 100%; border: 1px solid var(--n500); border-radius: var(--radius-sm); min-height: 40px; padding: 0 10px; background: var(--white); }
+  .fld input:disabled { background: var(--n100); color: var(--n600); }
+  .fld .err { color: var(--n900); font-size: var(--t200); line-height: var(--l200); margin-top: 4px; font-weight: 700; }
+  .form-actions { display: flex; gap: 12px; margin-top: 16px; }
+
+  /* Table */
+  .tbl-wrap { overflow-x: auto; border: 1px solid var(--n300); border-radius: 4px; }
+  table { border-collapse: collapse; width: 100%; min-width: 760px; }
+  th { text-align: left; padding: 0; border-bottom: 1px solid var(--n300); border-right: 1px solid var(--n200); background: var(--white); }
+  th:last-child { border-right: 0; }
+  th button { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 6px; border: 0; background: none; cursor: pointer; padding: 22px 16px; font-size: var(--t200); line-height: var(--l200); font-weight: 700; color: var(--n600); }
+  th button:hover { background: var(--n50); }
+  th button svg { width: 16px; height: 16px; }
+  th[aria-sort="ascending"] button svg { transform: rotate(180deg); }
+  th[aria-sort="ascending"] button, th[aria-sort="descending"] button { color: var(--n900); }
+  td { padding: 18px 16px; border-bottom: 1px solid var(--n200); }
+  tr:last-child td { border-bottom: 0; }
+  tbody tr:hover td { background: var(--n50); }
+  td a, td .lnk { color: var(--n900); text-decoration: underline; background: none; border: 0; padding: 0; cursor: pointer; text-align: left; }
+  td.yes { font-weight: 700; }
+  .empty-row td { text-align: center; padding: 40px 16px; color: var(--n600); }
+  .skel td { padding: 18px 16px; }
+  .skel i { display: block; height: 14px; border-radius: 4px; background: linear-gradient(90deg, var(--n100), var(--n200), var(--n100)); background-size: 200% 100%; animation: shimmer 1.1s linear infinite; }
+  .zero-ph { border: 1.5px dashed var(--n300); border-radius: 4px; padding: 0; background: var(--white); }
+  .zero-ph .ghost { display: grid; grid-template-columns: 1.2fr 3fr 1.4fr 1fr 1.4fr 1fr; gap: 0; border-bottom: 1px dashed var(--n300); }
+  .zero-ph .ghost span { padding: 22px 16px; color: var(--n400); font-size: var(--t200); line-height: var(--l200); font-weight: 700; }
+  .zero-ph .msg { padding: 48px 16px; text-align: center; color: var(--n600); }
+  .zero-ph .msg strong { display: block; color: var(--n900); font-size: var(--t400); line-height: var(--l400); margin-bottom: 4px; }
+
+  /* Dialog */
+  .scrim { position: fixed; inset: 0; background: rgba(27,29,37,.6); display: grid; place-items: center; z-index: 100; padding: 16px; }
+  .scrim[hidden] { display: none; }
+  .dlg { background: var(--white); border-radius: 12px; padding: 24px; max-width: 460px; width: 100%; }
+  .dlg h2 { margin: 0 0 8px; font-size: var(--t500); line-height: var(--l500); letter-spacing: -0.5px; font-weight: 400; }
+  .dlg p { margin: 0 0 20px; }
+  .dlg .acts { display: flex; gap: 12px; justify-content: flex-end; flex-wrap: wrap; }
+
+  /* Footer */
+  .foot { text-align: center; padding: 40px 24px 56px; color: var(--n600); }
+  .foot .links { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; margin: 16px 0; }
+  .foot .legal { max-width: 900px; margin: 0 auto 12px; font-size: var(--t200); line-height: var(--l200); }
+
+  /* Wireframe-only controls and annotations (not part of the product) */
+  .wf { position: fixed; right: 16px; bottom: 16px; z-index: 50; width: 300px; max-height: calc(100vh - 32px); overflow-y: auto; background: var(--white); border: 1.5px dashed var(--n600); border-radius: 12px; padding: 12px 14px; font-size: var(--t200); line-height: var(--l200); }
+  .wf summary { cursor: pointer; font-weight: 700; font-size: var(--t300); line-height: var(--l300); }
+  .wf .tag { font-weight: 400; color: var(--n600); font-size: var(--t200); }
+  .wf .row { display: flex; align-items: center; gap: 8px; margin: 10px 0 0; }
+  .wf .btn { width: 100%; min-height: 32px; padding: 6px 10px; font-size: var(--t200); line-height: var(--l200); margin-top: 8px; }
+  .wf hr { border: 0; border-top: 1px solid var(--n200); margin: 12px 0; }
+  .wf ol { margin: 6px 0 0; padding-left: 18px; color: var(--n600); }
+  .wf .say { margin-top: 6px; padding: 6px 8px; background: var(--n50); border-radius: 6px; min-height: 28px; color: var(--n700); }
+  body.anno [data-anno] { position: relative; outline: 1.5px dashed var(--n600); outline-offset: 3px; }
+  body.anno [data-anno]::before { content: attr(data-anno); position: absolute; top: -12px; left: -12px; width: 22px; height: 22px; border-radius: 50%; background: var(--n900); color: var(--white); font-size: var(--t200); line-height: 22px; text-align: center; font-weight: 700; z-index: 30; }
+
+  @media (max-width: 900px) {
+    .grid { grid-template-columns: 1fr 1fr; }
+    .band { padding: 20px 12px 32px; }
+    .wf { position: static; width: auto; margin: 16px; }
+  }
+  @media (max-width: 600px) {
+    .card { padding: 16px; }
+    .card-head { flex-direction: column; align-items: stretch; }
+    .grid { grid-template-columns: 1fr; }
+    .bar { flex-direction: column; gap: 16px; }
+    #barSlot { min-width: 0; width: 100%; }
+    .who-t { display: none; }
+    .btn, .cb-opt { min-height: 44px; }
+    .cb-opt { display: flex; align-items: center; }
+  }
+</style>
+</head>
+<body>
+
+<header class="eg-header">
+  <div class="in">
+    <a class="logo" href="#" aria-label="Egencia by Amex GBT"><b>Egencia</b><small>BY AMEX GBT</small></a>
+    <div class="hdr-right">
+      <button class="admin" type="button" tabindex="-1" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M12 1c-4.97 0-9 4.03-9 9v7c0 1.66 1.34 3 3 3h3v-8H5v-2c0-3.87 3.13-7 7-7s7 3.13 7 7v2h-4v8h3c1.66 0 3-1.34 3-3v-7c0-4.97-4.03-9-9-9z"/></svg>
+        Admin
+        <svg viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>
+      </button>
+      <div class="who">
+        <div class="avatar" aria-hidden="true">WN</div>
+        <div class="who-t"><span class="nm">Wes Noel</span><span class="co" id="hdrCo"></span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="band">
+  <div class="wrap">
+    <section class="card" aria-labelledby="pt">
+      <div class="card-head">
+        <h1 id="pt">Hotel direct bill configuration</h1>
+        <button class="btn btn-primary" id="addBtn" type="button" hidden>Add hotel</button>
+      </div>
+      <p class="desc">Manage direct billing configs per hotel.</p>
+
+      <!-- Zero state: focused company search, no hotel data -->
+      <div class="hero" id="hero" data-anno="1">
+        <label class="lbl" for="cbInput">Company</label>
+        <div id="heroSlot">
+          <div class="cb" id="cb">
+            <div class="cb-field">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+              <input id="cbInput" type="text" role="combobox" aria-expanded="false" aria-controls="cbList" aria-autocomplete="list" aria-describedby="cbHelp" autocomplete="off" placeholder="Company ID or name" />
+              <span class="cb-spin" aria-hidden="true"></span>
+              <button class="cb-clear" id="cbClear" type="button" aria-label="Clear search"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
+            </div>
+            <ul class="cb-list" id="cbList" role="listbox" aria-label="Companies" hidden></ul>
+          </div>
+        </div>
+        <p class="help" id="cbHelp">Select a company to view and manage its Direct Bill hotels. Type at least 2 characters.</p>
+      </div>
+
+      <!-- Persistent company bar -->
+      <div class="bar" id="bar" data-anno="2" hidden>
+        <div class="bar-co">
+          <span class="mini">Company</span>
+          <div class="bar-line">
+            <h2 class="co-name" id="coName" tabindex="-1"></h2>
+            <div id="barSlot"></div>
+            <button class="btn btn-sm" id="changeBtn" type="button">Change</button>
+            <button class="btn-link" id="cancelChange" type="button">Cancel</button>
+          </div>
+          <span class="meta" id="coMeta"></span>
+        </div>
+        <div class="bar-status" data-anno="3">
+          <span class="mini" id="stLabel">Direct Bill for Hotel</span>
+          <div class="st-row" id="stRow" role="status" aria-labelledby="stLabel"></div>
+        </div>
+      </div>
+
+      <!-- Add / edit hotel (existing behavior, unchanged) -->
+      <form class="form" id="form" hidden novalidate>
+        <h2 id="formTitle">Add hotel</h2>
+        <div class="grid">
+          <div class="fld"><label for="fPid">Property ID</label><input id="fPid" autocomplete="off" /><div class="err" id="ePid" hidden></div></div>
+          <div class="fld"><label for="fName">Hotel name</label><input id="fName" autocomplete="off" /><div class="err" id="eName" hidden></div></div>
+          <div class="fld"><label for="fCity">City</label><input id="fCity" autocomplete="off" /></div>
+          <div class="fld"><label for="fEn">Enabled</label><select id="fEn"><option>Yes</option><option>No</option></select></div>
+        </div>
+        <div class="form-actions"><button class="btn btn-primary" type="submit">Save</button><button class="btn" type="button" id="fCancel">Cancel</button></div>
+      </form>
+
+      <div id="tableRegion" data-anno="5"></div>
+    </section>
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="logo" style="display:inline-block"><b>Egencia</b><small>BY AMEX GBT</small></div>
+  <div class="links"><span>Egencia.com</span><span>Mobile app</span><span>Customer support</span><span>Privacy</span><span>Cookie policy</span><span>Egencia promise</span><span>Egencia LLC Terms of use</span><span>Do not sell my info</span></div>
+  <p class="legal">American Express and certain associated logos are trademarks of American Express, used in approved formats by GBT Travel Services UK Limited and its authorized sublicensees pursuant to a limited license.</p>
+  <p class="legal">&copy; 2026 GBT Travel Services UK Limited</p>
+</footer>
+
+<!-- Discard dialog -->
+<div class="scrim" id="scrim" hidden>
+  <div class="dlg" id="dlg" role="alertdialog" aria-modal="true" aria-labelledby="dlgT" aria-describedby="dlgB">
+    <h2 id="dlgT">Discard changes?</h2>
+    <p id="dlgB"></p>
+    <div class="acts"><button class="btn" id="dlgKeep" type="button">Keep editing</button><button class="btn btn-primary" id="dlgDiscard" type="button">Discard and switch</button></div>
+  </div>
+</div>
+
+<div class="sr-only" id="live" aria-live="polite"></div>
+
+<!-- Wireframe-only panel -->
+<details class="wf" id="wfPanel">
+  <summary>Wireframe controls <span class="tag">(not part of the product)</span></summary>
+  <button class="btn" id="wfReset" type="button">Reset to zero state</button>
+  <button class="btn" id="wfContext" type="button">Arrive with a company in context</button>
+  <div class="row"><input type="checkbox" id="wfSearchErr" /><label for="wfSearchErr">Simulate company search failure</label></div>
+  <div class="row"><input type="checkbox" id="wfStatusErr" /><label for="wfStatusErr">Force status lookup to fail</label></div>
+  <div class="row"><input type="checkbox" id="wfAnno" /><label for="wfAnno">Show annotations</label></div>
+  <hr />
+  <strong>Try searching</strong>
+  <ol>
+    <li><code>star</code>: five companies, mixed US and CA</li>
+    <li><code>nation</code> or <code>14175</code>: status Off, no hotels</li>
+    <li><code>north</code>: status fails once, then Retry works</li>
+    <li><code>mck</code>: status On</li>
+    <li><code>zzz</code>: no companies found</li>
+  </ol>
+  <hr />
+  <strong>Annotations</strong>
+  <ol>
+    <li>Company combobox. Name or ID, 2+ characters. Table stays empty until a company is chosen.</li>
+    <li>Company bar. Persistent. Name, ID, POS and Change. Reload keeps the company.</li>
+    <li>Status badge. Read only. Text plus icon, not a toggle. Per company.</li>
+    <li>Retry re-fetches the status only. The rest of the page keeps working.</li>
+    <li>Hotel table, Add hotel and edit. Unchanged from today.</li>
+  </ol>
+  <hr />
+  <strong>Screen reader would announce</strong>
+  <div class="say" id="say">Nothing yet</div>
+</details>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var ICON = {
+    check: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>',
+    dash: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 13H5v-2h14v2z"/></svg>',
+    warn: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>',
+    chev: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>'
+  };
+
+  /* Realistic data. NA only: US = POS 60000, CA = POS 60004. */
+  var H = function (p, n, c, e, i, r) { return { pid: p, name: n, city: c, en: e, instr: i, rates: r }; };
+  var COMPANIES = [
+    { id: 2137, name: 'Starbucks United States', cc: 'US', pos: 60000, status: 'on', hotels: [
+      H('2FGXOLAG', 'Courtyard by Marriott Chicago Downtown River North', 'Chicago', 'Yes', 3, 'Pub,Neg'),
+      H('V4GDMZXA', 'Renaissance Columbus Downtown Hotel', 'Columbus', 'Yes', 3, 'Pub,Neg'),
+      H('K9QTR2LB', 'Hyatt Regency Seattle', 'Seattle', 'Yes', 2, 'Pub'),
+      H('7HNPW4CD', 'The Westin Bonaventure Hotel & Suites', 'Los Angeles', 'No', 1, 'Neg'),
+      H('B3TLM8EQ', 'Hilton Garden Inn Atlanta Midtown', 'Atlanta', 'Yes', 4, 'Pub,Neg') ] },
+    { id: 5891, name: 'Starbucks Canada', cc: 'CA', pos: 60004, status: 'on', hotels: [
+      H('X2RVK7JA', 'Fairmont Royal York', 'Toronto', 'Yes', 2, 'Pub,Neg'),
+      H('M8DCP5ZT', 'Fairmont Hotel Vancouver', 'Vancouver', 'Yes', 3, 'Pub'),
+      H('Q5WNE1HF', 'Hyatt Regency Calgary', 'Calgary', 'Yes', 1, 'Neg') ] },
+    { id: 3597, name: 'Starbucks Coffee Co', cc: 'US', pos: 60000, status: 'on', hotels: [
+      H('D6JSA9RK', 'Sheraton Grand Chicago Riverwalk', 'Chicago', 'Yes', 2, 'Pub,Neg'),
+      H('T1BYU3MX', 'Hotel Zephyr Fisherman’s Wharf', 'San Francisco', 'Yes', 1, 'Pub') ] },
+    { id: 2347, name: 'Starbucks Execs', cc: 'US', pos: 60000, status: 'off', hotels: [
+      H('N7LCG4VP', 'Four Seasons Hotel Seattle', 'Seattle', 'No', 2, 'Neg') ] },
+    { id: 5384, name: 'Starbucks', cc: 'US', pos: 60000, status: 'on', hotels: [
+      H('R3HDF8WE', 'Marriott Marquis Houston', 'Houston', 'Yes', 3, 'Pub,Neg'),
+      H('Y9KMA2ZQ', 'JW Marriott Austin', 'Austin', 'Yes', 2, 'Pub,Neg') ] },
+    { id: 14175, name: 'Nationwide Insurance', cc: 'US', pos: 60000, status: 'off', hotels: [] },
+    { id: 20468, name: 'Northwind Traders', cc: 'US', pos: 60000, status: 'on', flaky: true, hotels: [
+      H('P4ZXC6NB', 'Kimpton Hotel Monaco Denver', 'Denver', 'Yes', 2, 'Pub'),
+      H('G8QTV5LA', 'The Ritz-Carlton, Atlanta', 'Atlanta', 'Yes', 3, 'Pub,Neg') ] },
+    { id: 1042, name: 'McKinsey & Company', cc: 'US', pos: 60000, status: 'on', hotels: [
+      H('F2WRB7UD', 'Park Hyatt New York', 'New York', 'Yes', 5, 'Neg'),
+      H('L6EHN3SK', 'The Langham, Boston', 'Boston', 'Yes', 4, 'Neg'),
+      H('C9PYT1JM', 'Four Seasons Hotel Washington, DC', 'Washington', 'Yes', 4, 'Neg') ] }
+  ];
+  var STORE = 'hdb-wireframe-company';
+  var S = { co: null, status: 'idle', changing: false, formOpen: false, dirty: false, editPid: null, pending: null, sort: { k: null, d: 1 }, load: 0, listOpen: false, results: [], active: -1, token: 0, ctxMode: false, retried: {} };
+
+  function say(t) { $('live').textContent = ''; setTimeout(function () { $('live').textContent = t; }, 30); $('say').textContent = t; }
+  function save(v) { try { v == null ? localStorage.removeItem(STORE) : localStorage.setItem(STORE, String(v)); } catch (e) {} }
+  function read() { try { return localStorage.getItem(STORE); } catch (e) { return null; } }
+  function byId(id) { return COMPANIES.filter(function (c) { return c.id === Number(id); })[0]; }
+  function label(c) { return c.name + ' (' + c.id + ')'; }
+
+  /* ---------- Combobox ---------- */
+  var cb = $('cb'), input = $('cbInput'), list = $('cbList');
+  function openList(open) {
+    S.listOpen = open; list.hidden = !open; input.setAttribute('aria-expanded', open);
+    if (!open) { input.removeAttribute('aria-activedescendant'); S.active = -1; }
+  }
+  function hilite(text, q) {
+    var i = text.toLowerCase().indexOf(q.toLowerCase());
+    var f = document.createDocumentFragment();
+    if (i < 0) { f.appendChild(document.createTextNode(text)); return f; }
+    f.appendChild(document.createTextNode(text.slice(0, i)));
+    var b = document.createElement('b'); b.textContent = text.slice(i, i + q.length); f.appendChild(b);
+    f.appendChild(document.createTextNode(text.slice(i + q.length)));
+    return f;
+  }
+  function msg(text, retry) {
+    list.innerHTML = '';
+    var li = document.createElement('li'); li.className = 'cb-msg'; li.setAttribute('role', 'presentation');
+    var s = document.createElement('span'); s.textContent = text; li.appendChild(s);
+    if (retry) { var b = document.createElement('button'); b.type = 'button'; b.className = 'btn-link'; b.textContent = 'Try again'; b.addEventListener('mousedown', function (e) { e.preventDefault(); runSearch(); }); li.appendChild(b); }
+    list.appendChild(li); openList(true);
+  }
+  function renderResults(q) {
+    list.innerHTML = '';
+    S.results.forEach(function (c, i) {
+      var li = document.createElement('li'); li.id = 'opt' + i; li.className = 'cb-opt'; li.setAttribute('role', 'option'); li.setAttribute('aria-selected', 'false');
+      li.appendChild(hilite(label(c), q));
+      li.addEventListener('mousedown', function (e) { e.preventDefault(); choose(c); });
+      li.addEventListener('mousemove', function () { setActive(i); });
+      list.appendChild(li);
+    });
+    openList(true); setActive(0);
+  }
+  function setActive(i) {
+    var opts = list.querySelectorAll('.cb-opt');
+    opts.forEach(function (o, k) { o.setAttribute('aria-selected', k === i ? 'true' : 'false'); });
+    S.active = i;
+    if (opts[i]) { input.setAttribute('aria-activedescendant', opts[i].id); opts[i].scrollIntoView({ block: 'nearest' }); }
+  }
+  function runSearch() {
+    var q = input.value.trim(); var tok = ++S.token;
+    cb.classList.toggle('has-text', input.value.length > 0);
+    if (q.length < 2) { openList(false); cb.classList.remove('busy'); return; }
+    cb.classList.add('busy');
+    setTimeout(function () {
+      if (tok !== S.token) return;
+      cb.classList.remove('busy');
+      if ($('wfSearchErr').checked) { msg('Companies couldn’t be loaded.', true); say('Companies couldn’t be loaded. Try again.'); return; }
+      var ql = q.toLowerCase();
+      S.results = COMPANIES.filter(function (c) { return c.name.toLowerCase().indexOf(ql) > -1 || String(c.id).indexOf(ql) === 0; });
+      if (!S.results.length) { msg('No companies found'); say('No companies found'); return; }
+      renderResults(q); say(S.results.length + (S.results.length === 1 ? ' company' : ' companies') + ' found');
+    }, 350);
+  }
+  input.addEventListener('input', runSearch);
+  input.addEventListener('keydown', function (e) {
+    var n = S.results.length;
+    if (e.key === 'ArrowDown') { e.preventDefault(); if (!S.listOpen && n) openList(true); if (n) setActive((S.active + 1) % n); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); if (n) setActive((S.active - 1 + n) % n); }
+    else if (e.key === 'Enter') { if (S.listOpen && S.results[S.active]) { e.preventDefault(); choose(S.results[S.active]); } }
+    else if (e.key === 'Escape') { if (S.listOpen) { openList(false); } else if (S.changing) { cancelChange(); } }
+  });
+  input.addEventListener('blur', function () { setTimeout(function () { openList(false); }, 120); });
+  $('cbClear').addEventListener('click', function () { input.value = ''; S.token++; cb.classList.remove('busy', 'has-text'); openList(false); input.focus(); });
+
+  function resetInput() { input.value = ''; S.results = []; S.token++; cb.classList.remove('busy', 'has-text'); openList(false); }
+
+  /* ---------- Switching ---------- */
+  function choose(c) {
+    openList(false);
+    if (S.co && S.co.id === c.id) { cancelChange(); return; }
+    if (S.dirty) { S.pending = c; showDialog(c); return; }
+    switchTo(c, true);
+  }
+  function switchTo(c, focus) {
+    S.co = c; S.changing = false; S.formOpen = false; S.dirty = false; S.editPid = null; S.sort = { k: null, d: 1 };
+    save(c.id); resetInput(); render();
+    loadHotels(c); loadStatus(c, false);
+    say('Showing ' + label(c) + '. Direct Bill for Hotel status loading.');
+    if (focus) $('coName').focus();
+  }
+  function cancelChange() { S.changing = false; resetInput(); render(); $('changeBtn').focus(); }
+  $('changeBtn').addEventListener('click', function () { S.changing = true; render(); input.focus(); });
+  $('cancelChange').addEventListener('click', cancelChange);
+
+  /* ---------- Loading ---------- */
+  function loadHotels(c) { var t = ++S.load; S.hotelsReady = false; renderTable(); setTimeout(function () { if (t === S.load) { S.hotelsReady = true; renderTable(); } }, 650); }
+  function loadStatus(c, isRetry) {
+    var t = (S.stTok = (S.stTok || 0) + 1); S.status = 'loading'; renderStatus();
+    setTimeout(function () {
+      if (t !== S.stTok || S.co !== c) return;
+      var fail = $('wfStatusErr').checked || (c.flaky && !S.retried[c.id] && !isRetry);
+      if (c.flaky && !isRetry) S.retried[c.id] = true;
+      S.status = fail ? 'na' : c.status; renderStatus();
+      say(fail ? 'Direct Bill for Hotel status unavailable' : 'Direct Bill for Hotel is ' + (c.status === 'on' ? 'On' : 'Off') + ' for ' + c.name);
+    }, 900);
+  }
+
+  /* ---------- Render ---------- */
+  function render() {
+    var has = !!S.co;
+    $('hero').hidden = has || false; $('bar').hidden = !has; $('addBtn').hidden = !has;
+    if (!has) { $('heroSlot').appendChild(cb); }
+    else {
+      $('hero').hidden = true;
+      $('bar').classList.toggle('changing', S.changing);
+      $('barSlot').appendChild(cb);
+      $('coName').textContent = label(S.co);
+      $('coMeta').textContent = S.co.cc + ', POS ' + S.co.pos;
+    }
+    $('form').hidden = !S.formOpen;
+    renderStatus(); renderTable();
+  }
+  function renderStatus() {
+    var r = $('stRow'); r.innerHTML = '';
+    if (!S.co) return;
+    var b = document.createElement('span');
+    if (S.status === 'loading') { b.className = 'badge load'; b.setAttribute('aria-label', 'Loading status'); r.appendChild(b); return; }
+    if (S.status === 'on') { b.className = 'badge on'; b.innerHTML = ICON.check + 'On'; }
+    else if (S.status === 'off') { b.className = 'badge off'; b.innerHTML = ICON.dash + 'Off'; }
+    else { b.className = 'badge na'; b.innerHTML = ICON.warn + 'Status unavailable'; }
+    r.appendChild(b);
+    if (S.status === 'na') {
+      var rt = document.createElement('button'); rt.type = 'button'; rt.className = 'btn-link'; rt.textContent = 'Retry'; rt.setAttribute('data-anno', '4');
+      rt.addEventListener('click', function () { loadStatus(S.co, true); say('Retrying status'); });
+      r.appendChild(rt);
+    }
+  }
+  var COLS = [['pid', 'Property ID'], ['name', 'Hotel name'], ['city', 'City'], ['en', 'Enabled'], ['instr', '# of instructions'], ['rates', 'Rates']];
+  function renderTable() {
+    var t = $('tableRegion');
+    if (!S.co) {
+      t.innerHTML = '<div class="zero-ph"><div class="ghost"><span>Property ID</span><span>Hotel name</span><span>City</span><span>Enabled</span><span># of instructions</span><span>Rates</span></div><div class="msg"><strong>No company selected</strong>Search for a company above to see its Direct Bill hotels.</div></div>';
+      return;
+    }
+    var rows = S.co.hotels.slice();
+    if (S.sort.k) rows.sort(function (a, b) { var x = a[S.sort.k], y = b[S.sort.k]; return (x > y ? 1 : x < y ? -1 : 0) * S.sort.d; });
+    var h = '<div class="tbl-wrap"><table><caption class="sr-only">Direct Bill hotels for ' + esc(S.co.name) + '</caption><thead><tr>';
+    COLS.forEach(function (c) {
+      var as = S.sort.k === c[0] ? (S.sort.d === 1 ? 'ascending' : 'descending') : 'none';
+      h += '<th scope="col" aria-sort="' + as + '"><button type="button" data-k="' + c[0] + '">' + c[1] + ICON.chev + '</button></th>';
+    });
+    h += '</tr></thead><tbody>';
+    if (!S.hotelsReady) { for (var i = 0; i < 4; i++) h += '<tr class="skel"><td><i style="width:70%"></i></td><td><i style="width:85%"></i></td><td><i style="width:60%"></i></td><td><i style="width:40%"></i></td><td><i style="width:30%"></i></td><td><i style="width:55%"></i></td></tr>'; }
+    else if (!rows.length) h += '<tr class="empty-row"><td colspan="6">No Direct Bill hotels have been set up for this company yet. Use Add hotel to create one.</td></tr>';
+    else rows.forEach(function (r) {
+      h += '<tr><td><button class="lnk" type="button" data-edit="' + r.pid + '">' + r.pid + '</button></td><td>' + esc(r.name) + '</td><td>' + esc(r.city) + '</td><td class="' + (r.en === 'Yes' ? 'yes' : '') + '">' + r.en + '</td><td>' + r.instr + '</td><td>' + r.rates + '</td></tr>';
+    });
+    h += '</tbody></table></div>';
+    t.innerHTML = h;
+    t.querySelectorAll('th button').forEach(function (b) { b.addEventListener('click', function () { var k = b.getAttribute('data-k'); S.sort = { k: k, d: S.sort.k === k ? -S.sort.d : 1 }; renderTable(); }); });
+    t.querySelectorAll('[data-edit]').forEach(function (b) { b.addEventListener('click', function () { openForm(b.getAttribute('data-edit')); }); });
+  }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+  /* ---------- Add / edit form ---------- */
+  var F = { pid: $('fPid'), name: $('fName'), city: $('fCity'), en: $('fEn') };
+  var base = '';
+  function snap() { return [F.pid.value, F.name.value, F.city.value, F.en.value].join('|'); }
+  function openForm(pid) {
+    S.formOpen = true; S.editPid = pid || null;
+    var h = pid ? S.co.hotels.filter(function (x) { return x.pid === pid; })[0] : null;
+    $('formTitle').textContent = h ? 'Edit hotel' : 'Add hotel';
+    F.pid.value = h ? h.pid : ''; F.pid.disabled = !!h; F.name.value = h ? h.name : ''; F.city.value = h ? h.city : ''; F.en.value = h ? h.en : 'Yes';
+    $('ePid').hidden = $('eName').hidden = true; base = snap(); S.dirty = false; render(); F.name.focus();
+  }
+  function closeForm() { S.formOpen = false; S.dirty = false; S.editPid = null; render(); }
+  ['pid', 'name', 'city', 'en'].forEach(function (k) { F[k].addEventListener('input', function () { S.dirty = snap() !== base; }); F[k].addEventListener('change', function () { S.dirty = snap() !== base; }); });
+  $('addBtn').addEventListener('click', function () { openForm(null); });
+  $('fCancel').addEventListener('click', closeForm);
+  $('form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var bad = false; $('ePid').hidden = $('eName').hidden = true;
+    if (!F.pid.value.trim()) { $('ePid').textContent = 'Enter a property ID'; $('ePid').hidden = false; bad = true; }
+    if (!F.name.value.trim()) { $('eName').textContent = 'Enter a hotel name'; $('eName').hidden = false; bad = true; }
+    if (bad) return;
+    if (S.editPid) { var h = S.co.hotels.filter(function (x) { return x.pid === S.editPid; })[0]; h.name = F.name.value; h.city = F.city.value; h.en = F.en.value; }
+    else S.co.hotels.push(H(F.pid.value.trim().toUpperCase(), F.name.value.trim(), F.city.value.trim() || '-', F.en.value, 0, 'Pub'));
+    say('Hotel saved'); closeForm();
+  });
+
+  /* ---------- Discard dialog ---------- */
+  var opener = null;
+  function showDialog(c) {
+    opener = document.activeElement;
+    $('dlgB').textContent = 'You have unsaved changes to this hotel. Switching to ' + label(c) + ' will discard them.';
+    $('scrim').hidden = false; $('dlgKeep').focus(); say('Discard changes? You have unsaved changes to this hotel.');
+  }
+  function hideDialog() { $('scrim').hidden = true; }
+  $('dlgKeep').addEventListener('click', function () { hideDialog(); S.pending = null; S.changing = false; resetInput(); render(); $('changeBtn').focus(); });
+  $('dlgDiscard').addEventListener('click', function () { var c = S.pending; hideDialog(); S.pending = null; S.dirty = false; switchTo(c, true); });
+  $('scrim').addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { $('dlgKeep').click(); }
+    if (e.key === 'Tab') { var a = [$('dlgKeep'), $('dlgDiscard')], i = a.indexOf(document.activeElement); e.preventDefault(); a[(i + (e.shiftKey ? -1 : 1) + 2) % 2].focus(); }
+  });
+
+  /* ---------- Wireframe controls ---------- */
+  $('wfAnno').addEventListener('change', function () { document.body.classList.toggle('anno', this.checked); });
+  function zero() { S.co = null; S.changing = false; S.formOpen = false; S.dirty = false; S.ctxMode = false; S.retried = {}; $('hdrCo').textContent = ''; save(null); resetInput(); render(); say('No company selected. Search for a company to begin.'); }
+  $('wfReset').addEventListener('click', zero);
+  $('wfContext').addEventListener('click', function () {
+    var c = byId(14175); $('hdrCo').textContent = label(c).replace(' (', '('); S.ctxMode = true;
+    switchTo(c, false); say('Company already in context. Showing ' + label(c) + ' directly.');
+  });
+
+  /* ---------- Init: reload keeps the chosen company ---------- */
+  var saved = read();
+  if (saved && byId(saved)) { switchTo(byId(saved), false); } else { render(); }
+})();
+</script>
+</body>
+</html>
