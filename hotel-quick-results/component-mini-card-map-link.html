@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hotel Mini Card — Show on map link | Hotel Mini Card Panel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+  .lab { display: grid; grid-template-columns: auto 1fr; gap: 40px; align-items: start; margin-bottom: 32px; }
+  .lab-card { padding-top: 14px; }
+  .lab-ctrl { display: flex; flex-direction: column; gap: 20px; max-width: 560px; }
+  .ctrl-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-faint); margin-bottom: 8px; }
+  .seg { display: inline-flex; border: 1px solid var(--line); border-radius: var(--radius-sm); overflow: hidden; background: var(--surface); }
+  .seg button { font: inherit; font-size: 13px; font-weight: 600; padding: 7px 14px; border: 0; background: transparent; color: var(--ink-soft); cursor: pointer; border-right: 1px solid var(--line); }
+  .seg button:last-child { border-right: 0; }
+  .seg button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+  .seg button:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  .opt-note { font-size: 13px; line-height: 1.55; color: var(--ink-soft); min-height: 84px; }
+  .opt-note b { color: var(--ink); }
+  .opt-note[hidden] { display: none; }
+
+  /* ── The link itself ─────────────────────────────────────────── */
+  .maplink {
+    display: inline-flex; align-items: center; gap: 4px; padding: 0; margin: 0;
+    font: inherit; font-size: 12px; font-weight: 600; line-height: 16px; color: var(--ink);
+    background: none; border: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 2px;
+    text-decoration-color: var(--ink-faint);
+  }
+  .maplink .icon { width: 13px; height: 13px; }
+  .maplink:hover { text-decoration-color: var(--ink); }
+  .maplink:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+
+  /* only the chosen placement shows */
+  .ml-a, .ml-b, .ml-c { display: none; }
+  .lab[data-placement="a"] .ml-a { display: inline-flex; }
+  .lab[data-placement="b"] .ml-b { display: inline-flex; }
+  .lab[data-placement="c"] .ml-c { display: inline-flex; }
+
+  /* A: its own row in the header text, directly under stars + distance */
+  .ml-a { align-self: flex-start; }
+
+  /* B: chip over the thumbnail */
+  .mini-thumb { position: relative; overflow: visible; }
+  .mini-thumb > svg { border-radius: var(--radius-sm); display: block; }
+  .ml-b {
+    position: absolute; left: 4px; bottom: 4px; z-index: 1; text-decoration: none; padding: 3px 7px 3px 5px;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 999px; font-size: 11px; line-height: 14px;
+    box-shadow: 0 1px 3px rgba(20,22,26,.12);
+  }
+  .ml-b:hover { border-color: var(--ink); }
+
+  /* C: left side of the price row, opposite the price */
+  .ml-c { margin-right: auto; align-self: center; }
+
+  /* ── Map strip ──────────────────────────────────────────────── */
+  .map-lab-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-faint); margin-bottom: 8px; display: flex; justify-content: space-between; }
+  .map-demo { position: relative; height: 260px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--line-soft); overflow: hidden; transition: box-shadow .2s, border-color .2s; }
+  .map-demo svg.roads { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .map-demo.is-pulse { border-color: var(--ink); box-shadow: 0 0 0 3px rgba(20,22,26,.14); }
+  .pin {
+    position: absolute; transform: translate(-50%, -100%); font: inherit; font-size: 12px; font-weight: 700; line-height: 1;
+    padding: 5px 8px; border-radius: 999px; background: var(--surface); color: var(--ink); border: 1px solid var(--ink-faint);
+    box-shadow: 0 1px 3px rgba(20,22,26,.18); cursor: default; white-space: nowrap; transition: transform .2s, background .15s, color .15s;
+  }
+  .pin.target { cursor: pointer; }
+  .pin.is-preview { transform: translate(-50%, -100%) scale(1.12); border-color: var(--ink); }
+  .pin.is-active { background: var(--ink); color: #fff; border-color: var(--ink); transform: translate(-50%, -100%) scale(1.15); z-index: 3; }
+  .pin-bubble {
+    position: absolute; z-index: 4; transform: translate(-50%, calc(-100% - 40px)); background: var(--surface); border: 1px solid var(--ink);
+    border-radius: var(--radius-sm); padding: 8px 10px; font-size: 12px; box-shadow: 0 6px 18px rgba(20,22,26,.16); white-space: nowrap; display: none;
+  }
+  .pin-bubble.show { display: block; animation: fadein .2s ease; }
+  .pin-bubble b { display: block; font-size: 13px; }
+  .pin-bubble span { color: var(--ink-soft); }
+  .map-status { font-size: 12px; color: var(--ink-soft); margin-top: 8px; min-height: 18px; }
+
+  .flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 8px; }
+  .flow > div { background: var(--surface); border: 1px dashed var(--line); border-radius: var(--radius-sm); padding: 10px 12px; font-size: 12.5px; line-height: 1.5; color: var(--ink-soft); }
+  .flow b { display: block; color: var(--ink); font-size: 11px; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 4px; }
+  @media (prefers-reduced-motion: reduce) { .pin, .map-demo { transition: none; } .pin-bubble.show { animation: none; } }
+</style>
+</head>
+<body>
+
+<header class="eg-header">
+  <div class="eg-header-inner">
+    <div class="eg-logo"><span class="eg-logo-sup">Amex GBT</span><span class="eg-logo-word">egencia</span></div>
+    <nav class="eg-nav"><a class="on" href="#">Trips</a><a href="#">Approvals</a><a href="#">Reports</a></nav>
+    <div class="eg-header-right"><div class="eg-avatar">WN</div></div>
+  </div>
+</header>
+<div class="eg-crumb"><a href="index.html">← Hotel Mini Card Panel overview</a></div>
+
+<main class="eg-content" style="padding-top:20px;">
+
+  <div style="margin-bottom:24px;">
+    <div class="t-800">Mini Card — "Show on map" link</div>
+    <div class="t-400 ink-soft" style="margin-top:6px; max-width:720px;">
+      Placement study on a single Featured card. The link would live on every Mini Card in all three columns and in the carousel. Switch the placement and card width, then click the link (or hover it) to see what happens on the map below.
+    </div>
+  </div>
+
+  <div class="lab" id="lab" data-placement="a">
+
+    <div class="lab-card">
+      <div class="mini-card" id="demoCard" style="width:373px;">
+        <div class="mini-real">
+          <div class="mini-badges">
+            <span class="badge badge-egencia-preferred"><svg class="icon" viewBox="0 0 24 24"><path d="M5 3v18"/><path d="M5 4h11l-2 4 2 4H5"/></svg>Egencia preferred</span>
+          </div>
+          <div class="mini-header">
+            <div class="mini-thumb">
+              <svg viewBox="0 0 77 77" xmlns="http://www.w3.org/2000/svg"><rect width="77" height="77" fill="#eef0f2"/><path d="M0 55 L20 32 L34 46 L52 22 L77 52 V77 H0 Z" fill="#d8dee2"/></svg>
+              <button type="button" class="maplink ml-b" data-maplink aria-label="Show New York Hilton Midtown on map"><svg class="icon" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11a7 7 0 0114 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>Map</button>
+            </div>
+            <div class="mini-header-body">
+              <div class="mini-name">New York Hilton Midtown</div>
+              <div class="mini-stars-distance"><span class="mini-stars">★★★★</span><span class="mini-distance">0.06 miles away</span></div>
+              <button type="button" class="maplink ml-a" data-maplink aria-label="Show New York Hilton Midtown on map"><svg class="icon" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11a7 7 0 0114 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>Show on map</button>
+              <div class="mini-cert"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9"/></svg>Sustainability certified</div>
+            </div>
+          </div>
+          <div class="mini-coworker">58% of coworker bookings</div>
+          <div class="mini-reviews">
+            <div class="mini-reviews-label">Reviews</div>
+            <div class="mini-reviews-line">4.2/5 Very Good (1,001 reviews)</div>
+            <div class="mini-reviews-line">Colleague Reviews: 4.5/5 (10 reviews)</div>
+          </div>
+          <div class="mini-perk"><svg class="icon" viewBox="0 0 24 24"><path d="M4 4h16v4a4 4 0 01-4 4H8a4 4 0 01-4-4V4z"/><path d="M4 12v4a4 4 0 004 4h8a4 4 0 004-4v-4"/></svg>Offers free breakfast, within company policy</div>
+          <div class="mini-price-block">
+            <div class="mini-price-row">
+              <button type="button" class="maplink ml-c" data-maplink aria-label="Show New York Hilton Midtown on map"><svg class="icon" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11a7 7 0 0114 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>Show on map</button>
+              <span class="mini-flag"><svg class="icon icon-filled" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg></span>
+              <span class="mini-price">$332</span>
+            </div>
+            <div class="mini-price-subs">
+              $393 w taxes and fees<br>Pay online<br>
+              <span class="cvv"><svg class="icon" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M2 10h20"/></svg>CVV required</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lab-ctrl">
+      <div>
+        <div class="ctrl-label">Placement</div>
+        <div class="seg" id="segPlacement" role="group" aria-label="Link placement">
+          <button type="button" data-v="a" aria-pressed="true">A · Under distance</button>
+          <button type="button" data-v="b" aria-pressed="false">B · On the photo</button>
+          <button type="button" data-v="c" aria-pressed="false">C · Price row</button>
+        </div>
+      </div>
+      <div class="opt-note" data-note="a"><b>A · Under distance (recommended).</b> Reads as a continuation of "0.06 miles away": the number tells you how far, the link shows where. Stars and distance always exist, so the link always lands in the same third row, and it fills the gap beside the photo when the sustainability line is missing. Costs about 16px of header height, which still fits inside the 77px photo.</div>
+      <div class="opt-note" data-note="b" hidden><b>B · On the photo.</b> A small "Map" chip pinned to the thumbnail corner. Zero added height and obvious at a glance, but it sits on top of imagery that changes per hotel, the tap target is small, and a text link on a photo is the weakest option for contrast and accessibility.</div>
+      <div class="opt-note" data-note="c" hidden><b>C · Price row.</b> Uses the empty space left of the price. Always pinned to the bottom of the card, so it never moves, and costs no height. The tradeoff is context: it sits next to the money and the out-of-policy flag instead of the location info, so it competes with the price for attention.</div>
+      <div>
+        <div class="ctrl-label">Card width</div>
+        <div class="seg" id="segWidth" role="group" aria-label="Card width">
+          <button type="button" data-v="291" aria-pressed="false">291 · carousel</button>
+          <button type="button" data-v="373" aria-pressed="true">373 · 3 columns</button>
+          <button type="button" data-v="568" aria-pressed="false">568 · 2 columns</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="map-lab-label"><span>Results map (sits below the quick results panel on the SRP)</span><span>Demo only</span></div>
+  <div class="map-demo" id="mapDemo">
+    <svg class="roads" viewBox="0 0 1000 260" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <g stroke="#d8dee2" stroke-width="10" fill="none">
+        <path d="M0 70 L1000 110"/><path d="M0 190 L1000 160"/><path d="M180 0 L240 260"/><path d="M520 0 L480 260"/><path d="M820 0 L860 260"/>
+      </g>
+      <g stroke="#e6e9ec" stroke-width="3" fill="none"><path d="M0 130 L1000 140"/><path d="M350 0 L370 260"/><path d="M680 0 L700 260"/></g>
+    </svg>
+    <button type="button" class="pin" style="left:14%;top:48%;" tabindex="-1">$289</button>
+    <button type="button" class="pin" style="left:27%;top:80%;" tabindex="-1">$274</button>
+    <button type="button" class="pin" style="left:38%;top:36%;" tabindex="-1">$356</button>
+    <button type="button" class="pin target" id="targetPin" style="left:54%;top:58%;" aria-label="New York Hilton Midtown, $332">$332</button>
+    <button type="button" class="pin" style="left:68%;top:30%;" tabindex="-1">$318</button>
+    <button type="button" class="pin" style="left:78%;top:74%;" tabindex="-1">$342</button>
+    <button type="button" class="pin" style="left:89%;top:44%;" tabindex="-1">$301</button>
+    <div class="pin-bubble" id="bubble" style="left:54%;top:58%;"><b>New York Hilton Midtown</b><span>0.06 miles away · $332</span></div>
+  </div>
+  <div class="map-status" id="mapStatus" role="status" aria-live="polite">Hover the link to preview the pin. Click it to jump to the map.</div>
+
+  <div class="ctrl-label" style="margin-top:28px;">Behavior</div>
+  <div class="flow">
+    <div><b>Hover / focus</b>The matching pin on the map lifts slightly so users can find it before they commit to scrolling.</div>
+    <div><b>Click</b>Smooth-scrolls to the map, selects the pin and opens its hotel callout. The card itself does not navigate to the PDP.</div>
+    <div><b>Card click</b>Anywhere else on the card still opens the PDP. The link stops the click, the same way the out-of-policy flag does.</div>
+    <div><b>Keyboard</b>A real button in tab order, labeled with the hotel name for screen readers, with a visible focus ring.</div>
+  </div>
+
+</main>
+
+<script>
+(function () {
+  const lab = document.getElementById("lab");
+  const card = document.getElementById("demoCard");
+  const map = document.getElementById("mapDemo");
+  const pin = document.getElementById("targetPin");
+  const bubble = document.getElementById("bubble");
+  const status = document.getElementById("mapStatus");
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let pulseTimer;
+
+  function setPressed(group, v) {
+    group.querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.v === v)));
+  }
+  document.getElementById("segPlacement").addEventListener("click", (e) => {
+    const b = e.target.closest("button"); if (!b) return;
+    lab.dataset.placement = b.dataset.v;
+    setPressed(e.currentTarget, b.dataset.v);
+    document.querySelectorAll(".opt-note").forEach((n) => { n.hidden = n.dataset.note !== b.dataset.v; });
+  });
+  document.getElementById("segWidth").addEventListener("click", (e) => {
+    const b = e.target.closest("button"); if (!b) return;
+    card.style.width = b.dataset.v + "px";
+    setPressed(e.currentTarget, b.dataset.v);
+  });
+
+  function preview(on) { if (!pin.classList.contains("is-active")) pin.classList.toggle("is-preview", on); }
+  function activate() {
+    pin.classList.remove("is-preview");
+    pin.classList.add("is-active");
+    bubble.classList.add("show");
+    map.classList.add("is-pulse");
+    clearTimeout(pulseTimer);
+    pulseTimer = setTimeout(() => map.classList.remove("is-pulse"), 1400);
+    status.textContent = "Map centered on New York Hilton Midtown. The pin is selected and its callout is open.";
+    map.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "center" });
+  }
+
+  document.querySelectorAll("[data-maplink]").forEach((link) => {
+    link.addEventListener("click", (e) => { e.stopPropagation(); activate(); });
+    link.addEventListener("mouseenter", () => preview(true));
+    link.addEventListener("mouseleave", () => preview(false));
+    link.addEventListener("focus", () => preview(true));
+    link.addEventListener("blur", () => preview(false));
+  });
+  pin.addEventListener("click", () => {
+    const on = pin.classList.toggle("is-active");
+    bubble.classList.toggle("show", on);
+    if (!on) status.textContent = "Hover the link to preview the pin. Click it to jump to the map.";
+  });
+})();
+</script>
+</body>
+</html>
