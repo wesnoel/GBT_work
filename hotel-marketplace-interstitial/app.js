@@ -514,10 +514,10 @@
 
   CONCEPTS.g3 = function () {
     var q = S.repeat ? " on" : "";
-    var LOYALTY = ["Earns Marriott Bonvoy points", "Earns Hilton Honors points", "Earns World of Hyatt points", "Earns IHG One Rewards points", "Earns Choice Privileges points"];
+    var LOYALTY = ["Marriott Bonvoy", "Hilton Honors", "World of Hyatt", "IHG One Rewards", "Choice Privileges"];
     var star = '<svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><path d="M12 2l3 7 7.4.6-5.6 4.9 1.7 7.3L12 18l-6.5 3.8 1.7-7.3L1.6 9.6 9 9z"/></svg>';
     var stars = star + star + star + star + star;
-    var html = hotelG(98, 118, 191, 154) + '<div class="fcap rot' + q + '" style="top:12px"><span data-i="0">' + LOYALTY[0] + "</span></div>" +
+    var html = hotelG(98, 118, 191, 154) + '<div class="fcap' + q + '" style="top:12px">Searching loyalty&hellip; <span class="rot" style="display:inline-block;min-height:0"><span data-i="0">' + LOYALTY[0] + "</span></span></div>" +
       '<div class="pills" style="top:78px"><span class="pill p1' + q + '" data-tip="Sample: share of colleague bookings in this city at this hotel"><span><b class="cnt">' + (S.repeat ? 42 : 0) + '</b>% of coworker bookings</span></span>' +
       '<span class="pill p2' + q + '" data-tip="Sample: average score from colleagues at your company">Reviews <span class="stars"><span class="base">' + stars + '</span><span class="fill">' + stars + '</span></span> <b>4.4</b></span></div>' +
       '<div class="pills two" style="top:114px"><span class="pill p3' + q + '" data-tip="Sample: within your company\'s travel policy"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path class="tickmark" d="M5 12.5l4.5 4.5L19 7"/></svg>In policy</span></div>';
