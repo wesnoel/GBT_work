@@ -12,7 +12,7 @@ The modal exists to reduce perceived load time. Every concept keeps the control'
 
 ## 2. Claims that do not apply to every user
 
-**Decision:** Default to wording that is true for everyone ("Negotiated rates, if your company has them", "Member rates, where your programs apply"). Do not hide or show claims by user.
+**Decision:** Default to wording that is true for everyone ("Negotiated rates, if your company has them", "Loyalty rates, where your programs apply"). Do not hide or show claims by user.
 
 The PRD puts personalization out of scope (section 10, item 4) and says claims must hold broadly or be reworded (R1). "True for everyone" wording satisfies both. The "PRD claims" toggle shows the stronger copy ("best prices", "your negotiated rates") so the team can see what legal and brand review would be approving.
 
@@ -78,16 +78,16 @@ A reasonable path is to prototype B and C against the control with real arranger
 
 Three variations on D (badge preview), added after review feedback that D is the preferred direction.
 
-**D1. Providers and rates.** Names the sources (Expedia, Booking.com, hotel chains direct) before showing the Negotiated and Member rate badges. Provider names are text stand-ins, not logos.
-**D2. All the signals.** The mini card collects six signals in turn: Egencia preferred, negotiated, member rate, coworker bookings, colleague reviews, and a match to how you book. Coworker bookings and colleague reviews are existing SRP trust signals, so the promise matches what the user will see.
+**D1. Providers and rates.** Names the sources (Expedia, Booking.com, hotel chains direct) before showing the Negotiated and Loyalty rate badges. Provider names are text stand-ins, not logos.
+**D2. All the signals.** The mini card collects eight signals in turn: Egencia preferred, negotiated, loyalty rate, coworker bookings, reviews, a match to how you book, breakfast, and company policy. Coworker bookings and reviews are existing SRP trust signals, so the promise matches what the user will see.
 **D3. By user type.** The message is framed for travelers or arrangers. A "Viewing as" control includes Unknown, which falls back to generic wording.
 
 **Decisions and flags**
 - **Naming partners:** Showing Expedia and Booking.com is the most concrete proof of breadth, and also a brand and legal decision. Confirm the partnership allows named use in product, and whether logos or text only. This joins the claim substantiation work in Dependency 5.
 - **Personalization is a scope conflict.** The PRD puts personalizing by company, traveler or program out of scope (section 10, item 4). "Matches how you book" in D2 and the role-based wording in D3 sit on that line. Wording that is true for everyone ("where they apply") stays in scope. Anything that depends on who the user is needs a PRD decision first. D3's Unknown fallback shows what the no-personalization version looks like.
-- **Too many signals for a short wait:** D2 reveals six signals in a 6 to 10 second window. Reading time may conflict with the guardrail that the wait must not feel longer. Consider showing three and moving the rest to the results.
+- **Too many signals for a short wait:** D2 reveals eight signals in a 6 to 10 second window. Reading time may conflict with the guardrail that the wait must not feel longer. Consider showing three and moving the rest to the results.
 - **Repeat exposure:** In all three, repeat mode shows everything lit with no sequence.
-- **Net-new:** the provider chip (D1), the signal pills and caption (D2), and the audience header and value row (D3). "Member rate" may be a net-new badge. Coworker bookings and colleague reviews mirror the existing hotel card.
+- **Net-new:** the provider chip (D1), the signal pills and caption (D2), and the audience header and value row (D3). "Loyalty rate" may be a net-new badge. Coworker bookings and colleague reviews mirror the existing hotel card.
 
 **Recommendation for discussion:** D1 is the best candidate to test first, since it answers the stated doubt directly. D2 works better as a later step or as a feature of the results. D3 should wait until the personalization question is settled.
 
@@ -130,7 +130,7 @@ Feedback on F1 to F3: the larger hotel did not sit on the skyline's baseline, an
 - Modal shell, progress bar, title and subtext map to the existing loading modal. Reuse the component instance.
 - Route illustration is the real asset (`assets/route-illustration.png`), shown static as in the live modal. A, C and D replace it, B keeps it.
 - Net-new: A's checklist row, C's source node and hub, D's mini result card and legend row.
-- D's "Member rate" badge may be net-new. "Egencia preferred" and "Negotiated" mirror the SRP badge pattern.
+- D's "Loyalty rate" badge may be net-new. "Egencia preferred" and "Negotiated" mirror the SRP badge pattern.
 - Spacing follows an 8px rhythm. Every color resolves to an Egencia token. Open Sans only.
 
 ---

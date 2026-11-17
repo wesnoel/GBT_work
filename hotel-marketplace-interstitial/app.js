@@ -77,14 +77,14 @@
   var WORD = {
     safe: {
       inv: ["Inventory", "Hotel chains, independents and booking partners"],
-      loy: ["Loyalty rates", "Member rates, where your programs apply"],
+      loy: ["Loyalty rates", "Loyalty rates, where your programs apply"],
       co: ["Company rates", "Negotiated rates, if your company has them"],
       pr: ["Prices", "Compared across every source we checked"],
       rot: ["Checking hotel chains, independents and booking partners", "Looking for your loyalty rates", "Including company rates, if your company has them", "Comparing prices across every source"],
       one: "Checking every source, including loyalty and company rates where they apply",
       csub: "Checking six source types",
       dsub: "Rates are marked on your results when they apply",
-      leg: [["Egencia preferred", "Hotels Egencia recommends"], ["Negotiated", "Your company's rates, when available"], ["Member rate", "Your loyalty pricing, when available"]]
+      leg: [["Egencia preferred", "Hotels Egencia recommends"], ["Negotiated", "Your company's rates, when available"], ["Loyalty rate", "Your loyalty pricing, when available"]]
     },
     strong: {
       inv: ["Inventory", "Every inventory source, in one search"],
@@ -95,7 +95,7 @@
       one: "Checking all inventory sources, loyalty rates, company rates and best prices",
       csub: "Every source, one search",
       dsub: "Your best rates, marked on your results",
-      leg: [["Egencia preferred", "Hotels Egencia recommends"], ["Negotiated", "Your company's negotiated rates"], ["Member rate", "Your loyalty rates, applied"]]
+      leg: [["Egencia preferred", "Hotels Egencia recommends"], ["Negotiated", "Your company's negotiated rates"], ["Loyalty rate", "Your loyalty rates, applied"]]
     }
   };
 
@@ -184,7 +184,7 @@
     d: function (ctx) {
       var w = WORD[S.wording], on = S.repeat ? " on" : "";
       var html = '<div class="prev"><div class="prev-card"><div class="prev-badges">' +
-        '<span class="badge pref' + on + '">Egencia preferred</span><span class="badge' + on + '">Negotiated</span><span class="badge member' + on + '">Member rate</span></div>' +
+        '<span class="badge pref' + on + '">Egencia preferred</span><span class="badge' + on + '">Negotiated</span><span class="badge member' + on + '">Loyalty rate</span></div>' +
         '<div class="thumb"></div><div><div class="ln"></div><div class="ln w60"></div><div class="ln w40"></div></div><div class="px">$189</div></div><ul class="legend">';
       w.leg.forEach(function (l) { html += '<li class="' + on.trim() + '"><b>' + l[0] + "</b><span>" + l[1] + "</span></li>"; });
       html += "</ul></div>";
@@ -200,10 +200,10 @@
     d1: function (ctx) {
       var strong = S.wording === "strong", on = S.repeat ? " on" : "";
       var names = ["Expedia", "Booking.com", "Hotel chains direct", "And more"];
-      var html = '<div class="prev"><div class="prev-card"><div class="prev-badges"><span class="badge' + on + '">Negotiated</span><span class="badge member' + on + '">Member rate</span></div>' +
+      var html = '<div class="prev"><div class="prev-card"><div class="prev-badges"><span class="badge' + on + '">Negotiated</span><span class="badge member' + on + '">Loyalty rate</span></div>' +
         '<div class="thumb"></div><div><div class="ln"></div><div class="ln w60"></div><div class="ln w40"></div></div><div class="px">$189</div></div>' +
         '<p class="prov-h">Rates from</p><div class="provs">' + names.map(function (n) { return '<span class="chip' + on + '">' + n + "</span>"; }).join("") + "</div>" +
-        '<ul class="legend"><li class="' + on.trim() + '"><b>Negotiated</b><span>' + (strong ? "Your company's negotiated rates" : "Your company's rates, when available") + '</span></li><li class="' + on.trim() + '"><b>Member rate</b><span>' + (strong ? "Your loyalty rates, applied" : "Your loyalty pricing, when available") + "</span></li></ul></div>";
+        '<ul class="legend"><li class="' + on.trim() + '"><b>Negotiated</b><span>' + (strong ? "Your company's negotiated rates" : "Your company's rates, when available") + '</span></li><li class="' + on.trim() + '"><b>Loyalty rate</b><span>' + (strong ? "Your loyalty rates, applied" : "Your loyalty pricing, when available") + "</span></li></ul></div>";
       var sub = strong ? "Expedia, Booking.com and every direct source, in one search" : "Checking partners like Expedia and Booking.com, plus hotels directly";
       return {
         visual: html, sub: sub, desc: "Searching for hotels. " + sub + ". Company and loyalty rates are marked on your results when they apply.",
@@ -220,24 +220,26 @@
       var sigs = [
         ["Egencia preferred", "Hotels Egencia recommends for business travel"],
         ["Negotiated", strong ? "Your company's negotiated rates" : "Your company's rates, when available"],
-        ["Member rate", strong ? "Your loyalty rates, applied" : "Your loyalty pricing, when available"],
+        ["Loyalty rate", strong ? "Your loyalty rates, applied" : "Your loyalty pricing, when available"],
         ["Coworker bookings", "How many colleagues booked this hotel"],
-        ["Colleague reviews", "Scores from people at your company"],
-        ["Matches how you book", "Shaped by your past trips"]
+        ["Reviews", "Scores from people at your company"],
+        ["Matches how you book", "Shaped by your past trips"],
+        ["Breakfast included", "Whether breakfast is included in the rate"],
+        ["Company policy", "Whether a hotel is in policy"]
       ];
       var on = S.repeat ? " on" : "";
       var html = '<div class="prev"><div class="prev-card"><div class="prev-badges">' +
-        '<span class="badge pref sig' + on + '" data-s="0">Egencia preferred</span><span class="badge sig' + on + '" data-s="1">Negotiated</span><span class="badge member sig' + on + '" data-s="2">Member rate</span></div>' +
-        '<div class="thumb"></div><div><div class="ln"></div><div class="sigs"><span class="pill sig' + on + '" data-s="3">42% of coworker bookings</span><span class="pill sig' + on + '" data-s="4">Colleague reviews 4.4</span><span class="pill sig' + on + '" data-s="5">Matches how you book</span></div></div><div class="px">$189</div></div>' +
+        '<span class="badge pref sig' + on + '" data-s="0">Egencia preferred</span><span class="badge sig' + on + '" data-s="1">Negotiated</span><span class="badge member sig' + on + '" data-s="2">Loyalty rate</span></div>' +
+        '<div class="thumb"></div><div><div class="ln"></div><div class="sigs"><span class="pill sig' + on + '" data-s="3">42% of coworker bookings</span><span class="pill sig' + on + '" data-s="4">Reviews 4.4</span><span class="pill sig' + on + '" data-s="5">Matches how you book</span><span class="pill sig' + on + '" data-s="6">Breakfast included</span><span class="pill sig' + on + '" data-s="7">Company policy</span></div></div><div class="px">$189</div></div>' +
         '<p class="cap" aria-hidden="true">' + (S.repeat ? "<b>Look for these signals on your results</b>" : "") + "</p></div>";
       var sub = strong ? "Everything that makes a hotel the best value for you, marked on your results" : "Signals that help you choose are marked on your results";
       var last = -1;
       return {
         visual: html, sub: sub,
-        desc: "Searching for hotels. " + sub + ". Signals include Egencia preferred, negotiated rates, member rates, coworker bookings, colleague reviews and a match to how you book.",
+        desc: "Searching for hotels. " + sub + ". Signals include Egencia preferred, negotiated rates, loyalty rates, coworker bookings, colleague reviews, a match to how you book, breakfast and company policy.",
         update: function (p, el) {
           if (S.repeat) return;
-          var i = Math.min(5, Math.floor(p * 6.2));
+          var i = Math.min(7, Math.floor(p * 8.2));
           el.querySelectorAll(".sig").forEach(function (n) { flip(n, "on", +n.dataset.s <= i, { o: 0.25, y: 6, s: 0.88 }, 0.35); });
           if (i !== last) { last = i; var cap = el.querySelector(".cap"); if (cap) { cap.innerHTML = "<b>" + sigs[i][0] + ":</b> " + sigs[i][1]; tween(cap, { o: 0, y: 4 }, { o: 1, y: 0 }, 0.3); } }
         }
@@ -246,9 +248,9 @@
     d3: function (ctx) {
       var strong = S.wording === "strong", t = S.userType;
       var C = {
-        traveler: ["For travelers", [["Your loyalty rates", strong ? "Applied for you, across every source" : "Member rates, where your programs apply"], ["Coworker picks", "See what colleagues book, in the results"], ["Matches how you book", "Shaped by your past trips"]]],
+        traveler: ["For travelers", [["Your loyalty rates", strong ? "Applied for you, across every source" : "Loyalty rates, where your programs apply"], ["Coworker picks", "See what colleagues book, in the results"], ["Matches how you book", "Shaped by your past trips"]]],
         arranger: ["For arrangers", [["Company rates", strong ? "Your company's negotiated rates, included" : "Negotiated rates, if your company has them"], ["Policy at a glance", "In and out of policy, marked on every hotel"], ["Booking for others", "Traveler loyalty and preferences, where on file"]]],
-        unknown: ["For your trip", [["Major partners and direct", "Expedia, Booking.com and hotels directly"], ["Company and member rates", "Where they apply to you"], ["What colleagues book", "Shown in the results"]]]
+        unknown: ["For your trip", [["Major partners and direct", "Expedia, Booking.com and hotels directly"], ["Company and loyalty rates", "Where they apply to you"], ["What colleagues book", "Shown in the results"]]]
       }[t];
       var on = S.repeat ? " on" : "";
       var html = '<div class="vals"><span class="who">' + C[0] + '</span><ul>' + C[1].map(function (r) {
@@ -301,7 +303,7 @@
   }
 
   CONCEPTS.f1 = function () {
-    var pins = [["Expedia", 36, 30, "Partner inventory"], ["Booking.com", 176, 14, "Partner inventory"], ["Hotel chains direct", 300, 40, "Rates direct from hotel brands"], ["Loyalty programs", 70, 96, "Member rates, where your programs apply"], ["Company rates", 322, 102, "Negotiated rates, if your company has them"]];
+    var pins = [["Expedia", 36, 30, "Partner inventory"], ["Booking.com", 176, 14, "Partner inventory"], ["Hotel chains direct", 300, 40, "Rates direct from hotel brands"], ["Loyalty programs", 70, 96, "Loyalty rates, where your programs apply"], ["Company rates", 322, 102, "Negotiated rates, if your company has them"]];
     var q = S.repeat ? " on" : "";
     var html = hotelImg(104, 126, 188, 128) + pins.map(function (p, i) {
       return '<div class="spin' + q + '" data-i="' + i + '" data-tip="' + p[3] + '" style="left:' + p[1] + "px;top:" + p[2] + 'px"><span class="chip"><i class="sd"></i>' + p[0] + '</span><span class="stem"></span><span class="dotp"></span></div>';
@@ -336,10 +338,10 @@
 
   CONCEPTS.f2 = function () {
     var strong = S.wording === "strong", q = S.repeat ? " on" : "";
-    /* order of reveal: Negotiated, Member rate, Egencia preferred, Coworker picks */
+    /* order of reveal: Negotiated, Loyalty rate, Egencia preferred, Coworker picks */
     var defs = [
       ["Negotiated", strong ? "Your company's negotiated rates" : "Your company's rates, when available", "R", "up", ""],
-      ["Member rate", strong ? "Your loyalty rates, applied" : "Your loyalty pricing, when available", "L", "low", ""],
+      ["Loyalty rate", strong ? "Your loyalty rates, applied" : "Your loyalty pricing, when available", "L", "low", ""],
       ["Egencia preferred", "Hotels Egencia recommends", "L", "up", " gold"],
       ["Coworker picks", "See what colleagues book", "R", "low", ""]
     ];
@@ -358,7 +360,7 @@
     return {
       fig: true, visual: figBase(html, true), meta: true,
       sub: "Rates and signals are marked on your results",
-      desc: "Searching for hotels. Rates and signals are marked on your results: negotiated rates, member rates, Egencia preferred and coworker picks.",
+      desc: "Searching for hotels. Rates and signals are marked on your results: negotiated rates, loyalty rates, Egencia preferred and coworker picks.",
       update: function (p, el, modal) {
         figHeading(p, modal);
         if (S.repeat) return;
@@ -385,7 +387,7 @@
     var html = hotelImg(87, 105, 196, 10) + '<div class="fcap' + q + '">Colleagues who booked here</div>' +
       inits.map(function (n, i) { return '<span class="av ' + tints[i] + q + '" data-i="' + i + '" style="left:' + (166 + i * 28) + 'px;top:146px">' + n + "</span>"; }).join("") +
       '<div class="pills"><span class="pill p1' + q + '" data-tip="Sample: share of colleague bookings in this city at this hotel"><span><b class="cnt">' + (S.repeat ? 42 : 0) + '</b>% of coworker bookings</span></span>' +
-      '<span class="pill p2' + q + '" data-tip="Sample: average score from colleagues at your company">Colleague reviews <span class="stars"><span class="base">' + stars + '</span><span class="fill">' + stars + '</span></span> <b>4.4</b></span></div>' +
+      '<span class="pill p2' + q + '" data-tip="Sample: average score from colleagues at your company">Reviews <span class="stars"><span class="base">' + stars + '</span><span class="fill">' + stars + '</span></span> <b>4.4</b></span></div>' +
       '<div class="pills two"><span class="pill p3' + q + '" data-tip="Sample: within your company\'s travel policy"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path class="tickmark" d="M5 12.5l4.5 4.5L19 7"/></svg>In policy</span></div>';
     var counted = S.repeat;
     return {
@@ -433,7 +435,7 @@
       extra + '<div class="tip" role="presentation"></div></div>';
   }
   CONCEPTS.g1 = function () {
-    var pins = [["Expedia", 44, 22, "Partner inventory"], ["Booking.com", 192, 34, "Partner inventory"], ["Hotel chains direct", 296, 22, "Rates direct from hotel brands"], ["Loyalty programs", 36, 92, "Member rates, where your programs apply"], ["Company rates", 338, 92, "Negotiated rates, if your company has them"]];
+    var pins = [["Expedia", 44, 22, "Partner inventory"], ["Booking.com", 192, 34, "Partner inventory"], ["Hotel chains direct", 296, 22, "Rates direct from hotel brands"], ["Loyalty programs", 36, 92, "Loyalty rates, where your programs apply"], ["Company rates", 338, 92, "Negotiated rates, if your company has them"]];
     var q = S.repeat ? " on" : "";
     var html = hotelG(143, 172, 168, 100) + pins.map(function (p, i) {
       return '<div class="spin' + q + '" data-i="' + i + '" data-tip="' + p[3] + '" style="left:' + p[1] + "px;top:" + p[2] + 'px"><span class="chip"><i class="sd"></i>' + p[0] + '</span><span class="stem"></span><span class="dotp"></span></div>';
@@ -468,10 +470,10 @@
 
   CONCEPTS.g2 = function () {
     var strong = S.wording === "strong", q = S.repeat ? " on" : "";
-    /* order of reveal: Negotiated, Member rate, Egencia preferred, Coworker picks */
+    /* order of reveal: Negotiated, Loyalty rate, Egencia preferred, Coworker picks */
     var defs = [
       ["Negotiated", strong ? "Your company's negotiated rates" : "Your company's rates, when available", "R", "up", ""],
-      ["Member rate", strong ? "Your loyalty rates, applied" : "Your loyalty pricing, when available", "L", "low", ""],
+      ["Loyalty rate", strong ? "Your loyalty rates, applied" : "Your loyalty pricing, when available", "L", "low", ""],
       ["Egencia preferred", "Hotels Egencia recommends", "L", "up", " gold"],
       ["Coworker picks", "See what colleagues book", "R", "low", ""]
     ];
@@ -490,7 +492,7 @@
     return {
       fig: true, visual: figBaseG(html), meta: true,
       sub: "Rates and signals are marked on your results",
-      desc: "Searching for hotels. Rates and signals are marked on your results: negotiated rates, member rates, Egencia preferred and coworker picks.",
+      desc: "Searching for hotels. Rates and signals are marked on your results: negotiated rates, loyalty rates, Egencia preferred and coworker picks.",
       update: function (p, el, modal) {
         figHeading(p, modal);
         if (S.repeat) return;
@@ -517,7 +519,7 @@
     var html = hotelG(98, 118, 191, 154) + '<div class="fcap' + q + '" style="top:12px">Colleagues who booked here</div>' +
       inits.map(function (n, i) { return '<span class="av ' + tints[i] + q + '" data-i="' + i + '" style="left:' + (166 + i * 28) + 'px;top:34px">' + n + "</span>"; }).join("") +
       '<div class="pills" style="top:78px"><span class="pill p1' + q + '" data-tip="Sample: share of colleague bookings in this city at this hotel"><span><b class="cnt">' + (S.repeat ? 42 : 0) + '</b>% of coworker bookings</span></span>' +
-      '<span class="pill p2' + q + '" data-tip="Sample: average score from colleagues at your company">Colleague reviews <span class="stars"><span class="base">' + stars + '</span><span class="fill">' + stars + '</span></span> <b>4.4</b></span></div>' +
+      '<span class="pill p2' + q + '" data-tip="Sample: average score from colleagues at your company">Reviews <span class="stars"><span class="base">' + stars + '</span><span class="fill">' + stars + '</span></span> <b>4.4</b></span></div>' +
       '<div class="pills two" style="top:114px"><span class="pill p3' + q + '" data-tip="Sample: within your company\'s travel policy"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path class="tickmark" d="M5 12.5l4.5 4.5L19 7"/></svg>In policy</span></div>';
     var counted = S.repeat;
     return {
@@ -556,7 +558,7 @@
   /* ---------- Stage ---------- */
   var HOTELS = [
     ["Hyatt Regency Chicago", "4 stars, 0.3 mi from search", "$189", ["Egencia preferred", "Negotiated"]],
-    ["Hilton Chicago", "4 stars, 0.6 mi from search", "$204", ["Member rate"]],
+    ["Hilton Chicago", "4 stars, 0.6 mi from search", "$204", ["Loyalty rate"]],
     ["The Gwen, a Luxury Collection Hotel", "5 stars, 0.9 mi from search", "$276", []],
     ["Hotel Chicago Downtown", "3 stars, 1.1 mi from search", "$152", ["Negotiated"]]
   ];
