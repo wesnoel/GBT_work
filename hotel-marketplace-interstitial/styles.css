@@ -339,3 +339,14 @@ button { font-family: inherit; }
 
 /* G variants: the hotel scales from its base so it stays on the skyline baseline */
 .fz .hotel.g { transform-origin: 50% 100%; }
+
+/* D2 + hotel: signal rows beside the hotel */
+.sg { position: absolute; display: inline-flex; align-items: center; gap: 8px; padding: 5px 12px; border-radius: var(--radius-sm); background: var(--white); border: 1px solid var(--n-300); font-size: 12px; line-height: 16px; color: var(--n-900); white-space: nowrap; opacity: 0; transform: translateX(16px); }
+.sg .dt { width: 8px; height: 8px; border-radius: 50%; background: var(--n-400); }
+.sg.on { opacity: 1; transform: none; }
+.sg.pref { border-color: var(--gold-400); } .sg.pref .dt { background: var(--gold-400); }
+.sg.neg { border-color: var(--n-500); } .sg.neg .dt { background: var(--n-500); }
+.sg.mem { border-color: var(--blue-500); } .sg.mem .dt { background: var(--blue-500); }
+.sg.soc { background: var(--n-100); border-color: var(--n-200); } .sg.soc .dt { background: var(--green-500); }
+.fz.quiet .sg { opacity: 1; transform: none; }
+.stage[data-viewport="mobile"] .sg { left: 190px !important; }

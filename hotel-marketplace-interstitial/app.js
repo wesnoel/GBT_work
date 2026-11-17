@@ -553,6 +553,48 @@
     };
   };
 
+  /* ---------- D2 + hotel: the six D2 signals, with the aligned hotel and parallax skyline ---------- */
+  CONCEPTS.d2h = function () {
+    var strong = S.wording === "strong", q = S.repeat ? " on" : "";
+    var sigs = [
+      ["Egencia preferred", "Hotels Egencia recommends for business travel", "pref"],
+      ["Negotiated", strong ? "Your company's negotiated rates" : "Your company's rates, when available", "neg"],
+      ["Member rate", strong ? "Your loyalty rates, applied" : "Your loyalty pricing, when available", "mem"],
+      ["42% of coworker bookings", "How many colleagues booked this hotel", "soc"],
+      ["Colleague reviews 4.4", "Scores from people at your company", "soc"],
+      ["Matches how you book", "Shaped by your past trips", "soc"]
+    ];
+    var html = hotelG(143, 172, 24, 100) + sigs.map(function (g, i) {
+      return '<div class="sg ' + g[2] + q + '" data-s="' + i + '" data-tip="' + g[1] + '" style="left:196px;top:' + (14 + i * 34) + 'px"><i class="dt"></i>' + g[0] + "</div>";
+    }).join("");
+    var base = strong ? "Everything that makes a hotel the best value for you, marked on your results" : "Signals that help you choose are marked on your results";
+    var last = -1;
+    return {
+      fig: true, visual: figBaseG(html), meta: true,
+      sub: S.repeat ? base : base,
+      desc: "Searching for hotels. " + base + ". Signals include Egencia preferred, negotiated rates, member rates, coworker bookings, colleague reviews and a match to how you book.",
+      bind: function (m) { bindTips(m, ".sg"); },
+      update: function (p, el, modal) {
+        figHeading(p, modal);
+        if (S.repeat) return;
+        var i = Math.min(5, Math.floor(p * 6.2));
+        el.querySelectorAll(".sg").forEach(function (g) {
+          if (+g.dataset.s <= i && !g.classList.contains("on")) {
+            g.classList.add("on");
+            tween(g, { o: 0, x: 16 }, { o: 1, x: 0 }, 0.35, 0, "back");
+            var h = el.querySelector(".hotel");
+            tween(h, { s: 1 }, { s: 1.02 }, 0.1, 0, "out", function () { tween(h, { s: 1.02 }, { s: 1 }, 0.2); });
+          }
+        });
+        if (i !== last) {
+          last = i;
+          var sub = modal.querySelector(".m-sub");
+          if (sub) tween(sub, { o: 1 }, { o: 0 }, 0.12, 0, "out", function () { sub.innerHTML = "<b>" + sigs[i][0].replace(/^42% of /, "").replace(/ 4\.4$/, "") + ":</b> " + sigs[i][1]; tween(sub, { o: 0 }, { o: 1 }, 0.2); });
+        }
+      }
+    };
+  };
+
   /* ---------- Stage ---------- */
   var HOTELS = [
     ["Hyatt Regency Chicago", "4 stars, 0.3 mi from search", "$189", ["Egencia preferred", "Negotiated"]],

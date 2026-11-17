@@ -126,6 +126,20 @@ Feedback on F1 to F3: the larger hotel did not sit on the skyline's baseline, an
 
 **Flag:** the three skyline layers reuse one illustration, so a repeated skyline shape can show up between layers. A real build would want a second skyline drawing for the far layer.
 
+## 13. D2 with hotel graphic
+
+D2 was the preferred signal concept, so this variant keeps its six signals and sequence and adds the hotel from the Figma file.
+
+- **Layout:** the hotel stands at left on the skyline's baseline (measured: hotel bottom, skyline layers and illustration area end on the same line). The six signals stack at right, in the same order as D2: Egencia preferred, Negotiated, Member rate, coworker bookings, colleague reviews, matches how you book.
+- **Motion:** each signal slides in from the right with a small overshoot while the hotel gives a 2% beat from its base. The skyline moves slowly in three parallax layers, as in G.
+- **Explainer line:** D2's caption now uses the value line under the dates. It fades to the meaning of whichever signal just arrived, such as "Negotiated: Your company's rates, when available". Without motion, it shows one general line.
+- **Hover:** a lit signal shows its meaning in a tooltip. As elsewhere, this is a review aid, not a proposed feature.
+
+**Flags**
+- Six signals in a 6 to 10 second wait is the same concern as D2. Try three in the modal and the rest in the results.
+- "Matches how you book" touches personalization, which the PRD puts out of scope. The figures are sample data.
+- The hotel is a generic building, so it does not represent the hotels the user is searching for.
+
 ## Figma handoff notes
 
 - Modal shell, progress bar, title and subtext map to the existing loading modal. Reuse the component instance.
