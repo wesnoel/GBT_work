@@ -6,10 +6,65 @@
   var defaults = { load: 8, minDisplay: 0, view: "variant", viewport: "desktop", reduced: false, wording: "safe", repeat: false, fail: false, userType: "traveler", mobileKeep: true };
   var S = Object.assign({}, defaults);
   try { Object.assign(S, JSON.parse(sessionStorage.getItem(KEY) || "{}")); } catch (e) {}
+  S.repeat = false; /* repeat exposure shows everything at once with no motion, so it never carries over between pages */
   S.viewport = "desktop"; /* desktop is the focus: every page opens in desktop, Mobile is a per-page preview only */
   var mq = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)");
   if (mq && mq.matches) S.reduced = true;
   function save() { try { sessionStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+
+  /* ---------- JS timeline ----------
+     All motion runs from the same timer as the progress bar, so it never depends on the browser's CSS animation clock
+     (which some preview panes freeze). CSS only holds each element's start and end state. */
+  var TW = [];
+  var EASE = {
+    out: function (k) { return 1 - Math.pow(1 - k, 3); },
+    back: function (k) { var c = 1.7, d = c + 1; return 1 + d * Math.pow(k - 1, 3) + c * Math.pow(k - 1, 2); },
+    backBig: function (k) { var c = 2.6, d = c + 1; return 1 + d * Math.pow(k - 1, 3) + c * Math.pow(k - 1, 2); }
+  };
+  function still() { return S.reduced || S.repeat; }
+  function applyTW(t, k) {
+    var e = t.ease(k), v = {}, key, st = t.el.style, f = t.from, o = t.to;
+    for (key in o) v[key] = (key in f ? f[key] : o[key]) + (o[key] - (key in f ? f[key] : o[key])) * e;
+    if ("o" in v) st.opacity = Math.max(0, Math.min(1, v.o));
+    if ("x" in v || "y" in v || "s" in v || "sx" in v || "sy" in v) {
+      var sx = "sx" in v ? v.sx : "s" in v ? v.s : 1, sy = "sy" in v ? v.sy : "s" in v ? v.s : 1;
+      st.transform = "translate(" + (v.x || 0) + "px," + (v.y || 0) + "px) scale(" + sx + "," + sy + ")";
+    }
+    if ("w" in v) st.width = v.w + "px";
+    if ("ring" in v) st.boxShadow = "0 0 0 " + (10 * v.ring) + "px rgba(0,111,207," + (0.35 * (1 - v.ring)) + ")";
+    if ("dash" in v) st.strokeDashoffset = v.dash;
+  }
+  function clearTW(t) {
+    var st = t.el.style, o = t.to;
+    if ("o" in o) st.opacity = "";
+    if ("x" in o || "y" in o || "s" in o || "sx" in o || "sy" in o) st.transform = "";
+    if ("w" in o) st.width = "";
+    if ("ring" in o) st.boxShadow = "";
+    if ("dash" in o) st.strokeDashoffset = "";
+  }
+  function tween(el, from, to, dur, delay, ease, done) {
+    if (!el) return;
+    if (still()) { if (done) done(); return; }
+    var t = { el: el, from: from, to: to, dur: dur * 1000, t0: performance.now() + (delay || 0) * 1000, ease: EASE[ease || "out"], done: done };
+    TW.push(t);
+    applyTW(t, 0);
+  }
+  function stepTW() {
+    var now = performance.now(), cur = TW;
+    TW = [];
+    cur.forEach(function (t) {
+      var k = (now - t.t0) / t.dur;
+      if (k < 0) { applyTW(t, 0); TW.push(t); }
+      else if (k >= 1) { clearTW(t); if (t.done) t.done(); }
+      else { applyTW(t, k); TW.push(t); }
+    });
+  }
+  /* turn a class on or off, and play a short entrance when it turns on */
+  function flip(el, cls, on, from, dur) {
+    if (!el || el.classList.contains(cls) === on) return;
+    el.classList.toggle(cls, on);
+    if (on) tween(el, from || { o: 0.25 }, { o: 1, x: 0, y: 0, s: 1 }, dur || 0.3, 0, "out");
+  }
 
   var CHECK = "M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z";
   var ICON = {
@@ -55,8 +110,7 @@
     if (!span || span.dataset.i === String(i)) return;
     span.dataset.i = i;
     if (!fade) { span.textContent = list[i]; return; }
-    span.classList.add("out");
-    setTimeout(function () { span.textContent = list[i]; span.classList.remove("out"); }, 300);
+    tween(span, { o: 1 }, { o: 0 }, 0.15, 0, "out", function () { span.textContent = list[i]; tween(span, { o: 0 }, { o: 1 }, 0.2); });
   }
 
   var CONCEPTS = {
@@ -75,11 +129,16 @@
       return {
         visual: html, sub: "Contacting hotels for rates",
         desc: "Searching for hotels. Checking inventory, loyalty rates, company rates and prices.",
-        update: function (p, el) {
+        update: function (p, el, modal, t) {
           if (S.repeat) return;
           el.querySelectorAll(".checks li").forEach(function (li, i) {
-            var s = 0.04 + 0.23 * i, e = s + 0.23;
-            li.className = p >= e ? "done" : p >= s ? "active" : "";
+            var s = 0.04 + 0.23 * i, e = s + 0.23, st = p >= e ? "done" : p >= s ? "active" : "", ck = li.querySelector(".ck");
+            if (li.dataset.st !== st) {
+              li.dataset.st = st; li.className = st; ck.style.transform = "";
+              if (st === "active") tween(li, { o: 0.45 }, { o: 1 }, 0.3);
+              if (st === "done") tween(ck, { s: 0.6 }, { s: 1 }, 0.35, 0, "back");
+            }
+            if (st === "active" && !S.reduced) ck.style.transform = "rotate(" + Math.round((t * 400) % 360) + "deg)";
           });
         }
       };
@@ -112,8 +171,10 @@
           var n = 0;
           el.querySelectorAll(".node").forEach(function (g, k) {
             var on = S.repeat || p >= 0.06 + 0.15 * k;
+            var sp = el.querySelector('.spoke[data-k="' + k + '"]');
+            if (on && !g.classList.contains("on")) { tween(g.querySelector("rect"), { o: 0.35 }, { o: 1 }, 0.4); if (sp) tween(sp, { o: 0.2 }, { o: 1 }, 0.4); }
             g.classList.toggle("on", on);
-            var sp = el.querySelector('.spoke[data-k="' + k + '"]'); if (sp) sp.classList.toggle("on", on);
+            if (sp) sp.classList.toggle("on", on);
             if (on) n++;
           });
           if (!S.repeat && n !== last) { last = n; var sub = modal.querySelector(".m-sub"); if (sub) sub.textContent = n === 6 && S.wording === "strong" ? w.csub : n + " of 6 source types checked"; }
@@ -132,7 +193,7 @@
         update: function (p, el) {
           if (S.repeat) return;
           var b = el.querySelectorAll(".badge"), l = el.querySelectorAll(".legend li");
-          [0.12, 0.4, 0.68].forEach(function (t, i) { b[i].classList.toggle("on", p >= t); l[i].classList.toggle("on", p >= t); });
+          [0.12, 0.4, 0.68].forEach(function (t, i) { flip(b[i], "on", p >= t, { o: 0.25, y: 6, s: 0.92 }, 0.35); flip(l[i], "on", p >= t, { o: 0.25, x: -8 }, 0.35); });
         }
       };
     },
@@ -148,9 +209,9 @@
         visual: html, sub: sub, desc: "Searching for hotels. " + sub + ". Company and loyalty rates are marked on your results when they apply.",
         update: function (p, el) {
           if (S.repeat) return;
-          el.querySelectorAll(".chip").forEach(function (c, i) { c.classList.toggle("on", p >= 0.08 + 0.12 * i); });
+          el.querySelectorAll(".chip").forEach(function (c, i) { flip(c, "on", p >= 0.08 + 0.12 * i, { o: 0.3, y: -8, s: 0.9 }, 0.35); });
           var b = el.querySelectorAll(".badge"), l = el.querySelectorAll(".legend li");
-          [0.6, 0.78].forEach(function (t, i) { b[i].classList.toggle("on", p >= t); l[i].classList.toggle("on", p >= t); });
+          [0.6, 0.78].forEach(function (t, i) { flip(b[i], "on", p >= t, { o: 0.25, y: 6, s: 0.92 }, 0.35); flip(l[i], "on", p >= t, { o: 0.25, x: -8 }, 0.35); });
         }
       };
     },
@@ -177,8 +238,8 @@
         update: function (p, el) {
           if (S.repeat) return;
           var i = Math.min(5, Math.floor(p * 6.2));
-          el.querySelectorAll(".sig").forEach(function (n) { n.classList.toggle("on", +n.dataset.s <= i); });
-          if (i !== last) { last = i; var cap = el.querySelector(".cap"); if (cap) cap.innerHTML = "<b>" + sigs[i][0] + ":</b> " + sigs[i][1]; }
+          el.querySelectorAll(".sig").forEach(function (n) { flip(n, "on", +n.dataset.s <= i, { o: 0.25, y: 6, s: 0.88 }, 0.35); });
+          if (i !== last) { last = i; var cap = el.querySelector(".cap"); if (cap) { cap.innerHTML = "<b>" + sigs[i][0] + ":</b> " + sigs[i][1]; tween(cap, { o: 0, y: 4 }, { o: 1, y: 0 }, 0.3); } }
         }
       };
     },
@@ -198,11 +259,299 @@
         visual: html, sub: sub, desc: "Searching for hotels. " + C[0] + ": " + C[1].map(function (r) { return r[0] + ", " + r[1]; }).join(". ") + ".",
         update: function (p, el) {
           if (S.repeat) return;
-          el.querySelectorAll(".vals li").forEach(function (li, i) { li.classList.toggle("on", p >= 0.1 + 0.28 * i); });
+          el.querySelectorAll(".vals li").forEach(function (li, i) { flip(li, "on", p >= 0.1 + 0.28 * i, { o: 0.25, x: -10 }, 0.4); });
         }
       };
     }
   }
+
+  /* ---------- Figma concepts: animated versions of the three static frames ---------- */
+  var HEAD = ["Checking with hotels...", "Comparing rates...", "Almost there..."];
+  function setHeading(modal, text) {
+    var h = modal.querySelector(".m-title");
+    if (!h || h.dataset.t === text) return;
+    h.dataset.t = text;
+    if (S.reduced || S.repeat) { h.textContent = text; return; }
+    tween(h, { o: 1 }, { o: 0 }, 0.15, 0, "out", function () { h.textContent = text; tween(h, { o: 0 }, { o: 1 }, 0.2); });
+  }
+  function figBase(extra, cityOn) {
+    return '<div class="fz' + (S.repeat ? " quiet" : "") + '">' +
+      '<div class="win" style="left:80px;top:14px;width:319px;height:26px"><img class="drift" alt="" src="assets/clouds-below.svg" data-d="-318" style="left:-45px;width:703px;height:20px"></div>' +
+      '<div class="win" style="left:80px;top:40px;width:319px;height:56px"><img class="drift" alt="" src="assets/clouds-above.svg" data-d="-318" style="left:-125px;top:4px;width:669px;height:52px"></div>' +
+      (cityOn ? '<div class="win city" style="left:47px;top:188px;width:386px;height:84px"><img class="drift" alt="" src="assets/city.svg" data-d="-918" style="left:0;width:2359px;height:84px"></div>' : "") +
+      extra + '<div class="tip" role="presentation"></div></div>';
+  }
+  function hotelImg(w, h, left, top) { return '<img class="hotel" alt="" src="assets/hotel-a.svg" style="left:' + left + 'px;top:' + top + 'px;width:' + w + 'px;height:' + h + 'px">'; }
+  function bindTips(modal, sel) {
+    var fz = modal.querySelector(".fz"), tip = modal.querySelector(".tip");
+    fz.addEventListener("mouseover", function (e) {
+      var el = e.target.closest(sel);
+      if (!el || !el.classList.contains("on")) { tip.classList.remove("show"); return; }
+      var r = el.getBoundingClientRect(), z = fz.getBoundingClientRect(), k = z.width / fz.offsetWidth || 1;
+      tip.textContent = el.dataset.tip;
+      tip.style.left = Math.max(8, Math.min(fz.offsetWidth - 188, (r.left - z.left + r.width / 2) / k - 90)) + "px";
+      tip.style.top = Math.max(2, (r.top - z.top) / k - 34) + "px";
+      tip.classList.add("show");
+    });
+    fz.addEventListener("mouseleave", function () { tip.classList.remove("show"); });
+  }
+  function figHeading(p, modal) {
+    setHeading(modal, S.repeat ? HEAD[0] : HEAD[p < 0.34 ? 0 : p < 0.67 ? 1 : 2]);
+    if (!still()) modal.querySelectorAll(".drift").forEach(function (im) { im.style.transform = "translateX(" + (parseFloat(im.dataset.d) * p) + "px)"; });
+  }
+
+  CONCEPTS.f1 = function () {
+    var pins = [["Expedia", 36, 30, "Partner inventory"], ["Booking.com", 176, 14, "Partner inventory"], ["Hotel chains direct", 300, 40, "Rates direct from hotel brands"], ["Loyalty programs", 70, 96, "Member rates, where your programs apply"], ["Company rates", 322, 102, "Negotiated rates, if your company has them"]];
+    var q = S.repeat ? " on" : "";
+    var html = hotelImg(104, 126, 188, 128) + pins.map(function (p, i) {
+      return '<div class="spin' + q + '" data-i="' + i + '" data-tip="' + p[3] + '" style="left:' + p[1] + "px;top:" + p[2] + 'px"><span class="chip"><i class="sd"></i>' + p[0] + '</span><span class="stem"></span><span class="dotp"></span></div>';
+    }).join("");
+    var count = S.repeat ? 5 : 0;
+    return {
+      fig: true, visual: figBase(html, true), meta: true,
+      sub: '<b class="num">' + count + "</b> of 5 sources checked", subClass: "blue",
+      desc: "Searching for hotels. Checking five source types: Expedia, Booking.com, hotel chains direct, loyalty programs and company rates.",
+      bind: function (m) { bindTips(m, ".spin"); },
+      update: function (p, el, modal) {
+        figHeading(p, modal);
+        if (S.repeat) return;
+        var n = 0;
+        el.querySelectorAll(".spin").forEach(function (pin, i) {
+          if (p >= 0.08 + 0.18 * i) {
+            n++;
+            if (!pin.classList.contains("on")) {
+              pin.classList.add("on");
+              tween(pin, { o: 0, y: -16, s: 0.92 }, { o: 1, y: 0, s: 1 }, 0.42, 0, "back");
+              tween(pin.querySelector(".chip"), { ring: 0 }, { ring: 1 }, 0.7);
+              tween(pin.querySelector(".stem"), { sy: 0 }, { sy: 1 }, 0.22, 0.12);
+              tween(pin.querySelector(".dotp"), { s: 0 }, { s: 1 }, 0.3, 0.28, "back");
+            }
+          }
+        });
+        var num = modal.querySelector(".num");
+        if (num && num.textContent !== String(n)) { num.textContent = n; tween(num, { o: 0, y: 6 }, { o: 1, y: 0 }, 0.25); }
+      }
+    };
+  };
+
+  CONCEPTS.f2 = function () {
+    var strong = S.wording === "strong", q = S.repeat ? " on" : "";
+    /* order of reveal: Negotiated, Member rate, Egencia preferred, Coworker picks */
+    var defs = [
+      ["Negotiated", strong ? "Your company's negotiated rates" : "Your company's rates, when available", "R", "up", ""],
+      ["Member rate", strong ? "Your loyalty rates, applied" : "Your loyalty pricing, when available", "L", "low", ""],
+      ["Egencia preferred", "Hotels Egencia recommends", "L", "up", " gold"],
+      ["Coworker picks", "See what colleagues book", "R", "low", ""]
+    ];
+    var html = '<span class="ring"></span>' + hotelImg(102, 123, 189, 131) + defs.map(function (d, i) {
+      var left = d[2] === "L" ? 12 : 318, top = d[3] === "up" ? 22 : 112;
+      var h = '<div class="co ' + d[2] + " " + d[3] + d[4] + q + '" data-i="' + i + '">';
+      if (d[3] === "up") {
+        var vx = d[2] === "L" ? 222 : 258, hx = d[2] === "L" ? 162 : 258, hw = 60;
+        h += '<span class="lead v" style="left:' + (vx - 1) + 'px;top:55px;height:76px"></span><span class="lead h" style="left:' + hx + "px;top:54px;width:" + hw + 'px"></span>';
+      } else {
+        var lx = d[2] === "L" ? 162 : 290;
+        h += '<span class="lead h" style="left:' + lx + 'px;top:144px;width:28px"></span>';
+      }
+      return h + '<div class="card" style="left:' + left + "px;top:" + top + 'px"><b>' + d[0] + "</b><span>" + d[1] + "</span></div></div>";
+    }).join("");
+    return {
+      fig: true, visual: figBase(html, true), meta: true,
+      sub: "Rates and signals are marked on your results",
+      desc: "Searching for hotels. Rates and signals are marked on your results: negotiated rates, member rates, Egencia preferred and coworker picks.",
+      update: function (p, el, modal) {
+        figHeading(p, modal);
+        if (S.repeat) return;
+        el.querySelectorAll(".co").forEach(function (co, i) {
+          if (p >= 0.1 + 0.22 * i && !co.classList.contains("on")) {
+            co.classList.add("on");
+            var left = co.classList.contains("L"), up = co.classList.contains("up");
+            tween(co.querySelector(".card"), { o: 0, x: left ? -14 : 14 }, { o: 1, x: 0 }, 0.36, 0.3);
+            tween(co.querySelector(".lead.v"), { sy: 0 }, { sy: 1 }, 0.18);
+            tween(co.querySelector(".lead.h"), { sx: 0 }, { sx: 1 }, 0.2, up ? 0.16 : 0);
+            tween(el.querySelector(".ring"), { o: 0.55, s: 0.55 }, { o: 0, s: 1.7 }, 0.7);
+            var h = el.querySelector(".hotel");
+            tween(h, { s: 1 }, { s: 1.03 }, 0.1, 0, "out", function () { tween(h, { s: 1.03 }, { s: 1 }, 0.22); });
+          }
+        });
+      }
+    };
+  };
+
+  CONCEPTS.f3 = function () {
+    var q = S.repeat ? " on" : "", inits = ["AK", "MR", "JT", "SP", "LW"], tints = ["t1", "t2", "t3", "t4", "t5"];
+    var star = '<svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><path d="M12 2l3 7 7.4.6-5.6 4.9 1.7 7.3L12 18l-6.5 3.8 1.7-7.3L1.6 9.6 9 9z"/></svg>';
+    var stars = star + star + star + star + star;
+    var html = hotelImg(87, 105, 196, 10) + '<div class="fcap' + q + '">Colleagues who booked here</div>' +
+      inits.map(function (n, i) { return '<span class="av ' + tints[i] + q + '" data-i="' + i + '" style="left:' + (166 + i * 28) + 'px;top:146px">' + n + "</span>"; }).join("") +
+      '<div class="pills"><span class="pill p1' + q + '" data-tip="Sample: share of colleague bookings in this city at this hotel"><span><b class="cnt">' + (S.repeat ? 42 : 0) + '</b>% of coworker bookings</span></span>' +
+      '<span class="pill p2' + q + '" data-tip="Sample: average score from colleagues at your company">Colleague reviews <span class="stars"><span class="base">' + stars + '</span><span class="fill">' + stars + '</span></span> <b>4.4</b></span></div>' +
+      '<div class="pills two"><span class="pill p3' + q + '" data-tip="Sample: within your company\'s travel policy"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path class="tickmark" d="M5 12.5l4.5 4.5L19 7"/></svg>In policy</span></div>';
+    var counted = S.repeat;
+    return {
+      fig: true, visual: figBase(html, false), meta: true,
+      sub: "Colleague bookings are shown on your results",
+      desc: "Searching for hotels. Colleague bookings are shown on your results, along with colleague review scores and whether a hotel is in policy.",
+      bind: function (m) { bindTips(m, ".pill"); },
+      update: function (p, el, modal) {
+        figHeading(p, modal);
+        if (S.repeat) return;
+        el.querySelectorAll(".av").forEach(function (a, i) {
+          if (p >= 0.06 + 0.07 * i && !a.classList.contains("on")) { a.classList.add("on"); tween(a, { o: 0, s: 0 }, { o: 1, s: 1 }, 0.42, 0, "backBig"); }
+        });
+        var fc = el.querySelector(".fcap");
+        if (p >= 0.06 && !fc.classList.contains("on")) { fc.classList.add("on"); tween(fc, { o: 0 }, { o: 1 }, 0.3); }
+        [["p1", 0.5], ["p2", 0.68], ["p3", 0.84]].forEach(function (x) {
+          var pl = el.querySelector("." + x[0]);
+          if (p >= x[1] && !pl.classList.contains("on")) {
+            pl.classList.add("on");
+            tween(pl, { o: 0, y: 8 }, { o: 1, y: 0 }, 0.32);
+            if (x[0] === "p2") tween(pl.querySelector(".stars .fill"), { w: 0 }, { w: 61.6 }, 0.8, 0.15);
+            if (x[0] === "p3") tween(pl.querySelector(".tickmark"), { dash: 24 }, { dash: 0 }, 0.35, 0.2);
+          }
+        });
+        if (p >= 0.5 && !counted) {
+          counted = true;
+          var c = el.querySelector(".cnt");
+          if (S.reduced) { c.textContent = 42; return; }
+          var t0 = performance.now();
+          (function step() { var k = Math.min(1, (performance.now() - t0) / 700); c.textContent = Math.round(42 * (1 - Math.pow(1 - k, 3))); if (k < 1) setTimeout(step, 24); })();
+        }
+      }
+    };
+  };
+
+
+  /* ---------- G variants: hotel stands on the skyline's baseline, skyline slower, in three parallax layers ---------- */
+  function hotelG(w, h, left, top) { return '<img class="hotel g" alt="" src="assets/hotel-aligned.svg" style="left:' + left + 'px;top:' + top + 'px;width:' + w + 'px;height:' + h + 'px">'; }
+  function figBaseG(extra) {
+    var layer = function (top, h, w, left, d, op) { return '<div class="win" style="left:30px;top:' + top + 'px;width:420px;height:' + h + 'px;opacity:' + op + '"><img class="drift" alt="" src="assets/city.svg" data-d="' + d + '" style="left:' + left + 'px;width:' + w + 'px;height:' + h + 'px"></div>'; };
+    return '<div class="fz' + (S.repeat ? " quiet" : "") + '">' +
+      '<div class="win" style="left:80px;top:14px;width:319px;height:26px"><img class="drift" alt="" src="assets/clouds-below.svg" data-d="-80" style="left:-45px;width:703px;height:20px"></div>' +
+      '<div class="win" style="left:80px;top:40px;width:319px;height:56px"><img class="drift" alt="" src="assets/clouds-above.svg" data-d="-140" style="left:-125px;top:4px;width:669px;height:52px"></div>' +
+      layer(220, 52, 1463, -420, -90, 0.4) + layer(205, 67, 1887, -900, -180, 0.65) + layer(188, 84, 2359, 0, -300, 1) +
+      extra + '<div class="tip" role="presentation"></div></div>';
+  }
+  CONCEPTS.g1 = function () {
+    var pins = [["Expedia", 44, 22, "Partner inventory"], ["Booking.com", 192, 34, "Partner inventory"], ["Hotel chains direct", 296, 22, "Rates direct from hotel brands"], ["Loyalty programs", 36, 92, "Member rates, where your programs apply"], ["Company rates", 338, 92, "Negotiated rates, if your company has them"]];
+    var q = S.repeat ? " on" : "";
+    var html = hotelG(143, 172, 168, 100) + pins.map(function (p, i) {
+      return '<div class="spin' + q + '" data-i="' + i + '" data-tip="' + p[3] + '" style="left:' + p[1] + "px;top:" + p[2] + 'px"><span class="chip"><i class="sd"></i>' + p[0] + '</span><span class="stem"></span><span class="dotp"></span></div>';
+    }).join("");
+    var count = S.repeat ? 5 : 0;
+    return {
+      fig: true, visual: figBaseG(html), meta: true,
+      sub: '<b class="num">' + count + "</b> of 5 sources checked", subClass: "blue",
+      desc: "Searching for hotels. Checking five source types: Expedia, Booking.com, hotel chains direct, loyalty programs and company rates.",
+      bind: function (m) { bindTips(m, ".spin"); },
+      update: function (p, el, modal) {
+        figHeading(p, modal);
+        if (S.repeat) return;
+        var n = 0;
+        el.querySelectorAll(".spin").forEach(function (pin, i) {
+          if (p >= 0.08 + 0.18 * i) {
+            n++;
+            if (!pin.classList.contains("on")) {
+              pin.classList.add("on");
+              tween(pin, { o: 0, y: -16, s: 0.92 }, { o: 1, y: 0, s: 1 }, 0.42, 0, "back");
+              tween(pin.querySelector(".chip"), { ring: 0 }, { ring: 1 }, 0.7);
+              tween(pin.querySelector(".stem"), { sy: 0 }, { sy: 1 }, 0.22, 0.12);
+              tween(pin.querySelector(".dotp"), { s: 0 }, { s: 1 }, 0.3, 0.28, "back");
+            }
+          }
+        });
+        var num = modal.querySelector(".num");
+        if (num && num.textContent !== String(n)) { num.textContent = n; tween(num, { o: 0, y: 6 }, { o: 1, y: 0 }, 0.25); }
+      }
+    };
+  };
+
+  CONCEPTS.g2 = function () {
+    var strong = S.wording === "strong", q = S.repeat ? " on" : "";
+    /* order of reveal: Negotiated, Member rate, Egencia preferred, Coworker picks */
+    var defs = [
+      ["Negotiated", strong ? "Your company's negotiated rates" : "Your company's rates, when available", "R", "up", ""],
+      ["Member rate", strong ? "Your loyalty rates, applied" : "Your loyalty pricing, when available", "L", "low", ""],
+      ["Egencia preferred", "Hotels Egencia recommends", "L", "up", " gold"],
+      ["Coworker picks", "See what colleagues book", "R", "low", ""]
+    ];
+    var html = '<span class="ring" style="left:180px;top:130px;width:120px;height:120px"></span>' + hotelG(143, 172, 168, 100) + defs.map(function (d, i) {
+      var left = d[2] === "L" ? 12 : 318, top = d[3] === "up" ? 14 : 100;
+      var h = '<div class="co ' + d[2] + " " + d[3] + d[4] + q + '" data-i="' + i + '">';
+      if (d[3] === "up") {
+        var vx = d[2] === "L" ? 214 : 266, hx = d[2] === "L" ? 162 : 266, hw = 52;
+        h += '<span class="lead v" style="left:' + (vx - 1) + 'px;top:47px;height:53px"></span><span class="lead h" style="left:' + hx + "px;top:46px;width:" + hw + 'px"></span>';
+      } else {
+        var lx = d[2] === "L" ? 162 : 306;
+        h += '<span class="lead h" style="left:' + lx + 'px;top:133px;width:12px"></span>';
+      }
+      return h + '<div class="card" style="left:' + left + "px;top:" + top + 'px"><b>' + d[0] + "</b><span>" + d[1] + "</span></div></div>";
+    }).join("");
+    return {
+      fig: true, visual: figBaseG(html), meta: true,
+      sub: "Rates and signals are marked on your results",
+      desc: "Searching for hotels. Rates and signals are marked on your results: negotiated rates, member rates, Egencia preferred and coworker picks.",
+      update: function (p, el, modal) {
+        figHeading(p, modal);
+        if (S.repeat) return;
+        el.querySelectorAll(".co").forEach(function (co, i) {
+          if (p >= 0.1 + 0.22 * i && !co.classList.contains("on")) {
+            co.classList.add("on");
+            var left = co.classList.contains("L"), up = co.classList.contains("up");
+            tween(co.querySelector(".card"), { o: 0, x: left ? -14 : 14 }, { o: 1, x: 0 }, 0.36, 0.3);
+            tween(co.querySelector(".lead.v"), { sy: 0 }, { sy: 1 }, 0.18);
+            tween(co.querySelector(".lead.h"), { sx: 0 }, { sx: 1 }, 0.2, up ? 0.16 : 0);
+            tween(el.querySelector(".ring"), { o: 0.55, s: 0.55 }, { o: 0, s: 1.7 }, 0.7);
+            var h = el.querySelector(".hotel");
+            tween(h, { s: 1 }, { s: 1.03 }, 0.1, 0, "out", function () { tween(h, { s: 1.03 }, { s: 1 }, 0.22); });
+          }
+        });
+      }
+    };
+  };
+
+  CONCEPTS.g3 = function () {
+    var q = S.repeat ? " on" : "", inits = ["AK", "MR", "JT", "SP", "LW"], tints = ["t1", "t2", "t3", "t4", "t5"];
+    var star = '<svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><path d="M12 2l3 7 7.4.6-5.6 4.9 1.7 7.3L12 18l-6.5 3.8 1.7-7.3L1.6 9.6 9 9z"/></svg>';
+    var stars = star + star + star + star + star;
+    var html = hotelG(98, 118, 191, 154) + '<div class="fcap' + q + '" style="top:12px">Colleagues who booked here</div>' +
+      inits.map(function (n, i) { return '<span class="av ' + tints[i] + q + '" data-i="' + i + '" style="left:' + (166 + i * 28) + 'px;top:34px">' + n + "</span>"; }).join("") +
+      '<div class="pills" style="top:78px"><span class="pill p1' + q + '" data-tip="Sample: share of colleague bookings in this city at this hotel"><span><b class="cnt">' + (S.repeat ? 42 : 0) + '</b>% of coworker bookings</span></span>' +
+      '<span class="pill p2' + q + '" data-tip="Sample: average score from colleagues at your company">Colleague reviews <span class="stars"><span class="base">' + stars + '</span><span class="fill">' + stars + '</span></span> <b>4.4</b></span></div>' +
+      '<div class="pills two" style="top:114px"><span class="pill p3' + q + '" data-tip="Sample: within your company\'s travel policy"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path class="tickmark" d="M5 12.5l4.5 4.5L19 7"/></svg>In policy</span></div>';
+    var counted = S.repeat;
+    return {
+      fig: true, visual: figBaseG(html), meta: true,
+      sub: "Colleague bookings are shown on your results",
+      desc: "Searching for hotels. Colleague bookings are shown on your results, along with colleague review scores and whether a hotel is in policy.",
+      bind: function (m) { bindTips(m, ".pill"); },
+      update: function (p, el, modal) {
+        figHeading(p, modal);
+        if (S.repeat) return;
+        el.querySelectorAll(".av").forEach(function (a, i) {
+          if (p >= 0.06 + 0.07 * i && !a.classList.contains("on")) { a.classList.add("on"); tween(a, { o: 0, s: 0 }, { o: 1, s: 1 }, 0.42, 0, "backBig"); }
+        });
+        var fc = el.querySelector(".fcap");
+        if (p >= 0.06 && !fc.classList.contains("on")) { fc.classList.add("on"); tween(fc, { o: 0 }, { o: 1 }, 0.3); }
+        [["p1", 0.5], ["p2", 0.68], ["p3", 0.84]].forEach(function (x) {
+          var pl = el.querySelector("." + x[0]);
+          if (p >= x[1] && !pl.classList.contains("on")) {
+            pl.classList.add("on");
+            tween(pl, { o: 0, y: 8 }, { o: 1, y: 0 }, 0.32);
+            if (x[0] === "p2") tween(pl.querySelector(".stars .fill"), { w: 0 }, { w: 61.6 }, 0.8, 0.15);
+            if (x[0] === "p3") tween(pl.querySelector(".tickmark"), { dash: 24 }, { dash: 0 }, 0.35, 0.2);
+          }
+        });
+        if (p >= 0.5 && !counted) {
+          counted = true;
+          var c = el.querySelector(".cnt");
+          if (S.reduced) { c.textContent = 42; return; }
+          var t0 = performance.now();
+          (function step() { var k = Math.min(1, (performance.now() - t0) / 700); c.textContent = Math.round(42 * (1 - Math.pow(1 - k, 3))); if (k < 1) setTimeout(step, 24); })();
+        }
+      }
+    };
+  };
 
   /* ---------- Stage ---------- */
   var HOTELS = [
@@ -247,6 +596,7 @@
       '<div class="grp"><label class="chk"><input type="checkbox" id="reduced"' + (S.reduced ? " checked" : "") + '> Reduce motion</label>' +
       (showView ? '<label class="chk"><input type="checkbox" id="fail"' + (S.fail ? " checked" : "") + '> Simulate variant failure (falls back to control)</label>' : "") + "</div>" +
       '<div class="grp"><span class="lbl">Timing</span><div class="readout" id="readout"></div></div>' +
+      '<div class="grp" id="motionNote" hidden><div class="readout"><span class="bad">Motion is off.</span> <span id="motionWhy"></span></div></div>' +
       '<div class="grp"><span class="lbl">Screen reader announcements</span><ol class="log" id="log"></ol></div></aside>';
   }
 
@@ -267,12 +617,27 @@
     var mobileCurrent = CONCEPT !== "control" && S.viewport === "mobile" && S.mobileKeep && S.view === "variant";
     var usingVariant = CONCEPT !== "control" && S.view === "variant" && !S.fail && !mobileCurrent;
     var fellBack = CONCEPT !== "control" && S.view === "variant" && S.fail && !mobileCurrent;
+    var mn = document.getElementById("motionNote");
+    if (mn) { mn.hidden = !still(); document.getElementById("motionWhy").textContent = S.repeat ? "Exposure is set to Repeat, so everything is shown at once. Choose First time to see the animation." : "Reduce motion is on (from your system setting or the checkbox). Untick it to see the animation."; }
     var mg = document.getElementById("mobileGrp"); if (mg) mg.hidden = S.viewport !== "mobile";
     var key = usingVariant ? CONCEPT : "control";
     active = CONCEPTS[key]({});
-    modal.innerHTML = (fellBack ? '<span class="m-fallback">Fallback: control shown</span>' : mobileCurrent ? '<span class="m-fallback">Mobile web: current modal kept</span>' : "") +
-      '<div class="m-visual">' + active.visual + '</div><div class="m-bar" role="progressbar" aria-label="Search progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i></i></div>' +
-      '<h2 class="m-title" id="m-title">Searching for hotels</h2><p class="m-sub" aria-hidden="' + (active.subHidden ? "true" : "false") + '">' + active.sub + '</p><p class="sr-only" id="m-desc">' + active.desc + "</p>";
+    var dur0 = Math.max(S.load, S.minDisplay);
+    modal.className = "modal" + (active.fig ? " fig" : "");
+    modal.style.setProperty("--dur", dur0 + "s");
+    var tag = fellBack ? '<span class="m-fallback">Fallback: control shown</span>' : mobileCurrent ? '<span class="m-fallback">Mobile web: current modal kept</span>' : "";
+    var barHTML = '<div class="m-bar" role="progressbar" aria-label="Search progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i></i></div>';
+    if (active.fig) {
+      modal.innerHTML = tag + '<div class="m-visual">' + active.visual + "</div>" + barHTML +
+        '<h2 class="m-title" id="m-title" data-t="' + HEAD[0] + '">' + HEAD[0] + '</h2><p class="m-meta"><b>Near Egencia Chicago</b><br>Mon, Dec 14 \u2013 Fri, Dec 18</p>' +
+        '<p class="m-sub ' + (active.subClass || "") + '" aria-hidden="true">' + active.sub + '</p><p class="sr-only" id="m-desc">' + active.desc + "</p>";
+      if (active.bind) active.bind(modal);
+    } else {
+      modal.innerHTML = tag + '<div class="m-visual">' + active.visual + "</div>" + barHTML +
+        '<h2 class="m-title" id="m-title">Searching for hotels</h2><p class="m-sub" aria-hidden="' + (active.subHidden ? "true" : "false") + '">' + active.sub + '</p><p class="sr-only" id="m-desc">' + active.desc + "</p>";
+    }
+    TW = [];
+    if (active.fig) tween(modal.querySelector(".hotel"), { o: 0, y: 14 }, { o: 1, y: 0 }, 0.7);
     list.innerHTML = skelHTML; heading.textContent = "Searching";
     stage.classList.add("is-loading");
     modal.focus();
@@ -280,16 +645,17 @@
     if (mobileCurrent) log("Mobile web keeps the current modal. Variant applies to desktop only.");
     if (fellBack) log("Variant failed to render. Control shown instead. User sees what they see today.");
     t0 = performance.now();
-    raf = setTimeout(tick, 33);
+    raf = setTimeout(tick, 16);
   }
   function tick() {
     var el = (performance.now() - t0) / 1000, dur = Math.max(S.load, S.minDisplay), p = Math.min(el / dur, 1);
     var visual = modal.querySelector(".m-visual"), bar = modal.querySelector(".m-bar");
+    stepTW();
     active.update(p, visual, modal, el);
     bar.firstChild.style.width = Math.max(8, p * 100) + "%";
     bar.setAttribute("aria-valuenow", Math.round(p * 100));
     readout.innerHTML = "Modal visible: <b>" + fmt(Math.min(el, dur)) + "</b> of <b>" + fmt(dur) + "</b>";
-    if (p < 1) { raf = setTimeout(tick, 33); return; }
+    if (p < 1) { raf = setTimeout(tick, 16); return; }
     finish(dur);
   }
   function finish(dur) {

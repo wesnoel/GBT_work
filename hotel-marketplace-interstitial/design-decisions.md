@@ -91,6 +91,40 @@ Three variations on D (badge preview), added after review feedback that D is the
 
 **Recommendation for discussion:** D1 is the best candidate to test first, since it answers the stated doubt directly. D2 works better as a later step or as a feature of the results. D3 should wait until the personalization question is settled.
 
+## 11. Animated Figma concepts (F1 to F3)
+
+Built from the artwork in the Figma file (city strip, clouds, hotel), as animated wireframes of the three static concepts. The Figma modal is 480 x 496, so these use that footprint, not the live 453 x 568.
+
+**Shared motion**
+- **City strip scrolls for the whole wait**, from the Start variant to the End variant (918px). Clouds drift 318px at their own pace. Motion length follows the real wait, so a 6s and a 10s wait feel the same speed per second.
+- **Hotel rises into place** in 0.7s, then stays still. It is the one fixed point.
+- **Heading cycles three phrases** with a quick crossfade at one third and two thirds. These phrases are placeholders.
+- **Everything else is triggered by progress**, not a clock, so a fast response skips later steps instead of rushing them.
+
+**F1 Skyline of sources:** each pin drops 16px with a small overshoot, pulses once, grows a stem and pops a dot. The count ticks up as each lands.
+**F2 Rate callouts:** a ripple spreads from the hotel, the leader line is drawn from the hotel outward, the card slides in from the side and the hotel gives a small beat.
+**F3 People who book here:** avatars pop in with a spring, the share counts up from 0 to 42 over 0.7s, stars fill left to right to 4.4, and the in-policy tick draws.
+
+**Interaction (prototype only):** hover a lit pin or pill for a one-line meaning, or a callout to emphasize its line. The live modal is not interactive, and these hovers are not keyboard accessible, so treat them as a review aid, not a proposed feature.
+
+**Repeat exposure and reduced motion:** repeat shows everything lit with no motion. Reduced motion removes all movement and shows each step as it is reached, with the count set to its final value.
+
+**Flags**
+- The city and cloud motion is continuous for up to 10 seconds. Test that it reads as calm, not busy.
+- All figures (42%, 4.4, "In policy") are sample data. "In policy" depends on each user's company policy.
+- F3 shows colleague activity. Decide whether it is anonymous only, and whether it needs privacy review.
+
+## 12. G variants: aligned hotel and slower parallax skyline
+
+Feedback on F1 to F3: the larger hotel did not sit on the skyline's baseline, and the skyline moved too fast. G1 to G3 fix both, using the new `hotel-for-alignment` component from the Figma file.
+
+- **Alignment:** the hotel's bottom edge, all three skyline layers and the bottom of the illustration area end on the same line. This was measured in the browser, not judged by eye. The hotel now scales from its base, so its small beat never lifts it off the ground.
+- **Speed:** the nearest skyline layer travels 300px over the whole wait, down from 918px. At an 8 second wait that is about 38px per second, not 115.
+- **Parallax:** the skyline is three layers of the same artwork. The far layer is smaller and fainter and travels 90px, the middle layer travels 180px and the near layer 300px. Clouds drift 80px and 140px. The hotel does not move.
+- **Hotel size:** 172px tall in G1 and G2, so the pins and callouts sit around it. 118px in G3, to leave room for avatars and pills above it.
+
+**Flag:** the three skyline layers reuse one illustration, so a repeated skyline shape can show up between layers. A real build would want a second skyline drawing for the far layer.
+
 ## Figma handoff notes
 
 - Modal shell, progress bar, title and subtext map to the existing loading modal. Reuse the component instance.

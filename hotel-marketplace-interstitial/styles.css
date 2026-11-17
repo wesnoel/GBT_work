@@ -228,3 +228,114 @@ button { font-family: inherit; }
 .vals .d { font-size: 12px; line-height: 16px; color: var(--n-600); }
 .rm .chip, .rm .sig, .rm .vals li { transition: none; }
 .stage[data-viewport="mobile"] .chip { padding: 2px 8px; }
+
+/* ---------- Figma concepts (F1 to F3): 480 x 496 modal, motion driven by --dur ---------- */
+.modal.fig { width: 480px; height: 496px; padding: 24px 0 0; }
+.stage[data-viewport="mobile"] .modal.fig { width: 480px; height: 496px; padding: 24px 0 0; transform: translate(-50%, -50%) scale(.72); }
+.fig .m-visual { flex: none; width: 480px; height: 272px; display: block; }
+.fig .m-bar { width: 384px; height: 4px; margin: 20px auto 24px; border-radius: 2px; }
+.fig .m-bar > i { border-radius: 2px; }
+.fig .m-title { font-size: 18px; line-height: 24px; font-weight: 600; letter-spacing: 0; transition: opacity .18s; }
+.fig .m-title.out { opacity: 0; }
+.fig .m-meta { margin: 8px 0 0; text-align: center; font-size: 14px; line-height: 20px; }
+.fig .m-meta b { font-weight: 600; }
+.fig .m-sub { margin: 10px 0 0; min-height: 20px; color: var(--n-600); }
+.fig .m-sub.blue { color: var(--blue-500); font-weight: 600; }
+
+.fz { position: relative; width: 480px; height: 272px; }
+.fz .win { position: absolute; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent); mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent); }
+.fz .win img { position: absolute; max-width: none; display: block; }
+.fz .drift { animation: drift var(--dur, 8s) linear forwards; will-change: transform; }
+@keyframes drift { to { transform: translateX(var(--d)); } }
+.fz .hotel { position: absolute; animation: rise .7s cubic-bezier(.2,.7,.2,1) both; }
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } }
+.fz .hotel.beat { animation: beat .32s ease-out; }
+@keyframes beat { 40% { transform: scale(1.03); } }
+.fz .tip { position: absolute; z-index: 5; width: 180px; padding: 6px 10px; border-radius: var(--radius-sm); background: var(--n-900); color: var(--white); font-size: 12px; line-height: 16px; text-align: center; opacity: 0; pointer-events: none; transition: opacity .15s; }
+.fz .tip.show { opacity: 1; }
+
+/* F1: source pins */
+.spin { position: absolute; opacity: 0; transform: translateY(-16px) scale(.92); }
+.spin.on { opacity: 1; transform: none; animation: pinIn .42s cubic-bezier(.34,1.56,.64,1); }
+@keyframes pinIn { from { opacity: 0; transform: translateY(-16px) scale(.92); } }
+.spin .chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px 5px 10px; border-radius: 999px; border: 1px solid var(--blue-500); background: var(--blue-50); color: var(--blue-900); font-size: 12px; line-height: 16px; font-weight: 600; white-space: nowrap; }
+.spin .chip .sd { width: 8px; height: 8px; border-radius: 50%; background: var(--green-500); }
+.spin.on .chip { animation: ringPulse .7s ease-out; }
+@keyframes ringPulse { from { box-shadow: 0 0 0 0 rgba(0,111,207,.35); } to { box-shadow: 0 0 0 10px rgba(0,111,207,0); } }
+.spin .stem { position: absolute; left: 50%; top: 100%; width: 2px; height: 12px; margin-left: -1px; background: var(--blue-500); transform: scaleY(0); transform-origin: top; }
+.spin.on .stem { transform: none; animation: grow .22s .12s ease-out backwards; }
+@keyframes grow { from { transform: scaleY(0); } }
+.spin .dotp { position: absolute; left: 50%; top: calc(100% + 10px); width: 8px; height: 8px; margin-left: -4px; border-radius: 50%; background: var(--blue-500); opacity: 0; }
+.spin.on .dotp { opacity: 1; animation: pop .3s .28s cubic-bezier(.34,1.56,.64,1) backwards; }
+@keyframes pop { from { transform: scale(0); } }
+.spin[data-tip]:hover .chip { background: var(--blue-100); }
+.num { display: inline-block; }
+.num.tick { animation: tickUp .25s ease-out; }
+@keyframes tickUp { from { opacity: 0; transform: translateY(6px); } }
+
+/* F2: callouts */
+.ring { position: absolute; left: 195px; top: 147px; width: 90px; height: 90px; border-radius: 50%; border: 2px solid var(--blue-500); opacity: 0; pointer-events: none; }
+.ring.go { animation: ring .7s ease-out; }
+@keyframes ring { from { opacity: .55; transform: scale(.55); } to { opacity: 0; transform: scale(1.7); } }
+.co .card { position: absolute; width: 150px; padding: 8px 10px; border-radius: var(--radius-sm); background: var(--white); border: 1.5px solid var(--blue-500); font-size: 12px; line-height: 16px; opacity: 0; transition: box-shadow .15s; }
+.co.gold .card { border-color: var(--gold-400); }
+.co .card b { display: block; font-weight: 600; }
+.co .card span { color: var(--n-600); }
+.co .lead { position: absolute; background: var(--blue-500); opacity: 0; }
+.co.gold .lead { background: var(--gold-400); }
+.co .lead.h { height: 2px; }
+.co .lead.v { width: 2px; }
+.co.on .card { opacity: 1; animation: cardL .36s .3s ease-out backwards; }
+.co.R.on .card { animation-name: cardR; }
+@keyframes cardL { from { opacity: 0; transform: translateX(-14px); } }
+@keyframes cardR { from { opacity: 0; transform: translateX(14px); } }
+.co.on .lead { opacity: 1; }
+.co.on .lead.v { transform-origin: bottom; animation: growY .18s ease-out backwards; }
+@keyframes growY { from { transform: scaleY(0); } }
+.co.on .lead.h { animation: growX .2s .16s ease-out backwards; }
+.co.L .lead.h { transform-origin: right; }
+.co.R .lead.h { transform-origin: left; }
+.co.low.on .lead.h { animation-delay: 0s; }
+@keyframes growX { from { transform: scaleX(0); } }
+.co:hover .card { box-shadow: 0 4px 12px rgba(27,29,37,.16); }
+.co:hover .lead { background: var(--blue-900); }
+
+/* F3: colleagues */
+.fcap { position: absolute; left: 0; width: 480px; top: 122px; text-align: center; font-size: 12px; line-height: 16px; color: var(--n-600); opacity: 0; transition: opacity .3s; }
+.fcap.on { opacity: 1; }
+.av { position: absolute; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; line-height: 16px; font-weight: 600; border: 2px solid var(--white); box-sizing: border-box; opacity: 0; transform: scale(0); }
+.av.t1 { background: var(--blue-100); } .av.t2 { background: var(--gold-100); } .av.t3 { background: var(--green-100); } .av.t4 { background: var(--blue-200); } .av.t5 { background: var(--n-200); }
+.av.on { opacity: 1; transform: none; animation: avIn .42s cubic-bezier(.34,1.8,.64,1); }
+@keyframes avIn { from { opacity: 0; transform: scale(0); } }
+.pills { position: absolute; left: 0; width: 480px; top: 196px; display: flex; justify-content: center; gap: 8px; }
+.pills.two { top: 232px; }
+.pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: var(--radius-sm); background: var(--n-100); border: 1px solid var(--n-200); font-size: 12px; line-height: 16px; white-space: nowrap; opacity: 0; transform: translateY(8px); }
+.pill b { font-weight: 600; }
+.pill.on { opacity: 1; transform: none; animation: pillIn .32s ease-out; }
+@keyframes pillIn { from { opacity: 0; transform: translateY(8px); } }
+.stars { position: relative; display: inline-block; width: 70px; height: 12px; }
+.stars svg { width: 14px; height: 12px; flex: none; }
+.stars .base, .stars .fill { position: absolute; left: 0; top: 0; display: flex; white-space: nowrap; }
+.stars .base svg { fill: var(--n-300); }
+.stars .fill { overflow: hidden; width: 0; }
+.stars .fill svg { fill: var(--gold-400); }
+.pill.p2.on .stars .fill { width: 61.6px; animation: starFill .8s .15s ease-out backwards; }
+@keyframes starFill { from { width: 0; } }
+.tickmark { fill: none; stroke: var(--green-500); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 24; stroke-dashoffset: 24; }
+.pill.p3.on .tickmark { stroke-dashoffset: 0; animation: draw .35s .2s ease-out backwards; }
+@keyframes draw { from { stroke-dashoffset: 24; } }
+
+/* Repeat exposure and reduced motion: everything is shown, nothing moves */
+.fz.quiet *, .rm .fz * { animation: none !important; transition: none !important; }
+.fz.quiet .spin, .fz.quiet .co .card, .fz.quiet .co .lead, .fz.quiet .fcap, .fz.quiet .av, .fz.quiet .pill { opacity: 1; transform: none; }
+.fz.quiet .spin .stem, .fz.quiet .spin .dotp { opacity: 1; transform: none; }
+.fz.quiet .stars .fill, .rm .pill.p2.on .stars .fill { width: 61.6px; }
+.fz.quiet .tickmark, .rm .pill.p3.on .tickmark { stroke-dashoffset: 0; }
+.rm .fz .spin.on .stem { transform: none; }
+.rm .fz .spin.on .dotp { opacity: 1; }
+
+/* Motion is driven from app.js (see "JS timeline"). CSS only holds start and end states, so its own animations stay off. */
+.modal *, .modal *::before, .modal *::after { transition: none !important; animation: none !important; }
+
+/* G variants: the hotel scales from its base so it stays on the skyline baseline */
+.fz .hotel.g { transform-origin: 50% 100%; }
