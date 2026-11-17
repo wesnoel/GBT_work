@@ -513,28 +513,26 @@
   };
 
   CONCEPTS.g3 = function () {
-    var q = S.repeat ? " on" : "", inits = ["AK", "MR", "JT", "SP", "LW"], tints = ["t1", "t2", "t3", "t4", "t5"];
+    var q = S.repeat ? " on" : "";
+    var LOYALTY = ["Earns Marriott Bonvoy points", "Earns Hilton Honors points", "Earns World of Hyatt points", "Earns IHG One Rewards points", "Earns Choice Privileges points"];
     var star = '<svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><path d="M12 2l3 7 7.4.6-5.6 4.9 1.7 7.3L12 18l-6.5 3.8 1.7-7.3L1.6 9.6 9 9z"/></svg>';
     var stars = star + star + star + star + star;
-    var html = hotelG(98, 118, 191, 154) + '<div class="fcap' + q + '" style="top:12px">Colleagues who booked here</div>' +
-      inits.map(function (n, i) { return '<span class="av ' + tints[i] + q + '" data-i="' + i + '" style="left:' + (166 + i * 28) + 'px;top:34px">' + n + "</span>"; }).join("") +
+    var html = hotelG(98, 118, 191, 154) + '<div class="fcap rot' + q + '" style="top:12px"><span data-i="0">' + LOYALTY[0] + "</span></div>" +
       '<div class="pills" style="top:78px"><span class="pill p1' + q + '" data-tip="Sample: share of colleague bookings in this city at this hotel"><span><b class="cnt">' + (S.repeat ? 42 : 0) + '</b>% of coworker bookings</span></span>' +
       '<span class="pill p2' + q + '" data-tip="Sample: average score from colleagues at your company">Reviews <span class="stars"><span class="base">' + stars + '</span><span class="fill">' + stars + '</span></span> <b>4.4</b></span></div>' +
       '<div class="pills two" style="top:114px"><span class="pill p3' + q + '" data-tip="Sample: within your company\'s travel policy"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path class="tickmark" d="M5 12.5l4.5 4.5L19 7"/></svg>In policy</span></div>';
     var counted = S.repeat;
     return {
       fig: true, visual: figBaseG(html), meta: true,
-      sub: "Colleague bookings are shown on your results",
-      desc: "Searching for hotels. Colleague bookings are shown on your results, along with colleague review scores and whether a hotel is in policy.",
+      sub: "Top loyalty programs, coworker bookings and reviews are shown on your results",
+      desc: "Searching for hotels. Top loyalty programs rotate at the top of the card, along with coworker bookings, review scores and whether a hotel is in policy.",
       bind: function (m) { bindTips(m, ".pill"); },
-      update: function (p, el, modal) {
+      update: function (p, el, modal, t) {
         figHeading(p, modal);
         if (S.repeat) return;
-        el.querySelectorAll(".av").forEach(function (a, i) {
-          if (p >= 0.06 + 0.07 * i && !a.classList.contains("on")) { a.classList.add("on"); tween(a, { o: 0, s: 0 }, { o: 1, s: 1 }, 0.42, 0, "backBig"); }
-        });
         var fc = el.querySelector(".fcap");
         if (p >= 0.06 && !fc.classList.contains("on")) { fc.classList.add("on"); tween(fc, { o: 0 }, { o: 1 }, 0.3); }
+        if (p >= 0.06) cycle(modal, LOYALTY, t, 2.4, true);
         [["p1", 0.5], ["p2", 0.68], ["p3", 0.84]].forEach(function (x) {
           var pl = el.querySelector("." + x[0]);
           if (p >= x[1] && !pl.classList.contains("on")) {

@@ -121,7 +121,8 @@ Feedback on F1 to F3: the larger hotel did not sit on the skyline's baseline, an
 - **Alignment:** the hotel's bottom edge, all three skyline layers and the bottom of the illustration area end on the same line. This was measured in the browser, not judged by eye. The hotel now scales from its base, so its small beat never lifts it off the ground.
 - **Speed:** the nearest skyline layer travels 300px over the whole wait, down from 918px. At an 8 second wait that is about 38px per second, not 115.
 - **Parallax:** the skyline is three layers of the same artwork. The far layer is smaller and fainter and travels 90px, the middle layer travels 180px and the near layer 300px. Clouds drift 80px and 140px. The hotel does not move.
-- **Hotel size:** 172px tall in G1 and G2, so the pins and callouts sit around it. 118px in G3, to leave room for avatars and pills above it.
+- **Hotel size:** 172px tall in G1 and G2, so the pins and callouts sit around it. 118px in G3, to leave room for the loyalty ticker and pills above it.
+- **G3 drops the avatar roster:** F3's "Colleagues who booked here" caption and five avatars implied a single hotel's social proof, but this interstitial is searching across many hotels at once, so that claim does not hold. G3 replaces the caption and avatars with a rotating ticker of top loyalty programs ("Earns Marriott Bonvoy points", etc.), reusing the same fade-crossfade rotator as concept B. The coworker-bookings and reviews pills stay, since those are per-hotel signals shown once a result exists. F3 is unchanged and still shows the avatar version for comparison.
 
 **Flag:** the three skyline layers reuse one illustration, so a repeated skyline shape can show up between layers. A real build would want a second skyline drawing for the far layer.
 
