@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Concept A, Cards | Hotel Modify Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body data-role="traveler" data-state="normal">
+<div class="review-bar"><div class="review-bar-inner">
+  <strong>Review controls</strong>
+  <label>Viewing as <select id="sel-role"><option value="traveler">Traveler</option><option value="arranger">Travel arranger</option><option value="counselor">GBT counselor</option></select></label>
+  <label>Booking state <select id="sel-state"><option value="normal">All changes available</option><option value="restricted">Date change not available</option><option value="locked">Booking cannot be modified</option></select></label>
+  <label>Content <select id="sel-content"><option value="typical">Typical</option><option value="long">Long values</option><option value="loading">Loading</option></select></label>
+  <span class="spacer"></span>
+  <a href="index.html">All concepts</a>
+</div></div>
+<header class="eg-header"><div class="eg-header-inner">
+  <div class="eg-left"><div class="eg-logo"><span class="eg-logo-super">GBT</span><span class="eg-logo-word">Egencia</span></div>
+  <nav class="eg-nav" aria-label="Primary"><a href="#">Book</a><a class="on" href="#">Trips</a><a href="#">Reports</a></nav></div>
+  <div class="eg-avatar"><span class="eg-avatar-circle">MO</span><span class="eg-avatar-name">Maya Okafor</span></div>
+</div></header>
+<main class="shell">
+<nav class="crumb" aria-label="Breadcrumb"><a href="#" onclick="go('Trip details');return false" data-i="back">Back to trip</a><span>/</span><span>Modify hotel booking</span></nav>
+<div class="ctx for-arranger" data-i="person"><span>You are modifying this booking <strong>for Maya Okafor</strong> (Acme Corp). Signed in as Priya Shah.</span></div>
+<div class="ctx for-counselor" data-i="person"><span>Servicing on behalf of <strong>Maya Okafor</strong> (Acme Corp). Signed in as Dana Reyes, GBT.</span></div>
+<h1 class="page-title">Modify your hotel booking</h1>
+<p class="page-sub">Choose what you want to change. Nothing is saved until you confirm.</p>
+<section class="summary" aria-label="Booking summary">
+  <div class="summary-top"><div class="thumb" data-i="hotel"></div>
+  <div><h2 class="hotel-name" data-long="Hilton Garden Inn Seattle Downtown Convention Center and Pike Place Market District">Hilton Garden Inn Seattle Downtown</h2><div class="muted">1821 7th Ave, Seattle, WA &middot; Confirmation HX48217</div></div></div>
+  <dl class="facts" style="margin-bottom:0">
+    <div class="fact"><dt>Guest</dt><dd data-long="Maya Alexandra Okafor-Adeyemi">Maya Okafor</dd></div>
+    <div class="fact"><dt>Check-in</dt><dd>Tue, Mar 9, 2027</dd></div>
+    <div class="fact"><dt>Check-out</dt><dd>Fri, Mar 12, 2027</dd></div>
+    <div class="fact"><dt>Room</dt><dd>1 King, city view</dd></div>
+    <div class="fact"><dt>Rate</dt><dd>$189.00 / night &middot; 3 nights</dd></div>
+  </dl>
+</section><div class="notice notice-warn only-locked" role="status" data-i="warn" style="margin-top:20px"><div><strong>This booking can't be changed online</strong>The stay starts within 24 hours, so changes are handled by the hotel. Call Hilton Garden Inn Seattle Downtown at +1 206 555 0142 or contact your GBT counselor.<div style="margin-top:12px"><a class="btn" href="#" onclick="go('Trip details');return false">Back to trip</a></div></div></div>
+<div class="cards hide-locked">
+  <article class="mcard clickable">
+    <div class="mcard-head"><div class="ico" data-i="person"></div><div><h3>Guest details</h3><span class="pill pill-ok">No price change</span></div></div>
+    <p>Update who is staying and the preferences the hotel receives.</p>
+    <ul class="mini-rows">
+      <li><button onclick="location.href='soft-changes.html?section=name'"><span><span class="k">Name</span><span class="v" data-long="Maya Alexandra Okafor-Adeyemi">Maya Okafor</span></span><span data-i="next"></span></button></li>
+      <li><button onclick="location.href='soft-changes.html?section=special'"><span><span class="k">Special request</span><span class="v" data-long="Late check-in after 11 PM, quiet room away from the elevator, extra pillows and a high floor if possible">Late check-in, quiet room</span></span><span data-i="next"></span></button></li>
+      <li><button onclick="location.href='soft-changes.html?section=loyalty'"><span><span class="k">Loyalty program</span><span class="v">Hilton Honors &bull;&bull;&bull;&bull;4821</span></span><span data-i="next"></span></button></li>
+    </ul>
+  </article>
+  <article class="mcard clickable is-date" data-disabled-when="restricted">
+    <div class="mcard-head"><div class="ico" data-i="cal"></div><div><h3>Dates</h3><span class="pill pill-warn">May change price</span></div></div>
+    <p>Move your check-in or check-out date.</p>
+    <div class="cur"><span class="k">Current stay</span><span class="v">Mar 9 &ndash; Mar 12, 2027 &middot; 3 nights</span></div>
+    <div class="reason" data-i="lock"><span>Not available for this booking. This rate can't be changed. <a href="#" class="link" onclick="go('Cancel and rebook');return false" style="padding:0">Cancel and rebook</a></span></div>
+    <div class="card-cta"><button class="btn" onclick="go('Date')">Change dates</button></div>
+  </article>
+  <article class="mcard clickable">
+    <div class="mcard-head"><div class="ico" data-i="bed"></div><div><h3>Room</h3><span class="pill pill-warn">May change price</span></div></div>
+    <p>Switch to a different room type at this hotel.</p>
+    <div class="cur"><span class="k">Current room</span><span class="v">1 King, city view &middot; $189.00 / night</span></div>
+    <div class="card-cta"><button class="btn" onclick="go('Room')">Change room</button></div>
+  </article>
+</div>
+<p class="muted hide-locked" style="margin-top:20px">Need to change something else? Contact your travel counselor.</p>
+<script>
+(function(){
+  var sel=document.getElementById('sel-content');
+  function content(){var v='typical';try{v=localStorage.getItem('hmh-content')||'typical'}catch(e){}
+    sel.value=v;document.body.setAttribute('data-content',v);
+    document.querySelectorAll('[data-long]').forEach(function(el){
+      if(!el.hasAttribute('data-short'))el.setAttribute('data-short',el.textContent);
+      el.textContent=v==='long'?el.getAttribute('data-long'):el.getAttribute('data-short');});
+    document.querySelectorAll('.cards,.summary').forEach(function(el){el.setAttribute('aria-busy',v==='loading')});}
+  sel.addEventListener('change',function(){try{localStorage.setItem('hmh-content',sel.value)}catch(e){};content()});
+  content();
+})();
+</script>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

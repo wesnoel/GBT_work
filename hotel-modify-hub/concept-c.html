@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Concept C, Guided choice | Hotel Modify Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body data-role="traveler" data-state="normal">
+<div class="review-bar"><div class="review-bar-inner">
+  <strong>Review controls</strong>
+  <label>Viewing as <select id="sel-role"><option value="traveler">Traveler</option><option value="arranger">Travel arranger</option><option value="counselor">GBT counselor</option></select></label>
+  <label>Booking state <select id="sel-state"><option value="normal">All changes available</option><option value="restricted">Date change not available</option><option value="locked">Booking cannot be modified</option></select></label>
+  <span class="spacer"></span>
+  <a href="index.html">All concepts</a>
+</div></div>
+<header class="eg-header"><div class="eg-header-inner">
+  <div class="eg-left"><div class="eg-logo"><span class="eg-logo-super">GBT</span><span class="eg-logo-word">Egencia</span></div>
+  <nav class="eg-nav" aria-label="Primary"><a href="#">Book</a><a class="on" href="#">Trips</a><a href="#">Reports</a></nav></div>
+  <div class="eg-avatar"><span class="eg-avatar-circle">MO</span><span class="eg-avatar-name">Maya Okafor</span></div>
+</div></header>
+<main class="shell">
+<nav class="crumb" aria-label="Breadcrumb"><a href="#" onclick="go('Trip details');return false" data-i="back">Back to trip</a><span>/</span><span>Modify hotel booking</span></nav>
+<div class="ctx for-arranger" data-i="person"><span>You are modifying this booking <strong>for Maya Okafor</strong> (Acme Corp). Signed in as Priya Shah.</span></div>
+<div class="ctx for-counselor" data-i="person"><span>Servicing on behalf of <strong>Maya Okafor</strong> (Acme Corp). Signed in as Dana Reyes, GBT.</span></div>
+<h1 class="page-title">What would you like to change?</h1>
+<p class="page-sub">Pick one. You will see what is involved before anything changes.</p>
+<section class="summary" aria-label="Booking summary">
+  <div class="summary-top"><div class="thumb" data-i="hotel"></div>
+  <div><h2 class="hotel-name">Hilton Garden Inn Seattle Downtown</h2><div class="muted">1821 7th Ave, Seattle, WA &middot; Confirmation HX48217</div></div></div>
+  <dl class="facts" style="margin-bottom:0">
+    <div class="fact"><dt>Guest</dt><dd>Maya Okafor</dd></div>
+    <div class="fact"><dt>Check-in</dt><dd>Tue, Mar 9, 2027</dd></div>
+    <div class="fact"><dt>Check-out</dt><dd>Fri, Mar 12, 2027</dd></div>
+    <div class="fact"><dt>Room</dt><dd>1 King, city view</dd></div>
+    <div class="fact"><dt>Rate</dt><dd>$189.00 / night &middot; 3 nights</dd></div>
+  </dl>
+</section><div class="notice notice-warn only-locked" role="status" data-i="warn" style="margin-top:20px"><div><strong>This booking can't be changed online</strong>The stay starts within 24 hours, so changes are handled by the hotel. Call Hilton Garden Inn Seattle Downtown at +1 206 555 0142 or contact your GBT counselor.<div style="margin-top:12px"><a class="btn" href="#" onclick="go('Trip details');return false">Back to trip</a></div></div></div>
+<div class="intent hide-locked">
+ <div class="tiles" role="radiogroup" aria-label="Type of change">
+  <button class="tile " role="radio" aria-checked="false" data-panel="soft" ><span class="radio"></span><span class="ico" data-i="person"></span><span><h3>Guest details</h3><p>Name, special requests or loyalty program.</p><span style="display:flex;gap:8px;margin-top:8px"><span class="pill pill-ok">No price change</span></span></span></button>
+  <button class="tile is-date" role="radio" aria-checked="false" data-panel="date" data-disabled-when="restricted"><span class="radio"></span><span class="ico" data-i="cal"></span><span><h3>Dates</h3><p>Move check-in or check-out.</p><span style="display:flex;gap:8px;margin-top:8px"><span class="pill pill-warn">May change price</span></span><div class="reason" data-i="lock"><span>Not available for this booking. This rate can't be changed. Cancel and rebook instead.</span></div></span></button>
+  <button class="tile " role="radio" aria-checked="false" data-panel="room" ><span class="radio"></span><span class="ico" data-i="bed"></span><span><h3>Room</h3><p>Switch to a different room type.</p><span style="display:flex;gap:8px;margin-top:8px"><span class="pill pill-warn">May change price</span></span></span></button>
+ </div>
+ <section class="preview" aria-live="polite" aria-label="What happens next">
+  <div class="panel on" id="p-none"><h3>Select a change</h3><p class="muted">Choose an option on the left to see what you can edit and what to expect.</p></div>
+  <div class="panel" id="p-soft"><h3>Guest details</h3><p class="muted">Edit any of these in one step.</p>
+   <ul><li><span>Name</span><span>Maya Okafor</span></li><li><span>Special request</span><span>Late check-in, quiet room</span></li><li><span>Loyalty program</span><span>Hilton Honors &bull;&bull;&bull;&bull;4821</span></li><li><span>Price</span><span>No change</span></li></ul>
+   <div class="foot"><span class="pill pill-ok">Usually instant</span><button class="btn btn-primary" onclick="go('Soft changes')">Continue</button></div></div>
+  <div class="panel" id="p-date"><h3>Dates</h3><p class="muted">You will pick new dates, then review availability and price.</p>
+   <ul><li><span>Current stay</span><span>Mar 9 &ndash; Mar 12, 2027</span></li><li><span>Nights</span><span>3</span></li><li><span>Price</span><span>May change</span></li></ul>
+   <div class="foot"><span class="pill pill-warn">Review price before confirming</span><button class="btn btn-primary" onclick="go('Date')">Continue</button></div></div>
+  <div class="panel" id="p-room"><h3>Room</h3><p class="muted">You will compare room types, then review any price difference.</p>
+   <ul><li><span>Current room</span><span>1 King, city view</span></li><li><span>Rate</span><span>$189.00 / night</span></li><li><span>Price</span><span>May change</span></li></ul>
+   <div class="foot"><span class="pill pill-warn">Review price before confirming</span><button class="btn btn-primary" onclick="go('Room')">Continue</button></div></div>
+ </section>
+</div>
+<script>
+(function(){
+  var tiles=document.querySelectorAll('.tile');
+  function show(id){document.querySelectorAll('.preview .panel').forEach(function(p){p.classList.toggle('on',p.id==='p-'+id)});
+    tiles.forEach(function(t){t.setAttribute('aria-checked',t.getAttribute('data-panel')===id?'true':'false')});}
+  tiles.forEach(function(t){t.addEventListener('click',function(){
+    if(t.getAttribute('aria-disabled')==='true'){show('none');t.setAttribute('aria-checked','false');window.go('Date');return;}
+    show(t.getAttribute('data-panel'));});});
+  window.onHubState=function(role,state){var d=document.querySelector('.tile.is-date');if(d&&d.getAttribute('aria-checked')==='true'&&state==='restricted')show('none');};
+})();
+</script>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hotel Modify Hub | Landing page concepts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<main class="shell">
+ <div class="hub-hero">
+  <span class="tag">Egencia project</span>
+  <h1>Hotel Modify Hub</h1>
+  <p>Three concepts for the landing page of hotel Modify. The Hub is where a Traveler, Travel Arranger or GBT Counselor chooses what to change on an existing booking: guest details (Name, Special request, Loyalty program), Dates, or Room. Only the landing page is designed here. Clicking an option shows where the next flow would start.</p>
+  <div class="hub-meta">
+   <span><strong>Source:</strong> PRD-EGE-20261117-3 and its UX spec</span>
+   <span><strong>Fidelity:</strong> Low-fi, medium interactive</span>
+   <span><strong>Status:</strong> Draft for review</span>
+  </div>
+ </div>
+ <p class="section-label">Selected direction: Concept A</p>
+ <div class="card-grid"><a class="screen-card" href="soft-changes.html"><span class="num">A &mdash; Flow 1 of 3</span><h3>Soft changes</h3><p>Opens from the Guest details card. Name, Special request and Loyalty program on one page with per-section validation, a retry-in-place failure banner and a discard dialog. Flows 2 (Date) and 3 (Room) are not built yet.</p><span class="open">Open wireframe &rarr;</span></a></div>
+ <p class="section-label">Landing page concepts</p>
+ <div class="card-grid">
+  <a class="screen-card" href="concept-a.html"><span class="num">A &mdash; Cards</span><h3>Three cards</h3><p>Booking summary on top, then one card per flow. Guest details lists Name, Special request and Loyalty as direct rows, so common edits are one click.</p><span class="open">Open wireframe &rarr;</span></a>
+  <a class="screen-card" href="concept-b.html"><span class="num">B &mdash; Editable list</span><h3>Booking details with Edit</h3><p>The booking itself is the Hub. Each detail has an Edit link, grouped by price impact, with a sticky summary alongside. Fastest for people who know what they want.</p><span class="open">Open wireframe &rarr;</span></a>
+  <a class="screen-card" href="concept-c.html"><span class="num">C &mdash; Guided choice</span><h3>What do you want to change?</h3><p>Pick an intent, see what is involved in a preview panel, then continue. Slower by one click, clearest about price impact before committing.</p><span class="open">Open wireframe &rarr;</span></a>
+ </div>
+ <div class="notes">
+  <h4>How to review</h4>
+  Use the dark review bar on every concept to switch the viewer (Traveler, Travel arranger, GBT counselor) and the booking state (all changes available, Date change not available, booking cannot be modified). Those settings carry across concepts. Decisions and open questions are in <a href="design-decisions.md" style="color:var(--b500);font-weight:700">design-decisions.md</a>.
+ </div>
+</main>
+</body>
+</html>

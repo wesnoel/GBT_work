@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Soft changes | Hotel Modify Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body data-role="traveler" data-state="normal">
+<div class="review-bar"><div class="review-bar-inner">
+  <strong>Review controls</strong>
+  <label>Viewing as <select id="sel-role"><option value="traveler">Traveler</option><option value="arranger">Travel arranger</option><option value="counselor">GBT counselor</option></select></label>
+  <label>Booking state <select id="sel-state"><option value="normal">All changes available</option><option value="restricted">Date change not available</option><option value="locked">Booking cannot be modified</option></select></label>
+  <label>On save <select id="sel-save"><option value="ok">Succeeds</option><option value="fail">Fails</option></select></label>
+  <span class="spacer"></span>
+  <a href="index.html">All concepts</a>
+</div></div>
+<header class="eg-header"><div class="eg-header-inner">
+  <div class="eg-left"><div class="eg-logo"><span class="eg-logo-super">GBT</span><span class="eg-logo-word">Egencia</span></div>
+  <nav class="eg-nav" aria-label="Primary"><a href="#">Book</a><a class="on" href="#">Trips</a><a href="#">Reports</a></nav></div>
+  <div class="eg-avatar"><span class="eg-avatar-circle">MO</span><span class="eg-avatar-name">Maya Okafor</span></div>
+</div></header>
+<main class="shell">
+<nav class="crumb" aria-label="Breadcrumb"><a href="concept-a.html" data-i="back" id="back-link">Back to modify</a><span>/</span><span>Guest details</span></nav>
+<div class="ctx for-arranger" data-i="person"><span>You are modifying this booking <strong>for Maya Okafor</strong> (Acme Corp). Signed in as Priya Shah.</span></div>
+<div class="ctx for-counselor" data-i="person"><span>Servicing on behalf of <strong>Maya Okafor</strong> (Acme Corp). Signed in as Dana Reyes, GBT.</span></div>
+<script src="app.js"></script>
+<h1 class="page-title" id="pg-title" tabindex="-1">Change guest details</h1>
+<p class="page-sub">Edit any of these, then save once. These changes don't affect your dates, room or price.</p>
+<div class="notice notice-err" id="fail-banner" role="alert" hidden data-i="warn"><div><strong>We couldn't save your changes</strong>Your booking hasn't changed. Your edits are still here. <button class="link" id="retry" style="padding:0 0 0 4px">Try again</button></div></div>
+<div class="notice notice-err" id="err-summary" role="alert" hidden data-i="warn" tabindex="-1"><div><strong>Please fix the following</strong><ul id="err-list" style="margin:6px 0 0;padding-left:18px"></ul></div></div>
+<form id="soft" novalidate class="sections">
+ <section class="sec" id="sec-name" data-sec="name">
+  <div class="sec-head"><div class="ico" data-i="person"></div><div class="sec-cur"><div class="k">Name</div><div class="v" id="cur-name">Maya Okafor</div></div><button type="button" class="btn sec-edit" aria-expanded="false" aria-controls="f-name">Edit<span class="sr"> name</span></button></div>
+  <div class="sec-body" id="f-name" hidden>
+   <div class="grid2">
+    <div class="field"><label for="first">First name</label><input id="first" value="Maya" autocomplete="given-name" aria-describedby="first-err"><div class="err" id="first-err"></div></div>
+    <div class="field"><label for="last">Last name</label><input id="last" value="Okafor" autocomplete="family-name" aria-describedby="last-err"><div class="err" id="last-err"></div></div>
+   </div>
+   <p class="help">Enter the name exactly as it appears on the traveler's ID.</p>
+   <button type="button" class="link sec-cancel">Undo changes to name</button>
+  </div>
+ </section>
+ <section class="sec" id="sec-special" data-sec="special">
+  <div class="sec-head"><div class="ico" data-i="chat"></div><div class="sec-cur"><div class="k">Special request</div><div class="v" id="cur-special">Late check-in, quiet room away from the elevator</div></div><button type="button" class="btn sec-edit" aria-expanded="false" aria-controls="f-special">Edit<span class="sr"> special request</span></button></div>
+  <div class="sec-body" id="f-special" hidden>
+   <div class="field"><label for="req">Special request</label><textarea id="req" rows="4" maxlength="250" aria-describedby="req-help req-err">Late check-in, quiet room away from the elevator</textarea><div class="help" id="req-help"><span id="req-count">49</span> of 250 characters. Requests are passed to the hotel and aren't guaranteed.</div><div class="err" id="req-err"></div></div>
+   <button type="button" class="link sec-cancel">Undo changes to special request</button>
+  </div>
+ </section>
+ <section class="sec" id="sec-loyalty" data-sec="loyalty">
+  <div class="sec-head"><div class="ico" data-i="loyalty"></div><div class="sec-cur"><div class="k">Loyalty program</div><div class="v" id="cur-loyalty">Hilton Honors &bull;&bull;&bull;&bull;4821</div></div><button type="button" class="btn sec-edit" aria-expanded="false" aria-controls="f-loyalty">Edit<span class="sr"> loyalty program</span></button></div>
+  <div class="sec-body" id="f-loyalty" hidden>
+   <div class="grid2">
+    <div class="field"><label for="prog">Program</label><select id="prog"><option>Hilton Honors</option><option>Marriott Bonvoy</option><option>IHG One Rewards</option><option>World of Hyatt</option><option value="">None</option></select></div>
+    <div class="field"><label for="num">Member number</label><input id="num" value="394821004821" inputmode="numeric" aria-describedby="num-err"><div class="err" id="num-err"></div></div>
+   </div>
+   <p class="help">Points are earned in the program you pick for this stay.</p>
+   <button type="button" class="link sec-cancel">Undo changes to loyalty program</button>
+  </div>
+ </section>
+ <div class="actions">
+  <p class="hint" id="save-hint">Edit at least one section to save.</p>
+  <div class="btn-row"><button type="button" class="btn" id="cancel">Cancel</button><button type="submit" class="btn btn-primary" id="save" aria-disabled="true">Save changes</button></div>
+ </div>
+</form>
+<dialog id="discard" aria-labelledby="dlg-title"><h2 id="dlg-title" style="margin:0 0 8px;font-size:20px">Discard your changes?</h2><p class="muted" style="margin:0 0 20px">You have unsaved edits. If you leave now, your booking stays as it is.</p><div class="btn-row" style="justify-content:flex-end"><button class="btn" id="keep" autofocus>Keep editing</button><button class="btn btn-primary" id="leave">Discard and leave</button></div></dialog>
+<script>
+(function(){
+  var secs=Array.prototype.slice.call(document.querySelectorAll('.sec'));
+  var save=document.getElementById('save'), hint=document.getElementById('save-hint');
+  var orig={first:'Maya',last:'Okafor',req:'Late check-in, quiet room away from the elevator',prog:'Hilton Honors',num:'394821004821'};
+  var fields={name:['first','last'],special:['req'],loyalty:['prog','num']};
+  var saving=false, dirty=function(){return secs.some(isDirty)};
+  function isDirty(s){var k=s.dataset.sec;return fields[k].some(function(id){return document.getElementById(id).value!==orig[id]})}
+  function open(s,on){s.classList.toggle('open',on);s.querySelector('.sec-body').hidden=!on;s.querySelector('.sec-edit').setAttribute('aria-expanded',on);s.querySelector('.sec-edit').firstChild.textContent=on?'Close':'Edit'}
+  function refresh(){var d=dirty();save.setAttribute('aria-disabled',d?'false':'true');hint.textContent=d?'Only the sections you changed will be saved.':'Edit at least one section to save.';
+    secs.forEach(function(s){s.classList.toggle('dirty',isDirty(s))});
+    document.getElementById('req-count').textContent=document.getElementById('req').value.length}
+  secs.forEach(function(s){
+    s.querySelector('.sec-edit').addEventListener('click',function(){var o=!s.classList.contains('open');open(s,o);if(o){var f=s.querySelector('input,textarea,select');f&&f.focus();window.go&&0}});
+    s.querySelector('.sec-cancel').addEventListener('click',function(){fields[s.dataset.sec].forEach(function(id){document.getElementById(id).value=orig[id]});clearErr(s);open(s,false);refresh();s.querySelector('.sec-edit').focus()});
+  });
+  document.getElementById('soft').addEventListener('input',function(e){clearErr(e.target.closest('.sec'));refresh()});
+  var q=new URLSearchParams(location.search).get('section');
+  if(q){var t=document.getElementById('sec-'+q);if(t){open(t,true);setTimeout(function(){var f=t.querySelector('input,textarea,select');f&&f.focus()},0)}}
+  else document.getElementById('pg-title').focus();
+  function clearErr(s){if(!s)return;s.querySelectorAll('.err').forEach(function(e){e.textContent=''});s.querySelectorAll('[aria-invalid]').forEach(function(i){i.removeAttribute('aria-invalid')})}
+  function setErr(id,msg,list){var el=document.getElementById(id),e=document.getElementById(id+'-err')||document.getElementById({first:'first',last:'last',req:'req',num:'num'}[id]+'-err');e.textContent=msg;el.setAttribute('aria-invalid','true');list.push([id,msg])}
+  function validate(){var list=[];
+    if(isDirty(document.getElementById('sec-name'))){var f=document.getElementById('first').value.trim(),l=document.getElementById('last').value.trim();
+      if(!f)setErr('first','First name: enter a first name.',list);else if(!/^[A-Za-z\u00C0-\u017F'\- ]+$/.test(f))setErr('first','First name: use letters only.',list);
+      if(!l)setErr('last','Last name: enter a last name.',list);else if(!/^[A-Za-z\u00C0-\u017F'\- ]+$/.test(l))setErr('last','Last name: use letters only.',list);}
+    if(isDirty(document.getElementById('sec-loyalty'))){var p=document.getElementById('prog').value,n=document.getElementById('num').value.trim();
+      if(p&&!n)setErr('num','Member number: enter your member number for this program.',list);else if(p&&!/^\d{9,12}$/.test(n))setErr('num','Member number: enter 9 to 12 digits.',list);}
+    return list}
+  function summary(list){var box=document.getElementById('err-summary'),ul=document.getElementById('err-list');ul.innerHTML='';
+    list.forEach(function(x){var li=document.createElement('li'),a=document.createElement('a');a.href='#'+x[0];a.textContent=x[1];a.style.textDecoration='underline';a.onclick=function(ev){ev.preventDefault();document.getElementById(x[0]).focus()};li.appendChild(a);ul.appendChild(li)});
+    box.hidden=!list.length;if(list.length){list.forEach(function(x){var s=document.getElementById(x[0]).closest('.sec');open(s,true)});box.focus()}}
+  function submit(){if(saving||save.getAttribute('aria-disabled')==='true')return;
+    document.getElementById('fail-banner').hidden=true;
+    var list=validate();summary(list);if(list.length)return;
+    saving=true;save.textContent='Saving...';save.setAttribute('aria-disabled','true');document.getElementById('soft').setAttribute('aria-busy','true');
+    setTimeout(function(){saving=false;document.getElementById('soft').removeAttribute('aria-busy');save.textContent='Save changes';
+      if(document.getElementById('sel-save').value==='fail'){refresh();var b=document.getElementById('fail-banner');b.hidden=false;b.setAttribute('tabindex','-1');b.focus();return}
+      var changed=secs.filter(isDirty).map(function(s){return s.querySelector('.k').textContent}).join(',');
+      location.href='trips-stub.html?changed='+encodeURIComponent(changed)}, 1100)}
+  document.getElementById('soft').addEventListener('submit',function(e){e.preventDefault();if(save.getAttribute('aria-disabled')==='true'){hint.style.color='var(--r500)';return}submit()});
+  document.getElementById('retry').addEventListener('click',submit);
+  var dlg=document.getElementById('discard'),dest='concept-a.html';
+  function leave(href){dest=href;if(dirty()){dlg.showModal()}else location.href=href}
+  document.getElementById('cancel').addEventListener('click',function(){leave('concept-a.html')});
+  document.getElementById('back-link').addEventListener('click',function(e){e.preventDefault();leave('concept-a.html')});
+  document.getElementById('keep').addEventListener('click',function(){dlg.close()});
+  document.getElementById('leave').addEventListener('click',function(){location.href=dest});
+  window.addEventListener('beforeunload',function(e){});
+  refresh();
+})();
+</script>
+</main>
+</body>
+</html>

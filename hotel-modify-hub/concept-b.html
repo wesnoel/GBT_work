@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Concept B, Editable list | Hotel Modify Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body data-role="traveler" data-state="normal">
+<div class="review-bar"><div class="review-bar-inner">
+  <strong>Review controls</strong>
+  <label>Viewing as <select id="sel-role"><option value="traveler">Traveler</option><option value="arranger">Travel arranger</option><option value="counselor">GBT counselor</option></select></label>
+  <label>Booking state <select id="sel-state"><option value="normal">All changes available</option><option value="restricted">Date change not available</option><option value="locked">Booking cannot be modified</option></select></label>
+  <span class="spacer"></span>
+  <a href="index.html">All concepts</a>
+</div></div>
+<header class="eg-header"><div class="eg-header-inner">
+  <div class="eg-left"><div class="eg-logo"><span class="eg-logo-super">GBT</span><span class="eg-logo-word">Egencia</span></div>
+  <nav class="eg-nav" aria-label="Primary"><a href="#">Book</a><a class="on" href="#">Trips</a><a href="#">Reports</a></nav></div>
+  <div class="eg-avatar"><span class="eg-avatar-circle">MO</span><span class="eg-avatar-name">Maya Okafor</span></div>
+</div></header>
+<main class="shell">
+<nav class="crumb" aria-label="Breadcrumb"><a href="#" onclick="go('Trip details');return false" data-i="back">Back to trip</a><span>/</span><span>Modify hotel booking</span></nav>
+<div class="ctx for-arranger" data-i="person"><span>You are modifying this booking <strong>for Maya Okafor</strong> (Acme Corp). Signed in as Priya Shah.</span></div>
+<div class="ctx for-counselor" data-i="person"><span>Servicing on behalf of <strong>Maya Okafor</strong> (Acme Corp). Signed in as Dana Reyes, GBT.</span></div>
+<h1 class="page-title">Modify your hotel booking</h1>
+<p class="page-sub">Review your booking and edit what you need. Nothing is saved until you confirm.</p>
+<div class="notice notice-warn only-locked" role="status" data-i="warn" style="margin-top:20px"><div><strong>This booking can't be changed online</strong>The stay starts within 24 hours, so changes are handled by the hotel. Call Hilton Garden Inn Seattle Downtown at +1 206 555 0142 or contact your GBT counselor.<div style="margin-top:12px"><a class="btn" href="#" onclick="go('Trip details');return false">Back to trip</a></div></div></div>
+<div class="split hide-locked">
+ <div>
+  <section class="group"><div class="group-head"><h3>Guest details</h3><span class="pill pill-ok">No price change</span></div>
+   <div class="row " ><div class="ico" data-i="person"></div><div><div class="k">Name</div><div class="v">Maya Okafor</div></div><div><button class="link" onclick="go('Soft changes','Name')">Edit</button></div></div><div class="row " ><div class="ico" data-i="chat"></div><div><div class="k">Special request</div><div class="v">Late check-in, quiet room away from the elevator</div></div><div><button class="link" onclick="go('Soft changes','Special request')">Edit</button></div></div><div class="row " ><div class="ico" data-i="loyalty"></div><div><div class="k">Loyalty program</div><div class="v">Hilton Honors &bull;&bull;&bull;&bull;4821</div></div><div><button class="link" onclick="go('Soft changes','Loyalty program')">Edit</button></div></div>
+  </section>
+  <section class="group"><div class="group-head"><h3>Stay</h3><span class="pill pill-warn">Changes here can affect price</span></div>
+   <div class="row is-date" data-disabled-when="restricted"><div class="ico" data-i="cal"></div><div><div class="k">Dates</div><div class="v">Tue, Mar 9 &ndash; Fri, Mar 12, 2027 (3 nights)</div><div class="reason" data-i="lock"><span>Not available for this booking. This rate can't be changed. Cancel and rebook instead.</span></div></div><div><button class="link" onclick="go('Date')">Edit</button></div></div><div class="row " ><div class="ico" data-i="bed"></div><div><div class="k">Room</div><div class="v">1 King, city view</div></div><div><button class="link" onclick="go('Room')">Edit</button></div></div>
+  </section>
+ </div>
+ <aside class="aside" aria-label="Booking summary">
+  <h3>Booking summary</h3>
+  <dl>
+   <div><dt>Hotel</dt><dd>Hilton Garden Inn Seattle Downtown</dd></div>
+   <div><dt>Confirmation</dt><dd>HX48217</dd></div>
+   <div><dt>Guest</dt><dd>Maya Okafor</dd></div>
+   <div><dt>Rate</dt><dd>$189.00 / night</dd></div>
+   <div><dt>Estimated total</dt><dd>$623.70 incl. taxes</dd></div>
+  </dl>
+  <p class="muted" style="margin:12px 0 0">Free cancellation until Mar 7, 2027, 6:00 PM.</p>
+ </aside>
+</div>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

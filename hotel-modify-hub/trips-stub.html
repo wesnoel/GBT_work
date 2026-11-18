@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Trips (stub) | Hotel Modify Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" /><link rel="stylesheet" href="styles.css" /></head>
+<body><main class="shell" style="max-width:760px">
+<div class="notice" id="ok" role="status" style="background:var(--g50);border-color:var(--g100);display:none" data-i="info"><div><strong>Your booking was updated</strong><span id="what"></span> saved for Hilton Garden Inn Seattle Downtown.</div></div>
+<h1 class="page-title" style="margin-top:20px">Trips</h1>
+<p class="page-sub">Placeholder. The Trips page is out of scope for this project. The success message above is a proposal (open question Q2 in the UX spec).</p>
+<a class="btn" href="index.html">Back to concepts</a> <a class="btn" href="concept-a.html">Modify again</a>
+</main><script src="app.js"></script>
+<script>var c=new URLSearchParams(location.search).get('changed');if(c){document.getElementById('ok').style.display='flex';document.getElementById('what').textContent=' '+c.replace(/,/g,', ')+' ';}</script></body></html>
